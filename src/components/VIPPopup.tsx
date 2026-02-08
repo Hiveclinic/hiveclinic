@@ -3,6 +3,9 @@ import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { z } from "zod";
+
+const emailSchema = z.string().trim().email("Please enter a valid email").max(255);
 
 const VIPPopup = () => {
   const [show, setShow] = useState(false);

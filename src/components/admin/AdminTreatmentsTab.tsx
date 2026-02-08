@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GripVertical, Save, Plus, Pencil, Trash2, ChevronDown, ChevronRight, Tag, Package, Layers } from "lucide-react";
+import { GripVertical, Save, Plus, Pencil, Trash2, ChevronDown, ChevronRight, Tag, Package, Layers, X } from "lucide-react";
 import { toast } from "sonner";
 
 type Variant = {
@@ -43,6 +43,13 @@ type Treatment = {
   offer_label: string | null;
 };
 
+const EMPTY_TREATMENT = {
+  name: "", slug: "", category: "", price: 0, duration_mins: 60,
+  deposit_required: false, deposit_amount: 0, payment_type: "full",
+  active: true, description: "", on_offer: false, offer_price: null as number | null,
+  offer_label: null as string | null,
+};
+
 const AdminTreatmentsTab = () => {
   const [treatments, setTreatments] = useState<Treatment[]>([]);
   const [variants, setVariants] = useState<Variant[]>([]);
@@ -52,12 +59,15 @@ const AdminTreatmentsTab = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+  const [showNewTreatment, setShowNewTreatment] = useState(false);
+  const [newTreatment, setNewTreatment] = useState({ ...EMPTY_TREATMENT });
 
-  // New variant form
+  // Variant/package forms
   const [newVariant, setNewVariant] = useState({ name: "", price: 0, duration_mins: 60, deposit_amount: 0 });
   const [showNewVariant, setShowNewVariant] = useState<string | null>(null);
   const [showNewPackage, setShowNewPackage] = useState<string | null>(null);
   const [newPackage, setNewPackage] = useState({ name: "", sessions_count: 3, total_price: 0, price_per_session: 0, valid_days: 365 });
+  const [editingVariantId, setEditingVariantId] = useState<string | null>(null);
 
   const fetchAll = async () => {
     const [tRes, vRes, pRes] = await Promise.all([
@@ -80,16 +90,47 @@ const AdminTreatmentsTab = () => {
     setTreatments(prev => prev.map(t => t.id === id ? { ...t, [field]: value } : t));
   };
 
+  const generateSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
   const saveOne = async (t: Treatment) => {
     const { error } = await supabase.from("treatments").update({
       name: t.name, price: t.price, duration_mins: t.duration_mins,
       deposit_required: t.deposit_required, deposit_amount: t.deposit_amount,
       active: t.active, category: t.category, description: t.description,
       on_offer: t.on_offer, offer_price: t.offer_price, offer_label: t.offer_label,
+      slug: t.slug,
     }).eq("id", t.id);
     if (error) { toast.error("Failed to save"); return; }
     toast.success(`${t.name} updated`);
     setEditingId(null);
+  };
+
+  const createTreatment = async () => {
+    if (!newTreatment.name.trim()) { toast.error("Name is required"); return; }
+    const slug = newTreatment.slug || generateSlug(newTreatment.name);
+    const { error } = await supabase.from("treatments").insert({
+      ...newTreatment,
+      slug,
+      sort_order: treatments.length,
+    });
+    if (error) { toast.error("Failed to create treatment"); return; }
+    toast.success(`${newTreatment.name} created`);
+    setNewTreatment({ ...EMPTY_TREATMENT });
+    setShowNewTreatment(false);
+    fetchAll();
+  };
+
+  const deleteTreatment = async (id: string, name: string) => {
+    if (!confirm(`Delete "${name}"? This will also remove all its variants and packages. This cannot be undone.`)) return;
+    // Delete related data first
+    await Promise.all([
+      supabase.from("treatment_variants").delete().eq("treatment_id", id),
+      supabase.from("treatment_packages").delete().eq("treatment_id", id),
+    ]);
+    const { error } = await supabase.from("treatments").delete().eq("id", id);
+    if (error) { toast.error("Failed to delete - it may have existing bookings"); return; }
+    toast.success(`${name} deleted`);
+    fetchAll();
   };
 
   const saveOrder = async () => {
@@ -136,7 +177,17 @@ const AdminTreatmentsTab = () => {
     fetchAll();
   };
 
+  const updateVariant = async (v: Variant) => {
+    const { error } = await supabase.from("treatment_variants").update({
+      name: v.name, price: v.price, duration_mins: v.duration_mins, deposit_amount: v.deposit_amount, active: v.active,
+    }).eq("id", v.id);
+    if (error) { toast.error("Failed to update variant"); return; }
+    toast.success("Variant updated");
+    setEditingVariantId(null);
+  };
+
   const deleteVariant = async (id: string) => {
+    if (!confirm("Delete this variant?")) return;
     await supabase.from("treatment_variants").delete().eq("id", id);
     setVariants(prev => prev.filter(v => v.id !== id));
     toast.success("Variant removed");
@@ -156,6 +207,7 @@ const AdminTreatmentsTab = () => {
   };
 
   const deletePackage = async (id: string) => {
+    if (!confirm("Delete this package?")) return;
     await supabase.from("treatment_packages").delete().eq("id", id);
     setPackages(prev => prev.filter(p => p.id !== id));
     toast.success("Package removed");
@@ -167,8 +219,47 @@ const AdminTreatmentsTab = () => {
     <div>
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-display text-xl">Treatments ({treatments.length})</h3>
-        <p className="font-body text-xs text-muted-foreground">Drag to reorder · Click arrow to expand variants & packages</p>
+        <div className="flex gap-2">
+          <button onClick={() => setShowNewTreatment(!showNewTreatment)} className="flex items-center gap-1 px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">
+            <Plus size={12} /> Add Treatment
+          </button>
+          <p className="font-body text-xs text-muted-foreground self-center hidden md:block">Drag to reorder</p>
+        </div>
       </div>
+
+      {/* New Treatment Form */}
+      {showNewTreatment && (
+        <div className="border border-gold/30 bg-gold/5 p-4 mb-6 space-y-3">
+          <div className="flex items-center justify-between mb-2">
+            <h4 className="font-body text-sm font-medium">New Treatment</h4>
+            <button onClick={() => setShowNewTreatment(false)} className="text-muted-foreground hover:text-foreground"><X size={14} /></button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <input value={newTreatment.name} onChange={e => setNewTreatment(p => ({ ...p, name: e.target.value, slug: generateSlug(e.target.value) }))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Treatment name" />
+            <input value={newTreatment.category} onChange={e => setNewTreatment(p => ({ ...p, category: e.target.value }))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Category" list="category-list" />
+            <datalist id="category-list">
+              {categories.map(c => <option key={c} value={c} />)}
+            </datalist>
+            <input type="number" value={newTreatment.price || ""} onChange={e => setNewTreatment(p => ({ ...p, price: Number(e.target.value) }))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Price (£)" />
+            <input type="number" value={newTreatment.duration_mins} onChange={e => setNewTreatment(p => ({ ...p, duration_mins: Number(e.target.value) }))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Duration (mins)" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" checked={newTreatment.deposit_required} onChange={e => setNewTreatment(p => ({ ...p, deposit_required: e.target.checked }))} className="accent-[hsl(var(--gold))]" />
+              <span className="font-body text-xs">Deposit required</span>
+            </label>
+            {newTreatment.deposit_required && (
+              <input type="number" value={newTreatment.deposit_amount || ""} onChange={e => setNewTreatment(p => ({ ...p, deposit_amount: Number(e.target.value) }))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Deposit (£)" />
+            )}
+          </div>
+          <textarea value={newTreatment.description || ""} onChange={e => setNewTreatment(p => ({ ...p, description: e.target.value }))} rows={2}
+            className="w-full border border-border bg-transparent px-3 py-2 font-body text-xs focus:border-gold focus:outline-none resize-none" placeholder="Description (optional)" />
+          <div className="flex gap-2">
+            <button onClick={createTreatment} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">Create</button>
+            <button onClick={() => setShowNewTreatment(false)} className="px-4 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">Cancel</button>
+          </div>
+        </div>
+      )}
 
       {/* Category Filter */}
       <div className="flex flex-wrap gap-2 mb-6">
@@ -197,11 +288,12 @@ const AdminTreatmentsTab = () => {
                   <div className="space-y-3">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                       <input value={t.name} onChange={e => updateField(t.id, "name", e.target.value)} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Name" />
-                      <input value={t.category} onChange={e => updateField(t.id, "category", e.target.value)} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Category" />
+                      <input value={t.category} onChange={e => updateField(t.id, "category", e.target.value)} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Category" list="category-list" />
                       <input type="number" value={t.price} onChange={e => updateField(t.id, "price", Number(e.target.value))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Price" />
                       <input type="number" value={t.duration_mins} onChange={e => updateField(t.id, "duration_mins", Number(e.target.value))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Duration" />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                      <input value={t.slug} onChange={e => updateField(t.id, "slug", e.target.value)} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Slug" />
                       <label className="flex items-center gap-2">
                         <input type="checkbox" checked={t.deposit_required} onChange={e => updateField(t.id, "deposit_required", e.target.checked)} className="accent-[hsl(var(--gold))]" />
                         <span className="font-body text-xs">Deposit required</span>
@@ -213,16 +305,16 @@ const AdminTreatmentsTab = () => {
                         <input type="checkbox" checked={t.on_offer} onChange={e => updateField(t.id, "on_offer", e.target.checked)} className="accent-[hsl(var(--gold))]" />
                         <span className="font-body text-xs">On Offer</span>
                       </label>
-                      {t.on_offer && (
-                        <input type="number" value={t.offer_price || ""} onChange={e => updateField(t.id, "offer_price", Number(e.target.value))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Offer Price £" />
-                      )}
                     </div>
                     {t.on_offer && (
-                      <input value={t.offer_label || ""} onChange={e => updateField(t.id, "offer_label", e.target.value)} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none w-full md:w-1/2" placeholder="Offer label e.g. 'Spring Special'" />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="number" value={t.offer_price || ""} onChange={e => updateField(t.id, "offer_price", Number(e.target.value))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Offer Price £" />
+                        <input value={t.offer_label || ""} onChange={e => updateField(t.id, "offer_label", e.target.value)} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Offer label e.g. 'Spring Special'" />
+                      </div>
                     )}
                     <div className="flex gap-2">
                       <button onClick={() => saveOne(t)} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors"><Save size={12} className="inline mr-1" /> Save</button>
-                      <button onClick={() => setEditingId(null)} className="px-4 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">Cancel</button>
+                      <button onClick={() => { setEditingId(null); fetchAll(); }} className="px-4 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">Cancel</button>
                     </div>
                   </div>
                 ) : (
@@ -256,6 +348,9 @@ const AdminTreatmentsTab = () => {
                     <button onClick={() => setEditingId(t.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors">
                       <Pencil size={14} />
                     </button>
+                    <button onClick={() => deleteTreatment(t.id, t.name)} className="px-2 py-1 border border-border text-muted-foreground hover:text-red-500 hover:border-red-500 transition-colors">
+                      <Trash2 size={14} />
+                    </button>
                   </div>
                 )}
               </div>
@@ -271,11 +366,25 @@ const AdminTreatmentsTab = () => {
                     </div>
                     {tVariants.map(v => (
                       <div key={v.id} className="flex items-center gap-3 py-1 font-body text-xs">
-                        <span className="flex-1">{v.name}</span>
-                        <span>£{Number(v.price).toFixed(0)}</span>
-                        <span className="text-muted-foreground">{v.duration_mins}m</span>
-                        {v.deposit_amount > 0 && <span className="text-gold">Dep: £{Number(v.deposit_amount).toFixed(0)}</span>}
-                        <button onClick={() => deleteVariant(v.id)} className="text-muted-foreground hover:text-red-500 transition-colors"><Trash2 size={12} /></button>
+                        {editingVariantId === v.id ? (
+                          <div className="flex gap-2 items-center flex-wrap flex-1">
+                            <input value={v.name} onChange={e => setVariants(prev => prev.map(x => x.id === v.id ? { ...x, name: e.target.value } : x))} className="border border-border bg-transparent px-2 py-1 font-body text-xs focus:border-gold focus:outline-none" />
+                            <input type="number" value={v.price} onChange={e => setVariants(prev => prev.map(x => x.id === v.id ? { ...x, price: Number(e.target.value) } : x))} className="w-20 border border-border bg-transparent px-2 py-1 font-body text-xs focus:border-gold focus:outline-none" />
+                            <input type="number" value={v.duration_mins} onChange={e => setVariants(prev => prev.map(x => x.id === v.id ? { ...x, duration_mins: Number(e.target.value) } : x))} className="w-16 border border-border bg-transparent px-2 py-1 font-body text-xs focus:border-gold focus:outline-none" />
+                            <input type="number" value={v.deposit_amount || ""} onChange={e => setVariants(prev => prev.map(x => x.id === v.id ? { ...x, deposit_amount: Number(e.target.value) } : x))} className="w-20 border border-border bg-transparent px-2 py-1 font-body text-xs focus:border-gold focus:outline-none" placeholder="Dep" />
+                            <button onClick={() => updateVariant(v)} className="px-2 py-0.5 bg-foreground text-background font-body text-xs"><Save size={10} /></button>
+                            <button onClick={() => { setEditingVariantId(null); fetchAll(); }} className="text-muted-foreground hover:text-foreground"><X size={12} /></button>
+                          </div>
+                        ) : (
+                          <>
+                            <span className="flex-1">{v.name}</span>
+                            <span>£{Number(v.price).toFixed(0)}</span>
+                            <span className="text-muted-foreground">{v.duration_mins}m</span>
+                            {v.deposit_amount > 0 && <span className="text-gold">Dep: £{Number(v.deposit_amount).toFixed(0)}</span>}
+                            <button onClick={() => setEditingVariantId(v.id)} className="text-muted-foreground hover:text-gold transition-colors"><Pencil size={10} /></button>
+                            <button onClick={() => deleteVariant(v.id)} className="text-muted-foreground hover:text-red-500 transition-colors"><Trash2 size={12} /></button>
+                          </>
+                        )}
                       </div>
                     ))}
                     {showNewVariant === t.id && (

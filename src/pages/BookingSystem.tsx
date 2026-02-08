@@ -28,6 +28,18 @@ type Availability = {
 
 const STEPS = ["Treatment", "Date & Time", "Your Details", "Payment"];
 
+// Map treatment categories to their info page routes
+const CATEGORY_ROUTES: Record<string, string> = {
+  "Lip Fillers": "/treatments/lip-fillers-manchester",
+  "Anti-Wrinkle": "/treatments/anti-wrinkle-injections-manchester",
+  "Dermal Filler": "/treatments/dermal-filler-manchester",
+  "HydraFacial": "/treatments/hydrafacial-manchester",
+  "Chemical Peels": "/treatments/chemical-peels-manchester",
+  "Skin Boosters": "/treatments/skin-boosters-manchester",
+  "Fat Dissolve": "/treatments/fat-dissolving-manchester",
+  "Microneedling": "/treatments/microneedling-manchester",
+};
+
 const BookingSystem = () => {
   const [step, setStep] = useState(0);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
@@ -302,8 +314,8 @@ const BookingSystem = () => {
                         </div>
                       </button>
                       <div className="flex items-center justify-between mt-2">
-                        {t.slug && (
-                          <a href={`/treatments/${t.slug}`} className="font-body text-xs text-gold hover:underline transition-colors" target="_blank" rel="noopener noreferrer">
+                        {CATEGORY_ROUTES[t.category] && (
+                          <a href={CATEGORY_ROUTES[t.category]} className="font-body text-xs text-gold hover:underline transition-colors" target="_blank" rel="noopener noreferrer">
                             More info →
                           </a>
                         )}

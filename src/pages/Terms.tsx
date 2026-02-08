@@ -186,7 +186,7 @@ const Terms = () => (
             </div>
 
             <div>
-              <h2 className="font-display text-3xl mb-4">17. Contact Us</h2>
+              <h2 className="font-display text-3xl mb-4">19. Contact Us</h2>
               <p>For any questions regarding these terms, or to raise a concern, please contact us:</p>
               <div className="mt-4 space-y-2">
                 <p className="font-semibold">Hive Clinic</p>

@@ -154,6 +154,21 @@ serve(async (req) => {
         await supabaseClient.rpc("increment_discount_usage", { discount_id: discountCodeId });
       }
 
+      // Send confirmation email
+      try {
+        await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-booking-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+          },
+          body: JSON.stringify({ bookingId: booking.id, emailType: "confirmation" }),
+        });
+        logStep("Confirmation email triggered");
+      } catch (emailErr) {
+        logStep("Email send failed (non-blocking)", emailErr);
+      }
+
       return new Response(JSON.stringify({ bookingId: booking.id, free: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,

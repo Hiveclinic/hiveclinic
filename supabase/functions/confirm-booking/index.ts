@@ -64,6 +64,20 @@ serve(async (req) => {
 
     console.log(`[CONFIRM-BOOKING] Booking ${bookingId} confirmed`);
 
+    // Send confirmation email (non-blocking)
+    try {
+      await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-booking-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        },
+        body: JSON.stringify({ bookingId, emailType: "confirmation" }),
+      });
+    } catch (emailErr) {
+      console.log("[CONFIRM-BOOKING] Email send failed (non-blocking)");
+    }
+
     return new Response(JSON.stringify({
       success: true,
       booking: {

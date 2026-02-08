@@ -27,6 +27,7 @@ import Terms from "./pages/Terms";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Aftercare from "./pages/Aftercare";
+import CustomerPortal from "./pages/CustomerPortal";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 import ScrollToTop from "./components/ScrollToTop";
@@ -63,6 +64,7 @@ const AnimatedRoutes = () => {
         <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
         <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
         <Route path="/aftercare" element={<PageTransition><Aftercare /></PageTransition>} />
+        <Route path="/my-appointments" element={<PageTransition><CustomerPortal /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
       </AnimatePresence>

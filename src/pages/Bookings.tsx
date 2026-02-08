@@ -4,8 +4,8 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 const faqs = [
-  { q: "Do I need a consultation first?", a: "Yes — for all injectable treatments, an initial consultation is required. This ensures your safety and allows us to create a personalised treatment plan." },
-  { q: "Is there any downtime?", a: "It depends on the treatment. Most facial treatments have minimal downtime. Injectables may involve slight swelling for 24–48 hours. We'll discuss this during your consultation." },
+  { q: "Do I need a consultation first?", a: "Yes - for all injectable treatments, an initial consultation is required. This ensures your safety and allows us to create a personalised treatment plan." },
+  { q: "Is there any downtime?", a: "It depends on the treatment. Most facial treatments have minimal downtime. Injectables may involve slight swelling for 24-48 hours. We'll discuss this during your consultation." },
   { q: "How do I prepare for my appointment?", a: "Avoid alcohol 24 hours before, arrive with a clean face if possible, and let us know about any medications or allergies." },
   { q: "Can I pay in instalments?", a: "Yes! We offer Klarna and Clearpay for eligible treatments, so you can spread the cost." },
   { q: "What if I need to reschedule?", a: "We ask for at least 24 hours' notice for cancellations or rescheduling. Late cancellations may incur a fee." },

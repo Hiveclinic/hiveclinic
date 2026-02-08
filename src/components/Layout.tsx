@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex-shrink-0">
-            <img src={logo} alt="Hive Clinic" className="h-10 mix-blend-multiply" />
+            <img src={logo} alt="Hive Clinic" className="h-14 mix-blend-multiply dark:invert" style={{ background: 'transparent' }} />
           </Link>
 
           {/* Desktop nav */}
@@ -104,7 +104,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div>
-              <img src={logo} alt="Hive Clinic" className="h-8 invert mb-4" />
+              <img src={logo} alt="Hive Clinic" className="h-12 invert mb-4" />
               <p className="font-body text-sm text-background/60 leading-relaxed">
                 A new standard in injectables. Manchester City Centre, Deansgate.
               </p>
@@ -130,8 +130,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <div>
               <h4 className="font-display text-lg mb-4">Opening Hours</h4>
               <div className="font-body text-sm text-background/60 space-y-1">
-                <p>Mon – Fri: 10am – 7pm</p>
-                <p>Sat: 10am – 5pm</p>
+                <p>Mon - Fri: 10am - 7pm</p>
+                <p>Sat: 10am - 5pm</p>
                 <p>Sun: Closed</p>
               </div>
               <div className="mt-4 flex gap-4">

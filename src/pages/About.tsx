@@ -17,7 +17,7 @@ const About = () => (
               </p>
               <p>
                 With years of experience in advanced aesthetics, Bianca brings a meticulous eye for detail and a deep
-                understanding of facial anatomy. Every treatment is approached with artistry — enhancing what's already
+                understanding of facial anatomy. Every treatment is approached with artistry - enhancing what's already
                 there, never changing who you are.
               </p>
               <p>
@@ -42,7 +42,7 @@ const About = () => (
                 natural features with precision, discretion, and an unwavering commitment to safety.
               </p>
               <p>
-                Located in the heart of Manchester's Deansgate, Hive is designed to feel like a sanctuary — a calm,
+                Located in the heart of Manchester's Deansgate, Hive is designed to feel like a sanctuary - a calm,
                 luxurious space where you can trust you're in expert hands.
               </p>
             </div>

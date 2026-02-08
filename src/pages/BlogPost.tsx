@@ -8,9 +8,9 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
     date: "January 2026",
     content: [
       "If you're considering dermal filler for the first time, it's completely normal to feel a mix of excitement and nerves. At Hive Clinic, we make sure every client feels informed, comfortable, and confident before any treatment begins.",
-      "Your journey starts with a thorough consultation where we discuss your goals, medical history, and expectations. This is your time to ask questions — no question is too small.",
-      "During the treatment, a topical numbing cream is applied to minimise discomfort. The procedure itself typically takes 15–30 minutes, depending on the area being treated.",
-      "Aftercare is just as important. Expect some mild swelling for 24–48 hours, and avoid intense exercise, alcohol, and excessive heat for the first day. We'll provide you with full aftercare instructions.",
+      "Your journey starts with a thorough consultation where we discuss your goals, medical history, and expectations. This is your time to ask questions - no question is too small.",
+      "During the treatment, a topical numbing cream is applied to minimise discomfort. The procedure itself typically takes 15-30 minutes, depending on the area being treated.",
+      "Aftercare is just as important. Expect some mild swelling for 24-48 hours, and avoid intense exercise, alcohol, and excessive heat for the first day. We'll provide you with full aftercare instructions.",
       "Results are visible immediately but settle beautifully over the following two weeks. We always recommend a review appointment to ensure you're happy with the outcome.",
     ],
   },
@@ -18,7 +18,7 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
     title: "The Ultimate Skincare Routine for Glass Skin",
     date: "December 2025",
     content: [
-      "Glass skin — that impossibly dewy, translucent-looking complexion — isn't just about genetics. With the right routine and professional treatments, it's achievable for everyone.",
+      "Glass skin - that impossibly dewy, translucent-looking complexion - isn't just about genetics. With the right routine and professional treatments, it's achievable for everyone.",
       "Start with a gentle cleanser that doesn't strip your skin. Follow with a hydrating toner and layer on a serum rich in hyaluronic acid. Seal everything in with a quality moisturiser and SPF during the day.",
       "In-clinic treatments like Profhilo and HydraFacials supercharge your at-home routine by delivering deep hydration and stimulating collagen production beneath the surface.",
       "Consistency is key. The best results come from combining a dedicated home routine with regular professional treatments. Book a skin consultation to get a personalised plan.",
@@ -29,7 +29,7 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
     date: "November 2025",
     content: [
       "Both Profhilo and dermal fillers involve injectable hyaluronic acid, but they serve very different purposes.",
-      "Dermal fillers add volume and structure to specific areas — think lips, cheeks, jawline. They're about shaping and contouring. Results are immediate and can last 6–18 months.",
+      "Dermal fillers add volume and structure to specific areas - think lips, cheeks, jawline. They're about shaping and contouring. Results are immediate and can last 6-18 months.",
       "Profhilo, on the other hand, is a skin booster. It disperses across a wide area to hydrate and stimulate collagen and elastin production. It improves overall skin quality, laxity, and glow rather than adding volume.",
       "Many of our clients benefit from both. A common approach is to address specific concerns with filler and maintain overall skin health with Profhilo treatments two to three times a year.",
       "Not sure which is right for you? Book a consultation and we'll guide you to the perfect plan.",

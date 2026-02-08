@@ -160,7 +160,7 @@ const TreatmentChatbot = () => {
                     {["I want to improve my skin texture", "What's best for lip enhancement?", "Help me reduce fine lines"].map((q) => (
                       <button
                         key={q}
-                        onClick={() => { setInput(q); }}
+                        onClick={() => { sendMessage(q); }}
                         className="block w-full text-left px-3 py-2 border border-border font-body text-xs hover:border-gold transition-colors"
                       >
                         {q}

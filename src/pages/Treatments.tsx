@@ -10,10 +10,10 @@ import gallery6 from "@/assets/gallery-6.jpg";
 const categories = [
   {
     title: "Chemical Peels",
-    desc: "Targeted chemical peels for face, back, and body - including intimate and melanostop treatments for even skin tone.",
+    desc: "Targeted chemical peels for face, back, and body - including intimate and body brightening treatments for even skin tone.",
     img: gallery4,
     link: "/treatments/chemical-peels-manchester",
-    treatments: ["Level 1 Chemical Peel", "Level 2 Chemical Peel", "Intimate Peels", "Melanostop Body Treatments"],
+    treatments: ["Level 1 Chemical Peel", "Level 2 Chemical Peel", "Intimate Peels", "Body Brightening Treatments"],
   },
   {
     title: "HydraFacial",

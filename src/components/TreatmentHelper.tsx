@@ -254,7 +254,7 @@ const TreatmentHelper = () => {
             </button>
 
             <p className="font-body text-xs text-muted-foreground mt-4 text-center">
-              No obligation — just a friendly chat about your goals.
+              No obligation - just a friendly chat about your goals.
             </p>
           </motion.div>
         )}

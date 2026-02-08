@@ -12,42 +12,49 @@ const categories = [
     title: "Chemical Peels",
     desc: "Targeted chemical peels for face, back, and body - including intimate and melanostop treatments for even skin tone.",
     img: gallery4,
+    link: "/treatments/chemical-peels-manchester",
     treatments: ["Level 1 Chemical Peel", "Level 2 Chemical Peel", "Intimate Peels", "Melanostop Body Treatments"],
   },
   {
     title: "HydraFacial",
     desc: "Deep cleansing, hydrating facials designed to deliver glass-like skin, tackle acne, and reset your glow.",
     img: gallery3,
+    link: "/treatments/hydrafacial-manchester",
     treatments: ["Glass Skin Boost", "Acne Refresh", "Glow Reset"],
   },
   {
     title: "Microneedling",
     desc: "Advanced microneedling with chemical peel for texture repair, scarring, pores, and stretch marks.",
     img: gallery5,
+    link: "/treatments/microneedling-manchester",
     treatments: ["Face Texture Repair", "Stretch Mark Repair"],
   },
   {
     title: "Fat Dissolve",
     desc: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, arms, and more.",
     img: gallery6,
+    link: "/treatments/fat-dissolving-manchester",
     treatments: ["Small Area", "Medium Area", "Large Area"],
   },
   {
     title: "Skin Boosters",
     desc: "Injectable moisturisers that work beneath the skin's surface to restore hydration and create a natural glow.",
     img: gallery1,
+    link: "/treatments/skin-boosters-manchester",
     treatments: ["Lumi Eyes", "Seventy Hyal", "Polynucleotides", "Profhilo"],
   },
   {
     title: "Dermal Filler",
     desc: "Expert filler treatments for lips, cheeks, jawline, chin, nose, tear troughs, and facial balancing packages.",
     img: gallery4,
+    link: "/treatments/dermal-filler-manchester",
     treatments: ["Lip Filler", "Cheek Filler", "Jawline Filler", "Nose Filler", "Tear Trough Filler", "Facial Balancing"],
   },
   {
     title: "Anti-Wrinkle",
     desc: "Precision anti-wrinkle injections including masseter slimming, brow lift, lip flip, and gummy smile correction.",
     img: gallery3,
+    link: "/treatments/anti-wrinkle-injections-manchester",
     treatments: ["Anti Wrinkle Injections", "Masseter Jaw Slimming", "Lip Flip", "Brow Lift", "Gummy Smile Correction"],
   },
 ];
@@ -73,9 +80,9 @@ const Treatments = () => (
               className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center`}
             >
               <div className={i % 2 !== 0 ? "lg:order-2" : ""}>
-                <div className="aspect-[4/5] overflow-hidden">
-                  <img src={cat.img} alt={cat.title} className="w-full h-full object-cover" loading="lazy" />
-                </div>
+                <Link to={cat.link} className="block aspect-[4/5] overflow-hidden group">
+                  <img src={cat.img} alt={`${cat.title} treatment in Manchester`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                </Link>
               </div>
               <div className={i % 2 !== 0 ? "lg:order-1" : ""}>
                 <h2 className="font-display text-4xl mb-4">{cat.title}</h2>
@@ -88,12 +95,20 @@ const Treatments = () => (
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to="/bookings"
-                  className="inline-flex items-center gap-2 px-8 py-3 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors"
-                >
-                  Book Now
-                </Link>
+                <div className="flex gap-4">
+                  <Link
+                    to={cat.link}
+                    className="inline-flex items-center gap-2 px-8 py-3 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors"
+                  >
+                    Learn More
+                  </Link>
+                  <Link
+                    to="/bookings"
+                    className="inline-flex items-center gap-2 px-8 py-3 border border-border font-body text-sm tracking-widest uppercase hover:border-gold transition-colors"
+                  >
+                    Book Now
+                  </Link>
+                </div>
               </div>
             </motion.div>
           ))}

@@ -8,6 +8,12 @@ import Index from "./pages/Index";
 import Treatments from "./pages/Treatments";
 import LipFillers from "./pages/LipFillers";
 import AntiWrinkle from "./pages/AntiWrinkle";
+import DermalFiller from "./pages/DermalFiller";
+import HydraFacial from "./pages/HydraFacial";
+import ChemicalPeels from "./pages/ChemicalPeels";
+import SkinBoosters from "./pages/SkinBoosters";
+import FatDissolve from "./pages/FatDissolve";
+import Microneedling from "./pages/Microneedling";
 import Pricing from "./pages/Pricing";
 import About from "./pages/About";
 import Bookings from "./pages/Bookings";
@@ -15,6 +21,7 @@ import Results from "./pages/Results";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
+import Terms from "./pages/Terms";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
@@ -31,6 +38,12 @@ const AnimatedRoutes = () => {
         <Route path="/treatments" element={<PageTransition><Treatments /></PageTransition>} />
         <Route path="/treatments/lip-fillers-manchester" element={<PageTransition><LipFillers /></PageTransition>} />
         <Route path="/treatments/anti-wrinkle-injections-manchester" element={<PageTransition><AntiWrinkle /></PageTransition>} />
+        <Route path="/treatments/dermal-filler-manchester" element={<PageTransition><DermalFiller /></PageTransition>} />
+        <Route path="/treatments/hydrafacial-manchester" element={<PageTransition><HydraFacial /></PageTransition>} />
+        <Route path="/treatments/chemical-peels-manchester" element={<PageTransition><ChemicalPeels /></PageTransition>} />
+        <Route path="/treatments/skin-boosters-manchester" element={<PageTransition><SkinBoosters /></PageTransition>} />
+        <Route path="/treatments/fat-dissolving-manchester" element={<PageTransition><FatDissolve /></PageTransition>} />
+        <Route path="/treatments/microneedling-manchester" element={<PageTransition><Microneedling /></PageTransition>} />
         <Route path="/pricing" element={<PageTransition><Pricing /></PageTransition>} />
         <Route path="/about" element={<PageTransition><About /></PageTransition>} />
         <Route path="/bookings" element={<PageTransition><Bookings /></PageTransition>} />
@@ -38,6 +51,7 @@ const AnimatedRoutes = () => {
         <Route path="/blog" element={<PageTransition><Blog /></PageTransition>} />
         <Route path="/blog/:slug" element={<PageTransition><BlogPost /></PageTransition>} />
         <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+        <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
         <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
         <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />

@@ -41,7 +41,7 @@ const Layout = ({
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex-shrink-0">
-            <img alt="Hive Clinic" className="h-16" src="/lovable-uploads/287bf846-68c9-4ce8-89d0-2589ecb9e5a7.png" style={{ background: 'transparent', mixBlendMode: 'multiply' }} />
+            <img alt="Hive Clinic" className="h-20 md:h-24" src="/lovable-uploads/287bf846-68c9-4ce8-89d0-2589ecb9e5a7.png" style={{ background: 'transparent', mixBlendMode: 'multiply' }} />
           </Link>
 
           {/* Desktop nav */}
@@ -81,7 +81,7 @@ const Layout = ({
       </header>
 
       {/* Main */}
-      <main className="flex-1 pt-[73px]">{children}</main>
+      <main className="flex-1 pt-[89px]">{children}</main>
 
       {/* Footer */}
       <footer className="bg-foreground text-background">
@@ -106,9 +106,11 @@ const Layout = ({
             <div>
               <h4 className="font-display text-lg mb-4">Opening Hours</h4>
               <div className="font-body text-sm text-background/60 space-y-1">
-                <p>Mon - Fri: 10am - 7pm</p>
-                <p>Sat: 10am - 5pm</p>
-                <p>Sun: Closed</p>
+                <p>Tue: 10am - 6pm</p>
+                <p>Thu: 10am - 3pm</p>
+                <p>Fri: 10am - 6pm</p>
+                <p>Sat: 10am - 6pm</p>
+                <p>Mon / Wed / Sun: Closed</p>
               </div>
               <div className="mt-4 flex gap-4">
                 <a href="https://instagram.com/hiveclinicuk" target="_blank" rel="noopener noreferrer" className="text-background/60 hover:text-background text-sm">Instagram</a>
@@ -124,6 +126,9 @@ const Layout = ({
               <p className="font-body text-xs text-background/40">
                 Manchester City Centre, Deansgate
               </p>
+              <Link to="/terms" className="font-body text-xs text-background/40 hover:text-background/60 transition-colors">
+                Terms & Conditions
+              </Link>
               <Link to="/auth" className="font-body text-xs text-background/20 hover:text-background/40 transition-colors">
                 Admin
               </Link>

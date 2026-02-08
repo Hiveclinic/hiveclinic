@@ -20,8 +20,8 @@ const TreatmentChatbot = () => {
     }
   }, [messages]);
 
-  const sendMessage = async () => {
-    const text = input.trim();
+  const sendMessage = async (overrideText?: string) => {
+    const text = (overrideText || input).trim();
     if (!text || isLoading) return;
 
     const userMsg: Message = { role: "user", content: text };
@@ -116,7 +116,7 @@ const TreatmentChatbot = () => {
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
             onClick={() => setOpen(true)}
-            className="fixed bottom-24 right-6 z-50 w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors"
+            className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-foreground text-background rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors"
             aria-label="Open treatment advisor"
           >
             <Sparkles size={22} />
@@ -131,7 +131,7 @@ const TreatmentChatbot = () => {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[calc(100vh-8rem)] bg-background border border-border flex flex-col shadow-2xl"
+            className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[calc(100vh-8rem)] bg-background border border-border flex flex-col shadow-2xl"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
@@ -160,7 +160,7 @@ const TreatmentChatbot = () => {
                     {["I want to improve my skin texture", "What's best for lip enhancement?", "Help me reduce fine lines"].map((q) => (
                       <button
                         key={q}
-                        onClick={() => { setInput(q); }}
+                        onClick={() => { sendMessage(q); }}
                         className="block w-full text-left px-3 py-2 border border-border font-body text-xs hover:border-gold transition-colors"
                       >
                         {q}
@@ -206,7 +206,7 @@ const TreatmentChatbot = () => {
                   maxLength={500}
                 />
                 <button
-                  onClick={sendMessage}
+                  onClick={() => sendMessage()}
                   disabled={!input.trim() || isLoading}
                   className="px-3 py-2 bg-foreground text-background hover:bg-accent transition-colors disabled:opacity-30"
                   aria-label="Send message"

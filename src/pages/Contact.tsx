@@ -22,7 +22,6 @@ const Contact = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* Form */}
             <div>
               {submitted ? (
                 <div className="p-12 bg-secondary text-center">
@@ -67,7 +66,6 @@ const Contact = () => {
               )}
             </div>
 
-            {/* Info + Map */}
             <div className="space-y-8">
               <div className="space-y-6">
                 {[
@@ -83,7 +81,6 @@ const Contact = () => {
                 ))}
               </div>
 
-              {/* Google Map */}
               <div className="aspect-video border border-border overflow-hidden">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2374.5!2d-2.2509!3d53.4774!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487bb1c16d4a6c01%3A0x4a8e0bce0c6b3a6a!2sDeansgate%2C%20Manchester!5e0!3m2!1sen!2suk!4v1700000000000"
@@ -98,6 +95,7 @@ const Contact = () => {
               </div>
             </div>
           </div>
+        </div>
       </section>
     </Layout>
   );

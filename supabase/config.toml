@@ -2,3 +2,9 @@ project_id = "kyjzjgdcfisuxogledux"
 
 [functions.mailchimp-subscribe]
 verify_jwt = false
+
+[functions.ai-aftercare]
+verify_jwt = false
+
+[functions.ai-treatment-chat]
+verify_jwt = false

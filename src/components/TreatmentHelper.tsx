@@ -18,7 +18,7 @@ const questions = [
   {
     q: "How would you describe your ideal outcome?",
     options: [
-      { label: "Understated — I want to look refreshed, not 'done'" },
+      { label: "Understated - I want to look refreshed, not 'done'" },
       { label: "A visible enhancement that still looks like me" },
       { label: "I want a dramatic, confidence-boosting change" },
       { label: "Healthier, clearer skin that speaks for itself" },

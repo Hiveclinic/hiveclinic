@@ -211,6 +211,36 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Blog Preview */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-4xl md:text-5xl mb-4">The Hive Edit</h2>
+            <p className="font-body text-muted-foreground">Expert skincare tips, treatment guides, and clinic news.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { slug: "what-to-expect-first-filler", title: "What to Expect at Your First Filler Appointment", img: gallery1, date: "February 2026" },
+              { slug: "lip-filler-aftercare-guide", title: "Lip Filler Aftercare: Your Complete Guide", img: gallery4, date: "January 2026" },
+              { slug: "hydrafacial-benefits-skin", title: "5 Benefits of HydraFacial for Every Skin Type", img: gallery3, date: "January 2026" },
+            ].map((post) => (
+              <Link key={post.slug} to={`/blog/${post.slug}`} className="group">
+                <div className="aspect-[4/5] overflow-hidden mb-4">
+                  <img src={post.img} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                </div>
+                <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-2">{post.date}</p>
+                <h3 className="font-display text-xl mb-2 group-hover:text-gold transition-colors">{post.title}</h3>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link to="/blog" className="inline-flex items-center gap-2 font-body text-sm tracking-widest uppercase text-gold hover:text-foreground transition-colors">
+              Read All Posts <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">

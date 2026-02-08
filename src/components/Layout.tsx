@@ -28,6 +28,9 @@ const navLinks = [{
   to: "/aftercare",
   label: "Aftercare"
 }, {
+  to: "/blog",
+  label: "Blog"
+}, {
   to: "/contact",
   label: "Contact"
 }, {

@@ -61,7 +61,8 @@ const AnimatedRoutes = () => {
         <Route path="/aftercare" element={<PageTransition><Aftercare /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
-    </AnimatePresence>
+      </AnimatePresence>
+    </>
   );
 };
 

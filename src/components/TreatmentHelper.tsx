@@ -35,11 +35,11 @@ const questions = [
   {
     q: "How does your skin typically behave?",
     options: [
-      { label: "Dry or dehydrated — it often feels tight" },
-      { label: "Oily or congested — I'm prone to breakouts" },
-      { label: "Combination — oily in places, dry in others" },
-      { label: "Sensitive — it reacts easily to products" },
-      { label: "Generally fine — I just want to maintain or improve" },
+      { label: "Dry or dehydrated - it often feels tight" },
+      { label: "Oily or congested - I'm prone to breakouts" },
+      { label: "Combination - oily in places, dry in others" },
+      { label: "Sensitive - it reacts easily to products" },
+      { label: "Generally fine - I just want to maintain or improve" },
     ],
   },
   {

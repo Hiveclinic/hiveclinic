@@ -3,6 +3,9 @@ import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { z } from "zod";
+
+const emailSchema = z.string().trim().email("Please enter a valid email").max(255);
 
 const VIPPopup = () => {
   const [show, setShow] = useState(false);
@@ -28,7 +31,13 @@ const VIPPopup = () => {
     e.preventDefault();
     setLoading(true);
 
-    const trimmedEmail = email.trim().toLowerCase();
+    const parsed = emailSchema.safeParse(email);
+    if (!parsed.success) {
+      toast.error(parsed.error.errors[0]?.message || "Invalid email");
+      setLoading(false);
+      return;
+    }
+    const trimmedEmail = parsed.data.toLowerCase();
 
     // Save to database
     const { error } = await supabase

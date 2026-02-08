@@ -222,7 +222,12 @@ const AdminBookingsTab = () => {
                   <span className="font-body text-xs text-gold">Deposit: £{Number(b.deposit_amount).toFixed(2)}</span>
                 )}
 
-                <div className="ml-auto flex gap-2">
+                <div className="ml-auto flex gap-2 flex-wrap">
+                  {b.status === "confirmed" && (
+                    <button onClick={() => sendReminder(b.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-gold hover:border-gold font-body text-xs tracking-wider uppercase transition-colors flex items-center gap-1">
+                      <Bell size={12} /> Remind
+                    </button>
+                  )}
                   {STATUS_OPTIONS.map(s => (
                     <button
                       key={s}

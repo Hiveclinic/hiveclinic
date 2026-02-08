@@ -120,9 +120,14 @@ const Layout = ({
             <p className="font-body text-xs text-background/40">
               © 2026 Hive Clinic. All rights reserved.
             </p>
-            <p className="font-body text-xs text-background/40">
-              Manchester City Centre, Deansgate
-            </p>
+            <div className="flex items-center gap-4">
+              <p className="font-body text-xs text-background/40">
+                Manchester City Centre, Deansgate
+              </p>
+              <Link to="/auth" className="font-body text-xs text-background/20 hover:text-background/40 transition-colors">
+                Admin
+              </Link>
+            </div>
           </div>
         </div>
       </footer>

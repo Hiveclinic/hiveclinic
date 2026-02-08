@@ -20,8 +20,8 @@ const TreatmentChatbot = () => {
     }
   }, [messages]);
 
-  const sendMessage = async () => {
-    const text = input.trim();
+  const sendMessage = async (overrideText?: string) => {
+    const text = (overrideText || input).trim();
     if (!text || isLoading) return;
 
     const userMsg: Message = { role: "user", content: text };

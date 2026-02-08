@@ -228,7 +228,7 @@ const TreatmentHelper = () => {
             {/* Urgency + CTA */}
             <div className="flex items-center gap-2 mb-4 text-gold">
               <Clock size={14} />
-              <p className="font-body text-sm">Limited availability this week — book now to secure your slot</p>
+              <p className="font-body text-sm">Limited availability this week - book now to secure your slot</p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">

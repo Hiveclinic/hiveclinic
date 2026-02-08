@@ -55,7 +55,7 @@ const LipFillers = () => (
           <div>
             <h2 className="font-display text-4xl md:text-5xl mb-6">Subtle Enhancement, Stunning Results</h2>
             <p className="font-body text-muted-foreground leading-relaxed mb-8">
-              At Hive Clinic, we believe less is more. Our lip filler treatments are designed to enhance your natural shape — adding volume, definition, and symmetry without ever looking overdone.
+              At Hive Clinic, we believe less is more. Our lip filler treatments are designed to enhance your natural shape - adding volume, definition, and symmetry without ever looking overdone.
             </p>
             <div className="space-y-4 mb-8">
               {["Natural-looking volume and shape", "Premium hyaluronic acid fillers", "Tailored to your facial proportions", "Includes full consultation", "Aftercare support included"].map((b) => (

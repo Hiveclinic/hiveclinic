@@ -96,7 +96,7 @@ const Contact = () => {
                   title="Hive Clinic location - Deansgate, Manchester"
                 />
               </div>
-          </div>
+            </div>
         </div>
       </section>
     </Layout>

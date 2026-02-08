@@ -80,6 +80,7 @@ const Contact = () => {
                         onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
                         className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors"
                       />
+                      {errors[field.key] && <p className="font-body text-xs text-red-500 mt-1">{errors[field.key]}</p>}
                     </div>
                   ))}
                   <div>

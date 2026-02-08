@@ -67,6 +67,8 @@ export type Database = {
       }
       bookings: {
         Row: {
+          addon_ids: string[] | null
+          addon_total: number | null
           aftercare_sent: boolean
           booking_date: string
           booking_time: string
@@ -80,6 +82,7 @@ export type Database = {
           duration_mins: number
           id: string
           notes: string | null
+          package_id: string | null
           payment_status: string
           reminder_sent: boolean
           setmore_booking_id: string | null
@@ -90,8 +93,11 @@ export type Database = {
           treatment_id: string
           updated_at: string
           user_id: string | null
+          variant_id: string | null
         }
         Insert: {
+          addon_ids?: string[] | null
+          addon_total?: number | null
           aftercare_sent?: boolean
           booking_date: string
           booking_time: string
@@ -105,6 +111,7 @@ export type Database = {
           duration_mins: number
           id?: string
           notes?: string | null
+          package_id?: string | null
           payment_status?: string
           reminder_sent?: boolean
           setmore_booking_id?: string | null
@@ -115,8 +122,11 @@ export type Database = {
           treatment_id: string
           updated_at?: string
           user_id?: string | null
+          variant_id?: string | null
         }
         Update: {
+          addon_ids?: string[] | null
+          addon_total?: number | null
           aftercare_sent?: boolean
           booking_date?: string
           booking_time?: string
@@ -130,6 +140,7 @@ export type Database = {
           duration_mins?: number
           id?: string
           notes?: string | null
+          package_id?: string | null
           payment_status?: string
           reminder_sent?: boolean
           setmore_booking_id?: string | null
@@ -140,6 +151,7 @@ export type Database = {
           treatment_id?: string
           updated_at?: string
           user_id?: string | null
+          variant_id?: string | null
         }
         Relationships: [
           {
@@ -343,6 +355,133 @@ export type Database = {
           },
         ]
       }
+      treatment_addons: {
+        Row: {
+          active: boolean
+          applicable_categories: string[] | null
+          created_at: string
+          description: string | null
+          duration_mins: number
+          id: string
+          name: string
+          price: number
+          sort_order: number | null
+        }
+        Insert: {
+          active?: boolean
+          applicable_categories?: string[] | null
+          created_at?: string
+          description?: string | null
+          duration_mins?: number
+          id?: string
+          name: string
+          price?: number
+          sort_order?: number | null
+        }
+        Update: {
+          active?: boolean
+          applicable_categories?: string[] | null
+          created_at?: string
+          description?: string | null
+          duration_mins?: number
+          id?: string
+          name?: string
+          price?: number
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      treatment_packages: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          name: string
+          price_per_session: number
+          sessions_count: number
+          sort_order: number | null
+          total_price: number
+          treatment_id: string
+          valid_days: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          price_per_session: number
+          sessions_count?: number
+          sort_order?: number | null
+          total_price: number
+          treatment_id: string
+          valid_days?: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          price_per_session?: number
+          sessions_count?: number
+          sort_order?: number | null
+          total_price?: number
+          treatment_id?: string
+          valid_days?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_packages_treatment_id_fkey"
+            columns: ["treatment_id"]
+            isOneToOne: false
+            referencedRelation: "treatments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      treatment_variants: {
+        Row: {
+          active: boolean
+          created_at: string
+          deposit_amount: number | null
+          duration_mins: number
+          id: string
+          name: string
+          price: number
+          sort_order: number | null
+          treatment_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          deposit_amount?: number | null
+          duration_mins?: number
+          id?: string
+          name: string
+          price: number
+          sort_order?: number | null
+          treatment_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          deposit_amount?: number | null
+          duration_mins?: number
+          id?: string
+          name?: string
+          price?: number
+          sort_order?: number | null
+          treatment_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_variants_treatment_id_fkey"
+            columns: ["treatment_id"]
+            isOneToOne: false
+            referencedRelation: "treatments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       treatments: {
         Row: {
           active: boolean
@@ -355,6 +494,9 @@ export type Database = {
           id: string
           image_url: string | null
           name: string
+          offer_label: string | null
+          offer_price: number | null
+          on_offer: boolean
           payment_type: string
           price: number
           slug: string
@@ -372,6 +514,9 @@ export type Database = {
           id?: string
           image_url?: string | null
           name: string
+          offer_label?: string | null
+          offer_price?: number | null
+          on_offer?: boolean
           payment_type?: string
           price: number
           slug: string
@@ -389,6 +534,9 @@ export type Database = {
           id?: string
           image_url?: string | null
           name?: string
+          offer_label?: string | null
+          offer_price?: number | null
+          on_offer?: boolean
           payment_type?: string
           price?: number
           slug?: string

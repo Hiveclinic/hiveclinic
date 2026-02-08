@@ -150,17 +150,43 @@ const Terms = () => (
             </div>
 
             <div>
-              <h2 className="font-display text-3xl mb-4">15. Changes to These Terms</h2>
+              <h2 className="font-display text-3xl mb-4">15. Payment Plans</h2>
+              <ul className="space-y-3 list-disc pl-5">
+                <li>Hive Clinic offers 0% interest payment plans on selected treatments, allowing you to spread the cost of your treatment into manageable monthly instalments with no additional charges or hidden fees.</li>
+                <li>Payment plans are available at the discretion of Hive Clinic and are subject to eligibility. Not all treatments qualify for payment plan options.</li>
+                <li>A minimum initial payment (deposit) is required at the time of booking. The remaining balance will be divided into equal monthly instalments as agreed between you and Hive Clinic.</li>
+                <li>For example, a £300 treatment may be split as £150 on the day, followed by 3 monthly payments of £50. The exact payment schedule will be confirmed prior to treatment.</li>
+                <li>All instalment payments must be made on the agreed dates. Failure to make a payment on time may result in the suspension of future appointments and the outstanding balance becoming immediately due in full.</li>
+                <li>Payment plans are separate from Klarna and Clearpay "buy now, pay later" options, which are also available on eligible treatments and are subject to their own terms and conditions.</li>
+                <li>Payment plans are non-transferable and apply only to the specific treatment and client for which they were agreed.</li>
+                <li>If you wish to cancel a treatment that is on a payment plan, any payments already made are non-refundable. The remaining balance may still be due depending on the stage of treatment.</li>
+                <li>Hive Clinic reserves the right to withdraw or amend payment plan offerings at any time without prior notice.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="font-display text-3xl mb-4">16. Multi-Session Courses & Packages</h2>
+              <ul className="space-y-3 list-disc pl-5">
+                <li>Certain treatments are available as multi-session courses at a discounted rate compared to booking individual sessions separately.</li>
+                <li>Course packages must be paid for in full at the time of purchase, unless a payment plan has been agreed (see Section 15).</li>
+                <li>All sessions within a course must be completed within 12 months of the purchase date unless otherwise agreed in writing. Unused sessions after this period will expire without refund.</li>
+                <li>Course packages are non-refundable and non-transferable once purchased. Sessions cannot be exchanged for alternative treatments.</li>
+                <li>If a course is partially completed and the client wishes to discontinue, no refund will be given for remaining sessions.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="font-display text-3xl mb-4">17. Changes to These Terms</h2>
               <p>Hive Clinic reserves the right to update, amend, or modify these Terms and Conditions at any time without prior notice. The most current version will always be available on our website. By continuing to book appointments or receive treatment after any changes, you agree to be bound by the updated terms.</p>
             </div>
 
             <div>
-              <h2 className="font-display text-3xl mb-4">16. Governing Law</h2>
+              <h2 className="font-display text-3xl mb-4">18. Governing Law</h2>
               <p>These Terms and Conditions shall be governed by and construed in accordance with the laws of England and Wales. Any disputes arising from or in connection with these terms shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
             </div>
 
             <div>
-              <h2 className="font-display text-3xl mb-4">17. Contact Us</h2>
+              <h2 className="font-display text-3xl mb-4">19. Contact Us</h2>
               <p>For any questions regarding these terms, or to raise a concern, please contact us:</p>
               <div className="mt-4 space-y-2">
                 <p className="font-semibold">Hive Clinic</p>

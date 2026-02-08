@@ -126,6 +126,9 @@ const Layout = ({
               <p className="font-body text-xs text-background/40">
                 Manchester City Centre, Deansgate
               </p>
+              <Link to="/terms" className="font-body text-xs text-background/40 hover:text-background/60 transition-colors">
+                Terms & Conditions
+              </Link>
               <Link to="/auth" className="font-body text-xs text-background/20 hover:text-background/40 transition-colors">
                 Admin
               </Link>

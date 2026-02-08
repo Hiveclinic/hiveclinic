@@ -227,7 +227,7 @@ const Index = () => {
               </a>
             </div>
             <p className="font-body text-xs text-muted-foreground mt-6">
-              25 St John Street, Deansgate, Manchester - Mon-Fri 10am-7pm, Sat 10am-5pm
+              25 Saint John Street, Manchester M3 4DT - Tue, Thu-Sat
             </p>
           </motion.div>
         </div>

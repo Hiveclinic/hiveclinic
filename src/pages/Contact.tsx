@@ -99,14 +99,14 @@ const Contact = () => {
 
               <div className="aspect-video border border-border overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2374.5!2d-2.2509!3d53.4774!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487bb1c16d4a6c01%3A0x4a8e0bce0c6b3a6a!2sDeansgate%2C%20Manchester!5e0!3m2!1sen!2suk!4v1700000000000"
+                  src="https://www.google.com/maps?q=25+Saint+John+Street,+Manchester,+M3+4DT,+UK&output=embed"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Hive Clinic location - Deansgate, Manchester"
+                  title="Hive Clinic - 25 Saint John Street, Manchester M3 4DT"
                 />
               </div>
             </div>

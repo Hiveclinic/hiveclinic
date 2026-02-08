@@ -164,7 +164,7 @@ const TreatmentHelper = () => {
                   onClick={() => handleAnswer(option.label)}
                   className="text-left px-5 py-4 border border-border hover:border-gold hover:bg-accent/5 font-body text-sm transition-all flex items-center gap-3 group"
                 >
-                  <span className="text-lg">{option.icon}</span>
+                  <span className="w-1.5 h-1.5 bg-gold rounded-full flex-shrink-0" />
                   <span className="group-hover:text-gold transition-colors">{option.label}</span>
                 </button>
               ))}

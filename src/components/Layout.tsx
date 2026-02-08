@@ -41,9 +41,7 @@ const Layout = ({
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex-shrink-0">
-            <img alt="Hive Clinic" className="h-14 mix-blend-multiply dark:invert" style={{
-            background: 'transparent'
-          }} src="/lovable-uploads/287bf846-68c9-4ce8-89d0-2589ecb9e5a7.png" />
+            <img alt="Hive Clinic" className="h-16" src="/lovable-uploads/287bf846-68c9-4ce8-89d0-2589ecb9e5a7.png" style={{ background: 'transparent', mixBlendMode: 'multiply' }} />
           </Link>
 
           {/* Desktop nav */}

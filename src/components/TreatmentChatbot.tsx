@@ -178,7 +178,16 @@ const TreatmentChatbot = () => {
                         <ReactMarkdown
                           components={{
                             a: ({ href, children }) => (
-                              <a href={href} target="_blank" rel="noopener noreferrer" className="text-gold underline underline-offset-2 hover:text-foreground transition-colors">
+                              <a
+                                href={href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-gold underline underline-offset-2 hover:text-foreground transition-colors"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  if (href) window.open(href, '_blank', 'noopener,noreferrer');
+                                }}
+                              >
                                 {children}
                               </a>
                             ),

@@ -5,6 +5,20 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// Rate limiting
+const rateLimiter = new Map<string, { count: number; resetAt: number }>();
+function checkRateLimit(ip: string, limit = 20, windowMs = 60000): boolean {
+  const now = Date.now();
+  const record = rateLimiter.get(ip);
+  if (!record || now > record.resetAt) {
+    rateLimiter.set(ip, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+  if (record.count >= limit) return false;
+  record.count++;
+  return true;
+}
+
 const SYSTEM_PROMPT = `You are Bee, the friendly AI treatment advisor for Hive Clinic - a luxury aesthetics clinic at 25 Saint John Street, Manchester (M3 4DT). Your name is Bee. If anyone asks your name, tell them you're Bee.
 
 Your role is to help visitors find the right treatment based on their concerns, skin goals, and preferences.

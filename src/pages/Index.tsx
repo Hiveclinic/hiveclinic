@@ -13,11 +13,11 @@ import klarnaLogo from "@/assets/klarna-logo.png";
 import clearpayLogo from "@/assets/clearpay-logo.png";
 
 const highlights = [
-  { title: "Chemical Peels", desc: "Targeted peels for face, back, and body to transform skin tone and texture.", link: "/treatments" },
-  { title: "HydraFacial", desc: "Deep cleansing facials for glass-like, refreshed skin.", link: "/treatments" },
-  { title: "Dermal Filler", desc: "Expert lip, cheek, jawline, and facial balancing treatments.", link: "/treatments/lip-fillers-manchester" },
+  { title: "Chemical Peels", desc: "Targeted peels for face, back, and body to transform skin tone and texture.", link: "/treatments/chemical-peels-manchester" },
+  { title: "HydraFacial", desc: "Deep cleansing facials for glass-like, refreshed skin.", link: "/treatments/hydrafacial-manchester" },
+  { title: "Dermal Filler", desc: "Expert lip, cheek, jawline, and facial balancing treatments.", link: "/treatments/dermal-filler-manchester" },
   { title: "Anti-Wrinkle", desc: "Precision injections for a naturally refreshed appearance.", link: "/treatments/anti-wrinkle-injections-manchester" },
-  { title: "Skin Boosters", desc: "Deep hydration for luminous, glass-like skin.", link: "/treatments" },
+  { title: "Skin Boosters", desc: "Deep hydration for luminous, glass-like skin.", link: "/treatments/skin-boosters-manchester" },
 ];
 
 const reviews = [

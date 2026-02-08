@@ -138,8 +138,8 @@ const TreatmentChatbot = () => {
               <div className="flex items-center gap-3">
                 <Sparkles size={16} className="text-gold" />
                 <div>
-                  <p className="font-display text-sm">Treatment Advisor</p>
-                  <p className="font-body text-xs text-muted-foreground">Powered by AI</p>
+                  <p className="font-display text-sm">Bee</p>
+                  <p className="font-body text-xs text-muted-foreground">Your Treatment Advisor</p>
                 </div>
               </div>
               <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Close chat">
@@ -152,9 +152,9 @@ const TreatmentChatbot = () => {
               {messages.length === 0 && (
                 <div className="text-center py-8">
                   <Sparkles size={28} className="text-gold mx-auto mb-3" />
-                  <p className="font-display text-lg mb-2">Hello!</p>
+                  <p className="font-display text-lg mb-2">Hey, I'm Bee!</p>
                   <p className="font-body text-xs text-muted-foreground leading-relaxed">
-                    I'm your AI treatment advisor. Tell me about your skin goals or concerns, and I'll recommend the best treatments for you.
+                    I'm your personal treatment advisor at Hive Clinic. Tell me about your skin goals or concerns, and I'll recommend the best treatments for you.
                   </p>
                   <div className="mt-4 space-y-2">
                     {["I want to improve my skin texture", "What's best for lip enhancement?", "Help me reduce fine lines"].map((q) => (

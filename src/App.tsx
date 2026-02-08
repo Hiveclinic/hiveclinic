@@ -16,7 +16,9 @@ import FatDissolve from "./pages/FatDissolve";
 import Microneedling from "./pages/Microneedling";
 import Pricing from "./pages/Pricing";
 import About from "./pages/About";
-import Bookings from "./pages/Bookings";
+import BookingSystem from "./pages/BookingSystem";
+import BookingSuccess from "./pages/BookingSuccess";
+import BookingCancelled from "./pages/BookingCancelled";
 import Results from "./pages/Results";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -50,7 +52,9 @@ const AnimatedRoutes = () => {
         <Route path="/treatments/microneedling-manchester" element={<PageTransition><Microneedling /></PageTransition>} />
         <Route path="/pricing" element={<PageTransition><Pricing /></PageTransition>} />
         <Route path="/about" element={<PageTransition><About /></PageTransition>} />
-        <Route path="/bookings" element={<PageTransition><Bookings /></PageTransition>} />
+        <Route path="/bookings" element={<PageTransition><BookingSystem /></PageTransition>} />
+        <Route path="/booking-success" element={<PageTransition><BookingSuccess /></PageTransition>} />
+        <Route path="/booking-cancelled" element={<PageTransition><BookingCancelled /></PageTransition>} />
         <Route path="/results" element={<PageTransition><Results /></PageTransition>} />
         <Route path="/blog" element={<PageTransition><Blog /></PageTransition>} />
         <Route path="/blog/:slug" element={<PageTransition><BlogPost /></PageTransition>} />

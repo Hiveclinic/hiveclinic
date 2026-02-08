@@ -86,7 +86,7 @@ const Contact = () => {
               <div className="space-y-6">
                 {[
                   { icon: MapPin, text: "25 Saint John Street, Manchester, M3 4DT" },
-                  { icon: Clock, text: "Tue: 10am-6pm | Thu: 10am-3pm | Fri-Sat: 10am-6pm | Mon/Wed/Sun: Closed" },
+                  { icon: Clock, text: "Mon: 10-4 | Tue: 10-5 | Thu: 12-8 | Fri: 10-6 | Sat: 10-5 | Wed/Sun: Closed" },
                   { icon: Phone, text: "+44 7795 008 114" },
                   { icon: Mail, text: "hello@hiveclinicuk.com" },
                 ].map(({ icon: Icon, text }) => (

@@ -4,7 +4,8 @@ import { Session } from "@supabase/supabase-js";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Mail, Phone, User, Calendar, Users } from "lucide-react";
+import { LogOut, Mail, Phone, User, Calendar, Users, Check, X, Download } from "lucide-react";
+import { toast } from "sonner";
 
 interface ContactSubmission {
   id: string;
@@ -13,6 +14,8 @@ interface ContactSubmission {
   phone: string | null;
   message: string;
   created_at: string;
+  contacted: boolean;
+  contacted_at: string | null;
 }
 
 interface EmailSubscriber {
@@ -28,6 +31,7 @@ const Admin = () => {
   const [subscribers, setSubscribers] = useState<EmailSubscriber[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [tab, setTab] = useState<"contacts" | "subscribers">("contacts");
+  const [filter, setFilter] = useState<"all" | "pending" | "contacted">("all");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,6 +90,82 @@ const Admin = () => {
     navigate("/auth");
   };
 
+  const toggleContacted = async (id: string, currentStatus: boolean) => {
+    const newStatus = !currentStatus;
+    const contactedAt = newStatus ? new Date().toISOString() : null;
+
+    const { error } = await supabase
+      .from("contact_submissions")
+      .update({ contacted: newStatus, contacted_at: contactedAt })
+      .eq("id", id);
+
+    if (error) {
+      toast.error("Failed to update status.");
+      return;
+    }
+
+    setSubmissions((prev) =>
+      prev.map((s) => s.id === id ? { ...s, contacted: newStatus, contacted_at: contactedAt } : s)
+    );
+    toast.success(newStatus ? "Marked as contacted." : "Marked as pending.");
+  };
+
+  const exportContactsCSV = () => {
+    const rows = filteredSubmissions.map((s) => ({
+      Name: s.name,
+      Email: s.email,
+      Phone: s.phone || "",
+      Message: s.message.replace(/"/g, '""'),
+      Status: s.contacted ? "Contacted" : "Pending",
+      "Contacted At": s.contacted_at ? new Date(s.contacted_at).toLocaleDateString("en-GB") : "",
+      "Submitted At": new Date(s.created_at).toLocaleDateString("en-GB"),
+    }));
+
+    const headers = Object.keys(rows[0] || {});
+    const csv = [
+      headers.join(","),
+      ...rows.map((r) => headers.map((h) => `"${(r as Record<string, string>)[h]}"`).join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `hive-enquiries-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportSubscribersCSV = () => {
+    const rows = subscribers.map((s) => ({
+      Email: s.email,
+      "Subscribed At": new Date(s.created_at).toLocaleDateString("en-GB"),
+    }));
+
+    const headers = Object.keys(rows[0] || {});
+    const csv = [
+      headers.join(","),
+      ...rows.map((r) => headers.map((h) => `"${(r as Record<string, string>)[h]}"`).join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `hive-vip-subscribers-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const filteredSubmissions = submissions.filter((s) => {
+    if (filter === "pending") return !s.contacted;
+    if (filter === "contacted") return s.contacted;
+    return true;
+  });
+
+  const pendingCount = submissions.filter((s) => !s.contacted).length;
+  const contactedCount = submissions.filter((s) => s.contacted).length;
+
   if (loading) {
     return (
       <Layout>
@@ -128,38 +208,91 @@ const Admin = () => {
             </button>
           </div>
 
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div className="border border-border p-5">
+              <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1">Total Enquiries</p>
+              <p className="font-display text-3xl">{submissions.length}</p>
+            </div>
+            <div className="border border-border p-5">
+              <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1">Pending</p>
+              <p className="font-display text-3xl text-gold">{pendingCount}</p>
+            </div>
+            <div className="border border-border p-5">
+              <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1">Contacted</p>
+              <p className="font-display text-3xl">{contactedCount}</p>
+            </div>
+            <div className="border border-border p-5">
+              <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1">VIP Subscribers</p>
+              <p className="font-display text-3xl">{subscribers.length}</p>
+            </div>
+          </div>
+
           {/* Tabs */}
-          <div className="flex gap-4 mb-8 border-b border-border">
+          <div className="flex items-center justify-between border-b border-border mb-6">
+            <div className="flex gap-4">
+              <button
+                onClick={() => setTab("contacts")}
+                className={`pb-3 font-body text-sm tracking-wider uppercase transition-colors ${tab === "contacts" ? "text-gold border-b-2 border-gold" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                Enquiries ({submissions.length})
+              </button>
+              <button
+                onClick={() => setTab("subscribers")}
+                className={`pb-3 font-body text-sm tracking-wider uppercase transition-colors ${tab === "subscribers" ? "text-gold border-b-2 border-gold" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                <span className="flex items-center gap-2"><Users size={14} /> VIP List ({subscribers.length})</span>
+              </button>
+            </div>
             <button
-              onClick={() => setTab("contacts")}
-              className={`pb-3 font-body text-sm tracking-wider uppercase transition-colors ${tab === "contacts" ? "text-gold border-b-2 border-gold" : "text-muted-foreground hover:text-foreground"}`}
+              onClick={tab === "contacts" ? exportContactsCSV : exportSubscribersCSV}
+              disabled={(tab === "contacts" && filteredSubmissions.length === 0) || (tab === "subscribers" && subscribers.length === 0)}
+              className="flex items-center gap-2 pb-3 font-body text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground transition-colors disabled:opacity-30"
             >
-              Enquiries ({submissions.length})
-            </button>
-            <button
-              onClick={() => setTab("subscribers")}
-              className={`pb-3 font-body text-sm tracking-wider uppercase transition-colors ${tab === "subscribers" ? "text-gold border-b-2 border-gold" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              <span className="flex items-center gap-2"><Users size={14} /> VIP List ({subscribers.length})</span>
+              <Download size={14} /> Export CSV
             </button>
           </div>
 
           {tab === "contacts" && (
             <>
-              {submissions.length === 0 ? (
+              {/* Filter */}
+              <div className="flex gap-3 mb-6">
+                {(["all", "pending", "contacted"] as const).map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setFilter(f)}
+                    className={`px-4 py-2 font-body text-xs tracking-wider uppercase border transition-colors ${filter === f ? "border-gold text-gold" : "border-border text-muted-foreground hover:border-foreground"}`}
+                  >
+                    {f === "all" ? `All (${submissions.length})` : f === "pending" ? `Pending (${pendingCount})` : `Contacted (${contactedCount})`}
+                  </button>
+                ))}
+              </div>
+
+              {filteredSubmissions.length === 0 ? (
                 <div className="p-12 bg-secondary text-center">
-                  <p className="font-body text-muted-foreground">No contact submissions yet.</p>
+                  <p className="font-body text-muted-foreground">No enquiries to show.</p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {submissions.map((sub) => (
+                  {filteredSubmissions.map((sub) => (
                     <motion.div
                       key={sub.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="border border-border p-6 hover:border-gold/30 transition-colors"
+                      className={`border p-6 transition-colors ${sub.contacted ? "border-border/50 opacity-70" : "border-border hover:border-gold/30"}`}
                     >
-                      <div className="flex flex-wrap gap-6 mb-4">
+                      <div className="flex flex-wrap gap-4 md:gap-6 mb-4 items-center">
+                        <button
+                          onClick={() => toggleContacted(sub.id, sub.contacted)}
+                          className={`flex items-center gap-2 px-3 py-1.5 border text-xs font-body tracking-wider uppercase transition-colors ${
+                            sub.contacted
+                              ? "border-green-600/30 text-green-600 hover:border-green-600"
+                              : "border-gold/30 text-gold hover:border-gold"
+                          }`}
+                          title={sub.contacted ? "Mark as pending" : "Mark as contacted"}
+                        >
+                          {sub.contacted ? <><Check size={12} /> Contacted</> : <><X size={12} /> Pending</>}
+                        </button>
                         <div className="flex items-center gap-2">
                           <User size={14} className="text-gold" />
                           <span className="font-body text-sm font-medium">{sub.name}</span>
@@ -184,6 +317,11 @@ const Admin = () => {
                         </div>
                       </div>
                       <p className="font-body text-sm text-foreground/80 leading-relaxed">{sub.message}</p>
+                      {sub.contacted && sub.contacted_at && (
+                        <p className="font-body text-xs text-muted-foreground mt-3">
+                          Contacted on {new Date(sub.contacted_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                        </p>
+                      )}
                     </motion.div>
                   ))}
                 </div>

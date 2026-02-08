@@ -97,7 +97,7 @@ const recommendations: Record<string, Recommendation> = {
   "I have stubborn fat around my chin, stomach or thighs": {
     category: "Fat Dissolving Injections",
     tagline: "Contour without surgery",
-    description: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, and more. Permanent results with no downtime — the body contouring solution you've been looking for.",
+    description: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, and more. Permanent results with no downtime - the body contouring solution you've been looking for.",
     benefits: ["Permanent fat cell reduction", "No surgery required", "Multiple areas treatable", "Prices from just £120"],
     testimonial: { text: "My double chin is gone. I can't believe the difference. So glad I found Hive.", name: "Priya K." },
     link: "/treatments/fat-dissolving-manchester",

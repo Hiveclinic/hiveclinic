@@ -174,8 +174,16 @@ const TreatmentChatbot = () => {
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div className={`max-w-[85%] px-3 py-2 ${msg.role === "user" ? "bg-foreground text-background" : "bg-secondary"}`}>
                     {msg.role === "assistant" ? (
-                      <div className="font-body text-xs leading-relaxed prose prose-sm max-w-none [&_p]:mb-1 [&_ul]:mb-1 [&_li]:mb-0.5 [&_strong]:font-semibold [&_h2]:text-sm [&_h2]:font-display [&_h2]:mt-2 [&_h2]:mb-1 [&_h3]:text-xs [&_h3]:font-display [&_h3]:mt-2 [&_h3]:mb-1">
-                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                      <div className="font-body text-xs leading-relaxed prose prose-sm max-w-none [&_p]:mb-1 [&_ul]:mb-1 [&_li]:mb-0.5 [&_strong]:font-semibold [&_h2]:text-sm [&_h2]:font-display [&_h2]:mt-2 [&_h2]:mb-1 [&_h3]:text-xs [&_h3]:font-display [&_h3]:mt-2 [&_h3]:mb-1 [&_a]:text-gold [&_a]:underline [&_a]:underline-offset-2">
+                        <ReactMarkdown
+                          components={{
+                            a: ({ href, children }) => (
+                              <a href={href} target="_blank" rel="noopener noreferrer" className="text-gold underline underline-offset-2 hover:text-foreground transition-colors">
+                                {children}
+                              </a>
+                            ),
+                          }}
+                        >{msg.content}</ReactMarkdown>
                       </div>
                     ) : (
                       <p className="font-body text-xs leading-relaxed">{msg.content}</p>

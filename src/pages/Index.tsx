@@ -24,6 +24,9 @@ const reviews = [
   { name: "Aisha M.", text: "Absolutely the best clinic in Manchester. Bianca is incredible - my skin has never looked better.", stars: 5 },
   { name: "Georgia L.", text: "The attention to detail is unreal. I felt so comfortable and the results were beyond what I expected.", stars: 5 },
   { name: "Priya K.", text: "Finally found somewhere that actually listens. Subtle, natural results every time.", stars: 5 },
+  { name: "Sophie R.", text: "Had my lip filler done here and I'm obsessed. So natural, nobody can tell it's filler. Already booked my next appointment.", stars: 5 },
+  { name: "Lauren T.", text: "Bianca explained everything so clearly before my anti-wrinkle treatment. Zero pressure, amazing results. Highly recommend.", stars: 5 },
+  { name: "Hannah B.", text: "The clinic is gorgeous and spotlessly clean. My HydraFacial left my skin glowing for days. Will be back monthly.", stars: 5 },
 ];
 
 const trustPoints = [

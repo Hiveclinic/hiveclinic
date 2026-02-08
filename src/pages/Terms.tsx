@@ -181,7 +181,7 @@ const Terms = () => (
             </div>
 
             <div>
-              <h2 className="font-display text-3xl mb-4">16. Governing Law</h2>
+              <h2 className="font-display text-3xl mb-4">18. Governing Law</h2>
               <p>These Terms and Conditions shall be governed by and construed in accordance with the laws of England and Wales. Any disputes arising from or in connection with these terms shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
             </div>
 

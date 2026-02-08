@@ -184,8 +184,8 @@ const Index = () => {
       <section className="py-24 bg-secondary">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="font-display text-4xl md:text-5xl text-center mb-4">What Our Clients Say</h2>
-          <p className="font-body text-muted-foreground text-center mb-16">Rated 5 stars across 100+ reviews</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <p className="font-body text-muted-foreground text-center mb-16">Rated 5 stars across 100+ Google reviews</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {reviews.map((r) => (
               <div key={r.name} className="p-8 border border-border bg-background">
                 <div className="flex gap-1 mb-4">
@@ -197,6 +197,16 @@ const Index = () => {
                 <p className="font-body text-sm tracking-wider uppercase text-muted-foreground">{r.name}</p>
               </div>
             ))}
+          </div>
+          <div className="text-center mt-10">
+            <a
+              href="https://g.page/r/hiveclinicuk/review"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 font-body text-sm tracking-widest uppercase text-gold hover:text-foreground transition-colors"
+            >
+              Read All Google Reviews <ArrowRight size={14} />
+            </a>
           </div>
         </div>
       </section>

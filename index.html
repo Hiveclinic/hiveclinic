@@ -45,10 +45,11 @@
       "telephone": "+447795008114",
       "priceRange": "££",
       "openingHoursSpecification": [
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Tuesday", "opens": "10:00", "closes": "18:00" },
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "10:00", "closes": "15:00" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Monday", "opens": "10:00", "closes": "16:00" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Tuesday", "opens": "10:00", "closes": "17:00" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "12:00", "closes": "20:00" },
         { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "10:00", "closes": "18:00" },
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "18:00" }
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "17:00" }
       ],
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -92,15 +93,12 @@
     </script>
 
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=MEASUREMENT_ID"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V16HNNVZ90"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      if (typeof import.meta !== 'undefined') {
-        // Will be replaced at runtime
-      }
-      gtag('config', 'MEASUREMENT_ID');
+      gtag('config', 'G-V16HNNVZ90');
     </script>
 
     <!-- Meta Pixel -->
@@ -113,12 +111,12 @@
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', 'PIXEL_ID');
+      fbq('init', '1385983552443887');
       fbq('track', 'PageView');
     </script>
   </head>
   <body>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1385983552443887&ev=PageView&noscript=1"/></noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

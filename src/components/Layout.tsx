@@ -106,11 +106,12 @@ const Layout = ({
             <div>
               <h4 className="font-display text-lg mb-4">Opening Hours</h4>
               <div className="font-body text-sm text-background/60 space-y-1">
-                <p>Tue: 10am - 6pm</p>
-                <p>Thu: 10am - 3pm</p>
+                <p>Mon: 10am - 4pm</p>
+                <p>Tue: 10am - 5pm</p>
+                <p>Thu: 12pm - 8pm</p>
                 <p>Fri: 10am - 6pm</p>
-                <p>Sat: 10am - 6pm</p>
-                <p>Mon / Wed / Sun: Closed</p>
+                <p>Sat: 10am - 5pm</p>
+                <p>Wed / Sun: Closed</p>
               </div>
               <div className="mt-4 flex gap-4">
                 <a href="https://instagram.com/hiveclinicuk" target="_blank" rel="noopener noreferrer" className="text-background/60 hover:text-background text-sm">Instagram</a>

@@ -5,39 +5,49 @@ import { Link } from "react-router-dom";
 
 const questions = [
   {
-    q: "What's your main concern right now?",
+    q: "What brought you here today?",
     options: [
-      { label: "Fine lines & wrinkles" },
-      { label: "I want fuller lips or more defined features" },
-      { label: "My skin looks dull, tired or dehydrated" },
-      { label: "Acne scarring or uneven texture" },
-      { label: "Stubborn fat I can't shift" },
-      { label: "Pigmentation or dark spots" },
+      { label: "I've noticed lines forming around my eyes, forehead or mouth" },
+      { label: "I'd love fuller, more balanced lips" },
+      { label: "My skin looks tired, dull or lacks hydration" },
+      { label: "I'm dealing with scarring, texture or enlarged pores" },
+      { label: "I have stubborn fat around my chin, stomach or thighs" },
+      { label: "I want to even out my skin tone or reduce dark spots" },
     ],
   },
   {
-    q: "What kind of result are you after?",
+    q: "How would you describe your ideal outcome?",
     options: [
-      { label: "Subtle — no one needs to know" },
-      { label: "Noticeable but natural" },
-      { label: "A real transformation" },
-      { label: "I just want healthy, glowing skin" },
+      { label: "Understated — I want to look refreshed, not 'done'" },
+      { label: "A visible enhancement that still looks like me" },
+      { label: "I want a dramatic, confidence-boosting change" },
+      { label: "Healthier, clearer skin that speaks for itself" },
     ],
   },
   {
-    q: "Have you had aesthetic treatments before?",
+    q: "What's your experience with aesthetic treatments?",
     options: [
-      { label: "No, this would be my first" },
-      { label: "Yes, a few times" },
-      { label: "Yes, I'm experienced" },
+      { label: "Completely new — I'm curious but a little nervous" },
+      { label: "I've had one or two treatments before" },
+      { label: "I'm a regular — I know what I like" },
     ],
   },
   {
-    q: "How soon do you want to see results?",
+    q: "How does your skin typically behave?",
     options: [
-      { label: "Immediately" },
-      { label: "Within a few weeks" },
-      { label: "I'm happy to build results over time" },
+      { label: "Dry or dehydrated — it often feels tight" },
+      { label: "Oily or congested — I'm prone to breakouts" },
+      { label: "Combination — oily in places, dry in others" },
+      { label: "Sensitive — it reacts easily to products" },
+      { label: "Generally fine — I just want to maintain or improve" },
+    ],
+  },
+  {
+    q: "When would you like to see results?",
+    options: [
+      { label: "I have an event coming up — as soon as possible" },
+      { label: "Within a few weeks would be ideal" },
+      { label: "I'm happy to invest in a longer-term treatment plan" },
     ],
   },
 ];
@@ -48,50 +58,57 @@ interface Recommendation {
   description: string;
   benefits: string[];
   testimonial: { text: string; name: string };
+  link: string;
 }
 
 const recommendations: Record<string, Recommendation> = {
-  "Fine lines & wrinkles": {
+  "I've noticed lines forming around my eyes, forehead or mouth": {
     category: "Anti-Wrinkle Treatments",
     tagline: "Turn back the clock without anyone knowing",
-    description: "Our precision anti-wrinkle injections smooth lines and restore a naturally refreshed look. From subtle brow lifts to full facial rejuvenation - results you'll love.",
+    description: "Our precision anti-wrinkle injections smooth lines and restore a naturally refreshed look. From subtle brow lifts to full facial rejuvenation — results you'll love.",
     benefits: ["Results visible in 3-7 days", "No downtime needed", "Lasts 3-4 months", "Prices from just £120"],
     testimonial: { text: "I look 10 years younger but completely natural. Bianca is amazing!", name: "Sarah T." },
+    link: "/treatments/anti-wrinkle-manchester",
   },
-  "I want fuller lips or more defined features": {
-    category: "Dermal Filler",
+  "I'd love fuller, more balanced lips": {
+    category: "Lip Fillers & Dermal Filler",
     tagline: "Enhance what you already have",
     description: "Expert filler treatments for lips, cheeks, jawline, and full facial balancing. We specialise in natural-looking results that enhance your features.",
     benefits: ["Instant results", "Natural-looking enhancement", "Lasts 6-12 months", "Prices from just £80"],
-    testimonial: { text: "My lips look incredible - subtle and natural. Everyone asks what my secret is!", name: "Emily R." },
+    testimonial: { text: "My lips look incredible — subtle and natural. Everyone asks what my secret is!", name: "Emily R." },
+    link: "/treatments/lip-fillers-manchester",
   },
-  "My skin looks dull, tired or dehydrated": {
+  "My skin looks tired, dull or lacks hydration": {
     category: "HydraFacial",
     tagline: "Wake up your skin",
     description: "Our deep cleansing HydraFacials deliver instant glass-skin results. Choose from Glass Skin Boost, Acne Refresh, or Glow Reset treatments.",
     benefits: ["Instant glow", "Zero downtime", "Deep hydration", "Prices from just £120"],
     testimonial: { text: "My skin has never looked this good. The Glass Skin Boost is life-changing!", name: "Aisha M." },
+    link: "/treatments/hydrafacial-manchester",
   },
-  "Acne scarring or uneven texture": {
-    category: "Microneedling",
+  "I'm dealing with scarring, texture or enlarged pores": {
+    category: "Microneedling & Chemical Peels",
     tagline: "Rebuild your skin from within",
     description: "Advanced microneedling combined with chemical peels for powerful texture repair. Targets scarring, enlarged pores, and uneven skin for smoother, clearer results.",
-    benefits: ["Clinically proven results", "Stimulates natural collagen", "Visible improvement in 2-4 weeks", "Prices from just £130"],
+    benefits: ["Clinically proven results", "Stimulates natural collagen", "Visible improvement in 2-4 weeks", "Prices from just £75"],
     testimonial: { text: "After 3 sessions my acne scars have practically disappeared. Wish I'd done it sooner!", name: "Jordan L." },
+    link: "/treatments/microneedling-manchester",
   },
-  "Stubborn fat I can't shift": {
-    category: "Fat Dissolve",
+  "I have stubborn fat around my chin, stomach or thighs": {
+    category: "Fat Dissolving Injections",
     tagline: "Contour without surgery",
-    description: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, and more. Permanent results with no downtime - the body contouring solution you've been looking for.",
+    description: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, and more. Permanent results with no downtime — the body contouring solution you've been looking for.",
     benefits: ["Permanent fat cell reduction", "No surgery required", "Multiple areas treatable", "Prices from just £120"],
-    testimonial: { text: "My double chin is gone! I can't believe the difference. So glad I found Hive.", name: "Priya K." },
+    testimonial: { text: "My double chin is gone. I can't believe the difference. So glad I found Hive.", name: "Priya K." },
+    link: "/treatments/fat-dissolving-manchester",
   },
-  "Pigmentation or dark spots": {
+  "I want to even out my skin tone or reduce dark spots": {
     category: "Chemical Peels",
     tagline: "Reveal your best skin",
     description: "Targeted chemical peels and melanostop treatments to even out skin tone, reduce pigmentation, and restore clarity. Available for face, body, and intimate areas.",
     benefits: ["Visible results after first session", "Suitable for all skin types", "Courses available for best results", "Prices from just £75"],
     testimonial: { text: "The difference in my skin tone is unreal. Even my friends have noticed!", name: "Georgia L." },
+    link: "/treatments/chemical-peels-manchester",
   },
 };
 
@@ -123,7 +140,7 @@ const TreatmentHelper = () => {
     setShowResult(false);
   };
 
-  const result = recommendations[answers[0]] || recommendations["My skin looks dull, tired or dehydrated"];
+  const result = recommendations[answers[0]] || recommendations["My skin looks tired, dull or lacks hydration"];
 
   return (
     <div className="bg-background border border-border p-8 md:p-12 max-w-2xl mx-auto shadow-sm">
@@ -211,7 +228,7 @@ const TreatmentHelper = () => {
             {/* Urgency + CTA */}
             <div className="flex items-center gap-2 mb-4 text-gold">
               <Clock size={14} />
-              <p className="font-body text-sm">Limited availability this week - book now to secure your slot</p>
+              <p className="font-body text-sm">Limited availability this week — book now to secure your slot</p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
@@ -221,16 +238,23 @@ const TreatmentHelper = () => {
               >
                 Book Free Consultation <ArrowRight size={14} />
               </Link>
-              <button
-                onClick={reset}
-                className="px-6 py-4 border border-border font-body text-sm tracking-widest uppercase hover:border-gold transition-colors"
+              <Link
+                to={result.link}
+                className="inline-flex items-center justify-center px-6 py-4 border border-border font-body text-sm tracking-widest uppercase hover:border-gold transition-colors"
               >
-                Retake Quiz
-              </button>
+                Learn More
+              </Link>
             </div>
 
+            <button
+              onClick={reset}
+              className="mt-3 w-full text-center text-muted-foreground hover:text-foreground font-body text-xs tracking-wider uppercase transition-colors"
+            >
+              Retake Quiz
+            </button>
+
             <p className="font-body text-xs text-muted-foreground mt-4 text-center">
-              No obligation - just a friendly chat about your goals.
+              No obligation — just a friendly chat about your goals.
             </p>
           </motion.div>
         )}

@@ -97,7 +97,7 @@ const recommendations: Record<string, Recommendation> = {
   "I have stubborn fat around my chin, stomach or thighs": {
     category: "Fat Dissolving Injections",
     tagline: "Contour without surgery",
-    description: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, and more. Permanent results with no downtime — the body contouring solution you've been looking for.",
+    description: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, and more. Permanent results with no downtime - the body contouring solution you've been looking for.",
     benefits: ["Permanent fat cell reduction", "No surgery required", "Multiple areas treatable", "Prices from just £120"],
     testimonial: { text: "My double chin is gone. I can't believe the difference. So glad I found Hive.", name: "Priya K." },
     link: "/treatments/fat-dissolving-manchester",
@@ -143,7 +143,9 @@ const TreatmentHelper = () => {
   const result = recommendations[answers[0]] || recommendations["My skin looks tired, dull or lacks hydration"];
 
   return (
-    <div className="bg-background border border-border p-8 md:p-12 max-w-2xl mx-auto shadow-sm">
+    <div className="bg-background border border-gold/20 p-8 md:p-12 max-w-2xl mx-auto relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
       <div className="flex items-center gap-2 mb-6">
         <Sparkles size={20} className="text-gold" />
         <h3 className="font-display text-2xl">Find Your Perfect Treatment</h3>
@@ -228,7 +230,7 @@ const TreatmentHelper = () => {
             {/* Urgency + CTA */}
             <div className="flex items-center gap-2 mb-4 text-gold">
               <Clock size={14} />
-              <p className="font-body text-sm">Limited availability this week — book now to secure your slot</p>
+              <p className="font-body text-sm">Limited availability this week - book now to secure your slot</p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
@@ -254,7 +256,7 @@ const TreatmentHelper = () => {
             </button>
 
             <p className="font-body text-xs text-muted-foreground mt-4 text-center">
-              No obligation — just a friendly chat about your goals.
+              No obligation - just a friendly chat about your goals.
             </p>
           </motion.div>
         )}

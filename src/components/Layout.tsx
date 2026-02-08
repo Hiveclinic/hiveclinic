@@ -140,6 +140,7 @@ const Layout = ({
       </footer>
 
       <WhatsAppButton />
+      <VIPPopup />
     </div>;
 };
 export default Layout;

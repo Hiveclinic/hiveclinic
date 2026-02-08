@@ -482,7 +482,7 @@ const BookingSystem = () => {
                           Apply
                         </button>
                       </div>
-                      {discountError && <p className="font-body text-xs text-red-500 mt-2">{discountError}</p>}
+                      {discountError && <p className="font-body text-xs text-destructive mt-2">{discountError}</p>}
                       {discountResult?.valid && (
                         <p className="font-body text-xs text-gold mt-2">
                           ✓ {discountResult.discountType === "percentage" ? `${discountResult.discountValue}%` : `£${discountResult.discountValue}`} discount applied

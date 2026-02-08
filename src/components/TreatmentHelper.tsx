@@ -27,9 +27,9 @@ const questions = [
   {
     q: "What's your experience with aesthetic treatments?",
     options: [
-      { label: "Completely new — I'm curious but a little nervous" },
+      { label: "Completely new - I'm curious but a little nervous" },
       { label: "I've had one or two treatments before" },
-      { label: "I'm a regular — I know what I like" },
+      { label: "I'm a regular - I know what I like" },
     ],
   },
   {

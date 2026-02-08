@@ -7,11 +7,11 @@ import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 
 const treatments = [
-  { name: "Anti-Wrinkle Injections", desc: "Smooth forehead lines, frown lines, and crow's feet for a naturally refreshed look.", from: "£120" },
-  { name: "Masseter Jaw Slimming", desc: "Slim and contour the jawline for a more defined, feminine shape.", from: "£200" },
-  { name: "Brow Lift", desc: "Subtly elevate the brow for a more open, youthful eye area.", from: "£120" },
-  { name: "Lip Flip", desc: "Enhance the upper lip shape without filler for a natural pout.", from: "£80" },
-  { name: "Gummy Smile Correction", desc: "Reduce gum visibility when smiling for a more balanced look.", from: "£80" },
+  { name: "Anti-Wrinkle Injections", desc: "Smooth forehead lines, frown lines, and crow's feet for a naturally refreshed look.", from: "£179" },
+  { name: "Masseter Jaw Slimming", desc: "Slim and contour the jawline for a more defined, feminine shape.", from: "£240" },
+  { name: "Brow Lift", desc: "Subtly elevate the brow for a more open, youthful eye area.", from: "£150" },
+  { name: "Lip Flip", desc: "Enhance the upper lip shape without filler for a natural pout.", from: "£120" },
+  { name: "Gummy Smile Correction", desc: "Reduce gum visibility when smiling for a more balanced look.", from: "£120" },
 ];
 
 const faqs = [

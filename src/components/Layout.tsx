@@ -126,7 +126,7 @@ const Layout = ({
                   <img src={instagramLogo} alt="Instagram" className="h-7 w-7 opacity-80 hover:opacity-100 transition-opacity" />
                 </a>
                 <a href="https://tiktok.com/@hiveclinicuk" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-                  <img src={tiktokLogo} alt="TikTok" className="h-7 w-7 opacity-80 hover:opacity-100 transition-opacity" />
+                  <img src={tiktokLogo} alt="TikTok" className="h-7 w-7 rounded-full object-cover opacity-80 hover:opacity-100 transition-opacity" style={{ clipPath: 'circle(50%)' }} />
                 </a>
               </div>
             </div>

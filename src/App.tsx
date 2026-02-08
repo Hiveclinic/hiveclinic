@@ -27,6 +27,7 @@ import Terms from "./pages/Terms";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Aftercare from "./pages/Aftercare";
+import CustomerPortal from "./pages/CustomerPortal";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 import ScrollToTop from "./components/ScrollToTop";

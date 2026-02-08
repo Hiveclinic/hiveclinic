@@ -29,6 +29,7 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "discounts", label: "Discounts", icon: <Tag size={14} /> },
   { key: "contacts", label: "Enquiries", icon: <Mail size={14} /> },
   { key: "subscribers", label: "VIP List", icon: <Users size={14} /> },
+  { key: "site", label: "Site Settings", icon: <Settings size={14} /> },
 ];
 
 interface ContactSubmission {

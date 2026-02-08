@@ -14,6 +14,150 @@ export type Database = {
   }
   public: {
     Tables: {
+      availability: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          end_time: string
+          id: string
+          is_available: boolean
+          slot_duration_mins: number
+          start_time: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          end_time: string
+          id?: string
+          is_available?: boolean
+          slot_duration_mins?: number
+          start_time: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          end_time?: string
+          id?: string
+          is_available?: boolean
+          slot_duration_mins?: number
+          start_time?: string
+        }
+        Relationships: []
+      }
+      blocked_dates: {
+        Row: {
+          blocked_date: string
+          created_at: string
+          id: string
+          reason: string | null
+        }
+        Insert: {
+          blocked_date: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+        }
+        Update: {
+          blocked_date?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+        }
+        Relationships: []
+      }
+      bookings: {
+        Row: {
+          aftercare_sent: boolean
+          booking_date: string
+          booking_time: string
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string | null
+          deposit_amount: number | null
+          discount_amount: number | null
+          discount_code_id: string | null
+          duration_mins: number
+          id: string
+          notes: string | null
+          payment_status: string
+          reminder_sent: boolean
+          setmore_booking_id: string | null
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          total_price: number
+          treatment_id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          aftercare_sent?: boolean
+          booking_date: string
+          booking_time: string
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone?: string | null
+          deposit_amount?: number | null
+          discount_amount?: number | null
+          discount_code_id?: string | null
+          duration_mins: number
+          id?: string
+          notes?: string | null
+          payment_status?: string
+          reminder_sent?: boolean
+          setmore_booking_id?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          total_price: number
+          treatment_id: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          aftercare_sent?: boolean
+          booking_date?: string
+          booking_time?: string
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string | null
+          deposit_amount?: number | null
+          discount_amount?: number | null
+          discount_code_id?: string | null
+          duration_mins?: number
+          id?: string
+          notes?: string | null
+          payment_status?: string
+          reminder_sent?: boolean
+          setmore_booking_id?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          total_price?: number
+          treatment_id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_discount_code_id_fkey"
+            columns: ["discount_code_id"]
+            isOneToOne: false
+            referencedRelation: "discount_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_treatment_id_fkey"
+            columns: ["treatment_id"]
+            isOneToOne: false
+            referencedRelation: "treatments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_submissions: {
         Row: {
           contacted: boolean
@@ -47,6 +191,90 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_profiles: {
+        Row: {
+          created_at: string
+          date_of_birth: string | null
+          email: string
+          full_name: string | null
+          id: string
+          medical_notes: string | null
+          phone: string | null
+          preferences: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_of_birth?: string | null
+          email: string
+          full_name?: string | null
+          id?: string
+          medical_notes?: string | null
+          phone?: string | null
+          preferences?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          medical_notes?: string | null
+          phone?: string | null
+          preferences?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      discount_codes: {
+        Row: {
+          active: boolean
+          applicable_treatments: string[] | null
+          code: string
+          created_at: string
+          discount_type: string
+          discount_value: number
+          id: string
+          max_uses: number | null
+          min_spend: number | null
+          used_count: number
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          active?: boolean
+          applicable_treatments?: string[] | null
+          code: string
+          created_at?: string
+          discount_type: string
+          discount_value: number
+          id?: string
+          max_uses?: number | null
+          min_spend?: number | null
+          used_count?: number
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          active?: boolean
+          applicable_treatments?: string[] | null
+          code?: string
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          id?: string
+          max_uses?: number | null
+          min_spend?: number | null
+          used_count?: number
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: []
+      }
       email_subscribers: {
         Row: {
           created_at: string
@@ -62,6 +290,110 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+        }
+        Relationships: []
+      }
+      payment_plans: {
+        Row: {
+          booking_id: string
+          created_at: string
+          id: string
+          instalment_amount: number
+          next_payment_date: string | null
+          paid_instalments: number
+          status: string
+          stripe_subscription_id: string | null
+          total_amount: number
+          total_instalments: number
+          updated_at: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          id?: string
+          instalment_amount: number
+          next_payment_date?: string | null
+          paid_instalments?: number
+          status?: string
+          stripe_subscription_id?: string | null
+          total_amount: number
+          total_instalments?: number
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          id?: string
+          instalment_amount?: number
+          next_payment_date?: string | null
+          paid_instalments?: number
+          status?: string
+          stripe_subscription_id?: string | null
+          total_amount?: number
+          total_instalments?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_plans_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      treatments: {
+        Row: {
+          active: boolean
+          category: string
+          created_at: string
+          deposit_amount: number | null
+          deposit_required: boolean
+          description: string | null
+          duration_mins: number
+          id: string
+          image_url: string | null
+          name: string
+          payment_type: string
+          price: number
+          slug: string
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          deposit_amount?: number | null
+          deposit_required?: boolean
+          description?: string | null
+          duration_mins?: number
+          id?: string
+          image_url?: string | null
+          name: string
+          payment_type?: string
+          price: number
+          slug: string
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          deposit_amount?: number | null
+          deposit_required?: boolean
+          description?: string | null
+          duration_mins?: number
+          id?: string
+          image_url?: string | null
+          name?: string
+          payment_type?: string
+          price?: number
+          slug?: string
+          sort_order?: number | null
+          updated_at?: string
         }
         Relationships: []
       }

@@ -6,6 +6,9 @@ import logo from "@/assets/logo.png";
 import WhatsAppButton from "./WhatsAppButton";
 import VIPPopup from "./VIPPopup";
 import TreatmentChatbot from "./TreatmentChatbot";
+import instagramLogo from "@/assets/instagram-logo.png";
+import tiktokLogo from "@/assets/tiktok-logo.png";
+
 const navLinks = [{
   to: "/",
   label: "Home"
@@ -22,8 +25,8 @@ const navLinks = [{
   to: "/results",
   label: "Results"
 }, {
-  to: "/blog",
-  label: "Blog"
+  to: "/aftercare",
+  label: "Aftercare"
 }, {
   to: "/contact",
   label: "Contact"

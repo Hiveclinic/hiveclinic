@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex-shrink-0">
-            <img src={logo} alt="Hive Clinic" className="h-10 mix-blend-multiply" />
+            <img src={logo} alt="Hive Clinic" className="h-14 mix-blend-multiply dark:invert" style={{ background: 'transparent' }} />
           </Link>
 
           {/* Desktop nav */}

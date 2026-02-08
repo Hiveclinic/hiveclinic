@@ -143,7 +143,6 @@ const Layout = ({
         </div>
       </footer>
 
-      <WhatsAppButton />
       <VIPPopup />
       <TreatmentChatbot />
     </div>;

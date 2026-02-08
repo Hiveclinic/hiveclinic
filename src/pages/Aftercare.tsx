@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-
+import AIAftercare from "@/components/AIAftercare";
 const aftercareGuides = [
   {
     title: "Lip Filler Aftercare",

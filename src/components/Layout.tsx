@@ -123,10 +123,10 @@ const Layout = ({
               </div>
               <div className="mt-4 flex gap-4 items-center">
                 <a href="https://instagram.com/hiveclinicuk" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                  <img src={instagramLogo} alt="Instagram" className="h-7 w-7 rounded-md" />
+                  <img src={instagramLogo} alt="Instagram" className="h-7 w-7 rounded-md brightness-0 invert opacity-60 hover:opacity-100 transition-opacity" />
                 </a>
                 <a href="https://tiktok.com/@hiveclinicuk" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-                  <img src={tiktokLogo} alt="TikTok" className="h-7 w-7 rounded-full" />
+                  <img src={tiktokLogo} alt="TikTok" className="h-7 w-7 rounded-full brightness-0 invert opacity-60 hover:opacity-100 transition-opacity" />
                 </a>
               </div>
             </div>

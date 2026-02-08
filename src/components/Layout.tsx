@@ -130,8 +130,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <div>
               <h4 className="font-display text-lg mb-4">Opening Hours</h4>
               <div className="font-body text-sm text-background/60 space-y-1">
-                <p>Mon – Fri: 10am – 7pm</p>
-                <p>Sat: 10am – 5pm</p>
+                <p>Mon - Fri: 10am - 7pm</p>
+                <p>Sat: 10am - 5pm</p>
                 <p>Sun: Closed</p>
               </div>
               <div className="mt-4 flex gap-4">

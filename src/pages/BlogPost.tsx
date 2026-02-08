@@ -29,7 +29,7 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
     date: "November 2025",
     content: [
       "Both Profhilo and dermal fillers involve injectable hyaluronic acid, but they serve very different purposes.",
-      "Dermal fillers add volume and structure to specific areas — think lips, cheeks, jawline. They're about shaping and contouring. Results are immediate and can last 6–18 months.",
+      "Dermal fillers add volume and structure to specific areas - think lips, cheeks, jawline. They're about shaping and contouring. Results are immediate and can last 6-18 months.",
       "Profhilo, on the other hand, is a skin booster. It disperses across a wide area to hydrate and stimulate collagen and elastin production. It improves overall skin quality, laxity, and glow rather than adding volume.",
       "Many of our clients benefit from both. A common approach is to address specific concerns with filler and maintain overall skin health with Profhilo treatments two to three times a year.",
       "Not sure which is right for you? Book a consultation and we'll guide you to the perfect plan.",

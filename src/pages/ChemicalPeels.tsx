@@ -80,7 +80,7 @@ const ChemicalPeels = () => (
               Our peels are medical-grade and professionally administered to ensure safety and maximum results. Every treatment is preceded by a thorough skin assessment.
             </p>
             <div className="space-y-4">
-              {["Medical-grade products only", "Skin assessment included", "Face, back, and body treatments", "Intimate and melanostop peels available", "Course packages for best results", "Full aftercare support"].map((b) => (
+              {["Medical-grade products only", "Skin assessment included", "Face, back, and body treatments", "Intimate and body brightening peels available", "Course packages for best results", "Full aftercare support"].map((b) => (
                 <div key={b} className="flex items-center gap-3">
                   <CheckCircle size={16} className="text-gold flex-shrink-0" />
                   <span className="font-body text-sm">{b}</span>

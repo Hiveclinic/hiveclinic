@@ -52,7 +52,9 @@ const AnimatedRoutes = () => {
         <Route path="/treatments/microneedling-manchester" element={<PageTransition><Microneedling /></PageTransition>} />
         <Route path="/pricing" element={<PageTransition><Pricing /></PageTransition>} />
         <Route path="/about" element={<PageTransition><About /></PageTransition>} />
-        <Route path="/bookings" element={<PageTransition><Bookings /></PageTransition>} />
+        <Route path="/bookings" element={<PageTransition><BookingSystem /></PageTransition>} />
+        <Route path="/booking-success" element={<PageTransition><BookingSuccess /></PageTransition>} />
+        <Route path="/booking-cancelled" element={<PageTransition><BookingCancelled /></PageTransition>} />
         <Route path="/results" element={<PageTransition><Results /></PageTransition>} />
         <Route path="/blog" element={<PageTransition><Blog /></PageTransition>} />
         <Route path="/blog/:slug" element={<PageTransition><BlogPost /></PageTransition>} />

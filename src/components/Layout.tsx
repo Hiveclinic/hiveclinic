@@ -99,6 +99,9 @@ const Layout = ({
               {navLinks.slice(0, 4).map(link => <Link key={link.to} to={link.to} className="block font-body text-sm text-background/60 hover:text-background mb-2">
                   {link.label}
                 </Link>)}
+              <Link to="/aftercare" className="block font-body text-sm text-background/60 hover:text-background mb-2">
+                Aftercare
+              </Link>
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Services</h4>

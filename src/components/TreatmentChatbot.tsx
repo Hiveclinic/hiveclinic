@@ -93,7 +93,7 @@ const TreatmentChatbot = () => {
       }
     } catch (e) {
       console.error("Chat error:", e);
-      upsertAssistant("Sorry, something went wrong. Please try again or contact us on WhatsApp.");
+      upsertAssistant("Sorry, something went wrong. Please try again or [message us on WhatsApp](https://wa.me/447795008114).");
     }
 
     setIsLoading(false);

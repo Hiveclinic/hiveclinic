@@ -41,7 +41,7 @@ const categories = [
     desc: "Injectable moisturisers that work beneath the skin's surface to restore hydration and create a natural glow.",
     img: gallery1,
     link: "/treatments/skin-boosters-manchester",
-    treatments: ["Lumi Eyes", "Seventy Hyal", "Polynucleotides", "Profhilo"],
+    treatments: ["Lumi Eyes", "Seventy Hyal", "Polynucleotides", "Injectable Skin Remodelling"],
   },
   {
     title: "Dermal Filler",

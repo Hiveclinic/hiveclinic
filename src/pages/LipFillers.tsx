@@ -133,7 +133,7 @@ const LipFillers = () => (
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready for Your Perfect Pout?</h2>
-        <p className="font-body text-muted-foreground mb-8">Book a free consultation — no obligation, just a friendly chat about your goals.</p>
+        <p className="font-body text-muted-foreground mb-8">Book a free consultation - no obligation, just a friendly chat about your goals.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link to="/bookings" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
             Book Free Consultation <ArrowRight size={14} />

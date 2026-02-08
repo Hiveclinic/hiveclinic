@@ -96,7 +96,7 @@ const SkinBoosters = () => (
         <p className="font-body text-muted-foreground text-center mb-16">Rated 5 stars across 100+ reviews</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { name: "Hannah L.", text: "Profhilo has genuinely changed my skin. It looks plumper, dewier, and I've had so many compliments." },
+            { name: "Hannah L.", text: "The injectable skin remodelling has genuinely changed my skin. It looks plumper, dewier, and I've had so many compliments." },
             { name: "Nina P.", text: "The Lumi Eyes treatment is incredible. My under-eyes look so much brighter and less tired. Worth every penny." },
             { name: "Zara M.", text: "I've tried skin boosters elsewhere but Bianca's technique is on another level. The results are so natural." },
           ].map((r) => (

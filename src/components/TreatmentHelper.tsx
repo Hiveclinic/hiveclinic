@@ -75,7 +75,7 @@ const recommendations: Record<string, Recommendation> = {
     tagline: "Enhance what you already have",
     description: "Expert filler treatments for lips, cheeks, jawline, and full facial balancing. We specialise in natural-looking results that enhance your features.",
     benefits: ["Instant results", "Natural-looking enhancement", "Lasts 6-12 months", "Prices from just £80"],
-    testimonial: { text: "My lips look incredible — subtle and natural. Everyone asks what my secret is!", name: "Emily R." },
+    testimonial: { text: "My lips look incredible - subtle and natural. Everyone asks what my secret is!", name: "Emily R." },
     link: "/treatments/lip-fillers-manchester",
   },
   "My skin looks tired, dull or lacks hydration": {

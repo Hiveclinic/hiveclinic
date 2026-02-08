@@ -66,7 +66,7 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
       "Chemical peels are one of the most effective treatments for improving skin texture, tone, and clarity. Whether you're dealing with acne scarring, hyperpigmentation, or just want brighter, smoother skin, there's a peel for you.",
       "At Hive Clinic, we offer two levels of chemical peels. Level 1 peels are ideal for treating hormonal breakouts, mild scarring, and rough texture. They include an antibacterial cleanse and clarifying mask for a comprehensive treatment.",
       "Level 2 peels are stronger and specifically designed for stubborn pigmentation issues like melasma and dark spots. These are our most popular peels for clients seeking dramatic improvement in skin tone evenness.",
-      "We also offer intimate peels and melanostop body treatments for areas like underarms, elbows, knees, and hands. These specialist peels are designed to brighten and even out skin tone in areas that traditional skincare can't reach.",
+      "We also offer intimate peels and body brightening treatments for areas like underarms, elbows, knees, and hands. These specialist peels are designed to brighten and even out skin tone in areas that traditional skincare can't reach.",
       "Most clients benefit from a course of 3-8 sessions depending on their concerns. We offer course packages at reduced prices to make ongoing treatment more accessible. Your practitioner will recommend the right plan during your consultation.",
       "Aftercare is important - expect mild peeling and redness for 2-5 days. Strict sun protection is essential, and we'll provide you with everything you need to know to get the best results from your treatment.",
     ],

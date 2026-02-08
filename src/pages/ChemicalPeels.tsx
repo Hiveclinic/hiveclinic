@@ -103,7 +103,7 @@ const ChemicalPeels = () => (
           {[
             { name: "Fatima A.", text: "My skin texture has completely transformed after 3 sessions. The pigmentation on my cheeks has faded dramatically." },
             { name: "Charlotte B.", text: "I had terrible back acne scarring and Bianca recommended a course of Level 1 peels. The difference is incredible." },
-            { name: "Amira H.", text: "The melanostop treatment for my underarms was something I'd been looking for everywhere. So glad I found Hive." },
+            { name: "Amira H.", text: "The body brightening treatment for my underarms was something I'd been looking for everywhere. So glad I found Hive." },
           ].map((r) => (
             <div key={r.name} className="p-8 border border-border bg-background">
               <div className="flex gap-1 mb-4">{Array.from({ length: 5 }).map((_, i) => <Star key={i} size={14} className="fill-gold text-gold" />)}</div>

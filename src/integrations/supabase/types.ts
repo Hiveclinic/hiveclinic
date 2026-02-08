@@ -109,6 +109,7 @@ export type Database = {
           package_id: string | null
           payment_status: string
           reminder_sent: boolean
+          reschedule_count: number
           setmore_booking_id: string | null
           status: string
           stripe_payment_intent_id: string | null
@@ -138,6 +139,7 @@ export type Database = {
           package_id?: string | null
           payment_status?: string
           reminder_sent?: boolean
+          reschedule_count?: number
           setmore_booking_id?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
@@ -167,6 +169,7 @@ export type Database = {
           package_id?: string | null
           payment_status?: string
           reminder_sent?: boolean
+          reschedule_count?: number
           setmore_booking_id?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
@@ -441,6 +444,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      site_settings: {
+        Row: {
+          announcement_active: boolean | null
+          announcement_link: string | null
+          announcement_text: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          announcement_active?: boolean | null
+          announcement_link?: string | null
+          announcement_text?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          announcement_active?: boolean | null
+          announcement_link?: string | null
+          announcement_text?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       treatment_addons: {
         Row: {

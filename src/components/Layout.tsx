@@ -6,6 +6,7 @@ import logo from "@/assets/logo.png";
 import WhatsAppButton from "./WhatsAppButton";
 import VIPPopup from "./VIPPopup";
 import TreatmentChatbot from "./TreatmentChatbot";
+import AnnouncementBanner from "./AnnouncementBanner";
 import instagramLogo from "@/assets/instagram-logo.png";
 import tiktokLogo from "@/assets/tiktok-logo.png";
 
@@ -45,6 +46,7 @@ const Layout = ({
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   return <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <AnnouncementBanner />
       {/* Nav */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">

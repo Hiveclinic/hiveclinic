@@ -4,7 +4,7 @@ import { Session } from "@supabase/supabase-js";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Calendar, Tag, Clock, CalendarX, Users, Mail, Stethoscope, Download, CreditCard, LayoutGrid, UserCheck } from "lucide-react";
+import { LogOut, Calendar, Tag, Clock, CalendarX, Users, Mail, Stethoscope, Download, CreditCard, LayoutGrid, UserCheck, Settings } from "lucide-react";
 import { toast } from "sonner";
 import AdminBookingsTab from "@/components/admin/AdminBookingsTab";
 import AdminAvailabilityTab from "@/components/admin/AdminAvailabilityTab";
@@ -14,8 +14,9 @@ import AdminTreatmentsTab from "@/components/admin/AdminTreatmentsTab";
 import AdminPaymentPlansTab from "@/components/admin/AdminPaymentPlansTab";
 import AdminCalendarView from "@/components/admin/AdminCalendarView";
 import AdminClientsTab from "@/components/admin/AdminClientsTab";
+import AdminSiteTab from "@/components/admin/AdminSiteTab";
 
-type TabKey = "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers";
+type TabKey = "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers" | "site";
 
 const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "bookings", label: "Bookings", icon: <Calendar size={14} /> },
@@ -28,6 +29,7 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "discounts", label: "Discounts", icon: <Tag size={14} /> },
   { key: "contacts", label: "Enquiries", icon: <Mail size={14} /> },
   { key: "subscribers", label: "VIP List", icon: <Users size={14} /> },
+  { key: "site", label: "Site Settings", icon: <Settings size={14} /> },
 ];
 
 interface ContactSubmission {
@@ -144,7 +146,7 @@ const Admin = () => {
           {tab === "availability" && <AdminAvailabilityTab />}
           {tab === "blocked" && <AdminBlockedDatesTab />}
           {tab === "discounts" && <AdminDiscountCodesTab />}
-
+          {tab === "site" && <AdminSiteTab />}
           {tab === "contacts" && (
             <>
               <div className="flex gap-3 mb-6">

@@ -11,7 +11,7 @@ const treatments = [
   { name: "Level 2 Chemical Peel - Face", desc: "A stronger depigmenting peel for dark spots, melasma, and uneven skin tone.", price: "£110" },
   { name: "Level 2 Chemical Peel - Back", desc: "Intensive peel for hyperpigmentation and textural buildup on the back.", price: "£125" },
   { name: "Intimate Peel - Small Area", desc: "Gentle brightening peel for intimate areas, underarms, or targeted zones.", price: "from £75" },
-  { name: "Melanostop Body Treatment", desc: "Specialist depigmenting treatment for hands, underarms, elbows, and knees.", price: "from £120" },
+  { name: "Body Brightening Treatment", desc: "Specialist depigmenting treatment for hands, underarms, elbows, and knees.", price: "from £120" },
 ];
 
 const faqs = [
@@ -80,7 +80,7 @@ const ChemicalPeels = () => (
               Our peels are medical-grade and professionally administered to ensure safety and maximum results. Every treatment is preceded by a thorough skin assessment.
             </p>
             <div className="space-y-4">
-              {["Medical-grade products only", "Skin assessment included", "Face, back, and body treatments", "Intimate and melanostop peels available", "Course packages for best results", "Full aftercare support"].map((b) => (
+              {["Medical-grade products only", "Skin assessment included", "Face, back, and body treatments", "Intimate and body brightening peels available", "Course packages for best results", "Full aftercare support"].map((b) => (
                 <div key={b} className="flex items-center gap-3">
                   <CheckCircle size={16} className="text-gold flex-shrink-0" />
                   <span className="font-body text-sm">{b}</span>
@@ -103,7 +103,7 @@ const ChemicalPeels = () => (
           {[
             { name: "Fatima A.", text: "My skin texture has completely transformed after 3 sessions. The pigmentation on my cheeks has faded dramatically." },
             { name: "Charlotte B.", text: "I had terrible back acne scarring and Bianca recommended a course of Level 1 peels. The difference is incredible." },
-            { name: "Amira H.", text: "The melanostop treatment for my underarms was something I'd been looking for everywhere. So glad I found Hive." },
+            { name: "Amira H.", text: "The body brightening treatment for my underarms was something I'd been looking for everywhere. So glad I found Hive." },
           ].map((r) => (
             <div key={r.name} className="p-8 border border-border bg-background">
               <div className="flex gap-1 mb-4">{Array.from({ length: 5 }).map((_, i) => <Star key={i} size={14} className="fill-gold text-gold" />)}</div>

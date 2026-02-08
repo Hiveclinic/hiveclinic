@@ -38,8 +38,8 @@ const posts = [
     img: gallery2,
   },
   {
-    slug: "profhilo-vs-fillers",
-    title: "Profhilo vs Fillers: What's the Difference?",
+    slug: "skin-boosters-vs-fillers",
+    title: "Skin Boosters vs Fillers: What's the Difference?",
     excerpt: "Two of the most popular injectable treatments - but they do very different things. Let us explain.",
     date: "November 2025",
     img: gallery6,

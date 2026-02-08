@@ -35,7 +35,7 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
       "2. Suitable for every skin type. Whether you have oily, dry, sensitive, or combination skin, HydraFacial can be customised to address your specific concerns. The treatment uses gentle vortex technology that's effective without being harsh.",
       "3. Deep cleansing beyond what home care can achieve. The patented vortex suction technology extracts impurities, dead skin cells, and sebum from pores at a depth that no at-home product can reach. This is why regular HydraFacials are such a game-changer for congested skin.",
       "4. Hydration that actually lasts. Unlike topical moisturisers that sit on the surface, HydraFacial infuses powerful serums deep into the skin. Hyaluronic acid, peptides, and antioxidants are delivered directly where they're needed most.",
-      "5. It pairs beautifully with other treatments. Many of our clients combine their HydraFacial with other treatments like Profhilo or microneedling for enhanced results. Your practitioner can recommend the perfect combination for your skin goals.",
+      "5. It pairs beautifully with other treatments. Many of our clients combine their HydraFacial with other treatments like skin boosters or microneedling for enhanced results. Your practitioner can recommend the perfect combination for your skin goals.",
     ],
   },
   "skincare-routine-glow": {
@@ -44,18 +44,18 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
     content: [
       "Glass skin - that impossibly dewy, translucent-looking complexion - isn't just about genetics. With the right routine and professional treatments, it's achievable for everyone.",
       "Start with a gentle cleanser that doesn't strip your skin. Follow with a hydrating toner and layer on a serum rich in hyaluronic acid. Seal everything in with a quality moisturiser and SPF during the day.",
-      "In-clinic treatments like Profhilo and HydraFacials supercharge your at-home routine by delivering deep hydration and stimulating collagen production beneath the surface.",
+      "In-clinic treatments like injectable skin boosters and HydraFacials supercharge your at-home routine by delivering deep hydration and stimulating collagen production beneath the surface.",
       "Consistency is key. The best results come from combining a dedicated home routine with regular professional treatments. Book a skin consultation to get a personalised plan.",
     ],
   },
-  "profhilo-vs-fillers": {
-    title: "Profhilo vs Fillers: What's the Difference?",
+  "skin-boosters-vs-fillers": {
+    title: "Skin Boosters vs Fillers: What's the Difference?",
     date: "November 2025",
     content: [
-      "Both Profhilo and dermal fillers involve injectable hyaluronic acid, but they serve very different purposes.",
+      "Both skin boosters and dermal fillers involve injectable hyaluronic acid, but they serve very different purposes.",
       "Dermal fillers add volume and structure to specific areas - think lips, cheeks, jawline. They're about shaping and contouring. Results are immediate and can last 6-18 months.",
-      "Profhilo, on the other hand, is a skin booster. It disperses across a wide area to hydrate and stimulate collagen and elastin production. It improves overall skin quality, laxity, and glow rather than adding volume.",
-      "Many of our clients benefit from both. A common approach is to address specific concerns with filler and maintain overall skin health with Profhilo treatments two to three times a year.",
+      "Skin boosters, on the other hand, disperse across a wide area to hydrate and stimulate collagen and elastin production. They improve overall skin quality, laxity, and glow rather than adding volume.",
+      "Many of our clients benefit from both. A common approach is to address specific concerns with filler and maintain overall skin health with skin booster treatments two to three times a year.",
       "Not sure which is right for you? Book a consultation and we'll guide you to the perfect plan.",
     ],
   },
@@ -66,7 +66,7 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
       "Chemical peels are one of the most effective treatments for improving skin texture, tone, and clarity. Whether you're dealing with acne scarring, hyperpigmentation, or just want brighter, smoother skin, there's a peel for you.",
       "At Hive Clinic, we offer two levels of chemical peels. Level 1 peels are ideal for treating hormonal breakouts, mild scarring, and rough texture. They include an antibacterial cleanse and clarifying mask for a comprehensive treatment.",
       "Level 2 peels are stronger and specifically designed for stubborn pigmentation issues like melasma and dark spots. These are our most popular peels for clients seeking dramatic improvement in skin tone evenness.",
-      "We also offer intimate peels and melanostop body treatments for areas like underarms, elbows, knees, and hands. These specialist peels are designed to brighten and even out skin tone in areas that traditional skincare can't reach.",
+      "We also offer intimate peels and body brightening treatments for areas like underarms, elbows, knees, and hands. These specialist peels are designed to brighten and even out skin tone in areas that traditional skincare can't reach.",
       "Most clients benefit from a course of 3-8 sessions depending on their concerns. We offer course packages at reduced prices to make ongoing treatment more accessible. Your practitioner will recommend the right plan during your consultation.",
       "Aftercare is important - expect mild peeling and redness for 2-5 days. Strict sun protection is essential, and we'll provide you with everything you need to know to get the best results from your treatment.",
     ],

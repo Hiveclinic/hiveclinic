@@ -33,9 +33,9 @@ const menu = [
       { name: "Large Area Course of 3", price: "£330" },
     ],
     extras: [
-      { name: "Hands Melanostop Body", price: "£120" },
-      { name: "Underarms Melanostop Body", price: "£150" },
-      { name: "Elbows and Knees Melanostop Body", price: "£130" },
+      { name: "Hands Body Brightening", price: "£120" },
+      { name: "Underarms Body Brightening", price: "£150" },
+      { name: "Elbows and Knees Body Brightening", price: "£130" },
     ],
   },
   {
@@ -67,7 +67,7 @@ const menu = [
       { name: "Lumi Eyes", price: "£140" },
       { name: "Seventy Hyal", price: "£160" },
       { name: "Polynucleotides", price: "£180" },
-      { name: "Profhilo", price: "£250" },
+      { name: "Injectable Skin Remodelling", price: "£250" },
     ],
   },
   {

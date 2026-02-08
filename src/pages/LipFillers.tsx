@@ -8,10 +8,10 @@ import gallery4 from "@/assets/gallery-4.jpg";
 
 const faqs = [
   { q: "Does lip filler hurt?", a: "We use a topical numbing cream and the filler itself contains anaesthetic, so most clients describe it as a mild pressure. Comfort is our priority." },
-  { q: "How long does lip filler last?", a: "Results typically last 6–12 months depending on the product used and your metabolism. We offer top-up appointments to maintain your look." },
-  { q: "Will my lips look natural?", a: "Absolutely. We specialise in subtle, balanced enhancements that complement your facial proportions. No one needs to know — unless you tell them." },
+  { q: "How long does lip filler last?", a: "Results typically last 6-12 months depending on the product used and your metabolism. We offer top-up appointments to maintain your look." },
+  { q: "Will my lips look natural?", a: "Absolutely. We specialise in subtle, balanced enhancements that complement your facial proportions. No one needs to know - unless you tell them." },
   { q: "How much does lip filler cost?", a: "Lip filler at Hive Clinic starts from just £80 for 0.5ml. A full consultation is included to discuss the best approach for your goals." },
-  { q: "Is there any downtime?", a: "You may experience mild swelling for 24–48 hours. Most clients return to normal activities immediately after treatment." },
+  { q: "Is there any downtime?", a: "You may experience mild swelling for 24-48 hours. Most clients return to normal activities immediately after treatment." },
 ];
 
 const LipFillers = () => (
@@ -55,7 +55,7 @@ const LipFillers = () => (
           <div>
             <h2 className="font-display text-4xl md:text-5xl mb-6">Subtle Enhancement, Stunning Results</h2>
             <p className="font-body text-muted-foreground leading-relaxed mb-8">
-              At Hive Clinic, we believe less is more. Our lip filler treatments are designed to enhance your natural shape — adding volume, definition, and symmetry without ever looking overdone.
+              At Hive Clinic, we believe less is more. Our lip filler treatments are designed to enhance your natural shape - adding volume, definition, and symmetry without ever looking overdone.
             </p>
             <div className="space-y-4 mb-8">
               {["Natural-looking volume and shape", "Premium hyaluronic acid fillers", "Tailored to your facial proportions", "Includes full consultation", "Aftercare support included"].map((b) => (
@@ -85,7 +85,7 @@ const LipFillers = () => (
         <p className="font-body text-muted-foreground text-center mb-16">Rated 5 stars across 100+ reviews</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { name: "Emily R.", text: "My lips look incredible — subtle, natural, and exactly what I asked for. Bianca is the best in Manchester." },
+            { name: "Emily R.", text: "My lips look incredible - subtle, natural, and exactly what I asked for. Bianca is the best in Manchester." },
             { name: "Sophie T.", text: "I was so nervous for my first time but Bianca made me feel completely at ease. The results are perfect." },
             { name: "Aisha M.", text: "I've been to other clinics before and Hive is on another level. Will never go anywhere else." },
           ].map((r) => (
@@ -133,7 +133,7 @@ const LipFillers = () => (
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready for Your Perfect Pout?</h2>
-        <p className="font-body text-muted-foreground mb-8">Book a free consultation — no obligation, just a friendly chat about your goals.</p>
+        <p className="font-body text-muted-foreground mb-8">Book a free consultation - no obligation, just a friendly chat about your goals.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link to="/bookings" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
             Book Free Consultation <ArrowRight size={14} />

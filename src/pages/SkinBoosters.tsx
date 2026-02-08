@@ -9,22 +9,22 @@ const treatments = [
   { name: "Lumi Eyes", desc: "Brighten and rejuvenate the under-eye area with this specialist polynucleotide treatment.", price: "£140" },
   { name: "Seventy Hyal", desc: "Deep hydration booster for plumper, dewy skin with long-lasting moisture retention.", price: "£160" },
   { name: "Polynucleotides", desc: "Bio-stimulating injections that regenerate skin cells and improve elasticity from within.", price: "£180" },
-  { name: "Profhilo", desc: "The gold standard in skin remodelling - stimulates collagen and elastin for total skin rejuvenation.", price: "£250" },
+  { name: "Injectable Skin Remodelling", desc: "The gold standard in skin remodelling - stimulates collagen and elastin for total skin rejuvenation.", price: "£250" },
 ];
 
 const faqs = [
   { q: "What are skin boosters?", a: "Skin boosters are injectable treatments that deliver deep hydration beneath the skin's surface. Unlike fillers, they don't add volume - they improve overall skin quality, texture, and radiance." },
-  { q: "What is the difference between Profhilo and fillers?", a: "Profhilo is a skin remodelling treatment that disperses across a wide area to stimulate collagen and elastin. Fillers add volume to specific areas. Many clients benefit from both." },
-  { q: "How many sessions do I need?", a: "Most skin boosters require 2 sessions 4 weeks apart for optimal results. Profhilo is typically 2 sessions, with maintenance every 6 months." },
+  { q: "What is the difference between skin remodelling and fillers?", a: "Skin remodelling treatments disperse across a wide area to stimulate collagen and elastin. Fillers add volume to specific areas. Many clients benefit from both." },
+  { q: "How many sessions do I need?", a: "Most skin boosters require 2 sessions 4 weeks apart for optimal results. Our injectable remodelling treatment is typically 2 sessions, with maintenance every 6 months." },
   { q: "When will I see results?", a: "You may notice improved hydration immediately, but the full collagen-stimulating effects develop over 4-8 weeks as your skin regenerates from within." },
-  { q: "How much do skin boosters cost in Manchester?", a: "Skin boosters at Hive Clinic start from £140 for Lumi Eyes. Profhilo, our most popular skin booster, is £250 per session." },
+  { q: "How much do skin boosters cost in Manchester?", a: "Skin boosters at Hive Clinic start from £140 for Lumi Eyes. Our injectable skin remodelling treatment, our most popular skin booster, is £250 per session." },
 ];
 
 const SkinBoosters = () => (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
-        <img src={gallery1} alt="Skin booster treatment Manchester - Profhilo at Hive Clinic" className="w-full h-full object-cover" />
+        <img src={gallery1} alt="Skin booster treatment Manchester - injectable remodelling at Hive Clinic" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -32,7 +32,7 @@ const SkinBoosters = () => (
           <p className="font-body text-sm text-gold uppercase tracking-[0.2em] mb-4">Glow From Within</p>
           <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">Skin Boosters Manchester</h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Profhilo, polynucleotides, and advanced skin boosters from £140. Deep hydration and collagen stimulation at Hive Clinic, Deansgate.
+            Advanced skin boosters and injectable remodelling from £140. Deep hydration and collagen stimulation at Hive Clinic, Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Bio-Stimulating Technology</span></div>
@@ -70,7 +70,7 @@ const SkinBoosters = () => (
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery2} alt="Profhilo skin booster results Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={gallery2} alt="Skin booster results Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
           <div>
             <h2 className="font-display text-4xl md:text-5xl mb-6">Why Skin Boosters at Hive</h2>
@@ -96,7 +96,7 @@ const SkinBoosters = () => (
         <p className="font-body text-muted-foreground text-center mb-16">Rated 5 stars across 100+ reviews</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { name: "Hannah L.", text: "Profhilo has genuinely changed my skin. It looks plumper, dewier, and I've had so many compliments." },
+            { name: "Hannah L.", text: "The injectable skin remodelling has genuinely changed my skin. It looks plumper, dewier, and I've had so many compliments." },
             { name: "Nina P.", text: "The Lumi Eyes treatment is incredible. My under-eyes look so much brighter and less tired. Worth every penny." },
             { name: "Zara M.", text: "I've tried skin boosters elsewhere but Bianca's technique is on another level. The results are so natural." },
           ].map((r) => (

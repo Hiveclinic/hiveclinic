@@ -18,7 +18,7 @@ const questions = [
   {
     q: "How would you describe your ideal outcome?",
     options: [
-      { label: "Understated — I want to look refreshed, not 'done'" },
+      { label: "Understated - I want to look refreshed, not 'done'" },
       { label: "A visible enhancement that still looks like me" },
       { label: "I want a dramatic, confidence-boosting change" },
       { label: "Healthier, clearer skin that speaks for itself" },
@@ -27,25 +27,25 @@ const questions = [
   {
     q: "What's your experience with aesthetic treatments?",
     options: [
-      { label: "Completely new — I'm curious but a little nervous" },
+      { label: "Completely new - I'm curious but a little nervous" },
       { label: "I've had one or two treatments before" },
-      { label: "I'm a regular — I know what I like" },
+      { label: "I'm a regular - I know what I like" },
     ],
   },
   {
     q: "How does your skin typically behave?",
     options: [
-      { label: "Dry or dehydrated — it often feels tight" },
-      { label: "Oily or congested — I'm prone to breakouts" },
-      { label: "Combination — oily in places, dry in others" },
-      { label: "Sensitive — it reacts easily to products" },
-      { label: "Generally fine — I just want to maintain or improve" },
+      { label: "Dry or dehydrated - it often feels tight" },
+      { label: "Oily or congested - I'm prone to breakouts" },
+      { label: "Combination - oily in places, dry in others" },
+      { label: "Sensitive - it reacts easily to products" },
+      { label: "Generally fine - I just want to maintain or improve" },
     ],
   },
   {
     q: "When would you like to see results?",
     options: [
-      { label: "I have an event coming up — as soon as possible" },
+      { label: "I have an event coming up - as soon as possible" },
       { label: "Within a few weeks would be ideal" },
       { label: "I'm happy to invest in a longer-term treatment plan" },
     ],
@@ -65,7 +65,7 @@ const recommendations: Record<string, Recommendation> = {
   "I've noticed lines forming around my eyes, forehead or mouth": {
     category: "Anti-Wrinkle Treatments",
     tagline: "Turn back the clock without anyone knowing",
-    description: "Our precision anti-wrinkle injections smooth lines and restore a naturally refreshed look. From subtle brow lifts to full facial rejuvenation — results you'll love.",
+    description: "Our precision anti-wrinkle injections smooth lines and restore a naturally refreshed look. From subtle brow lifts to full facial rejuvenation - results you'll love.",
     benefits: ["Results visible in 3-7 days", "No downtime needed", "Lasts 3-4 months", "Prices from just £120"],
     testimonial: { text: "I look 10 years younger but completely natural. Bianca is amazing!", name: "Sarah T." },
     link: "/treatments/anti-wrinkle-manchester",
@@ -75,7 +75,7 @@ const recommendations: Record<string, Recommendation> = {
     tagline: "Enhance what you already have",
     description: "Expert filler treatments for lips, cheeks, jawline, and full facial balancing. We specialise in natural-looking results that enhance your features.",
     benefits: ["Instant results", "Natural-looking enhancement", "Lasts 6-12 months", "Prices from just £80"],
-    testimonial: { text: "My lips look incredible — subtle and natural. Everyone asks what my secret is!", name: "Emily R." },
+    testimonial: { text: "My lips look incredible - subtle and natural. Everyone asks what my secret is!", name: "Emily R." },
     link: "/treatments/lip-fillers-manchester",
   },
   "My skin looks tired, dull or lacks hydration": {

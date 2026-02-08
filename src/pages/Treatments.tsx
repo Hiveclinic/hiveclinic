@@ -10,10 +10,10 @@ import gallery6 from "@/assets/gallery-6.jpg";
 const categories = [
   {
     title: "Chemical Peels",
-    desc: "Targeted chemical peels for face, back, and body - including intimate and melanostop treatments for even skin tone.",
+    desc: "Targeted chemical peels for face, back, and body - including intimate and body brightening treatments for even skin tone.",
     img: gallery4,
     link: "/treatments/chemical-peels-manchester",
-    treatments: ["Level 1 Chemical Peel", "Level 2 Chemical Peel", "Intimate Peels", "Melanostop Body Treatments"],
+    treatments: ["Level 1 Chemical Peel", "Level 2 Chemical Peel", "Intimate Peels", "Body Brightening Treatments"],
   },
   {
     title: "HydraFacial",
@@ -41,7 +41,7 @@ const categories = [
     desc: "Injectable moisturisers that work beneath the skin's surface to restore hydration and create a natural glow.",
     img: gallery1,
     link: "/treatments/skin-boosters-manchester",
-    treatments: ["Lumi Eyes", "Seventy Hyal", "Polynucleotides", "Profhilo"],
+    treatments: ["Lumi Eyes", "Seventy Hyal", "Polynucleotides", "Injectable Skin Remodelling"],
   },
   {
     title: "Dermal Filler",

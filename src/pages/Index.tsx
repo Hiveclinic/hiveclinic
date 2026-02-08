@@ -114,7 +114,7 @@ const Index = () => {
                 transition={{ delay: i * 0.1 }}
               >
                 <Link
-                  to="/treatments"
+                  to={h.link}
                   className="block p-6 border border-border hover:border-gold transition-colors group h-full"
                 >
                   <h3 className="font-display text-xl mb-3 group-hover:text-gold transition-colors">{h.title}</h3>

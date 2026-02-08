@@ -28,9 +28,12 @@ const VIPPopup = () => {
     e.preventDefault();
     setLoading(true);
 
+    const trimmedEmail = email.trim().toLowerCase();
+
+    // Save to database
     const { error } = await supabase
       .from("email_subscribers")
-      .insert({ email: email.trim().toLowerCase() });
+      .insert({ email: trimmedEmail });
 
     if (error) {
       if (error.code === "23505") {
@@ -40,6 +43,11 @@ const VIPPopup = () => {
       }
     } else {
       toast.success("Welcome to the VIP list! We'll be in touch.");
+
+      // Sync to Mailchimp in background (don't block UI)
+      supabase.functions.invoke("mailchimp-subscribe", {
+        body: { email: trimmedEmail },
+      }).catch(console.error);
     }
 
     setLoading(false);

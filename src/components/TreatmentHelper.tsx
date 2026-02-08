@@ -164,6 +164,8 @@ const TreatmentHelper = () => {
   const [answers, setAnswers] = useState<string[]>([]);
   const [showResult, setShowResult] = useState(false);
 
+  const questions = getQuestions(answers[0] || "");
+
   const handleAnswer = (answer: string) => {
     const newAnswers = [...answers, answer];
     setAnswers(newAnswers);

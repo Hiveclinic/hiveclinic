@@ -95,7 +95,7 @@ const Contact = () => {
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Hive Clinic location - Deansgate, Manchester"
                 />
-            </div>
+              </div>
           </div>
         </div>
       </section>

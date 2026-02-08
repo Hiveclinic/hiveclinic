@@ -201,7 +201,7 @@ const BookingSystem = () => {
     switch (step) {
       case 0: return !!selectedTreatment;
       case 1: return !!selectedDate && !!selectedTime;
-      case 2: return customerName.trim().length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail);
+      case 2: return customerName.trim().length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail) && customerPhone.trim().length >= 10;
       case 3: return true;
       default: return false;
     }

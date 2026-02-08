@@ -28,9 +28,11 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Aftercare from "./pages/Aftercare";
 import CustomerPortal from "./pages/CustomerPortal";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 import ScrollToTop from "./components/ScrollToTop";
+import CookieConsent from "./components/CookieConsent";
 
 const queryClient = new QueryClient();
 

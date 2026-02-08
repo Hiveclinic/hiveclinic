@@ -145,6 +145,7 @@ const Layout = ({
 
       <WhatsAppButton />
       <VIPPopup />
+      <TreatmentChatbot />
     </div>;
 };
 export default Layout;

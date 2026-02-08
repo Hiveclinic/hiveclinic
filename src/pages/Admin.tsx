@@ -13,8 +13,9 @@ import AdminBlockedDatesTab from "@/components/admin/AdminBlockedDatesTab";
 import AdminTreatmentsTab from "@/components/admin/AdminTreatmentsTab";
 import AdminPaymentPlansTab from "@/components/admin/AdminPaymentPlansTab";
 import AdminCalendarView from "@/components/admin/AdminCalendarView";
+import AdminClientsTab from "@/components/admin/AdminClientsTab";
 
-type TabKey = "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "contacts" | "subscribers";
+type TabKey = "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers";
 
 const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "bookings", label: "Bookings", icon: <Calendar size={14} /> },

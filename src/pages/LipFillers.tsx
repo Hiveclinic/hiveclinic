@@ -85,7 +85,7 @@ const LipFillers = () => (
         <p className="font-body text-muted-foreground text-center mb-16">Rated 5 stars across 100+ reviews</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { name: "Emily R.", text: "My lips look incredible — subtle, natural, and exactly what I asked for. Bianca is the best in Manchester." },
+            { name: "Emily R.", text: "My lips look incredible - subtle, natural, and exactly what I asked for. Bianca is the best in Manchester." },
             { name: "Sophie T.", text: "I was so nervous for my first time but Bianca made me feel completely at ease. The results are perfect." },
             { name: "Aisha M.", text: "I've been to other clinics before and Hive is on another level. Will never go anywhere else." },
           ].map((r) => (

@@ -101,7 +101,7 @@ const Layout = ({
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Services</h4>
-              {["Skin Rituals", "Enhancements", "Skin Boosters", "Vitamin Boosts", "Corrective Care"].map(s => <p key={s} className="font-body text-sm text-background/60 mb-2">{s}</p>)}
+              {["Chemical Peels", "HydraFacial", "Dermal Filler", "Anti-Wrinkle", "Skin Boosters", "Fat Dissolve"].map(s => <p key={s} className="font-body text-sm text-background/60 mb-2">{s}</p>)}
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Opening Hours</h4>

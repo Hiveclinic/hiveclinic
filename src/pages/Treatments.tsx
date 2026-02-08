@@ -9,34 +9,46 @@ import gallery6 from "@/assets/gallery-6.jpg";
 
 const categories = [
   {
-    title: "Skin Rituals",
-    desc: "Luxury facials, chemical peels, and bespoke skin treatments designed to deeply cleanse, hydrate, and rejuvenate.",
+    title: "Chemical Peels",
+    desc: "Targeted chemical peels for face, back, and body - including intimate and melanostop treatments for even skin tone.",
     img: gallery4,
-    treatments: ["Signature Facial", "Chemical Peel", "HydraFacial", "LED Light Therapy"],
+    treatments: ["Level 1 Chemical Peel", "Level 2 Chemical Peel", "Intimate Peels", "Melanostop Body Treatments"],
   },
   {
-    title: "Enhancements",
-    desc: "Expert injectable treatments including lip filler, cheek filler, jawline contouring, and anti-wrinkle injections.",
+    title: "HydraFacial",
+    desc: "Deep cleansing, hydrating facials designed to deliver glass-like skin, tackle acne, and reset your glow.",
     img: gallery3,
-    treatments: ["Lip Filler", "Cheek Filler", "Jawline Filler", "Anti-Wrinkle Treatment", "Chin Filler"],
+    treatments: ["Glass Skin Boost", "Acne Refresh", "Glow Reset"],
+  },
+  {
+    title: "Microneedling",
+    desc: "Advanced microneedling with chemical peel for texture repair, scarring, pores, and stretch marks.",
+    img: gallery5,
+    treatments: ["Face Texture Repair", "Stretch Mark Repair"],
+  },
+  {
+    title: "Fat Dissolve",
+    desc: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, arms, and more.",
+    img: gallery6,
+    treatments: ["Small Area", "Medium Area", "Large Area"],
   },
   {
     title: "Skin Boosters",
     desc: "Injectable moisturisers that work beneath the skin's surface to restore hydration and create a natural glow.",
-    img: gallery5,
-    treatments: ["Profhilo", "Skinvive", "Polynucleotides"],
-  },
-  {
-    title: "Vitamin Boosts",
-    desc: "IV drips and intramuscular vitamin injections to boost energy, immunity, and skin health from within.",
-    img: gallery6,
-    treatments: ["Vitamin B12 Shot", "Glow Drip", "Immunity Drip", "Energy Drip"],
-  },
-  {
-    title: "Corrective Care",
-    desc: "Advanced treatments targeting acne scarring, pigmentation, enlarged pores, and uneven skin texture.",
     img: gallery1,
-    treatments: ["Microneedling", "PRP Facial", "Laser Treatment", "Scar Revision"],
+    treatments: ["Lumi Eyes", "Seventy Hyal", "Polynucleotides", "Profhilo"],
+  },
+  {
+    title: "Dermal Filler",
+    desc: "Expert filler treatments for lips, cheeks, jawline, chin, nose, tear troughs, and facial balancing packages.",
+    img: gallery4,
+    treatments: ["Lip Filler", "Cheek Filler", "Jawline Filler", "Nose Filler", "Tear Trough Filler", "Facial Balancing"],
+  },
+  {
+    title: "Anti-Wrinkle",
+    desc: "Precision anti-wrinkle injections including masseter slimming, brow lift, lip flip, and gummy smile correction.",
+    img: gallery3,
+    treatments: ["Anti Wrinkle Injections", "Masseter Jaw Slimming", "Lip Flip", "Brow Lift", "Gummy Smile Correction"],
   },
 ];
 
@@ -58,7 +70,7 @@ const Treatments = () => (
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${i % 2 !== 0 ? "lg:direction-rtl" : ""}`}
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center`}
             >
               <div className={i % 2 !== 0 ? "lg:order-2" : ""}>
                 <div className="aspect-[4/5] overflow-hidden">

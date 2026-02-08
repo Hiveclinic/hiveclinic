@@ -9,13 +9,15 @@ import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
+import klarnaLogo from "@/assets/klarna-logo.png";
+import clearpayLogo from "@/assets/clearpay-logo.png";
 
 const highlights = [
-  { title: "Skin Rituals", desc: "Bespoke facials designed to deeply nourish and transform." },
-  { title: "Enhancements", desc: "Dermal fillers & anti-wrinkle treatments for subtle refinement." },
+  { title: "Chemical Peels", desc: "Targeted peels for face, back, and body to transform skin tone and texture." },
+  { title: "HydraFacial", desc: "Deep cleansing facials for glass-like, refreshed skin." },
+  { title: "Dermal Filler", desc: "Expert lip, cheek, jawline, and facial balancing treatments." },
+  { title: "Anti-Wrinkle", desc: "Precision injections for a naturally refreshed appearance." },
   { title: "Skin Boosters", desc: "Deep hydration for luminous, glass-like skin." },
-  { title: "Vitamin Boosts", desc: "IV drips & boosters for radiance from within." },
-  { title: "Corrective Care", desc: "Advanced solutions for scarring, pigmentation & texture." },
 ];
 
 const reviews = [
@@ -68,8 +70,8 @@ const Index = () => {
       <section className="py-8 border-b border-border">
         <div className="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-center gap-8">
           <p className="font-body text-sm text-muted-foreground tracking-wider uppercase">Pay with</p>
-          <div className="w-20 h-8 bg-muted flex items-center justify-center font-body text-xs text-muted-foreground">Klarna</div>
-          <div className="w-20 h-8 bg-muted flex items-center justify-center font-body text-xs text-muted-foreground">Clearpay</div>
+          <img src={klarnaLogo} alt="Klarna" className="h-8" />
+          <img src={clearpayLogo} alt="Clearpay" className="h-8" />
         </div>
       </section>
 
@@ -141,7 +143,11 @@ const Index = () => {
       <section className="py-24 bg-secondary">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="font-display text-4xl text-center mb-4">Follow the Glow</h2>
-          <p className="font-body text-muted-foreground text-center mb-12">@hiveclinicuk</p>
+          <p className="font-body text-muted-foreground text-center mb-12">
+            <a href="https://instagram.com/hiveclinicuk" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">
+              @hiveclinicuk
+            </a>
+          </p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
             {[gallery1, gallery2, gallery3, gallery4, gallery5, gallery6].map((img, i) => (
               <a
@@ -149,7 +155,7 @@ const Index = () => {
                 href="https://instagram.com/hiveclinicuk"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="aspect-square overflow-hidden group"
+                className="aspect-square overflow-hidden group relative"
               >
                 <img
                   src={img}
@@ -157,6 +163,11 @@ const Index = () => {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                  <svg className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                  </svg>
+                </div>
               </a>
             ))}
           </div>

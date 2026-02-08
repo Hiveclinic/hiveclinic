@@ -1,51 +1,111 @@
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
+import klarnaLogo from "@/assets/klarna-logo.png";
+import clearpayLogo from "@/assets/clearpay-logo.png";
 
 const menu = [
   {
-    category: "Skin Rituals",
+    category: "Chemical Peels",
     items: [
-      { name: "Signature Facial", price: "from £85" },
-      { name: "Chemical Peel", price: "from £95" },
-      { name: "HydraFacial", price: "from £120" },
-      { name: "LED Light Therapy", price: "from £50" },
+      { name: "Level 1 Chemical Peel - Face", price: "£85" },
+      { name: "Level 1 Chemical Peel - Back", price: "£95" },
+      { name: "Level 2 Chemical Peel - Face", price: "£110" },
+      { name: "Level 2 Chemical Peel - Back", price: "£125" },
+    ],
+    courses: [
+      { name: "Level 1 Face Course of 3", price: "£230" },
+      { name: "Level 1 Back Course of 3", price: "£260" },
+      { name: "Level 2 Face Course of 3", price: "£300" },
+      { name: "Level 2 Back Course of 3", price: "£330" },
     ],
   },
   {
-    category: "Enhancements",
+    category: "Intimate and Body Peels",
     items: [
-      { name: "Lip Filler (0.5ml)", price: "from £150" },
-      { name: "Lip Filler (1ml)", price: "from £220" },
-      { name: "Cheek Filler", price: "from £250" },
-      { name: "Jawline Filler", price: "from £280" },
-      { name: "Anti-Wrinkle Treatment", price: "from £180" },
-      { name: "Chin Filler", price: "from £220" },
+      { name: "Intimate Peel Small Area", price: "£75" },
+      { name: "Intimate Peel Medium Area", price: "£95" },
+      { name: "Intimate Peel Large Area", price: "£120" },
+    ],
+    courses: [
+      { name: "Small Area Course of 3", price: "£210" },
+      { name: "Medium Area Course of 3", price: "£265" },
+      { name: "Large Area Course of 3", price: "£330" },
+    ],
+    extras: [
+      { name: "Hands Melanostop Body", price: "£120" },
+      { name: "Underarms Melanostop Body", price: "£150" },
+      { name: "Elbows and Knees Melanostop Body", price: "£130" },
+    ],
+  },
+  {
+    category: "Microneedling",
+    items: [
+      { name: "Face Texture Repair - Scars, pores and glow (Microneedling with chemical peel)", price: "£130" },
+      { name: "Stretch Mark Repair (Salmon DNA and hydration)", price: "£150" },
+    ],
+  },
+  {
+    category: "HydraFacial",
+    items: [
+      { name: "Glass Skin Boost", price: "£140" },
+      { name: "Acne Refresh", price: "£130" },
+      { name: "Glow Reset", price: "£120" },
+    ],
+  },
+  {
+    category: "Fat Dissolve",
+    items: [
+      { name: "Small Area - Chin, Bra Fat, Jawline, Upper Arms, Lower Abdomen", price: "£120" },
+      { name: "Medium Area - Full Lower Abdomen, Upper Abdomen, Waist, Flanks, Upper Arms", price: "£180" },
+      { name: "Large Area - Full Abdomen, Back Rolls, Hips, Thighs", price: "£250" },
     ],
   },
   {
     category: "Skin Boosters",
     items: [
-      { name: "Profhilo", price: "from £280" },
-      { name: "Skinvive", price: "from £250" },
-      { name: "Polynucleotides", price: "from £300" },
+      { name: "Lumi Eyes", price: "£140" },
+      { name: "Seventy Hyal", price: "£160" },
+      { name: "Polynucleotides", price: "£180" },
+      { name: "Profhilo", price: "£250" },
     ],
   },
   {
-    category: "Vitamin Boosts",
+    category: "Dermal Filler",
     items: [
-      { name: "Vitamin B12 Shot", price: "from £30" },
-      { name: "Glow Drip", price: "from £150" },
-      { name: "Immunity Drip", price: "from £150" },
-      { name: "Energy Drip", price: "from £150" },
+      { name: "Lip Filler 0.5ml", price: "£80" },
+      { name: "Lip Filler 0.8ml", price: "£120" },
+      { name: "Lip Filler 1ml", price: "£150" },
+      { name: "Smile Lines", price: "£150" },
+      { name: "Marionette Lines", price: "£150" },
+      { name: "Chin Filler", price: "£160" },
+      { name: "Cheek Filler per ml", price: "£160" },
+      { name: "Jawline Filler per ml", price: "£170" },
+      { name: "Nose Filler", price: "£200" },
+      { name: "Tear Trough Filler", price: "£200" },
     ],
   },
   {
-    category: "Corrective Care",
+    category: "Facial Balancing Packages",
     items: [
-      { name: "Microneedling", price: "from £180" },
-      { name: "PRP Facial", price: "from £250" },
-      { name: "Scar Revision (per session)", price: "from £200" },
+      { name: "3ml Facial Balancing", price: "£350" },
+      { name: "5ml Facial Balancing", price: "£500" },
+      { name: "7ml Facial Balancing", price: "£650" },
+    ],
+  },
+  {
+    category: "Anti-Wrinkle",
+    items: [
+      { name: "Anti Wrinkle Injections - 2 Areas", price: "£179" },
+      { name: "Anti Wrinkle Injections - 3 Areas", price: "£220" },
+      { name: "Anti Wrinkle Injections - 6 Areas", price: "£360" },
+      { name: "Masseter Jaw Slimming", price: "£240" },
+      { name: "Bunny Lines", price: "£120" },
+      { name: "Lip Flip", price: "£120" },
+      { name: "Gummy Smile Correction", price: "£120" },
+      { name: "Chin Dimpling", price: "£120" },
+      { name: "DAO", price: "£120" },
+      { name: "Brow Lift", price: "£150" },
     ],
   },
 ];
@@ -73,6 +133,27 @@ const Pricing = () => (
                   </div>
                 ))}
               </div>
+              {section.courses && (
+                <div className="mt-6">
+                  <h3 className="font-display text-xl mb-3 text-muted-foreground">Courses</h3>
+                  {section.courses.map((item) => (
+                    <div key={item.name} className="flex justify-between items-baseline py-3 border-b border-border">
+                      <span className="font-body text-foreground text-sm">{item.name}</span>
+                      <span className="font-body text-sm text-gold ml-4 whitespace-nowrap">{item.price}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {section.extras && (
+                <div className="mt-6">
+                  {section.extras.map((item) => (
+                    <div key={item.name} className="flex justify-between items-baseline py-3 border-b border-border">
+                      <span className="font-body text-foreground text-sm">{item.name}</span>
+                      <span className="font-body text-sm text-gold ml-4 whitespace-nowrap">{item.price}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -84,8 +165,12 @@ const Pricing = () => (
           >
             Book Your Consultation
           </Link>
-          <p className="font-body text-xs text-muted-foreground mt-4">
-            Klarna & Clearpay available for eligible treatments.
+          <div className="flex items-center justify-center gap-6 mt-6">
+            <img src={klarnaLogo} alt="Klarna" className="h-8" />
+            <img src={clearpayLogo} alt="Clearpay" className="h-8" />
+          </div>
+          <p className="font-body text-xs text-muted-foreground mt-3">
+            Available for eligible treatments.
           </p>
         </div>
       </div>

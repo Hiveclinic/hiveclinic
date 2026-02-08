@@ -2,13 +2,28 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import Layout from "@/components/Layout";
 import { MapPin, Clock, Phone, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    const { error } = await supabase.from("contact_submissions").insert({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim() || null,
+      message: form.message.trim(),
+    });
+    setLoading(false);
+    if (error) {
+      toast.error("Something went wrong. Please try again.");
+      return;
+    }
     setSubmitted(true);
   };
 
@@ -39,7 +54,7 @@ const Contact = () => {
                       <label className="font-body text-sm uppercase tracking-wider mb-2 block">{field.label}</label>
                       <input
                         type={field.type}
-                        required
+                        required={field.key !== "phone"}
                         value={form[field.key as keyof typeof form]}
                         onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
                         className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors"
@@ -58,9 +73,10 @@ const Contact = () => {
                   </div>
                   <button
                     type="submit"
-                    className="w-full px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors"
+                    disabled={loading}
+                    className="w-full px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors disabled:opacity-50"
                   >
-                    Send Message
+                    {loading ? "Sending..." : "Send Message"}
                   </button>
                 </form>
               )}
@@ -69,9 +85,9 @@ const Contact = () => {
             <div className="space-y-8">
               <div className="space-y-6">
                 {[
-                  { icon: MapPin, text: "Deansgate, Manchester City Centre, M3" },
+                  { icon: MapPin, text: "25 St John Street, Deansgate, Manchester" },
                   { icon: Clock, text: "Mon - Fri: 10am - 7pm | Sat: 10am - 5pm | Sun: Closed" },
-                  { icon: Phone, text: "+44 7000 000 000" },
+                  { icon: Phone, text: "+44 7795 008 114" },
                   { icon: Mail, text: "hello@hiveclinicuk.com" },
                 ].map(({ icon: Icon, text }) => (
                   <div key={text} className="flex items-start gap-4">

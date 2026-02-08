@@ -4,95 +4,81 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo.png";
 import WhatsAppButton from "./WhatsAppButton";
-
-const navLinks = [
-  { to: "/", label: "Home" },
-  { to: "/treatments", label: "Treatments" },
-  { to: "/pricing", label: "Pricing" },
-  { to: "/about", label: "About" },
-  { to: "/results", label: "Results" },
-  { to: "/blog", label: "Blog" },
-  { to: "/contact", label: "Contact" },
-  { to: "/bookings", label: "Book Now" },
-];
-
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const navLinks = [{
+  to: "/",
+  label: "Home"
+}, {
+  to: "/treatments",
+  label: "Treatments"
+}, {
+  to: "/pricing",
+  label: "Pricing"
+}, {
+  to: "/about",
+  label: "About"
+}, {
+  to: "/results",
+  label: "Results"
+}, {
+  to: "/blog",
+  label: "Blog"
+}, {
+  to: "/contact",
+  label: "Contact"
+}, {
+  to: "/bookings",
+  label: "Book Now"
+}];
+const Layout = ({
+  children
+}: {
+  children: React.ReactNode;
+}) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-
-  return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+  return <div className="min-h-screen flex flex-col bg-background text-foreground">
       {/* Nav */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex-shrink-0">
-            <img src={logo} alt="Hive Clinic" className="h-14 mix-blend-multiply dark:invert" style={{ background: 'transparent' }} />
+            <img alt="Hive Clinic" className="h-14 mix-blend-multiply dark:invert" style={{
+            background: 'transparent'
+          }} src="/lovable-uploads/287bf846-68c9-4ce8-89d0-2589ecb9e5a7.png" />
           </Link>
 
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) =>
-              link.label === "Book Now" ? (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className="px-6 py-2.5 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors"
-                >
+            {navLinks.map(link => link.label === "Book Now" ? <Link key={link.to} to={link.to} className="px-6 py-2.5 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
                   {link.label}
-                </Link>
-              ) : (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`font-body text-sm tracking-widest uppercase transition-colors hover:text-gold ${
-                    location.pathname === link.to ? "text-gold" : "text-foreground"
-                  }`}
-                >
+                </Link> : <Link key={link.to} to={link.to} className={`font-body text-sm tracking-widest uppercase transition-colors hover:text-gold ${location.pathname === link.to ? "text-gold" : "text-foreground"}`}>
                   {link.label}
-                </Link>
-              )
-            )}
+                </Link>)}
           </div>
 
           {/* Mobile toggle */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden text-foreground"
-            aria-label="Toggle menu"
-          >
+          <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden text-foreground" aria-label="Toggle menu">
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </nav>
 
         {/* Mobile menu */}
         <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden bg-background border-t border-border overflow-hidden"
-            >
+          {mobileOpen && <motion.div initial={{
+          opacity: 0,
+          height: 0
+        }} animate={{
+          opacity: 1,
+          height: "auto"
+        }} exit={{
+          opacity: 0,
+          height: 0
+        }} className="lg:hidden bg-background border-t border-border overflow-hidden">
               <div className="px-6 py-6 flex flex-col gap-4">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    onClick={() => setMobileOpen(false)}
-                    className={`font-body text-sm tracking-widest uppercase ${
-                      link.label === "Book Now"
-                        ? "bg-foreground text-background px-6 py-3 text-center"
-                        : location.pathname === link.to
-                        ? "text-gold"
-                        : "text-foreground"
-                    }`}
-                  >
+                {navLinks.map(link => <Link key={link.to} to={link.to} onClick={() => setMobileOpen(false)} className={`font-body text-sm tracking-widest uppercase ${link.label === "Book Now" ? "bg-foreground text-background px-6 py-3 text-center" : location.pathname === link.to ? "text-gold" : "text-foreground"}`}>
                     {link.label}
-                  </Link>
-                ))}
+                  </Link>)}
               </div>
-            </motion.div>
-          )}
+            </motion.div>}
         </AnimatePresence>
       </header>
 
@@ -111,21 +97,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Quick Links</h4>
-              {navLinks.slice(0, 4).map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className="block font-body text-sm text-background/60 hover:text-background mb-2"
-                >
+              {navLinks.slice(0, 4).map(link => <Link key={link.to} to={link.to} className="block font-body text-sm text-background/60 hover:text-background mb-2">
                   {link.label}
-                </Link>
-              ))}
+                </Link>)}
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Services</h4>
-              {["Skin Rituals", "Enhancements", "Skin Boosters", "Vitamin Boosts", "Corrective Care"].map((s) => (
-                <p key={s} className="font-body text-sm text-background/60 mb-2">{s}</p>
-              ))}
+              {["Skin Rituals", "Enhancements", "Skin Boosters", "Vitamin Boosts", "Corrective Care"].map(s => <p key={s} className="font-body text-sm text-background/60 mb-2">{s}</p>)}
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Opening Hours</h4>
@@ -152,8 +130,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </footer>
 
       <WhatsAppButton />
-    </div>
-  );
+    </div>;
 };
-
 export default Layout;

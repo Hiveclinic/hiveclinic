@@ -13,6 +13,8 @@ import Results from "./pages/Results";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
+import Auth from "./pages/Auth";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 

@@ -140,6 +140,7 @@ const Admin = () => {
           {tab === "calendar" && <AdminCalendarView />}
           {tab === "treatments" && <AdminTreatmentsTab />}
           {tab === "payments" && <AdminPaymentPlansTab />}
+          {tab === "clients" && <AdminClientsTab />}
           {tab === "availability" && <AdminAvailabilityTab />}
           {tab === "blocked" && <AdminBlockedDatesTab />}
           {tab === "discounts" && <AdminDiscountCodesTab />}

@@ -138,6 +138,11 @@ const Aftercare = () => (
           </p>
         </motion.div>
 
+        {/* AI Personalised Aftercare */}
+        <div className="my-16">
+          <AIAftercare />
+        </div>
+
         <div className="space-y-16">
           {aftercareGuides.map((guide, i) => (
             <motion.div

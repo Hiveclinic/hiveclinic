@@ -121,9 +121,13 @@ const Layout = ({
                 <p>Sat: 10am - 5pm</p>
                 <p>Wed / Sun: Closed</p>
               </div>
-              <div className="mt-4 flex gap-4">
-                <a href="https://instagram.com/hiveclinicuk" target="_blank" rel="noopener noreferrer" className="text-background/60 hover:text-background text-sm">Instagram</a>
-                <a href="https://tiktok.com/@hiveclinicuk" target="_blank" rel="noopener noreferrer" className="text-background/60 hover:text-background text-sm">TikTok</a>
+              <div className="mt-4 flex gap-4 items-center">
+                <a href="https://instagram.com/hiveclinicuk" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <img src={instagramLogo} alt="Instagram" className="h-7 w-7 rounded-md" />
+                </a>
+                <a href="https://tiktok.com/@hiveclinicuk" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                  <img src={tiktokLogo} alt="TikTok" className="h-7 w-7 rounded-full" />
+                </a>
               </div>
             </div>
           </div>

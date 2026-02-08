@@ -143,7 +143,9 @@ const TreatmentHelper = () => {
   const result = recommendations[answers[0]] || recommendations["My skin looks tired, dull or lacks hydration"];
 
   return (
-    <div className="bg-background border border-border p-8 md:p-12 max-w-2xl mx-auto shadow-sm">
+    <div className="bg-background border border-gold/20 p-8 md:p-12 max-w-2xl mx-auto relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
       <div className="flex items-center gap-2 mb-6">
         <Sparkles size={20} className="text-gold" />
         <h3 className="font-display text-2xl">Find Your Perfect Treatment</h3>

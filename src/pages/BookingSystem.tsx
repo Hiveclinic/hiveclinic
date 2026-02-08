@@ -395,13 +395,14 @@ const BookingSystem = () => {
                     />
                   </div>
                   <div>
-                    <label className="font-body text-sm block mb-2">Phone Number</label>
+                    <label className="font-body text-sm block mb-2">Phone Number *</label>
                     <input
                       type="tel"
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors"
                       placeholder="07XXX XXXXXX"
+                      required
                     />
                   </div>
                   <div>

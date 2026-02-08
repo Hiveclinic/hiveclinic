@@ -144,21 +144,40 @@ serve(async (req) => {
             </div>
             
             <p style="color:#555;font-size:14px;line-height:1.6;">For personalised aftercare advice, visit our <a href="https://hiveclinic.lovable.app/aftercare" style="color:#c9a96e;">aftercare page</a> or chat with our AI aftercare assistant.</p>
-            
             <p style="color:#555;font-size:14px;line-height:1.6;">If you experience any concerns, please contact us immediately via <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a>.</p>
             
             <div style="text-align:center;margin:30px 0;">
               <a href="https://hiveclinic.lovable.app/bookings" style="display:inline-block;background:#0d0d0d;color:#fff;padding:14px 32px;font-size:13px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;">Book Your Next Treatment</a>
             </div>
-            
-            <p style="color:#555;font-size:14px;line-height:1.6;">Thank you for choosing Hive Clinic. We hope you love your results! 🐝</p>
           </div>
           ${footerHtml}
         </div>
       `;
 
-      // Mark aftercare as sent
       await supabaseClient.from("bookings").update({ aftercare_sent: true }).eq("id", bookingId);
+    } else if (emailType === "cancellation") {
+      subject = `Booking Cancelled — ${treatmentName}`;
+      html = `
+        <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
+          ${headerHtml}
+          <div style="padding:40px 30px;">
+            <h2 style="font-family:Georgia,serif;font-size:24px;color:#0d0d0d;margin:0 0 20px;">Booking Cancelled</h2>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Hi ${booking.customer_name},</p>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Your appointment for <strong>${treatmentName}</strong> on <strong>${dateFormatted}</strong> at <strong>${timeFormatted}</strong> has been cancelled.</p>
+            
+            <div style="background:#f9f7f5;border-left:3px solid #c9a96e;padding:20px;margin:24px 0;">
+              <p style="margin:0;font-size:14px;color:#555;">If you believe this is an error or would like to rebook, please contact us via <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a> or email us at <a href="mailto:hello@hiveclinicuk.com" style="color:#c9a96e;">hello@hiveclinicuk.com</a>.</p>
+            </div>
+            
+            <p style="color:#555;font-size:14px;line-height:1.6;">Please refer to our <a href="https://hiveclinic.lovable.app/terms" style="color:#c9a96e;">Terms & Conditions</a> regarding our cancellation and refund policy.</p>
+            
+            <div style="text-align:center;margin:30px 0;">
+              <a href="https://hiveclinic.lovable.app/bookings" style="display:inline-block;background:#0d0d0d;color:#fff;padding:14px 32px;font-size:13px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;">Rebook Now</a>
+            </div>
+          </div>
+          ${footerHtml}
+        </div>
+      `;
     } else {
       throw new Error(`Unknown email type: ${emailType}`);
     }

@@ -4,7 +4,7 @@ import { Session } from "@supabase/supabase-js";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Calendar, Tag, Clock, CalendarX, Users, Mail, Stethoscope, Download, CreditCard, LayoutGrid } from "lucide-react";
+import { LogOut, Calendar, Tag, Clock, CalendarX, Users, Mail, Stethoscope, Download, CreditCard, LayoutGrid, UserCheck } from "lucide-react";
 import { toast } from "sonner";
 import AdminBookingsTab from "@/components/admin/AdminBookingsTab";
 import AdminAvailabilityTab from "@/components/admin/AdminAvailabilityTab";
@@ -13,14 +13,16 @@ import AdminBlockedDatesTab from "@/components/admin/AdminBlockedDatesTab";
 import AdminTreatmentsTab from "@/components/admin/AdminTreatmentsTab";
 import AdminPaymentPlansTab from "@/components/admin/AdminPaymentPlansTab";
 import AdminCalendarView from "@/components/admin/AdminCalendarView";
+import AdminClientsTab from "@/components/admin/AdminClientsTab";
 
-type TabKey = "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "contacts" | "subscribers";
+type TabKey = "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers";
 
 const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "bookings", label: "Bookings", icon: <Calendar size={14} /> },
   { key: "calendar", label: "Calendar", icon: <LayoutGrid size={14} /> },
   { key: "treatments", label: "Treatments", icon: <Stethoscope size={14} /> },
   { key: "payments", label: "Payment Plans", icon: <CreditCard size={14} /> },
+  { key: "clients", label: "Clients", icon: <UserCheck size={14} /> },
   { key: "availability", label: "Availability", icon: <Clock size={14} /> },
   { key: "blocked", label: "Blocked Dates", icon: <CalendarX size={14} /> },
   { key: "discounts", label: "Discounts", icon: <Tag size={14} /> },
@@ -138,6 +140,7 @@ const Admin = () => {
           {tab === "calendar" && <AdminCalendarView />}
           {tab === "treatments" && <AdminTreatmentsTab />}
           {tab === "payments" && <AdminPaymentPlansTab />}
+          {tab === "clients" && <AdminClientsTab />}
           {tab === "availability" && <AdminAvailabilityTab />}
           {tab === "blocked" && <AdminBlockedDatesTab />}
           {tab === "discounts" && <AdminDiscountCodesTab />}

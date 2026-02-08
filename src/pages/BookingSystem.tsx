@@ -201,7 +201,7 @@ const BookingSystem = () => {
     switch (step) {
       case 0: return !!selectedTreatment;
       case 1: return !!selectedDate && !!selectedTime;
-      case 2: return customerName.trim().length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail);
+      case 2: return customerName.trim().length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail) && customerPhone.trim().length >= 10;
       case 3: return true;
       default: return false;
     }
@@ -271,39 +271,50 @@ const BookingSystem = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {filteredTreatments.map((t) => (
-                    <button
+                    <div
                       key={t.id}
-                      onClick={() => {
-                        setSelectedTreatment(t);
-                        setPaymentMode(t.deposit_required ? "deposit" : "full");
-                      }}
-                      className={`text-left p-6 border transition-all ${
+                      className={`text-left p-5 border transition-all ${
                         selectedTreatment?.id === t.id
                           ? "border-gold bg-gold/5"
                           : "border-border hover:border-gold/50"
                       }`}
                     >
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-display text-lg">{t.name}</h3>
-                          <p className="font-body text-xs text-muted-foreground mt-1">{t.category} · {t.duration_mins} mins</p>
+                      <button
+                        onClick={() => {
+                          setSelectedTreatment(t);
+                          setPaymentMode(t.deposit_required ? "deposit" : "full");
+                        }}
+                        className="w-full text-left"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-display text-lg">{t.name}</h3>
+                            <p className="font-body text-xs text-muted-foreground mt-1">{t.duration_mins} mins</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-display text-lg">
+                              {Number(t.price) === 0 ? "Free" : `£${Number(t.price).toFixed(0)}`}
+                            </p>
+                            {t.deposit_required && (
+                              <p className="font-body text-xs text-gold">£{Number(t.deposit_amount).toFixed(0)} deposit</p>
+                            )}
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <p className="font-display text-lg">
-                            {Number(t.price) === 0 ? "Free" : `£${Number(t.price).toFixed(0)}`}
-                          </p>
-                          {t.deposit_required && (
-                            <p className="font-body text-xs text-gold">£{Number(t.deposit_amount).toFixed(0)} deposit</p>
-                          )}
-                        </div>
+                      </button>
+                      <div className="flex items-center justify-between mt-2">
+                        {t.slug && (
+                          <a href={`/treatments/${t.slug}`} className="font-body text-xs text-gold hover:underline transition-colors" target="_blank" rel="noopener noreferrer">
+                            More info →
+                          </a>
+                        )}
+                        {selectedTreatment?.id === t.id && (
+                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1 text-gold ml-auto">
+                            <Check size={14} />
+                            <span className="font-body text-xs">Selected</span>
+                          </motion.div>
+                        )}
                       </div>
-                      {selectedTreatment?.id === t.id && (
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-3 flex items-center gap-1 text-gold">
-                          <Check size={14} />
-                          <span className="font-body text-xs">Selected</span>
-                        </motion.div>
-                      )}
-                    </button>
+                    </div>
                   ))}
                 </div>
               </motion.div>
@@ -395,13 +406,14 @@ const BookingSystem = () => {
                     />
                   </div>
                   <div>
-                    <label className="font-body text-sm block mb-2">Phone Number</label>
+                    <label className="font-body text-sm block mb-2">Phone Number *</label>
                     <input
                       type="tel"
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors"
                       placeholder="07XXX XXXXXX"
+                      required
                     />
                   </div>
                   <div>

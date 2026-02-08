@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar, Clock, User, Mail, Phone, Check, X, AlertTriangle, Download, Search, Filter } from "lucide-react";
+import { Calendar, Clock, User, Mail, Phone, Check, X, AlertTriangle, Download, Search, Filter, Bell } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -53,6 +53,14 @@ const AdminBookingsTab = () => {
   useEffect(() => { fetchBookings(); }, []);
 
   const updateStatus = async (id: string, newStatus: string) => {
+    const booking = bookings.find(b => b.id === id);
+    if (!booking) return;
+
+    // Confirm destructive actions
+    if (newStatus === "cancelled" && !confirm(`Cancel ${booking.customer_name}'s booking? An email will be sent.`)) return;
+    if (newStatus === "completed" && !confirm(`Mark ${booking.customer_name}'s booking as completed? An aftercare email will be sent.`)) return;
+    if (newStatus === "no_show" && !confirm(`Mark ${booking.customer_name} as no-show?`)) return;
+
     const { error } = await supabase
       .from("bookings")
       .update({ status: newStatus })
@@ -64,6 +72,30 @@ const AdminBookingsTab = () => {
     }
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
     toast.success(`Booking marked as ${newStatus}`);
+
+    // Send email based on status change
+    if (newStatus === "completed") {
+      supabase.functions.invoke("send-booking-email", { body: { bookingId: id, emailType: "aftercare" } })
+        .then(() => toast.success("Aftercare email sent"))
+        .catch(() => toast.error("Failed to send aftercare email"));
+    } else if (newStatus === "cancelled") {
+      supabase.functions.invoke("send-booking-email", { body: { bookingId: id, emailType: "cancellation" } })
+        .then(() => toast.success("Cancellation email sent"))
+        .catch(() => toast.error("Failed to send cancellation email"));
+    }
+  };
+
+  const sendReminder = async (id: string) => {
+    const booking = bookings.find(b => b.id === id);
+    if (!booking) return;
+    if (!confirm(`Send a reminder email to ${booking.customer_name}?`)) return;
+
+    try {
+      await supabase.functions.invoke("send-booking-email", { body: { bookingId: id, emailType: "reminder" } });
+      toast.success("Reminder sent!");
+    } catch {
+      toast.error("Failed to send reminder");
+    }
   };
 
   const filtered = bookings
@@ -190,7 +222,12 @@ const AdminBookingsTab = () => {
                   <span className="font-body text-xs text-gold">Deposit: £{Number(b.deposit_amount).toFixed(2)}</span>
                 )}
 
-                <div className="ml-auto flex gap-2">
+                <div className="ml-auto flex gap-2 flex-wrap">
+                  {b.status === "confirmed" && (
+                    <button onClick={() => sendReminder(b.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-gold hover:border-gold font-body text-xs tracking-wider uppercase transition-colors flex items-center gap-1">
+                      <Bell size={12} /> Remind
+                    </button>
+                  )}
                   {STATUS_OPTIONS.map(s => (
                     <button
                       key={s}

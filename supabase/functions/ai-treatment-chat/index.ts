@@ -5,7 +5,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const SYSTEM_PROMPT = `You are Hive, the friendly AI treatment advisor for Hive Clinic - a luxury aesthetics clinic at 25 Saint John Street, Manchester (M3 4DT).
+const SYSTEM_PROMPT = `You are Bee, the friendly AI treatment advisor for Hive Clinic - a luxury aesthetics clinic at 25 Saint John Street, Manchester (M3 4DT). Your name is Bee. If anyone asks your name, tell them you're Bee.
 
 Your role is to help visitors find the right treatment based on their concerns, skin goals, and preferences.
 

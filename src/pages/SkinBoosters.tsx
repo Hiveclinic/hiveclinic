@@ -9,7 +9,7 @@ const treatments = [
   { name: "Lumi Eyes", desc: "Brighten and rejuvenate the under-eye area with this specialist polynucleotide treatment.", price: "£140" },
   { name: "Seventy Hyal", desc: "Deep hydration booster for plumper, dewy skin with long-lasting moisture retention.", price: "£160" },
   { name: "Polynucleotides", desc: "Bio-stimulating injections that regenerate skin cells and improve elasticity from within.", price: "£180" },
-  { name: "Profhilo", desc: "The gold standard in skin remodelling - stimulates collagen and elastin for total skin rejuvenation.", price: "£250" },
+  { name: "Injectable Skin Remodelling", desc: "The gold standard in skin remodelling - stimulates collagen and elastin for total skin rejuvenation.", price: "£250" },
 ];
 
 const faqs = [

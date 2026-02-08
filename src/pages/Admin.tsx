@@ -146,7 +146,7 @@ const Admin = () => {
           {tab === "availability" && <AdminAvailabilityTab />}
           {tab === "blocked" && <AdminBlockedDatesTab />}
           {tab === "discounts" && <AdminDiscountCodesTab />}
-
+          {tab === "site" && <AdminSiteTab />}
           {tab === "contacts" && (
             <>
               <div className="flex gap-3 mb-6">

@@ -41,9 +41,7 @@ const Layout = ({
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex-shrink-0">
-            <img alt="Hive Clinic" className="h-14 mix-blend-multiply dark:invert" style={{
-            background: 'transparent'
-          }} src="/lovable-uploads/287bf846-68c9-4ce8-89d0-2589ecb9e5a7.png" />
+            <img alt="Hive Clinic" className="h-16" src="/lovable-uploads/287bf846-68c9-4ce8-89d0-2589ecb9e5a7.png" style={{ background: 'transparent', mixBlendMode: 'multiply' }} />
           </Link>
 
           {/* Desktop nav */}
@@ -90,7 +88,7 @@ const Layout = ({
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div>
-              <img alt="Hive Clinic" className="h-12 invert mb-4" src="/lovable-uploads/af7c9fcb-cbc7-403e-b2bb-d4d8bb0a804c.png" />
+              <img alt="Hive Clinic" className="h-14 invert mb-4 brightness-0 invert" src="/lovable-uploads/af7c9fcb-cbc7-403e-b2bb-d4d8bb0a804c.png" />
               <p className="font-body text-sm text-background/60 leading-relaxed">
                 A new standard in injectables. Manchester City Centre, Deansgate.
               </p>
@@ -103,7 +101,7 @@ const Layout = ({
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Services</h4>
-              {["Skin Rituals", "Enhancements", "Skin Boosters", "Vitamin Boosts", "Corrective Care"].map(s => <p key={s} className="font-body text-sm text-background/60 mb-2">{s}</p>)}
+              {["Chemical Peels", "HydraFacial", "Dermal Filler", "Anti-Wrinkle", "Skin Boosters", "Fat Dissolve"].map(s => <p key={s} className="font-body text-sm text-background/60 mb-2">{s}</p>)}
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Opening Hours</h4>

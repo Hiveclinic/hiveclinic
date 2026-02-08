@@ -17,7 +17,7 @@ const Bookings = () => {
   return (
     <Layout>
       <section className="py-24">
-        <div className="max-w-4xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-16">
             <h1 className="font-display text-5xl md:text-6xl mb-4">Book Your Appointment</h1>
             <p className="font-body text-muted-foreground">
@@ -25,19 +25,19 @@ const Bookings = () => {
             </p>
           </motion.div>
 
-          {/* Booking embed */}
-          <div className="mb-24">
+          {/* Booking embed - full width */}
+          <div className="mb-24 -mx-6">
             <iframe
               src="https://hiveclinicuk.setmore.com"
               title="Book an appointment at Hive Clinic"
-              className="w-full border border-border"
-              style={{ height: "700px" }}
+              className="w-full border-0"
+              style={{ height: "800px" }}
               loading="lazy"
             />
           </div>
 
           {/* FAQ */}
-          <div>
+          <div className="max-w-4xl mx-auto">
             <h2 className="font-display text-3xl text-center mb-10">Frequently Asked Questions</h2>
             <div className="space-y-0">
               {faqs.map((faq, i) => (

@@ -32,7 +32,7 @@ const SkinBoosters = () => (
           <p className="font-body text-sm text-gold uppercase tracking-[0.2em] mb-4">Glow From Within</p>
           <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">Skin Boosters Manchester</h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Profhilo, polynucleotides, and advanced skin boosters from £140. Deep hydration and collagen stimulation at Hive Clinic, Deansgate.
+            Advanced skin boosters and injectable remodelling from £140. Deep hydration and collagen stimulation at Hive Clinic, Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Bio-Stimulating Technology</span></div>

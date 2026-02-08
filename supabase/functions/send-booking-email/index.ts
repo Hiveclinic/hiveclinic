@@ -1,0 +1,189 @@
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { Resend } from "npm:resend@2.0.0";
+import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
+
+const logStep = (step: string, details?: unknown) => {
+  console.log(`[BOOKING-EMAIL] ${step}${details ? ` - ${JSON.stringify(details)}` : ""}`);
+};
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const resendKey = Deno.env.get("RESEND_API_KEY");
+    if (!resendKey) throw new Error("RESEND_API_KEY is not configured");
+
+    const resend = new Resend(resendKey);
+
+    const { bookingId, emailType } = await req.json();
+    // emailType: "confirmation" | "reminder" | "aftercare"
+
+    if (!bookingId || !emailType) throw new Error("Missing bookingId or emailType");
+    logStep("Processing email", { bookingId, emailType });
+
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
+    const { data: booking, error: bookingError } = await supabaseClient
+      .from("bookings")
+      .select("*, treatments(name, description)")
+      .eq("id", bookingId)
+      .single();
+
+    if (bookingError || !booking) throw new Error("Booking not found");
+    logStep("Booking found", { name: booking.customer_name, treatment: booking.treatments?.name });
+
+    const treatmentName = booking.treatments?.name || "your treatment";
+    const dateFormatted = new Date(booking.booking_date + "T00:00:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+    const timeFormatted = booking.booking_time?.slice(0, 5);
+
+    let subject = "";
+    let html = "";
+
+    const headerHtml = `
+      <div style="background:#0d0d0d;padding:40px 30px;text-align:center;">
+        <h1 style="font-family:Georgia,serif;color:#c9a96e;font-size:28px;margin:0;">Hive Clinic</h1>
+        <p style="color:#999;font-size:12px;margin-top:4px;letter-spacing:2px;">MANCHESTER</p>
+      </div>
+    `;
+
+    const footerHtml = `
+      <div style="background:#f5f0eb;padding:30px;text-align:center;border-top:1px solid #e5ddd5;">
+        <p style="font-size:12px;color:#999;margin:0;">Hive Clinic · Manchester City Centre, Deansgate</p>
+        <p style="font-size:11px;color:#bbb;margin-top:8px;">
+          <a href="https://hiveclinic.lovable.app" style="color:#c9a96e;">Website</a> · 
+          <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a> · 
+          <a href="https://instagram.com/hiveclinicuk" style="color:#c9a96e;">Instagram</a>
+        </p>
+      </div>
+    `;
+
+    if (emailType === "confirmation") {
+      subject = `Booking Confirmed — ${treatmentName}`;
+      html = `
+        <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
+          ${headerHtml}
+          <div style="padding:40px 30px;">
+            <h2 style="font-family:Georgia,serif;font-size:24px;color:#0d0d0d;margin:0 0 20px;">Your booking is confirmed</h2>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Hi ${booking.customer_name},</p>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Thank you for booking with Hive Clinic. Here are your appointment details:</p>
+            
+            <div style="background:#f9f7f5;border-left:3px solid #c9a96e;padding:20px;margin:24px 0;">
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Treatment:</strong> ${treatmentName}</p>
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Date:</strong> ${dateFormatted}</p>
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Time:</strong> ${timeFormatted}</p>
+              <p style="margin:0;font-size:14px;"><strong>Duration:</strong> ${booking.duration_mins} minutes</p>
+              ${Number(booking.total_price) > 0 ? `<p style="margin:8px 0 0;font-size:14px;"><strong>Total:</strong> £${Number(booking.total_price).toFixed(2)}</p>` : ""}
+            </div>
+            
+            <p style="color:#555;font-size:14px;line-height:1.6;">Please arrive 5 minutes early. If you need to reschedule, contact us at least 24 hours in advance.</p>
+            <p style="color:#555;font-size:14px;line-height:1.6;">We look forward to seeing you! ✨</p>
+          </div>
+          ${footerHtml}
+        </div>
+      `;
+    } else if (emailType === "reminder") {
+      subject = `Reminder: ${treatmentName} Tomorrow`;
+      html = `
+        <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
+          ${headerHtml}
+          <div style="padding:40px 30px;">
+            <h2 style="font-family:Georgia,serif;font-size:24px;color:#0d0d0d;margin:0 0 20px;">Your appointment is tomorrow</h2>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Hi ${booking.customer_name},</p>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Just a friendly reminder that your appointment is tomorrow:</p>
+            
+            <div style="background:#f9f7f5;border-left:3px solid #c9a96e;padding:20px;margin:24px 0;">
+              <p style="margin:0 0 8px;font-size:14px;"><strong>${treatmentName}</strong></p>
+              <p style="margin:0 0 8px;font-size:14px;">📅 ${dateFormatted}</p>
+              <p style="margin:0;font-size:14px;">🕐 ${timeFormatted}</p>
+            </div>
+            
+            <p style="color:#555;font-size:14px;line-height:1.6;"><strong>Preparation tips:</strong></p>
+            <ul style="color:#555;font-size:14px;line-height:1.8;">
+              <li>Arrive 5 minutes early</li>
+              <li>Come with a clean face (no makeup for skin treatments)</li>
+              <li>Avoid alcohol 24 hours before injectable treatments</li>
+              <li>Stay hydrated</li>
+            </ul>
+            
+            <p style="color:#555;font-size:14px;line-height:1.6;">Need to reschedule? Please let us know ASAP via <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a>.</p>
+          </div>
+          ${footerHtml}
+        </div>
+      `;
+    } else if (emailType === "aftercare") {
+      subject = `Aftercare Instructions — ${treatmentName}`;
+      html = `
+        <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
+          ${headerHtml}
+          <div style="padding:40px 30px;">
+            <h2 style="font-family:Georgia,serif;font-size:24px;color:#0d0d0d;margin:0 0 20px;">Your aftercare guide</h2>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Hi ${booking.customer_name},</p>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Thank you for visiting Hive Clinic today. Here are your aftercare instructions for ${treatmentName}:</p>
+            
+            <div style="background:#f9f7f5;border-left:3px solid #c9a96e;padding:20px;margin:24px 0;">
+              <p style="margin:0 0 12px;font-size:14px;font-weight:bold;">General Aftercare</p>
+              <ul style="margin:0;padding-left:20px;font-size:14px;line-height:1.8;color:#555;">
+                <li>Avoid touching the treated area for at least 4 hours</li>
+                <li>No strenuous exercise for 24 hours</li>
+                <li>Avoid extreme heat (saunas, hot baths) for 48 hours</li>
+                <li>Stay hydrated and avoid alcohol for 24 hours</li>
+                <li>Use SPF 50+ on treated areas when outdoors</li>
+                <li>Apply any prescribed aftercare products as directed</li>
+              </ul>
+            </div>
+            
+            <p style="color:#555;font-size:14px;line-height:1.6;">For personalised aftercare advice, visit our <a href="https://hiveclinic.lovable.app/aftercare" style="color:#c9a96e;">aftercare page</a> or chat with our AI aftercare assistant.</p>
+            
+            <p style="color:#555;font-size:14px;line-height:1.6;">If you experience any concerns, please contact us immediately via <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a>.</p>
+            
+            <div style="text-align:center;margin:30px 0;">
+              <a href="https://hiveclinic.lovable.app/bookings" style="display:inline-block;background:#0d0d0d;color:#fff;padding:14px 32px;font-size:13px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;">Book Your Next Treatment</a>
+            </div>
+            
+            <p style="color:#555;font-size:14px;line-height:1.6;">Thank you for choosing Hive Clinic. We hope you love your results! 🐝</p>
+          </div>
+          ${footerHtml}
+        </div>
+      `;
+
+      // Mark aftercare as sent
+      await supabaseClient.from("bookings").update({ aftercare_sent: true }).eq("id", bookingId);
+    } else {
+      throw new Error(`Unknown email type: ${emailType}`);
+    }
+
+    logStep("Sending email", { to: booking.customer_email, subject });
+
+    const emailResponse = await resend.emails.send({
+      from: "Hive Clinic <noreply@hiveclinic.lovable.app>",
+      to: [booking.customer_email],
+      subject,
+      html,
+    });
+
+    logStep("Email sent successfully", emailResponse);
+
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 200,
+    });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : "Unknown error";
+    logStep("ERROR", { message: msg });
+    return new Response(JSON.stringify({ error: msg }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500,
+    });
+  }
+});

@@ -8,3 +8,15 @@ verify_jwt = false
 
 [functions.ai-treatment-chat]
 verify_jwt = false
+
+[functions.create-booking-checkout]
+verify_jwt = false
+
+[functions.confirm-booking]
+verify_jwt = false
+
+[functions.validate-discount]
+verify_jwt = false
+
+[functions.send-booking-email]
+verify_jwt = false

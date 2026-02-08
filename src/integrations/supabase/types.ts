@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_client_notes: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          customer_email: string
+          id: string
+          note: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          customer_email: string
+          id?: string
+          note: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string
+          id?: string
+          note?: string
+        }
+        Relationships: []
+      }
       availability: {
         Row: {
           created_at: string
@@ -170,6 +194,39 @@ export type Database = {
           },
         ]
       }
+      client_images: {
+        Row: {
+          customer_email: string
+          id: string
+          image_type: string
+          image_url: string
+          notes: string | null
+          treatment_name: string | null
+          uploaded_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          customer_email: string
+          id?: string
+          image_type?: string
+          image_url: string
+          notes?: string | null
+          treatment_name?: string | null
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          customer_email?: string
+          id?: string
+          image_type?: string
+          image_url?: string
+          notes?: string | null
+          treatment_name?: string | null
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           contacted: boolean
@@ -302,6 +359,36 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+        }
+        Relationships: []
+      }
+      gdpr_consents: {
+        Row: {
+          consent_type: string
+          consented: boolean
+          consented_at: string
+          customer_email: string
+          id: string
+          ip_address: string | null
+          withdrawn_at: string | null
+        }
+        Insert: {
+          consent_type: string
+          consented?: boolean
+          consented_at?: string
+          customer_email: string
+          id?: string
+          ip_address?: string | null
+          withdrawn_at?: string | null
+        }
+        Update: {
+          consent_type?: string
+          consented?: boolean
+          consented_at?: string
+          customer_email?: string
+          id?: string
+          ip_address?: string | null
+          withdrawn_at?: string | null
         }
         Relationships: []
       }

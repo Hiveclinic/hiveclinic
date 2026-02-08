@@ -65,7 +65,7 @@ const recommendations: Record<string, Recommendation> = {
   "I've noticed lines forming around my eyes, forehead or mouth": {
     category: "Anti-Wrinkle Treatments",
     tagline: "Turn back the clock without anyone knowing",
-    description: "Our precision anti-wrinkle injections smooth lines and restore a naturally refreshed look. From subtle brow lifts to full facial rejuvenation — results you'll love.",
+    description: "Our precision anti-wrinkle injections smooth lines and restore a naturally refreshed look. From subtle brow lifts to full facial rejuvenation - results you'll love.",
     benefits: ["Results visible in 3-7 days", "No downtime needed", "Lasts 3-4 months", "Prices from just £120"],
     testimonial: { text: "I look 10 years younger but completely natural. Bianca is amazing!", name: "Sarah T." },
     link: "/treatments/anti-wrinkle-manchester",

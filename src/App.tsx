@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Index from "./pages/Index";
 import Treatments from "./pages/Treatments";
+import LipFillers from "./pages/LipFillers";
+import AntiWrinkle from "./pages/AntiWrinkle";
 import Pricing from "./pages/Pricing";
 import About from "./pages/About";
 import Bookings from "./pages/Bookings";

@@ -162,7 +162,7 @@ const AntiWrinkle = () => (
             Message Us on WhatsApp
           </a>
         </div>
-        <p className="font-body text-xs text-muted-foreground mt-6">25 St John Street, Deansgate, Manchester</p>
+        <p className="font-body text-xs text-muted-foreground mt-6">25 Saint John Street, Manchester M3 4DT</p>
       </div>
     </section>
   </Layout>

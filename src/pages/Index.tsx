@@ -13,11 +13,11 @@ import klarnaLogo from "@/assets/klarna-logo.png";
 import clearpayLogo from "@/assets/clearpay-logo.png";
 
 const highlights = [
-  { title: "Chemical Peels", desc: "Targeted peels for face, back, and body to transform skin tone and texture." },
-  { title: "HydraFacial", desc: "Deep cleansing facials for glass-like, refreshed skin." },
-  { title: "Dermal Filler", desc: "Expert lip, cheek, jawline, and facial balancing treatments." },
-  { title: "Anti-Wrinkle", desc: "Precision injections for a naturally refreshed appearance." },
-  { title: "Skin Boosters", desc: "Deep hydration for luminous, glass-like skin." },
+  { title: "Chemical Peels", desc: "Targeted peels for face, back, and body to transform skin tone and texture.", link: "/treatments" },
+  { title: "HydraFacial", desc: "Deep cleansing facials for glass-like, refreshed skin.", link: "/treatments" },
+  { title: "Dermal Filler", desc: "Expert lip, cheek, jawline, and facial balancing treatments.", link: "/treatments/lip-fillers-manchester" },
+  { title: "Anti-Wrinkle", desc: "Precision injections for a naturally refreshed appearance.", link: "/treatments/anti-wrinkle-injections-manchester" },
+  { title: "Skin Boosters", desc: "Deep hydration for luminous, glass-like skin.", link: "/treatments" },
 ];
 
 const reviews = [
@@ -114,7 +114,7 @@ const Index = () => {
                 transition={{ delay: i * 0.1 }}
               >
                 <Link
-                  to="/treatments"
+                  to={h.link}
                   className="block p-6 border border-border hover:border-gold transition-colors group h-full"
                 >
                   <h3 className="font-display text-xl mb-3 group-hover:text-gold transition-colors">{h.title}</h3>

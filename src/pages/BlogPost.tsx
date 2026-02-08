@@ -35,7 +35,7 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
       "2. Suitable for every skin type. Whether you have oily, dry, sensitive, or combination skin, HydraFacial can be customised to address your specific concerns. The treatment uses gentle vortex technology that's effective without being harsh.",
       "3. Deep cleansing beyond what home care can achieve. The patented vortex suction technology extracts impurities, dead skin cells, and sebum from pores at a depth that no at-home product can reach. This is why regular HydraFacials are such a game-changer for congested skin.",
       "4. Hydration that actually lasts. Unlike topical moisturisers that sit on the surface, HydraFacial infuses powerful serums deep into the skin. Hyaluronic acid, peptides, and antioxidants are delivered directly where they're needed most.",
-      "5. It pairs beautifully with other treatments. Many of our clients combine their HydraFacial with other treatments like Profhilo or microneedling for enhanced results. Your practitioner can recommend the perfect combination for your skin goals.",
+      "5. It pairs beautifully with other treatments. Many of our clients combine their HydraFacial with other treatments like skin boosters or microneedling for enhanced results. Your practitioner can recommend the perfect combination for your skin goals.",
     ],
   },
   "skincare-routine-glow": {

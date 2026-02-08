@@ -7,37 +7,37 @@ const questions = [
   {
     q: "What's your main concern right now?",
     options: [
-      { label: "Fine lines & wrinkles", icon: "✨" },
-      { label: "I want fuller lips or more defined features", icon: "💋" },
-      { label: "My skin looks dull, tired or dehydrated", icon: "🪞" },
-      { label: "Acne scarring or uneven texture", icon: "🔬" },
-      { label: "Stubborn fat I can't shift", icon: "🎯" },
-      { label: "Pigmentation or dark spots", icon: "🌟" },
+      { label: "Fine lines & wrinkles" },
+      { label: "I want fuller lips or more defined features" },
+      { label: "My skin looks dull, tired or dehydrated" },
+      { label: "Acne scarring or uneven texture" },
+      { label: "Stubborn fat I can't shift" },
+      { label: "Pigmentation or dark spots" },
     ],
   },
   {
     q: "What kind of result are you after?",
     options: [
-      { label: "Subtle - no one needs to know", icon: "🤫" },
-      { label: "Noticeable but natural", icon: "✨" },
-      { label: "A real transformation", icon: "💫" },
-      { label: "I just want healthy, glowing skin", icon: "🌿" },
+      { label: "Subtle — no one needs to know" },
+      { label: "Noticeable but natural" },
+      { label: "A real transformation" },
+      { label: "I just want healthy, glowing skin" },
     ],
   },
   {
     q: "Have you had aesthetic treatments before?",
     options: [
-      { label: "No, this would be my first", icon: "🆕" },
-      { label: "Yes, a few times", icon: "👍" },
-      { label: "Yes, I'm experienced", icon: "⭐" },
+      { label: "No, this would be my first" },
+      { label: "Yes, a few times" },
+      { label: "Yes, I'm experienced" },
     ],
   },
   {
     q: "How soon do you want to see results?",
     options: [
-      { label: "Immediately", icon: "⚡" },
-      { label: "Within a few weeks", icon: "📅" },
-      { label: "I'm happy to build results over time", icon: "🌱" },
+      { label: "Immediately" },
+      { label: "Within a few weeks" },
+      { label: "I'm happy to build results over time" },
     ],
   },
 ];

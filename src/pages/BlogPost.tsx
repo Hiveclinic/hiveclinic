@@ -8,9 +8,9 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
     date: "January 2026",
     content: [
       "If you're considering dermal filler for the first time, it's completely normal to feel a mix of excitement and nerves. At Hive Clinic, we make sure every client feels informed, comfortable, and confident before any treatment begins.",
-      "Your journey starts with a thorough consultation where we discuss your goals, medical history, and expectations. This is your time to ask questions — no question is too small.",
-      "During the treatment, a topical numbing cream is applied to minimise discomfort. The procedure itself typically takes 15–30 minutes, depending on the area being treated.",
-      "Aftercare is just as important. Expect some mild swelling for 24–48 hours, and avoid intense exercise, alcohol, and excessive heat for the first day. We'll provide you with full aftercare instructions.",
+      "Your journey starts with a thorough consultation where we discuss your goals, medical history, and expectations. This is your time to ask questions - no question is too small.",
+      "During the treatment, a topical numbing cream is applied to minimise discomfort. The procedure itself typically takes 15-30 minutes, depending on the area being treated.",
+      "Aftercare is just as important. Expect some mild swelling for 24-48 hours, and avoid intense exercise, alcohol, and excessive heat for the first day. We'll provide you with full aftercare instructions.",
       "Results are visible immediately but settle beautifully over the following two weeks. We always recommend a review appointment to ensure you're happy with the outcome.",
     ],
   },

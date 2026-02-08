@@ -200,7 +200,7 @@ const Index = () => {
           </div>
           <div className="text-center mt-10">
             <a
-              href="https://g.page/r/hiveclinicuk/review"
+              href="https://share.google/mBcefh9rsj2qmoRlJ"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 font-body text-sm tracking-widest uppercase text-gold hover:text-foreground transition-colors"

@@ -22,6 +22,7 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "calendar", label: "Calendar", icon: <LayoutGrid size={14} /> },
   { key: "treatments", label: "Treatments", icon: <Stethoscope size={14} /> },
   { key: "payments", label: "Payment Plans", icon: <CreditCard size={14} /> },
+  { key: "clients", label: "Clients", icon: <UserCheck size={14} /> },
   { key: "availability", label: "Availability", icon: <Clock size={14} /> },
   { key: "blocked", label: "Blocked Dates", icon: <CalendarX size={14} /> },
   { key: "discounts", label: "Discounts", icon: <Tag size={14} /> },

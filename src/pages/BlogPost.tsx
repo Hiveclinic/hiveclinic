@@ -44,7 +44,7 @@ const posts: Record<string, { title: string; date: string; content: string[] }> 
     content: [
       "Glass skin - that impossibly dewy, translucent-looking complexion - isn't just about genetics. With the right routine and professional treatments, it's achievable for everyone.",
       "Start with a gentle cleanser that doesn't strip your skin. Follow with a hydrating toner and layer on a serum rich in hyaluronic acid. Seal everything in with a quality moisturiser and SPF during the day.",
-      "In-clinic treatments like Profhilo and HydraFacials supercharge your at-home routine by delivering deep hydration and stimulating collagen production beneath the surface.",
+      "In-clinic treatments like injectable skin boosters and HydraFacials supercharge your at-home routine by delivering deep hydration and stimulating collagen production beneath the surface.",
       "Consistency is key. The best results come from combining a dedicated home routine with regular professional treatments. Book a skin consultation to get a personalised plan.",
     ],
   },

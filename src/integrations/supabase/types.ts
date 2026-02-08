@@ -16,6 +16,8 @@ export type Database = {
     Tables: {
       contact_submissions: {
         Row: {
+          contacted: boolean
+          contacted_at: string | null
           created_at: string
           email: string
           id: string
@@ -24,6 +26,8 @@ export type Database = {
           phone: string | null
         }
         Insert: {
+          contacted?: boolean
+          contacted_at?: string | null
           created_at?: string
           email: string
           id?: string
@@ -32,6 +36,8 @@ export type Database = {
           phone?: string | null
         }
         Update: {
+          contacted?: boolean
+          contacted_at?: string | null
           created_at?: string
           email?: string
           id?: string

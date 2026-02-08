@@ -17,7 +17,7 @@ const About = () => (
               </p>
               <p>
                 With years of experience in advanced aesthetics, Bianca brings a meticulous eye for detail and a deep
-                understanding of facial anatomy. Every treatment is approached with artistry — enhancing what's already
+                understanding of facial anatomy. Every treatment is approached with artistry - enhancing what's already
                 there, never changing who you are.
               </p>
               <p>

@@ -91,7 +91,9 @@ const Contact = () => {
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                       className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors resize-none"
+                      maxLength={5000}
                     />
+                    {errors.message && <p className="font-body text-xs text-red-500 mt-1">{errors.message}</p>}
                   </div>
                   <button
                     type="submit"

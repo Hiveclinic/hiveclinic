@@ -28,7 +28,13 @@ const VIPPopup = () => {
     e.preventDefault();
     setLoading(true);
 
-    const trimmedEmail = email.trim().toLowerCase();
+    const parsed = emailSchema.safeParse(email);
+    if (!parsed.success) {
+      toast.error(parsed.error.errors[0]?.message || "Invalid email");
+      setLoading(false);
+      return;
+    }
+    const trimmedEmail = parsed.data.toLowerCase();
 
     // Save to database
     const { error } = await supabase

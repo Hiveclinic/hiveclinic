@@ -90,7 +90,7 @@ const Layout = ({
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div>
-              <img src={logo} alt="Hive Clinic" className="h-12 invert mb-4" />
+              <img alt="Hive Clinic" className="h-12 invert mb-4" src="/lovable-uploads/af7c9fcb-cbc7-403e-b2bb-d4d8bb0a804c.png" />
               <p className="font-body text-sm text-background/60 leading-relaxed">
                 A new standard in injectables. Manchester City Centre, Deansgate.
               </p>

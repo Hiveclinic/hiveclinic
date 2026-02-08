@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-
+import AIAftercare from "@/components/AIAftercare";
 const aftercareGuides = [
   {
     title: "Lip Filler Aftercare",
@@ -137,6 +137,11 @@ const Aftercare = () => (
             Your treatment doesn't end when you leave the clinic. Follow these guidelines to get the best possible results.
           </p>
         </motion.div>
+
+        {/* AI Personalised Aftercare */}
+        <div className="my-16">
+          <AIAftercare />
+        </div>
 
         <div className="space-y-16">
           {aftercareGuides.map((guide, i) => (

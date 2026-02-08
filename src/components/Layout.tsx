@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo.png";
 import WhatsAppButton from "./WhatsAppButton";
 import VIPPopup from "./VIPPopup";
+import TreatmentChatbot from "./TreatmentChatbot";
 const navLinks = [{
   to: "/",
   label: "Home"
@@ -144,6 +145,7 @@ const Layout = ({
 
       <WhatsAppButton />
       <VIPPopup />
+      <TreatmentChatbot />
     </div>;
 };
 export default Layout;

@@ -206,7 +206,7 @@ const TreatmentChatbot = () => {
                   maxLength={500}
                 />
                 <button
-                  onClick={sendMessage}
+                  onClick={() => sendMessage()}
                   disabled={!input.trim() || isLoading}
                   className="px-3 py-2 bg-foreground text-background hover:bg-accent transition-colors disabled:opacity-30"
                   aria-label="Send message"

@@ -3,7 +3,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Sparkles, CheckCircle, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const questions = [
+const SKIN_CONCERNS = [
+  "I've noticed lines forming around my eyes, forehead or mouth",
+  "My skin looks tired, dull or lacks hydration",
+  "I'm dealing with scarring, texture or enlarged pores",
+  "I want to even out my skin tone or reduce dark spots",
+];
+
+const BODY_CONCERNS = [
+  "I have stubborn fat around my chin, stomach or thighs",
+];
+
+const baseQuestions = [
   {
     q: "What brought you here today?",
     options: [
@@ -32,25 +43,61 @@ const questions = [
       { label: "I'm a regular - I know what I like" },
     ],
   },
-  {
-    q: "How does your skin typically behave?",
-    options: [
-      { label: "Dry or dehydrated - it often feels tight" },
-      { label: "Oily or congested - I'm prone to breakouts" },
-      { label: "Combination - oily in places, dry in others" },
-      { label: "Sensitive - it reacts easily to products" },
-      { label: "Generally fine - I just want to maintain or improve" },
-    ],
-  },
-  {
-    q: "When would you like to see results?",
-    options: [
-      { label: "I have an event coming up - as soon as possible" },
-      { label: "Within a few weeks would be ideal" },
-      { label: "I'm happy to invest in a longer-term treatment plan" },
-    ],
-  },
 ];
+
+const skinTypeQuestion = {
+  q: "How does your skin typically behave?",
+  options: [
+    { label: "Dry or dehydrated - it often feels tight" },
+    { label: "Oily or congested - I'm prone to breakouts" },
+    { label: "Combination - oily in places, dry in others" },
+    { label: "Sensitive - it reacts easily to products" },
+    { label: "Generally fine - I just want to maintain or improve" },
+  ],
+};
+
+const bodyTypeQuestion = {
+  q: "Which area concerns you the most?",
+  options: [
+    { label: "Under my chin or jawline" },
+    { label: "Stomach or love handles" },
+    { label: "Inner thighs or arms" },
+    { label: "Multiple areas - I'd like a full plan" },
+  ],
+};
+
+const fillerTypeQuestion = {
+  q: "What enhancement are you most interested in?",
+  options: [
+    { label: "Fuller, more defined lips" },
+    { label: "Cheek or jawline contouring" },
+    { label: "Overall facial balancing" },
+    { label: "I'm not sure - I'd like expert advice" },
+  ],
+};
+
+const timelineQuestion = {
+  q: "When would you like to see results?",
+  options: [
+    { label: "I have an event coming up - as soon as possible" },
+    { label: "Within a few weeks would be ideal" },
+    { label: "I'm happy to invest in a longer-term treatment plan" },
+  ],
+};
+
+const getQuestions = (firstAnswer: string) => {
+  const isSkinConcern = SKIN_CONCERNS.includes(firstAnswer);
+  const isBodyConcern = BODY_CONCERNS.includes(firstAnswer);
+  const isFillerConcern = firstAnswer === "I'd love fuller, more balanced lips";
+
+  const contextQuestion = isBodyConcern
+    ? bodyTypeQuestion
+    : isFillerConcern
+    ? fillerTypeQuestion
+    : skinTypeQuestion;
+
+  return [...baseQuestions, contextQuestion, timelineQuestion];
+};
 
 interface Recommendation {
   category: string;

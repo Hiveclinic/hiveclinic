@@ -104,7 +104,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div>
-              <img src={logo} alt="Hive Clinic" className="h-8 invert mb-4" />
+              <img src={logo} alt="Hive Clinic" className="h-12 invert mb-4" />
               <p className="font-body text-sm text-background/60 leading-relaxed">
                 A new standard in injectables. Manchester City Centre, Deansgate.
               </p>

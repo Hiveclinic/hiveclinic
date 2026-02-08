@@ -45,7 +45,7 @@ const questions = [
   {
     q: "When would you like to see results?",
     options: [
-      { label: "I have an event coming up — as soon as possible" },
+      { label: "I have an event coming up - as soon as possible" },
       { label: "Within a few weeks would be ideal" },
       { label: "I'm happy to invest in a longer-term treatment plan" },
     ],

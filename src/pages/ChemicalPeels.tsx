@@ -11,7 +11,7 @@ const treatments = [
   { name: "Level 2 Chemical Peel - Face", desc: "A stronger depigmenting peel for dark spots, melasma, and uneven skin tone.", price: "£110" },
   { name: "Level 2 Chemical Peel - Back", desc: "Intensive peel for hyperpigmentation and textural buildup on the back.", price: "£125" },
   { name: "Intimate Peel - Small Area", desc: "Gentle brightening peel for intimate areas, underarms, or targeted zones.", price: "from £75" },
-  { name: "Melanostop Body Treatment", desc: "Specialist depigmenting treatment for hands, underarms, elbows, and knees.", price: "from £120" },
+  { name: "Body Brightening Treatment", desc: "Specialist depigmenting treatment for hands, underarms, elbows, and knees.", price: "from £120" },
 ];
 
 const faqs = [

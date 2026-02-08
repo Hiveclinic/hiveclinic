@@ -81,7 +81,7 @@ const Layout = ({
       </header>
 
       {/* Main */}
-      <main className="flex-1 pt-[73px]">{children}</main>
+      <main className="flex-1 pt-[89px]">{children}</main>
 
       {/* Footer */}
       <footer className="bg-foreground text-background">

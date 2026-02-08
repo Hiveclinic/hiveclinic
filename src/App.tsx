@@ -24,6 +24,7 @@ import Contact from "./pages/Contact";
 import Terms from "./pages/Terms";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import Aftercare from "./pages/Aftercare";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 

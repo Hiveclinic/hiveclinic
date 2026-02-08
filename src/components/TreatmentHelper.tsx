@@ -6,11 +6,11 @@ import { Link } from "react-router-dom";
 const questions = [
   {
     q: "What's your main skin concern?",
-    options: ["Fine lines & wrinkles", "Volume loss", "Dull / tired skin", "Acne scarring", "Uneven texture"],
+    options: ["Fine lines & wrinkles", "Volume loss or facial contouring", "Dull / tired skin", "Acne scarring or texture", "Stubborn fat areas", "Pigmentation or uneven tone"],
   },
   {
     q: "What's your goal?",
-    options: ["Preventative care", "Subtle enhancement", "Noticeable transformation", "Skin health & glow"],
+    options: ["Preventative care", "Subtle enhancement", "Noticeable transformation", "Skin health & glow", "Body contouring"],
   },
   {
     q: "How much downtime can you manage?",
@@ -18,16 +18,17 @@ const questions = [
   },
   {
     q: "What's your budget range?",
-    options: ["Under £150", "£150 – £300", "£300 – £500", "£500+"],
+    options: ["Under £150", "£150 - £300", "£300 - £500", "£500+"],
   },
 ];
 
 const recommendations: Record<string, { category: string; description: string }> = {
-  "Fine lines & wrinkles": { category: "Enhancements", description: "Consider anti-wrinkle treatments or skin boosters to smooth and refresh." },
-  "Volume loss": { category: "Enhancements", description: "Dermal fillers can restore lost volume for a naturally youthful look." },
-  "Dull / tired skin": { category: "Skin Rituals", description: "Our signature facials and skin boosters will restore your glow." },
-  "Acne scarring": { category: "Corrective Care", description: "Advanced treatments like microneedling can significantly improve texture." },
-  "Uneven texture": { category: "Skin Boosters", description: "Hydrating skin boosters and chemical peels for smoother, refined skin." },
+  "Fine lines & wrinkles": { category: "Anti-Wrinkle", description: "Precision anti-wrinkle injections to smooth lines and refresh your look - from brow lifts to full facial treatments." },
+  "Volume loss or facial contouring": { category: "Dermal Filler", description: "Expert filler treatments for lips, cheeks, jawline, and facial balancing packages for natural contouring." },
+  "Dull / tired skin": { category: "HydraFacial", description: "Deep cleansing facials like Glass Skin Boost and Glow Reset to bring back your radiance." },
+  "Acne scarring or texture": { category: "Microneedling", description: "Face texture repair with microneedling and chemical peel combination for scars, pores, and glow." },
+  "Stubborn fat areas": { category: "Fat Dissolve", description: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, and more - no downtime required." },
+  "Pigmentation or uneven tone": { category: "Chemical Peels", description: "Targeted chemical peels and melanostop treatments to even out skin tone and restore clarity." },
 };
 
 const TreatmentHelper = () => {

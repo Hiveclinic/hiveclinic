@@ -1,6 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Menu, X, Search as SearchIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo.png";
 import WhatsAppButton from "./WhatsAppButton";
@@ -9,6 +9,7 @@ import TreatmentChatbot from "./TreatmentChatbot";
 import AnnouncementBanner from "./AnnouncementBanner";
 import instagramLogo from "@/assets/instagram-logo.png";
 import tiktokLogo from "@/assets/tiktok-logo.png";
+import { supabase } from "@/integrations/supabase/client";
 
 const navLinks = [{
   to: "/",
@@ -23,9 +24,6 @@ const navLinks = [{
   to: "/about",
   label: "About"
 }, {
-  to: "/results",
-  label: "Results"
-}, {
   to: "/aftercare",
   label: "Aftercare"
 }, {
@@ -38,13 +36,74 @@ const navLinks = [{
   to: "/bookings",
   label: "Book Now"
 }];
+
+type SearchResult = {
+  type: "treatment" | "page";
+  name: string;
+  link: string;
+};
+
+const STATIC_PAGES: SearchResult[] = [
+  { type: "page", name: "Home", link: "/" },
+  { type: "page", name: "Treatments", link: "/treatments" },
+  { type: "page", name: "Pricing", link: "/pricing" },
+  { type: "page", name: "About Us", link: "/about" },
+  { type: "page", name: "Results & Gallery", link: "/results" },
+  { type: "page", name: "Aftercare", link: "/aftercare" },
+  { type: "page", name: "Blog", link: "/blog" },
+  { type: "page", name: "Contact", link: "/contact" },
+  { type: "page", name: "Book Now", link: "/bookings" },
+  { type: "page", name: "My Appointments", link: "/my-appointments" },
+  { type: "page", name: "Privacy Policy", link: "/privacy" },
+  { type: "page", name: "Terms & Conditions", link: "/terms" },
+];
+
 const Layout = ({
   children
 }: {
   children: React.ReactNode;
 }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [treatments, setTreatments] = useState<{ name: string; slug: string; category: string }[]>([]);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.from("treatments").select("name, slug, category").eq("active", true).order("name").then(({ data }) => {
+      if (data) setTreatments(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchOpen]);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    const q = searchQuery.toLowerCase();
+    const treatmentResults: SearchResult[] = treatments
+      .filter(t => t.name.toLowerCase().includes(q) || t.category.toLowerCase().includes(q))
+      .slice(0, 6)
+      .map(t => ({ type: "treatment", name: t.name, link: "/bookings" }));
+    const pageResults = STATIC_PAGES.filter(p => p.name.toLowerCase().includes(q));
+    setSearchResults([...treatmentResults, ...pageResults].slice(0, 8));
+  }, [searchQuery, treatments]);
+
+  const handleSearchSelect = (result: SearchResult) => {
+    setSearchOpen(false);
+    setSearchQuery("");
+    navigate(result.link);
+  };
+
   return <div className="min-h-screen flex flex-col bg-background text-foreground">
       <AnnouncementBanner />
       {/* Nav */}
@@ -61,12 +120,20 @@ const Layout = ({
                 </Link> : <Link key={link.to} to={link.to} className={`font-body text-sm tracking-widest uppercase transition-colors hover:text-gold ${location.pathname === link.to ? "text-gold" : "text-foreground"}`}>
                   {link.label}
                 </Link>)}
+            <button onClick={() => setSearchOpen(true)} className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Search">
+              <SearchIcon size={16} strokeWidth={1.5} />
+            </button>
           </div>
 
           {/* Mobile toggle */}
-          <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden text-foreground" aria-label="Toggle menu">
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="flex items-center gap-3 lg:hidden">
+            <button onClick={() => setSearchOpen(true)} className="text-muted-foreground hover:text-foreground" aria-label="Search">
+              <SearchIcon size={18} strokeWidth={1.5} />
+            </button>
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="text-foreground" aria-label="Toggle menu">
+              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </nav>
 
         {/* Mobile menu */}
@@ -90,6 +157,65 @@ const Layout = ({
         </AnimatePresence>
       </header>
 
+      {/* Search Overlay */}
+      <AnimatePresence>
+        {searchOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-foreground/60 backdrop-blur-sm flex items-start justify-center pt-24"
+            onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="bg-background border border-border w-full max-w-xl mx-4"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex items-center border-b border-border px-5">
+                <SearchIcon size={16} strokeWidth={1.5} className="text-muted-foreground" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search treatments, pages..."
+                  className="flex-1 bg-transparent px-3 py-4 font-body text-sm focus:outline-none"
+                  onKeyDown={e => {
+                    if (e.key === "Escape") { setSearchOpen(false); setSearchQuery(""); }
+                    if (e.key === "Enter" && searchResults.length > 0) handleSearchSelect(searchResults[0]);
+                  }}
+                />
+                <button onClick={() => { setSearchOpen(false); setSearchQuery(""); }} className="text-muted-foreground hover:text-foreground">
+                  <X size={16} strokeWidth={1.5} />
+                </button>
+              </div>
+              {searchResults.length > 0 && (
+                <div className="max-h-80 overflow-y-auto">
+                  {searchResults.map((r, i) => (
+                    <button
+                      key={`${r.type}-${r.name}-${i}`}
+                      onClick={() => handleSearchSelect(r)}
+                      className="w-full text-left px-5 py-3 hover:bg-secondary transition-colors flex items-center gap-3 border-b border-border/50 last:border-0"
+                    >
+                      <span className="font-body text-[10px] uppercase tracking-wider text-muted-foreground w-16">{r.type}</span>
+                      <span className="font-body text-sm">{r.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {searchQuery && searchResults.length === 0 && (
+                <div className="p-8 text-center">
+                  <p className="font-body text-sm text-muted-foreground">No results found for "{searchQuery}"</p>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Main */}
       <main className="flex-1 pt-[89px]">{children}</main>
 
@@ -110,6 +236,9 @@ const Layout = ({
                 </Link>)}
               <Link to="/aftercare" className="block font-body text-sm text-background/60 hover:text-background mb-2">
                 Aftercare
+              </Link>
+              <Link to="/results" className="block font-body text-sm text-background/60 hover:text-background mb-2">
+                Results
               </Link>
             </div>
             <div>
@@ -146,6 +275,9 @@ const Layout = ({
               </p>
               <Link to="/terms" className="font-body text-xs text-background/40 hover:text-background/60 transition-colors">
                 Terms & Conditions
+              </Link>
+              <Link to="/privacy" className="font-body text-xs text-background/40 hover:text-background/60 transition-colors">
+                Privacy
               </Link>
               <Link to="/auth" className="font-body text-xs text-background/20 hover:text-background/40 transition-colors">
                 Admin

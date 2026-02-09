@@ -88,7 +88,7 @@ const CustomerPortal = () => {
     const { error } = await supabase.from("bookings").update({ status: "cancelled" }).eq("id", id);
     if (error) { toast.error("Failed to cancel"); return; }
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: "cancelled" } : b));
-    toast.success("Booking cancelled. You may be eligible for a refund - we'll be in touch.");
+    toast.success("Booking cancelled. If you'd like to rebook, contact us via WhatsApp or visit our website.");
   };
 
   const canReschedule = (booking: Booking) => {
@@ -138,6 +138,9 @@ const CustomerPortal = () => {
     const booking = bookings.find(b => b.id === id);
     if (!booking) return;
 
+    const oldDate = booking.booking_date;
+    const oldTime = booking.booking_time;
+
     setRescheduling(true);
     const { error } = await supabase.from("bookings").update({
       booking_date: format(newDate, "yyyy-MM-dd"),
@@ -151,8 +154,8 @@ const CustomerPortal = () => {
       return;
     }
 
-    // Send reschedule confirmation email
-    supabase.functions.invoke("send-booking-email", { body: { bookingId: id, emailType: "reschedule" } }).catch(() => {});
+    // Send reschedule confirmation email + admin notification
+    supabase.functions.invoke("send-booking-email", { body: { bookingId: id, emailType: "reschedule", oldDate, oldTime } }).catch(() => {});
 
     setBookings(prev => prev.map(b => b.id === id ? {
       ...b,

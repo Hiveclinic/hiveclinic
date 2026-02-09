@@ -1,16 +1,22 @@
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ChevronLeft, ChevronRight, Clock, User } from "lucide-react";
-import { format, addDays, startOfWeek, isSameDay, parseISO } from "date-fns";
+import { ChevronLeft, ChevronRight, Clock, User, X, Mail, Phone, StickyNote, Check } from "lucide-react";
+import { format, addDays, startOfWeek, isSameDay } from "date-fns";
 
 type CalendarBooking = {
   id: string;
   customer_name: string;
+  customer_email: string;
+  customer_phone: string | null;
   booking_date: string;
   booking_time: string;
   duration_mins: number;
   status: string;
+  payment_status: string;
+  total_price: number;
+  notes: string | null;
+  treatment_id: string;
   treatments?: { name: string } | null;
 };
 
@@ -21,6 +27,11 @@ type Availability = {
   is_available: boolean;
 };
 
+type Treatment = {
+  id: string;
+  name: string;
+};
+
 const STATUS_BG: Record<string, string> = {
   confirmed: "bg-blue-500/20 border-blue-500/40 text-blue-700",
   completed: "bg-green-500/20 border-green-500/40 text-green-700",
@@ -29,14 +40,27 @@ const STATUS_BG: Record<string, string> = {
   pending: "bg-yellow-500/20 border-yellow-500/40 text-yellow-700",
 };
 
-const HOURS = Array.from({ length: 14 }, (_, i) => i + 8); // 8am-9pm
+const STATUSES = ["pending", "confirmed", "completed", "cancelled", "no_show"];
+const HOURS = Array.from({ length: 14 }, (_, i) => i + 8);
 
 const AdminCalendarView = () => {
   const [bookings, setBookings] = useState<CalendarBooking[]>([]);
   const [availability, setAvailability] = useState<Availability[]>([]);
+  const [treatments, setTreatments] = useState<Treatment[]>([]);
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [dragBooking, setDragBooking] = useState<CalendarBooking | null>(null);
   const [loading, setLoading] = useState(true);
+  const [editBooking, setEditBooking] = useState<CalendarBooking | null>(null);
+  const [editForm, setEditForm] = useState<{
+    customer_name: string;
+    customer_email: string;
+    customer_phone: string;
+    status: string;
+    notes: string;
+    booking_date: string;
+    booking_time: string;
+  } | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const weekDays = useMemo(() => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)), [weekStart]);
 
@@ -45,18 +69,79 @@ const AdminCalendarView = () => {
     const startStr = format(weekDays[0], "yyyy-MM-dd");
     const endStr = format(weekDays[6], "yyyy-MM-dd");
 
-    const [bookRes, availRes] = await Promise.all([
-      supabase.from("bookings").select("id, customer_name, booking_date, booking_time, duration_mins, status, treatments(name)")
-        .gte("booking_date", startStr).lte("booking_date", endStr).neq("status", "cancelled"),
+    const [bookRes, availRes, treatRes] = await Promise.all([
+      supabase.from("bookings").select("id, customer_name, customer_email, customer_phone, booking_date, booking_time, duration_mins, status, payment_status, total_price, notes, treatment_id, treatments(name)")
+        .gte("booking_date", startStr).lte("booking_date", endStr),
       supabase.from("availability").select("*"),
+      supabase.from("treatments").select("id, name").eq("active", true).order("name"),
     ]);
 
     if (bookRes.data) setBookings(bookRes.data as unknown as CalendarBooking[]);
     if (availRes.data) setAvailability(availRes.data as Availability[]);
+    if (treatRes.data) setTreatments(treatRes.data as Treatment[]);
     setLoading(false);
   };
 
   useEffect(() => { fetchData(); }, [weekStart]);
+
+  const openEdit = (booking: CalendarBooking) => {
+    setEditBooking(booking);
+    setEditForm({
+      customer_name: booking.customer_name,
+      customer_email: booking.customer_email,
+      customer_phone: booking.customer_phone || "",
+      status: booking.status,
+      notes: booking.notes || "",
+      booking_date: booking.booking_date,
+      booking_time: booking.booking_time.slice(0, 5),
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!editBooking || !editForm) return;
+    setSaving(true);
+
+    const oldStatus = editBooking.status;
+    const newStatus = editForm.status;
+    const oldDate = editBooking.booking_date;
+    const oldTime = editBooking.booking_time;
+
+    const { error } = await supabase.from("bookings").update({
+      customer_name: editForm.customer_name,
+      customer_email: editForm.customer_email,
+      customer_phone: editForm.customer_phone || null,
+      status: editForm.status,
+      notes: editForm.notes || null,
+      booking_date: editForm.booking_date,
+      booking_time: editForm.booking_time.length === 5 ? `${editForm.booking_time}:00` : editForm.booking_time,
+    }).eq("id", editBooking.id);
+
+    if (error) {
+      toast.error("Failed to update booking");
+      setSaving(false);
+      return;
+    }
+
+    // Trigger emails based on status change
+    if (oldStatus !== newStatus) {
+      if (newStatus === "completed") {
+        supabase.functions.invoke("send-booking-email", { body: { bookingId: editBooking.id, emailType: "aftercare" } }).catch(() => {});
+      } else if (newStatus === "cancelled") {
+        supabase.functions.invoke("send-booking-email", { body: { bookingId: editBooking.id, emailType: "cancellation" } }).catch(() => {});
+      }
+    }
+
+    // If date/time changed, send reschedule notification
+    if (editForm.booking_date !== oldDate || `${editForm.booking_time}:00` !== oldTime) {
+      supabase.functions.invoke("send-booking-email", { body: { bookingId: editBooking.id, emailType: "reschedule", oldDate, oldTime } }).catch(() => {});
+    }
+
+    toast.success("Booking updated");
+    setEditBooking(null);
+    setEditForm(null);
+    setSaving(false);
+    fetchData();
+  };
 
   const handleDrop = async (date: Date, hour: number) => {
     if (!dragBooking) return;
@@ -64,13 +149,15 @@ const AdminCalendarView = () => {
     const newDate = format(date, "yyyy-MM-dd");
     const newTime = `${String(hour).padStart(2, "0")}:00`;
 
-    // Check if the slot is available
     const dayAvail = availability.find(a => a.day_of_week === date.getDay());
     if (!dayAvail?.is_available) {
       toast.error("That day is unavailable");
       setDragBooking(null);
       return;
     }
+
+    const oldDate = dragBooking.booking_date;
+    const oldTime = dragBooking.booking_time;
 
     const { error } = await supabase.from("bookings")
       .update({ booking_date: newDate, booking_time: newTime })
@@ -80,6 +167,8 @@ const AdminCalendarView = () => {
       toast.error("Failed to reschedule");
     } else {
       toast.success(`${dragBooking.customer_name} moved to ${format(date, "EEE d MMM")} at ${newTime}`);
+      // Send admin notification for reschedule
+      supabase.functions.invoke("send-booking-email", { body: { bookingId: dragBooking.id, emailType: "reschedule", oldDate, oldTime } }).catch(() => {});
       fetchData();
     }
     setDragBooking(null);
@@ -89,6 +178,7 @@ const AdminCalendarView = () => {
     const dateStr = format(date, "yyyy-MM-dd");
     return bookings.filter(b => {
       if (b.booking_date !== dateStr) return false;
+      if (b.status === "cancelled") return false;
       const bookingHour = parseInt(b.booking_time.split(":")[0]);
       return bookingHour === hour;
     });
@@ -104,15 +194,15 @@ const AdminCalendarView = () => {
       {/* Week Navigation */}
       <div className="flex items-center justify-between mb-6">
         <button onClick={() => setWeekStart(addDays(weekStart, -7))} className="p-2 border border-border hover:border-gold transition-colors">
-          <ChevronLeft size={16} />
+          <ChevronLeft size={14} strokeWidth={1.5} />
         </button>
         <h3 className="font-display text-xl">
-          {format(weekDays[0], "d MMM")} — {format(weekDays[6], "d MMM yyyy")}
+          {format(weekDays[0], "d MMM")} - {format(weekDays[6], "d MMM yyyy")}
         </h3>
         <div className="flex gap-2">
           <button onClick={() => setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 }))} className="px-3 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-gold transition-colors">Today</button>
           <button onClick={() => setWeekStart(addDays(weekStart, 7))} className="p-2 border border-border hover:border-gold transition-colors">
-            <ChevronRight size={16} />
+            <ChevronRight size={14} strokeWidth={1.5} />
           </button>
         </div>
       </div>
@@ -156,11 +246,12 @@ const AdminCalendarView = () => {
                           draggable
                           onDragStart={() => setDragBooking(b)}
                           onDragEnd={() => setDragBooking(null)}
-                          className={`px-2 py-1 mb-1 border rounded text-xs cursor-grab active:cursor-grabbing ${STATUS_BG[b.status] || "bg-secondary"}`}
+                          onClick={() => openEdit(b)}
+                          className={`px-2 py-1 mb-1 border rounded text-xs cursor-pointer hover:ring-1 hover:ring-gold/50 ${STATUS_BG[b.status] || "bg-secondary"}`}
                         >
                           <p className="font-body font-medium truncate">{b.customer_name}</p>
                           <p className="font-body text-[10px] opacity-70 truncate">
-                            {(b.treatments as any)?.name} · {b.duration_mins}m
+                            {(b.treatments as any)?.name} - {b.duration_mins}m
                           </p>
                         </div>
                       ))}
@@ -174,8 +265,81 @@ const AdminCalendarView = () => {
       )}
 
       <p className="font-body text-xs text-muted-foreground mt-4 text-center">
-        Drag and drop bookings to reschedule. Only available slots are shown.
+        Click a booking to edit details. Drag and drop to reschedule.
       </p>
+
+      {/* Edit Modal */}
+      {editBooking && editForm && (
+        <div className="fixed inset-0 z-50 bg-foreground/50 flex items-center justify-center p-4" onClick={() => { setEditBooking(null); setEditForm(null); }}>
+          <div className="bg-background border border-border w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-5 border-b border-border">
+              <h3 className="font-display text-xl">Edit Booking</h3>
+              <button onClick={() => { setEditBooking(null); setEditForm(null); }} className="text-muted-foreground hover:text-foreground">
+                <X size={16} strokeWidth={1.5} />
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <label className="font-body text-xs uppercase tracking-wider text-muted-foreground block mb-1">Customer Name</label>
+                <input value={editForm.customer_name} onChange={e => setEditForm({ ...editForm, customer_name: e.target.value })}
+                  className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-body text-xs uppercase tracking-wider text-muted-foreground block mb-1">Email</label>
+                  <input value={editForm.customer_email} onChange={e => setEditForm({ ...editForm, customer_email: e.target.value })}
+                    className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" />
+                </div>
+                <div>
+                  <label className="font-body text-xs uppercase tracking-wider text-muted-foreground block mb-1">Phone</label>
+                  <input value={editForm.customer_phone} onChange={e => setEditForm({ ...editForm, customer_phone: e.target.value })}
+                    className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-body text-xs uppercase tracking-wider text-muted-foreground block mb-1">Date</label>
+                  <input type="date" value={editForm.booking_date} onChange={e => setEditForm({ ...editForm, booking_date: e.target.value })}
+                    className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" />
+                </div>
+                <div>
+                  <label className="font-body text-xs uppercase tracking-wider text-muted-foreground block mb-1">Time</label>
+                  <input type="time" value={editForm.booking_time} onChange={e => setEditForm({ ...editForm, booking_time: e.target.value })}
+                    className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" />
+                </div>
+              </div>
+              <div>
+                <label className="font-body text-xs uppercase tracking-wider text-muted-foreground block mb-1">Status</label>
+                <div className="flex flex-wrap gap-2">
+                  {STATUSES.map(s => (
+                    <button key={s} onClick={() => setEditForm({ ...editForm, status: s })}
+                      className={`px-3 py-1.5 border font-body text-xs uppercase tracking-wider transition-colors ${editForm.status === s ? "border-gold bg-gold/10 text-gold" : "border-border text-muted-foreground hover:border-foreground"}`}>
+                      {s === "no_show" ? "No Show" : s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="font-body text-xs uppercase tracking-wider text-muted-foreground block mb-1">Notes</label>
+                <textarea value={editForm.notes} onChange={e => setEditForm({ ...editForm, notes: e.target.value })} rows={3}
+                  className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none resize-none" />
+              </div>
+              <div className="border-t border-border pt-4 flex items-center justify-between">
+                <div className="font-body text-xs text-muted-foreground">
+                  <p>Treatment: {(editBooking.treatments as any)?.name}</p>
+                  <p>Total: £{Number(editBooking.total_price).toFixed(2)} - {editBooking.payment_status}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => { setEditBooking(null); setEditForm(null); }} className="px-4 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">Cancel</button>
+                  <button onClick={saveEdit} disabled={saving} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors disabled:opacity-50 flex items-center gap-1">
+                    <Check size={12} strokeWidth={1.5} /> {saving ? "Saving..." : "Save"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -138,6 +138,9 @@ const CustomerPortal = () => {
     const booking = bookings.find(b => b.id === id);
     if (!booking) return;
 
+    const oldDate = booking.booking_date;
+    const oldTime = booking.booking_time;
+
     setRescheduling(true);
     const { error } = await supabase.from("bookings").update({
       booking_date: format(newDate, "yyyy-MM-dd"),
@@ -151,8 +154,8 @@ const CustomerPortal = () => {
       return;
     }
 
-    // Send reschedule confirmation email
-    supabase.functions.invoke("send-booking-email", { body: { bookingId: id, emailType: "reschedule" } }).catch(() => {});
+    // Send reschedule confirmation email + admin notification
+    supabase.functions.invoke("send-booking-email", { body: { bookingId: id, emailType: "reschedule", oldDate, oldTime } }).catch(() => {});
 
     setBookings(prev => prev.map(b => b.id === id ? {
       ...b,

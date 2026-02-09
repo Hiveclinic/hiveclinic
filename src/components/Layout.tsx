@@ -1,6 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Menu, X, Search as SearchIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo.png";
 import WhatsAppButton from "./WhatsAppButton";
@@ -9,6 +9,7 @@ import TreatmentChatbot from "./TreatmentChatbot";
 import AnnouncementBanner from "./AnnouncementBanner";
 import instagramLogo from "@/assets/instagram-logo.png";
 import tiktokLogo from "@/assets/tiktok-logo.png";
+import { supabase } from "@/integrations/supabase/client";
 
 const navLinks = [{
   to: "/",

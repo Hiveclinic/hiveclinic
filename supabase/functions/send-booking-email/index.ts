@@ -11,6 +11,8 @@ const logStep = (step: string, details?: unknown) => {
   console.log(`[BOOKING-EMAIL] ${step}${details ? ` - ${JSON.stringify(details)}` : ""}`);
 };
 
+const ADMIN_EMAIL = "hello@hiveclinicuk.com";
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -22,8 +24,8 @@ serve(async (req) => {
 
     const resend = new Resend(resendKey);
 
-    const { bookingId, emailType } = await req.json();
-    // emailType: "confirmation" | "reminder" | "aftercare"
+    const { bookingId, emailType, oldDate, oldTime } = await req.json();
+    // emailType: "confirmation" | "reminder" | "aftercare" | "cancellation" | "reschedule"
 
     if (!bookingId || !emailType) throw new Error("Missing bookingId or emailType");
     logStep("Processing email", { bookingId, emailType });
@@ -59,17 +61,17 @@ serve(async (req) => {
 
     const footerHtml = `
       <div style="background:#f5f0eb;padding:30px;text-align:center;border-top:1px solid #e5ddd5;">
-        <p style="font-size:12px;color:#999;margin:0;">Hive Clinic · Manchester City Centre, Deansgate</p>
+        <p style="font-size:12px;color:#999;margin:0;">Hive Clinic - Manchester City Centre, Deansgate</p>
         <p style="font-size:11px;color:#bbb;margin-top:8px;">
-          <a href="https://hiveclinic.lovable.app" style="color:#c9a96e;">Website</a> · 
-          <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a> · 
+          <a href="https://hiveclinic.lovable.app" style="color:#c9a96e;">Website</a> - 
+          <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a> - 
           <a href="https://instagram.com/hiveclinicuk" style="color:#c9a96e;">Instagram</a>
         </p>
       </div>
     `;
 
     if (emailType === "confirmation") {
-      subject = `Booking Confirmed — ${treatmentName}`;
+      subject = `Booking Confirmed - ${treatmentName}`;
       html = `
         <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
           ${headerHtml}
@@ -86,8 +88,8 @@ serve(async (req) => {
               ${Number(booking.total_price) > 0 ? `<p style="margin:8px 0 0;font-size:14px;"><strong>Total:</strong> £${Number(booking.total_price).toFixed(2)}</p>` : ""}
             </div>
             
-            <p style="color:#555;font-size:14px;line-height:1.6;">Please arrive 5 minutes early. If you need to reschedule, contact us at least 24 hours in advance.</p>
-            <p style="color:#555;font-size:14px;line-height:1.6;">We look forward to seeing you! ✨</p>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Please arrive 5 minutes early. If you need to reschedule, contact us at least 48 hours in advance.</p>
+            <p style="color:#555;font-size:14px;line-height:1.6;">We look forward to seeing you!</p>
           </div>
           ${footerHtml}
         </div>
@@ -104,8 +106,8 @@ serve(async (req) => {
             
             <div style="background:#f9f7f5;border-left:3px solid #c9a96e;padding:20px;margin:24px 0;">
               <p style="margin:0 0 8px;font-size:14px;"><strong>${treatmentName}</strong></p>
-              <p style="margin:0 0 8px;font-size:14px;">📅 ${dateFormatted}</p>
-              <p style="margin:0;font-size:14px;">🕐 ${timeFormatted}</p>
+              <p style="margin:0 0 8px;font-size:14px;">${dateFormatted}</p>
+              <p style="margin:0;font-size:14px;">${timeFormatted}</p>
             </div>
             
             <p style="color:#555;font-size:14px;line-height:1.6;"><strong>Preparation tips:</strong></p>
@@ -122,7 +124,7 @@ serve(async (req) => {
         </div>
       `;
     } else if (emailType === "aftercare") {
-      subject = `Aftercare Instructions — ${treatmentName}`;
+      subject = `Aftercare Instructions - ${treatmentName}`;
       html = `
         <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
           ${headerHtml}
@@ -156,7 +158,7 @@ serve(async (req) => {
 
       await supabaseClient.from("bookings").update({ aftercare_sent: true }).eq("id", bookingId);
     } else if (emailType === "cancellation") {
-      subject = `Booking Cancelled — ${treatmentName}`;
+      subject = `Booking Cancelled - ${treatmentName}`;
       html = `
         <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
           ${headerHtml}
@@ -166,10 +168,8 @@ serve(async (req) => {
             <p style="color:#555;font-size:14px;line-height:1.6;">Your appointment for <strong>${treatmentName}</strong> on <strong>${dateFormatted}</strong> at <strong>${timeFormatted}</strong> has been cancelled.</p>
             
             <div style="background:#f9f7f5;border-left:3px solid #c9a96e;padding:20px;margin:24px 0;">
-              <p style="margin:0;font-size:14px;color:#555;">If you believe this is an error or would like to rebook, please contact us via <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a> or email us at <a href="mailto:hello@hiveclinicuk.com" style="color:#c9a96e;">hello@hiveclinicuk.com</a>.</p>
+              <p style="margin:0;font-size:14px;color:#555;">If you'd like to rebook, please contact us via <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a> or visit our <a href="https://hiveclinic.lovable.app/bookings" style="color:#c9a96e;">booking page</a>.</p>
             </div>
-            
-            <p style="color:#555;font-size:14px;line-height:1.6;">Please refer to our <a href="https://hiveclinic.lovable.app/terms" style="color:#c9a96e;">Terms & Conditions</a> regarding our cancellation and refund policy.</p>
             
             <div style="text-align:center;margin:30px 0;">
               <a href="https://hiveclinic.lovable.app/bookings" style="display:inline-block;background:#0d0d0d;color:#fff;padding:14px 32px;font-size:13px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;">Rebook Now</a>
@@ -178,6 +178,76 @@ serve(async (req) => {
           ${footerHtml}
         </div>
       `;
+    } else if (emailType === "reschedule") {
+      // Send to customer
+      subject = `Appointment Rescheduled - ${treatmentName}`;
+      html = `
+        <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
+          ${headerHtml}
+          <div style="padding:40px 30px;">
+            <h2 style="font-family:Georgia,serif;font-size:24px;color:#0d0d0d;margin:0 0 20px;">Appointment Rescheduled</h2>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Hi ${booking.customer_name},</p>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Your appointment has been successfully rescheduled. Here are your new details:</p>
+            
+            <div style="background:#f9f7f5;border-left:3px solid #c9a96e;padding:20px;margin:24px 0;">
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Treatment:</strong> ${treatmentName}</p>
+              <p style="margin:0 0 8px;font-size:14px;"><strong>New Date:</strong> ${dateFormatted}</p>
+              <p style="margin:0;font-size:14px;"><strong>New Time:</strong> ${timeFormatted}</p>
+            </div>
+            
+            <p style="color:#555;font-size:14px;line-height:1.6;">We look forward to seeing you!</p>
+          </div>
+          ${footerHtml}
+        </div>
+      `;
+
+      // Send customer email
+      logStep("Sending reschedule email to customer", { to: booking.customer_email });
+      await resend.emails.send({
+        from: "Hive Clinic <noreply@hiveclinic.lovable.app>",
+        to: [booking.customer_email],
+        subject,
+        html,
+      });
+
+      // Send admin notification
+      const oldDateFormatted = oldDate ? new Date(oldDate + "T00:00:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }) : "Unknown";
+      const oldTimeFormatted = oldTime ? oldTime.slice(0, 5) : "Unknown";
+      
+      const adminHtml = `
+        <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
+          ${headerHtml}
+          <div style="padding:40px 30px;">
+            <h2 style="font-family:Georgia,serif;font-size:24px;color:#0d0d0d;margin:0 0 20px;">Client Rescheduled</h2>
+            <p style="color:#555;font-size:14px;line-height:1.6;"><strong>${booking.customer_name}</strong> has rescheduled their appointment:</p>
+            
+            <div style="background:#fff3f3;border-left:3px solid #e55;padding:15px;margin:16px 0;">
+              <p style="margin:0;font-size:13px;color:#555;"><strong>Previous:</strong> ${oldDateFormatted} at ${oldTimeFormatted}</p>
+            </div>
+            <div style="background:#f0fff0;border-left:3px solid #5a5;padding:15px;margin:0 0 16px;">
+              <p style="margin:0;font-size:13px;color:#555;"><strong>New:</strong> ${dateFormatted} at ${timeFormatted}</p>
+            </div>
+            
+            <p style="color:#555;font-size:14px;line-height:1.6;">Treatment: ${treatmentName}</p>
+            <p style="color:#555;font-size:14px;line-height:1.6;">Email: ${booking.customer_email}</p>
+            ${booking.customer_phone ? `<p style="color:#555;font-size:14px;line-height:1.6;">Phone: ${booking.customer_phone}</p>` : ""}
+          </div>
+          ${footerHtml}
+        </div>
+      `;
+
+      logStep("Sending reschedule notification to admin");
+      await resend.emails.send({
+        from: "Hive Clinic <noreply@hiveclinic.lovable.app>",
+        to: [ADMIN_EMAIL],
+        subject: `Reschedule: ${booking.customer_name} - ${treatmentName}`,
+        html: adminHtml,
+      });
+
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
     } else {
       throw new Error(`Unknown email type: ${emailType}`);
     }

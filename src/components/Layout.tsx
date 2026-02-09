@@ -23,9 +23,6 @@ const navLinks = [{
   to: "/about",
   label: "About"
 }, {
-  to: "/results",
-  label: "Results"
-}, {
   to: "/aftercare",
   label: "Aftercare"
 }, {

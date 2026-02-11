@@ -26,7 +26,13 @@ serve(async (req) => {
     logStep("Function started");
 
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
-    if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
+    if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set. Please configure it in your project secrets.");
+    
+    // Validate key format
+    if (!stripeKey.startsWith("sk_") && !stripeKey.startsWith("rk_")) {
+      throw new Error(`Invalid Stripe key format. Key must start with sk_live_, sk_test_, or rk_live_. Got: ${stripeKey.substring(0, 5)}...`);
+    }
+    logStep("Stripe key validated", { prefix: stripeKey.substring(0, 7) });
 
     const {
       treatmentId,
@@ -35,9 +41,11 @@ serve(async (req) => {
       customerName,
       customerEmail,
       customerPhone,
-      paymentMode, // 'deposit' or 'full'
+      paymentMode,
       discountCode,
       notes,
+      addonIds,
+      addonTotal,
     } = await req.json();
 
     if (!treatmentId || !bookingDate || !bookingTime || !customerName || !customerEmail) {
@@ -90,7 +98,6 @@ serve(async (req) => {
         if (discount.max_uses && discount.used_count >= discount.max_uses) throw new Error("Discount code usage limit reached");
         if (Number(treatment.price) < Number(discount.min_spend)) throw new Error(`Minimum spend of £${discount.min_spend} required for this code`);
 
-        // Check if applicable to this treatment
         if (discount.applicable_treatments && discount.applicable_treatments.length > 0) {
           if (!discount.applicable_treatments.includes(treatmentId)) {
             throw new Error("Discount code not valid for this treatment");
@@ -110,7 +117,8 @@ serve(async (req) => {
       }
     }
 
-    const totalPrice = Math.max(0, Number(treatment.price) - discountAmount);
+    const addonTotalNum = Number(addonTotal) || 0;
+    const totalPrice = Math.max(0, Number(treatment.price) + addonTotalNum - discountAmount);
     const isDeposit = paymentMode === "deposit" && treatment.deposit_required;
     const chargeAmount = isDeposit ? Number(treatment.deposit_amount) : totalPrice;
 
@@ -123,7 +131,7 @@ serve(async (req) => {
       userId = userData.user?.id || null;
     }
 
-    // Free treatment (e.g. consultation) - create booking directly
+    // Free treatment - create booking directly
     if (chargeAmount === 0) {
       const { data: booking, error: bookingError } = await supabaseClient
         .from("bookings")
@@ -142,6 +150,8 @@ serve(async (req) => {
           deposit_amount: 0,
           discount_code_id: discountCodeId,
           discount_amount: discountAmount,
+          addon_ids: addonIds || [],
+          addon_total: addonTotalNum,
           notes,
         })
         .select()
@@ -149,25 +159,25 @@ serve(async (req) => {
 
       if (bookingError) throw new Error(`Failed to create booking: ${bookingError.message}`);
 
-      // Increment discount usage
-      if (discountCodeId) {
-        await supabaseClient.rpc("increment_discount_usage", { discount_id: discountCodeId });
-      }
-
       // Send confirmation email
       try {
         await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-booking-email`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
-          },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}` },
           body: JSON.stringify({ bookingId: booking.id, emailType: "confirmation" }),
         });
-        logStep("Confirmation email triggered");
       } catch (emailErr) {
         logStep("Email send failed (non-blocking)", emailErr);
       }
+
+      // Subscribe to Mailchimp
+      try {
+        await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/mailchimp-subscribe`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}` },
+          body: JSON.stringify({ email: customerEmail, firstName: customerName.split(" ")[0], lastName: customerName.split(" ").slice(1).join(" ") }),
+        });
+      } catch (_) { /* non-blocking */ }
 
       return new Response(JSON.stringify({ bookingId: booking.id, free: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -193,6 +203,8 @@ serve(async (req) => {
         deposit_amount: isDeposit ? Number(treatment.deposit_amount) : 0,
         discount_code_id: discountCodeId,
         discount_amount: discountAmount,
+        addon_ids: addonIds || [],
+        addon_total: addonTotalNum,
         notes,
       })
       .select()
@@ -201,35 +213,51 @@ serve(async (req) => {
     if (bookingError) throw new Error(`Failed to create booking: ${bookingError.message}`);
     logStep("Booking created", { bookingId: booking.id });
 
-    // Create Stripe checkout session
-    const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
+    // Create Stripe checkout session with detailed error handling
+    let session;
+    try {
+      const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
+      const origin = req.headers.get("origin") || "https://hiveclinic.lovable.app";
 
-    const origin = req.headers.get("origin") || "https://hiveclinic.lovable.app";
-
-    const session = await stripe.checkout.sessions.create({
-      customer_email: customerEmail,
-      line_items: [
-        {
-          price_data: {
-            currency: "gbp",
-            product_data: {
-              name: `${treatment.name}${isDeposit ? " (Deposit)" : ""}`,
-              description: `${bookingDate} at ${bookingTime}${isDeposit ? ` — Remaining £${(totalPrice - chargeAmount).toFixed(2)} due at appointment` : ""}`,
+      session = await stripe.checkout.sessions.create({
+        customer_email: customerEmail,
+        line_items: [
+          {
+            price_data: {
+              currency: "gbp",
+              product_data: {
+                name: `${treatment.name}${isDeposit ? " (Deposit)" : ""}`,
+                description: `${bookingDate} at ${bookingTime}${isDeposit ? ` — Remaining £${(totalPrice - chargeAmount).toFixed(2)} due at appointment` : ""}`,
+              },
+              unit_amount: Math.round(chargeAmount * 100),
             },
-            unit_amount: Math.round(chargeAmount * 100),
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        mode: "payment",
+        success_url: `${origin}/booking-success?booking_id=${booking.id}&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/booking-cancelled?booking_id=${booking.id}`,
+        metadata: {
+          booking_id: booking.id,
+          treatment_name: treatment.name,
+          is_deposit: String(isDeposit),
         },
-      ],
-      mode: "payment",
-      success_url: `${origin}/booking-success?booking_id=${booking.id}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/booking-cancelled?booking_id=${booking.id}`,
-      metadata: {
-        booking_id: booking.id,
-        treatment_name: treatment.name,
-        is_deposit: String(isDeposit),
-      },
-    });
+      });
+    } catch (stripeError) {
+      const stripeMsg = stripeError instanceof Error ? stripeError.message : String(stripeError);
+      logStep("STRIPE ERROR", { message: stripeMsg, type: (stripeError as any)?.type, code: (stripeError as any)?.code });
+      
+      // Clean up the pending booking
+      await supabaseClient.from("bookings").delete().eq("id", booking.id);
+      
+      if (stripeMsg.includes("Invalid API Key") || stripeMsg.includes("authentication")) {
+        throw new Error("Payment system configuration error. Please contact the clinic.");
+      }
+      if (stripeMsg.includes("permission") || stripeMsg.includes("restricted")) {
+        throw new Error("Payment system permissions error. Please contact the clinic.");
+      }
+      throw new Error(`Payment error: ${stripeMsg}`);
+    }
 
     // Update booking with stripe session ID
     await supabaseClient
@@ -238,6 +266,15 @@ serve(async (req) => {
       .eq("id", booking.id);
 
     logStep("Stripe session created", { sessionId: session.id });
+
+    // Subscribe to Mailchimp (non-blocking)
+    try {
+      await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/mailchimp-subscribe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}` },
+        body: JSON.stringify({ email: customerEmail, firstName: customerName.split(" ")[0], lastName: customerName.split(" ").slice(1).join(" ") }),
+      });
+    } catch (_) { /* non-blocking */ }
 
     return new Response(JSON.stringify({ url: session.url, bookingId: booking.id }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

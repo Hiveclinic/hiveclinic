@@ -112,7 +112,7 @@ const AdminClientsTab = () => {
     const { error: uploadError } = await supabase.storage.from("client-images").upload(path, file);
     if (uploadError) { toast.error("Upload failed"); setUploading(false); return; }
 
-    const { data: urlData } = supabase.storage.from("client-images").getPublicUrl(path);
+    // Store path only - signed URLs are loaded on expand
     
     const { error } = await supabase.from("client_images").insert({
       customer_email: email,

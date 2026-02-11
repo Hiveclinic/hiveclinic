@@ -1,214 +1,160 @@
 
-# Comprehensive Hive Clinic Upgrade Plan
+# Comprehensive Hive Clinic Implementation - Phase 2
 
-This is a large-scale update covering the admin calendar, client images, booking UX, Stripe fix, email automations, treatment menu, cancellation messaging, rescheduling notifications, and more. Here is the full breakdown.
+This plan covers Stripe fix, booking page redesign, full treatment menu insertion, new treatment pages, client image fix, and security review.
 
 ---
 
-## 1. Admin Calendar - Full Editing and Rescheduling
+## 1. Stripe Payment Fix (Critical - Priority 1)
 
-**Current state:** The calendar shows bookings and supports drag-and-drop but cannot edit booking details.
+The provided key `rk_live_51SHs6sPOpm31z20v...` starts with `rk_live_` which is a **restricted key**. This should work with Stripe Checkout as long as it has the required permissions (checkout sessions, payment intents). The key will be stored as the `STRIPE_SECRET_KEY` secret.
 
 **Changes:**
-- Add a click-to-open detail modal on each booking in the calendar
-- Modal allows editing customer name, email, phone, date, time, status, notes, and treatment
-- Status changes trigger the same email logic (aftercare on completed, cancellation email on cancelled)
-- Reschedule via drag-and-drop already works - will ensure it also sends a notification email to the admin
+- Store the provided Stripe key as `STRIPE_SECRET_KEY` via the secrets tool
+- Add better error logging in `create-booking-checkout` to surface Stripe-specific errors (e.g. invalid key format, missing permissions)
+- Add a try/catch specifically around the `stripe.checkout.sessions.create` call with detailed error messages
+- Redeploy `create-booking-checkout` and `confirm-booking` edge functions
 
 ---
 
-## 2. Client Images Fix (Before/After Upload and Viewing)
+## 2. Booking Page Redesign - Category-First Flow with Popular Section
 
-**Current state:** The storage bucket `client-images` is private, but `getPublicUrl` is called which won't work for private buckets. Signed URLs are generated but may not load properly.
+**Current state:** All treatments shown in a flat grid with category filter buttons at the top. Cluttered feel.
 
-**Changes:**
-- Fix the upload flow to correctly use signed URLs for display (remove `getPublicUrl` call)
-- Ensure images load via `createSignedUrl` on expand
-- Add a lightbox/enlarged view when clicking an image
+**New design:**
+- **"Most Popular" section** at the top showing 4-5 highlighted treatments (Lip Fillers, Anti-Wrinkle, HydraFacial, Dermal Filler)
+- **Category cards** below - user clicks a category to expand and see treatments within it
+- **Collapsible add-ons** - shown as a subtle "Add extras" expandable section after treatment selection, not a full grid
+- **Anti-wrinkle area calculator** only appears when anti-wrinkle is selected (inline, not a separate section)
+- **Cleaner spacing** throughout with more whitespace
+- Progress stepper remains the same (it's already clean)
 
----
-
-## 3. Icons - Fine Line Luxury Style
-
-**Current state:** Uses Lucide React icons which are already line-style but some may appear chunky at certain sizes.
-
-**Changes:**
-- Reduce icon sizes throughout admin and booking pages (use `size={14}` or `size={16}` consistently)
-- Use `strokeWidth={1.5}` on key icons for a finer, more luxury feel
-- Replace any emoji usage in emails with plain text or gold bullet characters
+**File:** `src/pages/BookingSystem.tsx` - full rewrite of step 0 (treatment selection)
 
 ---
 
-## 4. Booking Page Layout Simplification
+## 3. Full Treatment Menu Database Insertion
 
-**Current state:** The booking page shows all treatments in a grid with category filters, add-ons, and the anti-wrinkle calculator all on the same view.
+Delete all existing treatments and insert the complete Setmore menu. This uses SQL migrations to handle the data operations cleanly.
 
-**Changes:**
-- Restructure into a cleaner category-first flow: user picks category, then sees treatments within that category
-- Collapse add-ons into a subtle expandable section rather than a full grid
-- Use more whitespace and reduce visual density
-- Cleaner progress stepper with thinner lines
+**Categories and treatments to insert (48+ treatments):**
 
----
+- **Consultations** (3): Free Online, In-Person £25, Prescriber £30
+- **Chemical Peels** (5): Level 1 Face £85, Level 1 Back £95, Level 2 Face £110, Level 2 Back £125, Level 2 Body Areas £110
+- **Intimate & Body Peels** (3): Small £85, Medium £110, Large £140
+- **Microneedling & Skin Repair** (2): Skin Texture £140, Stretch Mark £160
+- **HydraFacial** (3): Glass Skin £145, Acne Refresh £135, Glow Reset £125
+- **Dermaplaning** (2): Skin Polish £75, + Hydration Facial £115
+- **LED Light Therapy** (1): LED 30 mins £45
+- **Mesotherapy** (3): Face £155, Under Eye £155, Scalp £210
+- **PRP** (3): Facial £325, Under Eye £325, Scalp £425
+- **Skin Boosters** (4): Lumi Eyes £135, Seventy Hyal £155, Polynucleotides £175, Profhilo £250
+- **Dermal Filler** (9): Lips 0.5ml £90, 0.8ml £135, 1ml £165, Smile Lines £165, Marionette £165, Chin £175, Cheeks £175, Jawline £185, Nose £225, Tear Trough £225
+- **Facial Balancing** (3): 3ml £380, 5ml £540, 7ml £720
+- **Anti-Wrinkle** (9): 2 Areas £185, 3 Areas £225, 6 Areas £360, Masseter £250, Bunny Lines £120, Lip Flip £120, Gummy Smile £120, Chin Dimpling £120, DAO £120, Brow Lift £150
+- **Fat Dissolve** (3): Small £125, Medium £180, Large £250
+- **Micro Sclerotherapy** (3): Small £225, Medium £325, Large £475
 
-## 5. Stripe Payment Fix
-
-**Current state:** The key provided (`mk_1SydNKPOpm31z20vG9XXsiML`) starts with `mk_` which is not a valid Stripe secret key format. Stripe secret keys start with `sk_live_` or `sk_test_`.
-
-**Changes:**
-- The Stripe integration code is correct but the key itself is invalid
-- You will need to provide a valid Stripe secret key (starting with `sk_test_` or `sk_live_`) from your Stripe dashboard at stripe.com
-- I will add better error handling in the checkout function to surface clear messages when the key is misconfigured
-
----
-
-## 6. Cancellation Email - Remove Refund Mention
-
-**Current state:** The customer portal says "You may be eligible for a refund - we'll be in touch" and the cancellation email mentions refund policy.
-
-**Changes:**
-- Remove the refund toast message from `CustomerPortal.tsx`
-- Update the cancellation email template to remove refund language
-- Replace with: "If you'd like to rebook, please contact us via WhatsApp or visit our website."
+**Course packages** (via `treatment_packages` table):
+- Level 1 Face x3 £230, Level 1 Back x3 £260, Level 2 Face x3 £300, Level 2 Back x3 £330
+- Intimate Small x3 £235, Medium x3 £300, Large x3 £380
+- Microneedling x3 (10% off), x6 (15% off)
+- LED x6 £250
+- Mesotherapy x3 (10% off), x6 (15% off)
+- Lumi Eyes x3 £390, Seventy Hyal x2 £290, Polynucleotides x3 £495, Profhilo x2 £480
 
 ---
 
-## 7. Admin Notification on Customer Reschedule
+## 4. New Treatment Landing Pages
 
-**Current state:** When a customer reschedules, only the customer gets an email.
+Create 6 new treatment pages following the same pattern as `LipFillers.tsx`:
 
-**Changes:**
-- Add a "reschedule" email type in `send-booking-email` that also sends a notification to the admin email (e.g. hello@hiveclinicuk.com)
-- Include old date/time and new date/time in the admin notification
+- `/treatments/dermaplaning-manchester` - Dermaplaning
+- `/treatments/led-light-therapy-manchester` - LED Light Therapy
+- `/treatments/mesotherapy-manchester` - Mesotherapy
+- `/treatments/prp-manchester` - PRP
+- `/treatments/facial-balancing-manchester` - Facial Balancing
+- `/treatments/micro-sclerotherapy-manchester` - Micro Sclerotherapy
+- `/treatments/consultations` - Consultations
+- `/treatments/intimate-peels-manchester` - Intimate & Body Peels
 
----
+Each page will include: hero section, treatment description, pricing grid, FAQs, and booking CTA.
 
-## 8. Results Page - Less Prominent
-
-**Changes:**
-- Remove "Results" from the main navigation links in `Layout.tsx`
-- Keep the page accessible via direct URL and footer link
-
----
-
-## 9. Scroll to Top on Page Navigation
-
-**Current state:** `ScrollToTop` component is already implemented and included in `App.tsx`. This should already be working.
-
-**Changes:**
-- Verify it uses `behavior: "instant"` (it does) - no change needed
+**Also update:**
+- `src/App.tsx` - add new routes
+- `src/pages/Treatments.tsx` - add new categories to the grid
+- `CATEGORY_ROUTES` in `BookingSystem.tsx` - map all new categories
 
 ---
 
-## 10. Body Font Upgrade
+## 5. Client Images Fix (Signed URLs)
 
-**Current state:** Uses Satoshi which is modern but can feel casual.
+**Current bug:** Line 115 in `AdminClientsTab.tsx` calls `getPublicUrl()` which won't work on a private bucket. The signed URL logic exists (line 137-147) but images may not display on initial load.
 
-**Changes:**
-- No font change needed - Satoshi is a premium body font used by luxury brands. However, I will increase letter-spacing slightly on body text and reduce font weights to create a more refined feel
-- Increase tracking on uppercase elements for a more editorial look
-
----
-
-## 11. Email Automations and Mailchimp
-
-**Current state:** Email sending works via Resend edge function. Mailchimp API key and audience ID are already configured as secrets.
-
-**Changes:**
-- Add Mailchimp subscribe trigger when a booking is created (add customer email to the audience list)
-- The `mailchimp-subscribe` edge function already exists - I will wire it into the booking flow
-- This enables you to set up automations in Mailchimp based on subscriber tags
+**Fix:**
+- Remove the `getPublicUrl` call (line 115)
+- Ensure `loadSignedUrl` is called for all images when a client is expanded
+- Add a lightbox modal for clicking on images to see full size
+- Add loading states for images
 
 ---
 
-## 12. Full Treatment Menu Update
+## 6. Update Anti-Wrinkle Area Pricing
 
-**Changes:**
-- Insert all treatments from the provided Setmore menu as database records with correct categories, pricing, and descriptions
-- Categories: Consultations, Chemical Peels, Intimate & Body Peels, Microneedling & Skin Repair, HydraFacial, Dermaplaning, LED Light Therapy, Mesotherapy, PRP, Skin Boosters, Dermal Filler, Facial Balancing, Anti-Wrinkle, Fat Dissolve, Micro Sclerotherapy
-- Create variants where applicable (e.g. Lip Filler 0.5ml/0.8ml/1ml, Fat Dissolve Small/Medium/Large)
-- Create course packages (e.g. Level 1 Face Course of 3)
+Current pricing in the booking calculator uses old values (1 area £100, 2 areas £170, 3 areas £220). Update to match the Setmore menu:
+- 2 Areas - £185
+- 3 Areas - £225
+- 6 Areas - £360
 
----
-
-## 13. Treatment Landing Page Updates and Category Routes
-
-**Changes:**
-- Update `CATEGORY_ROUTES` mapping to cover all new categories
-- Add new treatment pages for categories that don't have one (Consultations, Dermaplaning, LED, Mesotherapy, PRP, Facial Balancing, Micro Sclerotherapy)
+Remove "1 Area" option since the Setmore menu doesn't list it. The individual treatments (Masseter, Bunny Lines, etc.) will be separate selectable treatments.
 
 ---
 
-## 14. Quiz Personalisation
+## 7. Security Review
 
-**Changes:**
-- Update the Treatment Helper quiz to branch based on individual answers rather than a generic path
-- Body-focused concerns route to fat dissolve/body peels, face concerns route to facials/peels/injectables, specific areas like lips/jawline route directly to filler options
+Current RLS policies are solid. Key checks:
+- All admin tables use `has_role(auth.uid(), 'admin')` - correct
+- Bookings allow public INSERT with `true` check - correct for guest checkout
+- Contact submissions allow public INSERT - correct
+- Storage bucket `client-images` is private - correct
+- Edge functions validate inputs before processing - will add better validation for the Stripe key
 
----
-
-## 15. Aftercare Chatbot Emergency Detection
-
-**Changes:**
-- Update the `ai-aftercare` edge function system prompt to include emergency detection keywords (severe swelling, vision changes, difficulty breathing, excessive bleeding, allergic reaction)
-- When detected, respond with urgent tone and recommend calling 999 or going to A&E immediately
+No critical security issues found. Minor improvement: add rate limiting awareness to edge functions via error messages.
 
 ---
 
-## 16. Client Import/Export in Setmore Format
+## 8. Mailchimp Integration in Booking Flow
 
-**Changes:**
-- Update the CSV export to match Setmore's export layout (Name, Email, Phone, Service, Date, Time)
-- Update CSV import to accept Setmore export format
+Wire the existing `mailchimp-subscribe` edge function into `create-booking-checkout` to auto-subscribe customers when they book.
 
 ---
 
-## 17. Search Bar
+## Technical Summary
 
-**Changes:**
-- Add a search icon in the navigation header that expands into a search overlay
-- Searches across treatments, blog posts, and pages
+### Files to Edit:
+- `src/pages/BookingSystem.tsx` - redesign step 0
+- `src/components/admin/AdminClientsTab.tsx` - fix signed URLs
+- `supabase/functions/create-booking-checkout/index.ts` - better Stripe error handling + Mailchimp trigger
+- `src/App.tsx` - add 8 new routes
+- `src/pages/Treatments.tsx` - add new categories
 
----
+### Files to Create:
+- `src/pages/Dermaplaning.tsx`
+- `src/pages/LEDTherapy.tsx`
+- `src/pages/Mesotherapy.tsx`
+- `src/pages/PRP.tsx`
+- `src/pages/FacialBalancing.tsx`
+- `src/pages/MicroSclerotherapy.tsx`
+- `src/pages/Consultations.tsx`
+- `src/pages/IntimatePeels.tsx`
 
-## 18. Website Editability Note
+### Database Changes:
+- Delete existing treatments and re-insert full menu (48+ treatments)
+- Insert course packages into `treatment_packages`
 
-Images and text are managed through the admin dashboard (announcement banner, treatments, add-ons). For full CMS-like editability of all page content outside of Lovable, a headless CMS integration would be needed - but the current admin dashboard covers the most frequently changed content.
+### Edge Functions to Deploy:
+- `create-booking-checkout` (Stripe error handling + Mailchimp)
+- `confirm-booking` (redeployed)
 
----
-
-## 19. Security Review
-
-- Review all RLS policies on all tables
-- Ensure no public write access to sensitive tables
-- Verify edge functions validate inputs properly
-- Check storage bucket policies for client-images
-
----
-
-## Technical Details
-
-### Database Changes
-- Insert full treatment menu (treatments, treatment_variants, treatment_packages)
-- No schema changes needed - existing tables support all features
-
-### Edge Function Updates
-- `send-booking-email`: Add reschedule admin notification, remove refund language from cancellation
-- `ai-aftercare`: Update system prompt for emergency detection
-- `create-booking-checkout`: Better Stripe error handling
-- `mailchimp-subscribe`: Wire into booking flow
-
-### Frontend File Changes
-- `AdminCalendarView.tsx`: Add booking detail modal with full edit capability
-- `AdminClientsTab.tsx`: Fix image upload/display with signed URLs
-- `BookingSystem.tsx`: Simplify layout, category-first flow
-- `CustomerPortal.tsx`: Remove refund mention from cancellation
-- `Layout.tsx`: Remove Results from nav, add search
-- `index.css`: Refine typography spacing
-- New treatment landing pages for uncovered categories
-- `TreatmentHelper.tsx`: Branching quiz logic
-
-### Files to Create
-- Treatment pages for new categories (Dermaplaning, LED, Mesotherapy, PRP, Facial Balancing, Micro Sclerotherapy)
-
-This is a multi-step implementation that will require several messages to complete fully.
+### Secrets:
+- Update `STRIPE_SECRET_KEY` with the provided restricted key

@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,7 +18,7 @@ const Auth = () => {
       (_event, session) => {
         setSession(session);
         if (session) {
-          navigate("/admin");
+          navigate("/hive-admin");
         }
       }
     );
@@ -27,7 +26,7 @@ const Auth = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session) {
-        navigate("/admin");
+        navigate("/hive-admin");
       }
     });
 
@@ -37,23 +36,9 @@ const Auth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    if (isLogin) {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        toast.error(error.message);
-      }
-    } else {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: `${window.location.origin}/` },
-      });
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success("Check your email for a confirmation link.");
-      }
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      toast.error(error.message);
     }
     setLoading(false);
   };
@@ -63,8 +48,8 @@ const Auth = () => {
       <section className="py-24">
         <div className="max-w-md mx-auto px-6">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-12">
-            <h1 className="font-display text-4xl mb-2">Admin Access</h1>
-            <p className="font-body text-muted-foreground text-sm">Sign in to manage your clinic.</p>
+            <h1 className="font-display text-4xl mb-2">Staff Login</h1>
+            <p className="font-body text-muted-foreground text-sm">Authorised personnel only.</p>
           </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -94,16 +79,9 @@ const Auth = () => {
               disabled={loading}
               className="w-full px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors disabled:opacity-50"
             >
-              {loading ? "Please wait..." : isLogin ? "Sign In" : "Sign Up"}
+              {loading ? "Please wait..." : "Sign In"}
             </button>
           </form>
-
-          <p className="text-center mt-6 font-body text-sm text-muted-foreground">
-            {isLogin ? "Need an account?" : "Already have an account?"}{" "}
-            <button onClick={() => setIsLogin(!isLogin)} className="text-gold hover:underline">
-              {isLogin ? "Sign Up" : "Sign In"}
-            </button>
-          </p>
         </div>
       </section>
     </Layout>

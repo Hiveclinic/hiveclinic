@@ -79,8 +79,8 @@ const AnimatedRoutes = () => {
           <Route path="/blog/:slug" element={<PageTransition><BlogPost /></PageTransition>} />
           <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
           <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
-          <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
-          <Route path="/admin" element={<PageTransition><Admin /></PageTransition>} />
+          <Route path="/hive-admin-login" element={<PageTransition><Auth /></PageTransition>} />
+          <Route path="/hive-admin" element={<PageTransition><Admin /></PageTransition>} />
           <Route path="/aftercare" element={<PageTransition><Aftercare /></PageTransition>} />
           <Route path="/my-appointments" element={<PageTransition><CustomerPortal /></PageTransition>} />
           <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />

@@ -41,6 +41,7 @@ type Treatment = {
   on_offer: boolean;
   offer_price: number | null;
   offer_label: string | null;
+  image_url: string | null;
 };
 
 const EMPTY_TREATMENT = {
@@ -98,7 +99,7 @@ const AdminTreatmentsTab = () => {
       deposit_required: t.deposit_required, deposit_amount: t.deposit_amount,
       active: t.active, category: t.category, description: t.description,
       on_offer: t.on_offer, offer_price: t.offer_price, offer_label: t.offer_label,
-      slug: t.slug,
+      slug: t.slug, image_url: t.image_url,
     }).eq("id", t.id);
     if (error) { toast.error("Failed to save"); return; }
     toast.success(`${t.name} updated`);
@@ -312,6 +313,11 @@ const AdminTreatmentsTab = () => {
                         <input value={t.offer_label || ""} onChange={e => updateField(t.id, "offer_label", e.target.value)} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Offer label e.g. 'Spring Special'" />
                       </div>
                     )}
+                    <div>
+                      <label className="font-body text-xs text-muted-foreground block mb-1">Image URL</label>
+                      <input value={t.image_url || ""} onChange={e => updateField(t.id, "image_url", e.target.value || null)} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="https://... or leave empty" />
+                      {t.image_url && <img src={t.image_url} alt={t.name} className="mt-2 w-20 h-20 object-cover border border-border" />}
+                    </div>
                     <div className="flex gap-2">
                       <button onClick={() => saveOne(t)} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors"><Save size={12} className="inline mr-1" /> Save</button>
                       <button onClick={() => { setEditingId(null); fetchAll(); }} className="px-4 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">Cancel</button>

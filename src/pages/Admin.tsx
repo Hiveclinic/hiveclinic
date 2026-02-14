@@ -53,11 +53,11 @@ const Admin = () => {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      if (!session) navigate("/auth");
+      if (!session) navigate("/hive-admin-login");
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      if (!session) navigate("/auth");
+      if (!session) navigate("/hive-admin-login");
     });
     return () => subscription.unsubscribe();
   }, [navigate]);
@@ -79,7 +79,7 @@ const Admin = () => {
     fetchData();
   }, [session]);
 
-  const handleSignOut = async () => { await supabase.auth.signOut(); navigate("/auth"); };
+  const handleSignOut = async () => { await supabase.auth.signOut(); navigate("/hive-admin-login"); };
 
   const toggleContacted = async (id: string, current: boolean) => {
     const newStatus = !current;

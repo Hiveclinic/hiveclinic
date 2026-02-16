@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ChevronLeft, ChevronRight, Clock, User, X, Mail, Phone, StickyNote, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, User, X, Mail, Phone, StickyNote, Check, CreditCard, Link as LinkIcon, DollarSign } from "lucide-react";
 import { format, addDays, startOfWeek, isSameDay } from "date-fns";
 
 type CalendarBooking = {
@@ -15,6 +15,7 @@ type CalendarBooking = {
   status: string;
   payment_status: string;
   total_price: number;
+  deposit_amount: number | null;
   notes: string | null;
   treatment_id: string;
   treatments?: { name: string } | null;
@@ -61,6 +62,7 @@ const AdminCalendarView = () => {
     booking_time: string;
   } | null>(null);
   const [saving, setSaving] = useState(false);
+  const [creatingPaymentLink, setCreatingPaymentLink] = useState(false);
 
   const weekDays = useMemo(() => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)), [weekStart]);
 
@@ -70,7 +72,7 @@ const AdminCalendarView = () => {
     const endStr = format(weekDays[6], "yyyy-MM-dd");
 
     const [bookRes, availRes, treatRes] = await Promise.all([
-      supabase.from("bookings").select("id, customer_name, customer_email, customer_phone, booking_date, booking_time, duration_mins, status, payment_status, total_price, notes, treatment_id, treatments(name)")
+      supabase.from("bookings").select("id, customer_name, customer_email, customer_phone, booking_date, booking_time, duration_mins, status, payment_status, total_price, deposit_amount, notes, treatment_id, treatments(name)")
         .gte("booking_date", startStr).lte("booking_date", endStr),
       supabase.from("availability").select("*"),
       supabase.from("treatments").select("id, name").eq("active", true).order("name"),
@@ -122,7 +124,6 @@ const AdminCalendarView = () => {
       return;
     }
 
-    // Trigger emails based on status change
     if (oldStatus !== newStatus) {
       if (newStatus === "completed") {
         supabase.functions.invoke("send-booking-email", { body: { bookingId: editBooking.id, emailType: "aftercare" } }).catch(() => {});
@@ -131,7 +132,6 @@ const AdminCalendarView = () => {
       }
     }
 
-    // If date/time changed, send reschedule notification
     if (editForm.booking_date !== oldDate || `${editForm.booking_time}:00` !== oldTime) {
       supabase.functions.invoke("send-booking-email", { body: { bookingId: editBooking.id, emailType: "reschedule", oldDate, oldTime } }).catch(() => {});
     }
@@ -143,31 +143,49 @@ const AdminCalendarView = () => {
     fetchData();
   };
 
+  const handleSendPaymentLink = async () => {
+    if (!editBooking) return;
+    setCreatingPaymentLink(true);
+    try {
+      const remaining = Number(editBooking.total_price) - Number(editBooking.deposit_amount || 0);
+      const { data, error } = await supabase.functions.invoke("create-payment-link", {
+        body: {
+          amount: remaining,
+          bookingId: editBooking.id,
+          treatmentName: (editBooking.treatments as any)?.name || "Treatment",
+          customerEmail: editBooking.customer_email,
+        },
+      });
+      if (error || data?.error) throw new Error(data?.error || "Failed");
+      await navigator.clipboard.writeText(data.url);
+      toast.success("Payment link copied to clipboard! Send it to the client.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to create payment link");
+    } finally {
+      setCreatingPaymentLink(false);
+    }
+  };
+
+  const handleMarkPaid = async () => {
+    if (!editBooking) return;
+    const { error } = await supabase.from("bookings").update({ payment_status: "fully_paid" }).eq("id", editBooking.id);
+    if (error) { toast.error("Failed to update"); return; }
+    toast.success("Marked as fully paid");
+    setEditBooking(prev => prev ? { ...prev, payment_status: "fully_paid" } : null);
+    fetchData();
+  };
+
   const handleDrop = async (date: Date, hour: number) => {
     if (!dragBooking) return;
-
     const newDate = format(date, "yyyy-MM-dd");
     const newTime = `${String(hour).padStart(2, "0")}:00`;
-
     const dayAvail = availability.find(a => a.day_of_week === date.getDay());
-    if (!dayAvail?.is_available) {
-      toast.error("That day is unavailable");
-      setDragBooking(null);
-      return;
-    }
-
+    if (!dayAvail?.is_available) { toast.error("That day is unavailable"); setDragBooking(null); return; }
     const oldDate = dragBooking.booking_date;
     const oldTime = dragBooking.booking_time;
-
-    const { error } = await supabase.from("bookings")
-      .update({ booking_date: newDate, booking_time: newTime })
-      .eq("id", dragBooking.id);
-
-    if (error) {
-      toast.error("Failed to reschedule");
-    } else {
+    const { error } = await supabase.from("bookings").update({ booking_date: newDate, booking_time: newTime }).eq("id", dragBooking.id);
+    if (error) { toast.error("Failed to reschedule"); } else {
       toast.success(`${dragBooking.customer_name} moved to ${format(date, "EEE d MMM")} at ${newTime}`);
-      // Send admin notification for reschedule
       supabase.functions.invoke("send-booking-email", { body: { bookingId: dragBooking.id, emailType: "reschedule", oldDate, oldTime } }).catch(() => {});
       fetchData();
     }
@@ -179,8 +197,7 @@ const AdminCalendarView = () => {
     return bookings.filter(b => {
       if (b.booking_date !== dateStr) return false;
       if (b.status === "cancelled") return false;
-      const bookingHour = parseInt(b.booking_time.split(":")[0]);
-      return bookingHour === hour;
+      return parseInt(b.booking_time.split(":")[0]) === hour;
     });
   };
 
@@ -188,6 +205,8 @@ const AdminCalendarView = () => {
     const avail = availability.find(a => a.day_of_week === date.getDay());
     return avail?.is_available ?? false;
   };
+
+  const showPaymentActions = editBooking && (editBooking.payment_status === "pending" || editBooking.payment_status === "deposit_paid");
 
   return (
     <div>
@@ -212,7 +231,6 @@ const AdminCalendarView = () => {
       ) : (
         <div className="overflow-x-auto">
           <div className="min-w-[900px]">
-            {/* Header */}
             <div className="grid grid-cols-8 border-b border-border">
               <div className="p-2 font-body text-xs text-muted-foreground">Time</div>
               {weekDays.map(day => (
@@ -222,37 +240,23 @@ const AdminCalendarView = () => {
                 </div>
               ))}
             </div>
-
-            {/* Time Slots Grid */}
             {HOURS.map(hour => (
               <div key={hour} className="grid grid-cols-8 border-b border-border/50 min-h-[60px]">
-                <div className="p-2 font-body text-xs text-muted-foreground flex items-start">
-                  {`${String(hour).padStart(2, "0")}:00`}
-                </div>
+                <div className="p-2 font-body text-xs text-muted-foreground flex items-start">{`${String(hour).padStart(2, "0")}:00`}</div>
                 {weekDays.map(day => {
                   const slotBookings = getBookingsForSlot(day, hour);
                   const available = isDayAvailable(day);
-
                   return (
-                    <div
-                      key={`${day.toISOString()}-${hour}`}
+                    <div key={`${day.toISOString()}-${hour}`}
                       className={`p-1 border-l border-border/30 ${available ? "cursor-pointer hover:bg-gold/5" : "bg-secondary/30"} ${isSameDay(day, new Date()) ? "bg-gold/5" : ""}`}
                       onDragOver={e => { if (available) e.preventDefault(); }}
                       onDrop={() => handleDrop(day, hour)}
                     >
                       {slotBookings.map(b => (
-                        <div
-                          key={b.id}
-                          draggable
-                          onDragStart={() => setDragBooking(b)}
-                          onDragEnd={() => setDragBooking(null)}
-                          onClick={() => openEdit(b)}
-                          className={`px-2 py-1 mb-1 border rounded text-xs cursor-pointer hover:ring-1 hover:ring-gold/50 ${STATUS_BG[b.status] || "bg-secondary"}`}
-                        >
+                        <div key={b.id} draggable onDragStart={() => setDragBooking(b)} onDragEnd={() => setDragBooking(null)} onClick={() => openEdit(b)}
+                          className={`px-2 py-1 mb-1 border rounded text-xs cursor-pointer hover:ring-1 hover:ring-gold/50 ${STATUS_BG[b.status] || "bg-secondary"}`}>
                           <p className="font-body font-medium truncate">{b.customer_name}</p>
-                          <p className="font-body text-[10px] opacity-70 truncate">
-                            {(b.treatments as any)?.name} - {b.duration_mins}m
-                          </p>
+                          <p className="font-body text-[10px] opacity-70 truncate">{(b.treatments as any)?.name} - {b.duration_mins}m</p>
                         </div>
                       ))}
                     </div>
@@ -264,9 +268,7 @@ const AdminCalendarView = () => {
         </div>
       )}
 
-      <p className="font-body text-xs text-muted-foreground mt-4 text-center">
-        Click a booking to edit details. Drag and drop to reschedule.
-      </p>
+      <p className="font-body text-xs text-muted-foreground mt-4 text-center">Click a booking to edit details. Drag and drop to reschedule.</p>
 
       {/* Edit Modal */}
       {editBooking && editForm && (
@@ -274,9 +276,7 @@ const AdminCalendarView = () => {
           <div className="bg-background border border-border w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between p-5 border-b border-border">
               <h3 className="font-display text-xl">Edit Booking</h3>
-              <button onClick={() => { setEditBooking(null); setEditForm(null); }} className="text-muted-foreground hover:text-foreground">
-                <X size={16} strokeWidth={1.5} />
-              </button>
+              <button onClick={() => { setEditBooking(null); setEditForm(null); }} className="text-muted-foreground hover:text-foreground"><X size={16} strokeWidth={1.5} /></button>
             </div>
             <div className="p-5 space-y-4">
               <div>
@@ -324,10 +324,32 @@ const AdminCalendarView = () => {
                 <textarea value={editForm.notes} onChange={e => setEditForm({ ...editForm, notes: e.target.value })} rows={3}
                   className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none resize-none" />
               </div>
+
+              {/* Payment Actions */}
+              {showPaymentActions && (
+                <div className="border border-gold/30 bg-gold/5 p-4 space-y-3">
+                  <p className="font-body text-xs uppercase tracking-wider text-gold flex items-center gap-1"><CreditCard size={12} /> Payment Actions</p>
+                  <p className="font-body text-xs text-muted-foreground">
+                    Outstanding: £{(Number(editBooking.total_price) - Number(editBooking.deposit_amount || 0)).toFixed(2)}
+                    {editBooking.payment_status === "deposit_paid" && ` (deposit of £${Number(editBooking.deposit_amount).toFixed(2)} received)`}
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                    <button onClick={handleSendPaymentLink} disabled={creatingPaymentLink}
+                      className="flex items-center gap-1 px-3 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors disabled:opacity-50">
+                      <LinkIcon size={12} /> {creatingPaymentLink ? "Creating..." : "Send Payment Link"}
+                    </button>
+                    <button onClick={handleMarkPaid}
+                      className="flex items-center gap-1 px-3 py-2 border border-green-600/30 text-green-600 font-body text-xs uppercase tracking-wider hover:bg-green-600/10 transition-colors">
+                      <DollarSign size={12} /> Mark as Paid
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className="border-t border-border pt-4 flex items-center justify-between">
                 <div className="font-body text-xs text-muted-foreground">
                   <p>Treatment: {(editBooking.treatments as any)?.name}</p>
-                  <p>Total: £{Number(editBooking.total_price).toFixed(2)} - {editBooking.payment_status}</p>
+                  <p>Total: £{Number(editBooking.total_price).toFixed(2)} — <span className={editBooking.payment_status === "fully_paid" ? "text-green-600" : "text-gold"}>{editBooking.payment_status}</span></p>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => { setEditBooking(null); setEditForm(null); }} className="px-4 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">Cancel</button>

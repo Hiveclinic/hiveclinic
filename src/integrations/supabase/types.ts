@@ -116,6 +116,7 @@ export type Database = {
           stripe_session_id: string | null
           total_price: number
           treatment_id: string
+          treatment_ids: string[] | null
           updated_at: string
           user_id: string | null
           variant_id: string | null
@@ -146,6 +147,7 @@ export type Database = {
           stripe_session_id?: string | null
           total_price: number
           treatment_id: string
+          treatment_ids?: string[] | null
           updated_at?: string
           user_id?: string | null
           variant_id?: string | null
@@ -176,6 +178,7 @@ export type Database = {
           stripe_session_id?: string | null
           total_price?: number
           treatment_id?: string
+          treatment_ids?: string[] | null
           updated_at?: string
           user_id?: string | null
           variant_id?: string | null
@@ -444,6 +447,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      site_images: {
+        Row: {
+          alt_text: string | null
+          id: string
+          image_url: string
+          key: string
+          updated_at: string
+        }
+        Insert: {
+          alt_text?: string | null
+          id?: string
+          image_url: string
+          key: string
+          updated_at?: string
+        }
+        Update: {
+          alt_text?: string | null
+          id?: string
+          image_url?: string
+          key?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       site_settings: {
         Row: {

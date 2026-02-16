@@ -248,6 +248,39 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
       });
+    } else if (emailType === "client_cancelled") {
+      // Send admin notification that a client cancelled
+      const adminCancelHtml = `
+        <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
+          ${headerHtml}
+          <div style="padding:40px 30px;">
+            <h2 style="font-family:Georgia,serif;font-size:24px;color:#0d0d0d;margin:0 0 20px;">Client Cancelled Booking</h2>
+            <p style="color:#555;font-size:14px;line-height:1.6;"><strong>${booking.customer_name}</strong> has cancelled their appointment:</p>
+            <div style="background:#fff3f3;border-left:3px solid #e55;padding:20px;margin:24px 0;">
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Treatment:</strong> ${treatmentName}</p>
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Date:</strong> ${dateFormatted}</p>
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Time:</strong> ${timeFormatted}</p>
+              <p style="margin:0;font-size:14px;"><strong>Total:</strong> £${Number(booking.total_price).toFixed(2)}</p>
+            </div>
+            <p style="color:#555;font-size:14px;">Email: ${booking.customer_email}</p>
+            ${booking.customer_phone ? `<p style="color:#555;font-size:14px;">Phone: ${booking.customer_phone}</p>` : ""}
+          </div>
+          ${footerHtml}
+        </div>
+      `;
+
+      logStep("Sending client cancellation notification to admin");
+      await resend.emails.send({
+        from: "Hive Clinic <noreply@hiveclinic.lovable.app>",
+        to: [ADMIN_EMAIL],
+        subject: `Client Cancelled: ${booking.customer_name} - ${treatmentName}`,
+        html: adminCancelHtml,
+      });
+
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
     } else {
       throw new Error(`Unknown email type: ${emailType}`);
     }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Trash2, Pencil, Save, X, Megaphone, Settings, Layers } from "lucide-react";
+import { Plus, Trash2, Pencil, Save, X, Megaphone, Layers, Image, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 type Addon = {
@@ -20,20 +20,30 @@ type SiteSettings = {
   announcement_link: string;
 };
 
+type SiteImage = {
+  id: string;
+  key: string;
+  image_url: string;
+  alt_text: string;
+};
+
 const AdminSiteTab = () => {
   const [addons, setAddons] = useState<Addon[]>([]);
   const [settings, setSettings] = useState<SiteSettings>({ announcement_text: "", announcement_active: false, announcement_link: "" });
+  const [siteImages, setSiteImages] = useState<SiteImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNewAddon, setShowNewAddon] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newAddon, setNewAddon] = useState({ name: "", description: "", price: 0, duration_mins: 0, applicable_categories: "" });
   const [categories, setCategories] = useState<string[]>([]);
+  const [uploadingKey, setUploadingKey] = useState<string | null>(null);
 
   const fetchAll = async () => {
-    const [addonsRes, settingsRes, treatRes] = await Promise.all([
+    const [addonsRes, settingsRes, treatRes, imagesRes] = await Promise.all([
       supabase.from("treatment_addons").select("*").order("sort_order", { ascending: true }),
       supabase.from("site_settings").select("*").eq("id", "global").single(),
       supabase.from("treatments").select("category"),
+      supabase.from("site_images").select("*").order("key"),
     ]);
     if (addonsRes.data) setAddons(addonsRes.data as Addon[]);
     if (settingsRes.data) {
@@ -44,6 +54,7 @@ const AdminSiteTab = () => {
       });
     }
     if (treatRes.data) setCategories([...new Set(treatRes.data.map((t: any) => t.category))].sort());
+    if (imagesRes.data) setSiteImages(imagesRes.data as SiteImage[]);
     setLoading(false);
   };
 
@@ -58,6 +69,52 @@ const AdminSiteTab = () => {
     }).eq("id", "global");
     if (error) { toast.error("Failed to save"); return; }
     toast.success("Settings saved");
+  };
+
+  const handleImageUpload = async (key: string, file: File) => {
+    setUploadingKey(key);
+    const ext = file.name.split(".").pop();
+    const path = `${key}-${Date.now()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage.from("site-images").upload(path, file, { upsert: true });
+    if (uploadError) { toast.error("Upload failed"); setUploadingKey(null); return; }
+
+    const { data: { publicUrl } } = supabase.storage.from("site-images").getPublicUrl(path);
+
+    const { error } = await supabase.from("site_images").update({
+      image_url: publicUrl,
+      updated_at: new Date().toISOString(),
+    }).eq("key", key);
+
+    if (error) { toast.error("Failed to save image URL"); setUploadingKey(null); return; }
+
+    setSiteImages(prev => prev.map(img => img.key === key ? { ...img, image_url: publicUrl } : img));
+    toast.success("Image updated");
+    setUploadingKey(null);
+  };
+
+  const updateImageUrl = async (key: string, url: string) => {
+    const { error } = await supabase.from("site_images").update({
+      image_url: url,
+      updated_at: new Date().toISOString(),
+    }).eq("key", key);
+    if (error) { toast.error("Failed to save"); return; }
+    setSiteImages(prev => prev.map(img => img.key === key ? { ...img, image_url: url } : img));
+    toast.success("Image URL saved");
+  };
+
+  const updateAltText = async (key: string, altText: string) => {
+    await supabase.from("site_images").update({ alt_text: altText }).eq("key", key);
+    setSiteImages(prev => prev.map(img => img.key === key ? { ...img, alt_text: altText } : img));
+  };
+
+  const addNewImageKey = async () => {
+    const key = prompt("Enter image key (e.g. 'treatment_hero', 'banner_promo'):");
+    if (!key) return;
+    const { error } = await supabase.from("site_images").insert({ key: key.trim(), image_url: "", alt_text: "" });
+    if (error) { toast.error(error.message.includes("duplicate") ? "Key already exists" : "Failed to add"); return; }
+    toast.success("Image slot added");
+    fetchAll();
   };
 
   const createAddon = async () => {
@@ -132,6 +189,60 @@ const AdminSiteTab = () => {
           <button onClick={saveSettings} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">
             <Save size={12} className="inline mr-1" /> Save Banner
           </button>
+        </div>
+      </div>
+
+      {/* Website Images */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-display text-xl flex items-center gap-2"><Image size={18} /> Website Images ({siteImages.length})</h3>
+          <button onClick={addNewImageKey} className="flex items-center gap-1 px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">
+            <Plus size={12} /> Add Image Slot
+          </button>
+        </div>
+        <div className="space-y-3">
+          {siteImages.map(img => (
+            <div key={img.id} className="border border-border p-4">
+              <div className="flex items-start gap-4">
+                {/* Preview */}
+                <div className="w-24 h-24 bg-secondary flex-shrink-0 flex items-center justify-center overflow-hidden border border-border">
+                  {img.image_url ? (
+                    <img src={img.image_url} alt={img.alt_text} className="w-full h-full object-cover" />
+                  ) : (
+                    <Image size={20} className="text-muted-foreground" />
+                  )}
+                </div>
+                <div className="flex-1 space-y-2">
+                  <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">{img.key.replace(/_/g, " ")}</p>
+                  <div className="flex gap-2">
+                    <input
+                      value={img.image_url}
+                      onChange={e => setSiteImages(prev => prev.map(i => i.key === img.key ? { ...i, image_url: e.target.value } : i))}
+                      className="flex-1 border border-border bg-transparent px-3 py-1.5 font-body text-xs focus:border-gold focus:outline-none"
+                      placeholder="Paste image URL or upload below"
+                    />
+                    <button onClick={() => updateImageUrl(img.key, img.image_url)} className="px-3 py-1.5 bg-foreground text-background font-body text-[10px] uppercase tracking-wider hover:bg-accent transition-colors">
+                      <Save size={10} className="inline mr-1" /> Save
+                    </button>
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <input
+                      value={img.alt_text}
+                      onChange={e => setSiteImages(prev => prev.map(i => i.key === img.key ? { ...i, alt_text: e.target.value } : i))}
+                      onBlur={() => updateAltText(img.key, img.alt_text)}
+                      className="flex-1 border border-border bg-transparent px-3 py-1.5 font-body text-xs focus:border-gold focus:outline-none"
+                      placeholder="Alt text"
+                    />
+                    <label className="flex items-center gap-1 px-3 py-1.5 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors cursor-pointer">
+                      <Upload size={10} />
+                      <span className="font-body text-[10px] uppercase tracking-wider">{uploadingKey === img.key ? "Uploading..." : "Upload"}</span>
+                      <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) handleImageUpload(img.key, e.target.files[0]); }} disabled={uploadingKey === img.key} />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

@@ -89,6 +89,8 @@ const CustomerPortal = () => {
     if (error) { toast.error("Failed to cancel"); return; }
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: "cancelled" } : b));
     toast.success("Booking cancelled. If you'd like to rebook, contact us via WhatsApp or visit our website.");
+    // Notify admin about client cancellation
+    supabase.functions.invoke("send-booking-email", { body: { bookingId: id, emailType: "client_cancelled" } }).catch(() => {});
   };
 
   const canReschedule = (booking: Booking) => {

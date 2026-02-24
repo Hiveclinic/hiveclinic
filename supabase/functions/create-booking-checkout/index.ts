@@ -129,9 +129,9 @@ serve(async (req) => {
     }
 
     const addonTotalNum = Number(addonTotal) || 0;
-    const totalPrice = Math.max(0, Number(treatment.price) + addonTotalNum - discountAmount);
-    const isDeposit = paymentMode === "deposit" && treatment.deposit_required;
-    const chargeAmount = isDeposit ? Number(treatment.deposit_amount) : totalPrice;
+    const totalPrice = Math.max(0, allTreatmentsPrice + addonTotalNum - discountAmount);
+    const isDeposit = paymentMode === "deposit" && anyDepositRequired;
+    const chargeAmount = isDeposit ? allTreatmentsDeposit : totalPrice;
 
     // Check if authenticated user
     let userId: string | null = null;

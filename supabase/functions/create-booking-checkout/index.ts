@@ -148,13 +148,14 @@ serve(async (req) => {
         .from("bookings")
         .insert({
           treatment_id: treatmentId,
+          treatment_ids: allTreatmentIds,
           user_id: userId,
           customer_name: customerName,
           customer_email: customerEmail,
           customer_phone: customerPhone,
           booking_date: bookingDate,
           booking_time: bookingTime,
-          duration_mins: treatment.duration_mins,
+          duration_mins: allTreatmentsDuration,
           status: "confirmed",
           payment_status: "fully_paid",
           total_price: 0,

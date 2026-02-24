@@ -1,28 +1,23 @@
 project_id = "kyjzjgdcfisuxogledux"
 
-[functions.mailchimp-subscribe]
-verify_jwt = false
-
-[functions.ai-aftercare]
-verify_jwt = false
-
-[functions.ai-treatment-chat]
-verify_jwt = false
-
-[functions.create-booking-checkout]
-verify_jwt = false
-
-[functions.confirm-booking]
-verify_jwt = false
-
-[functions.validate-discount]
-verify_jwt = false
-
-[functions.send-booking-email]
-verify_jwt = false
-
-[functions.send-reminders]
-verify_jwt = false
-
-[functions.create-payment-link]
-verify_jwt = false
+[functions]
+  [functions.ai-aftercare]
+    verify_jwt = false
+  [functions.ai-treatment-chat]
+    verify_jwt = false
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.confirm-booking]
+    verify_jwt = false
+  [functions.create-booking-checkout]
+    verify_jwt = false
+  [functions.create-payment-link]
+    verify_jwt = false
+  [functions.mailchimp-subscribe]
+    verify_jwt = false
+  [functions.send-booking-email]
+    verify_jwt = false
+  [functions.send-reminders]
+    verify_jwt = false
+  [functions.validate-discount]
+    verify_jwt = false

@@ -109,8 +109,9 @@ serve(async (req) => {
         if (allTreatmentsPrice < Number(discount.min_spend)) throw new Error(`Minimum spend of £${discount.min_spend} required for this code`);
 
         if (discount.applicable_treatments && discount.applicable_treatments.length > 0) {
-          if (!discount.applicable_treatments.includes(treatmentId)) {
-            throw new Error("Discount code not valid for this treatment");
+          const hasApplicable = allTreatmentIds.some(id => discount.applicable_treatments.includes(id));
+          if (!hasApplicable) {
+            throw new Error("Discount code not valid for these treatments");
           }
         }
 

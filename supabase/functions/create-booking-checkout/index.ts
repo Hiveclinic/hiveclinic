@@ -64,16 +64,14 @@ serve(async (req) => {
 
     if (allTreatmentsError || !allTreatments || allTreatments.length === 0) throw new Error("One or more treatments not found or inactive");
 
-    // Get treatment details
-    const { data: treatment, error: treatmentError } = await supabaseClient
-      .from("treatments")
-      .select("*")
-      .eq("id", treatmentId)
-      .eq("active", true)
-      .single();
-
-    if (treatmentError || !treatment) throw new Error("Treatment not found or inactive");
-    logStep("Treatment found", { name: treatment.name, price: treatment.price });
+    // Use primary treatment for backwards compat, but calculate totals from all
+    const treatment = allTreatments.find(t => t.id === treatmentId) || allTreatments[0];
+    const allTreatmentsPrice = allTreatments.reduce((sum, t) => sum + Number(t.price), 0);
+    const allTreatmentsDuration = allTreatments.reduce((sum, t) => sum + Number(t.duration_mins), 0);
+    const allTreatmentsDeposit = allTreatments.reduce((sum, t) => t.deposit_required ? sum + Number(t.deposit_amount) : sum, 0);
+    const anyDepositRequired = allTreatments.some(t => t.deposit_required);
+    const treatmentNames = allTreatments.map(t => t.name).join(" + ");
+    logStep("Treatments found", { names: treatmentNames, totalPrice: allTreatmentsPrice });
 
     // Check for existing booking at this slot
     const { data: existingBooking } = await supabaseClient

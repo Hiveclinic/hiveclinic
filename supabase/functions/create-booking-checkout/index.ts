@@ -239,7 +239,7 @@ serve(async (req) => {
             price_data: {
               currency: "gbp",
               product_data: {
-                name: `${treatment.name}${isDeposit ? " (Deposit)" : ""}`,
+                name: `${treatmentNames}${isDeposit ? " (Deposit)" : ""}`,
                 description: `${bookingDate} at ${bookingTime}${isDeposit ? ` — Remaining £${(totalPrice - chargeAmount).toFixed(2)} due at appointment` : ""}`,
               },
               unit_amount: Math.round(chargeAmount * 100),
@@ -252,7 +252,7 @@ serve(async (req) => {
         cancel_url: `${origin}/booking-cancelled?booking_id=${booking.id}`,
         metadata: {
           booking_id: booking.id,
-          treatment_name: treatment.name,
+          treatment_name: treatmentNames,
           is_deposit: String(isDeposit),
         },
       });

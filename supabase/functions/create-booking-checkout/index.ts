@@ -116,7 +116,7 @@ serve(async (req) => {
         }
 
         if (discount.discount_type === "percentage") {
-          discountAmount = (Number(treatment.price) * Number(discount.discount_value)) / 100;
+          discountAmount = (allTreatmentsPrice * Number(discount.discount_value)) / 100;
         } else {
           discountAmount = Number(discount.discount_value);
         }

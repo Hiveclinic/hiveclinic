@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, Sparkles, ChevronDown } from "lucide-react";
+import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, Sparkles, ChevronDown, X, Package } from "lucide-react";
 import { format, addDays, startOfDay } from "date-fns";
 import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
@@ -39,7 +39,17 @@ type Availability = {
   is_available: boolean;
 };
 
-const STEPS = ["Treatment", "Date & Time", "Your Details", "Payment"];
+type TreatmentPackage = {
+  id: string;
+  name: string;
+  treatment_id: string;
+  sessions_count: number;
+  total_price: number;
+  price_per_session: number;
+  valid_days: number;
+};
+
+const STEPS = ["Treatments", "Date & Time", "Your Details", "Payment"];
 
 const CATEGORY_ROUTES: Record<string, string> = {
   "Lip Fillers": "/treatments/lip-fillers-manchester",
@@ -69,10 +79,12 @@ const BookingSystem = () => {
   const [availability, setAvailability] = useState<Availability[]>([]);
   const [blockedDates, setBlockedDates] = useState<string[]>([]);
   const [existingBookings, setExistingBookings] = useState<{ booking_date: string; booking_time: string }[]>([]);
+  const [packages, setPackages] = useState<TreatmentPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
+  // Multi-treatment selection
+  const [selectedTreatments, setSelectedTreatments] = useState<Treatment[]>([]);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -86,23 +98,26 @@ const BookingSystem = () => {
   const [paymentMode, setPaymentMode] = useState<"deposit" | "full">("full");
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [addonsOpen, setAddonsOpen] = useState(false);
+  const [showCoursePrompt, setShowCoursePrompt] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
   const loadData = async () => {
     setLoading(true);
-    const [treatRes, availRes, blockedRes, bookingsRes, addonsRes] = await Promise.all([
+    const [treatRes, availRes, blockedRes, bookingsRes, addonsRes, packagesRes] = await Promise.all([
       supabase.from("treatments").select("*").eq("active", true).order("sort_order"),
       supabase.from("availability").select("*"),
       supabase.from("blocked_dates").select("blocked_date"),
       supabase.from("bookings").select("booking_date, booking_time").in("status", ["pending", "confirmed"]),
       supabase.from("treatment_addons").select("*").eq("active", true).order("sort_order"),
+      supabase.from("treatment_packages").select("*").eq("active", true).order("sort_order"),
     ]);
     if (treatRes.data) setTreatments(treatRes.data as Treatment[]);
     if (availRes.data) setAvailability(availRes.data as Availability[]);
     if (blockedRes.data) setBlockedDates(blockedRes.data.map((d: { blocked_date: string }) => d.blocked_date));
     if (bookingsRes.data) setExistingBookings(bookingsRes.data);
     if (addonsRes.data) setAddons(addonsRes.data as Addon[]);
+    if (packagesRes.data) setPackages(packagesRes.data as TreatmentPackage[]);
     setLoading(false);
   };
 
@@ -120,13 +135,34 @@ const BookingSystem = () => {
     return treatments.filter(t => t.category === expandedCategory);
   }, [treatments, expandedCategory]);
 
+  // Primary treatment for addon filtering
+  const primaryTreatment = selectedTreatments[0] || null;
+
   const applicableAddons = useMemo(() => {
-    if (!selectedTreatment) return [];
+    if (!primaryTreatment) return [];
+    const selectedCategories = [...new Set(selectedTreatments.map(t => t.category))];
     return addons.filter(a => {
       if (!a.applicable_categories || a.applicable_categories.length === 0) return true;
-      return a.applicable_categories.includes(selectedTreatment.category);
+      return selectedCategories.some(c => a.applicable_categories!.includes(c));
     });
-  }, [selectedTreatment, addons]);
+  }, [selectedTreatments, addons, primaryTreatment]);
+
+  // Course suggestions for selected treatments
+  const courseSuggestions = useMemo(() => {
+    if (selectedTreatments.length === 0) return [];
+    const suggestions: { treatment: Treatment; pkg: TreatmentPackage; savings: number; singleTotal: number }[] = [];
+    for (const t of selectedTreatments) {
+      const treatmentPackages = packages.filter(p => p.treatment_id === t.id);
+      for (const pkg of treatmentPackages) {
+        const singleTotal = Number(t.price) * pkg.sessions_count;
+        const savings = singleTotal - Number(pkg.total_price);
+        if (savings > 0) {
+          suggestions.push({ treatment: t, pkg, savings, singleTotal });
+        }
+      }
+    }
+    return suggestions;
+  }, [selectedTreatments, packages]);
 
   const toggleAddon = (id: string) => {
     setSelectedAddons(prev => prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]);
@@ -146,11 +182,22 @@ const BookingSystem = () => {
     }, 0);
   }, [selectedAddons, addons]);
 
-  const effectivePrice = useMemo(() => {
-    if (!selectedTreatment) return 0;
-    if (selectedTreatment.on_offer && selectedTreatment.offer_price) return Number(selectedTreatment.offer_price);
-    return Number(selectedTreatment.price);
-  }, [selectedTreatment]);
+  const treatmentsTotal = useMemo(() => {
+    return selectedTreatments.reduce((sum, t) => {
+      const price = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
+      return sum + price;
+    }, 0);
+  }, [selectedTreatments]);
+
+  const treatmentsDuration = useMemo(() => {
+    return selectedTreatments.reduce((sum, t) => sum + t.duration_mins, 0);
+  }, [selectedTreatments]);
+
+  const totalDuration = treatmentsDuration + addonsDuration;
+
+  // Check if any selected treatment requires deposit
+  const depositRequired = selectedTreatments.some(t => t.deposit_required);
+  const totalDeposit = selectedTreatments.reduce((sum, t) => t.deposit_required ? sum + Number(t.deposit_amount) : sum, 0);
 
   const availableDates = useMemo(() => {
     const dates: Date[] = [];
@@ -167,10 +214,8 @@ const BookingSystem = () => {
     return dates;
   }, [availability, blockedDates]);
 
-  const totalDuration = (selectedTreatment?.duration_mins || 0) + addonsDuration;
-
   const timeSlots = useMemo(() => {
-    if (!selectedDate || !selectedTreatment) return [];
+    if (!selectedDate || selectedTreatments.length === 0) return [];
     const dayOfWeek = selectedDate.getDay();
     const avail = availability.find((a) => a.day_of_week === dayOfWeek);
     if (!avail || !avail.is_available) return [];
@@ -192,40 +237,41 @@ const BookingSystem = () => {
       if (!taken) slots.push(timeStr);
     }
     return slots;
-  }, [selectedDate, selectedTreatment, availability, existingBookings, totalDuration]);
+  }, [selectedDate, selectedTreatments, availability, existingBookings, totalDuration]);
 
   const totalPrice = useMemo(() => {
-    const base = effectivePrice + addonsTotal;
+    const base = treatmentsTotal + addonsTotal;
     const discount = discountResult?.valid ? discountResult.discountAmount : 0;
     return Math.max(0, base - discount);
-  }, [effectivePrice, addonsTotal, discountResult]);
+  }, [treatmentsTotal, addonsTotal, discountResult]);
 
   const chargeAmount = useMemo(() => {
-    if (!selectedTreatment) return 0;
-    if (paymentMode === "deposit" && selectedTreatment.deposit_required) {
-      return Number(selectedTreatment.deposit_amount);
+    if (selectedTreatments.length === 0) return 0;
+    if (paymentMode === "deposit" && depositRequired) {
+      return totalDeposit;
     }
     return totalPrice;
-  }, [selectedTreatment, paymentMode, totalPrice]);
+  }, [selectedTreatments, paymentMode, totalPrice, depositRequired, totalDeposit]);
 
   const applyDiscount = async () => {
-    if (!discountCode.trim() || !selectedTreatment) return;
+    if (!discountCode.trim() || selectedTreatments.length === 0) return;
     setDiscountError("");
     setDiscountResult(null);
     const { data, error } = await supabase.functions.invoke("validate-discount", {
-      body: { code: discountCode.trim(), treatmentId: selectedTreatment.id, treatmentPrice: effectivePrice + addonsTotal },
+      body: { code: discountCode.trim(), treatmentId: primaryTreatment!.id, treatmentPrice: treatmentsTotal + addonsTotal },
     });
     if (error) { setDiscountError("Failed to validate code"); return; }
     if (data.valid) { setDiscountResult(data); } else { setDiscountError(data.error || "Invalid code"); }
   };
 
   const handleBooking = async () => {
-    if (!selectedTreatment || !selectedDate || !selectedTime || !customerName || !customerEmail) return;
+    if (selectedTreatments.length === 0 || !selectedDate || !selectedTime || !customerName || !customerEmail) return;
     setSubmitting(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-booking-checkout", {
         body: {
-          treatmentId: selectedTreatment.id,
+          treatmentId: primaryTreatment!.id,
+          treatmentIds: selectedTreatments.map(t => t.id),
           bookingDate: format(selectedDate, "yyyy-MM-dd"),
           bookingTime: selectedTime,
           customerName, customerEmail, customerPhone, paymentMode,
@@ -244,7 +290,7 @@ const BookingSystem = () => {
 
   const canProceed = () => {
     switch (step) {
-      case 0: return !!selectedTreatment;
+      case 0: return selectedTreatments.length > 0;
       case 1: return !!selectedDate && !!selectedTime;
       case 2: return customerName.trim().length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail) && customerPhone.trim().length >= 10;
       case 3: return true;
@@ -252,19 +298,45 @@ const BookingSystem = () => {
     }
   };
 
-  const selectTreatment = (t: Treatment) => {
-    setSelectedTreatment(t);
-    setPaymentMode(t.deposit_required ? "deposit" : "full");
+  const toggleTreatment = (t: Treatment) => {
+    const isSelected = selectedTreatments.some(s => s.id === t.id);
+    if (isSelected) {
+      setSelectedTreatments(prev => prev.filter(s => s.id !== t.id));
+    } else {
+      setSelectedTreatments(prev => [...prev, t]);
+    }
     setSelectedAddons([]);
     setAddonsOpen(false);
   };
 
+  const removeTreatment = (id: string) => {
+    setSelectedTreatments(prev => prev.filter(t => t.id !== id));
+  };
+
+  // When selected treatments change, check for course suggestions
+  useEffect(() => {
+    if (courseSuggestions.length > 0 && selectedTreatments.length > 0) {
+      setShowCoursePrompt(true);
+    } else {
+      setShowCoursePrompt(false);
+    }
+  }, [courseSuggestions, selectedTreatments.length]);
+
+  // When first treatment is added, set payment mode
+  useEffect(() => {
+    if (selectedTreatments.length > 0 && depositRequired) {
+      setPaymentMode("deposit");
+    } else {
+      setPaymentMode("full");
+    }
+  }, [selectedTreatments, depositRequired]);
+
   const TreatmentCard = ({ t }: { t: Treatment }) => {
-    const isSelected = selectedTreatment?.id === t.id;
+    const isSelected = selectedTreatments.some(s => s.id === t.id);
     const price = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
     return (
       <button
-        onClick={() => selectTreatment(t)}
+        onClick={() => toggleTreatment(t)}
         className={`w-full text-left p-4 border transition-all ${isSelected ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}
       >
         <div className="flex justify-between items-start gap-3">
@@ -315,7 +387,7 @@ const BookingSystem = () => {
         <div className="max-w-3xl mx-auto px-6">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-12">
             <h1 className="font-display text-4xl md:text-5xl mb-3">Book Your Treatment</h1>
-            <p className="font-body text-sm text-muted-foreground">Secure your appointment with instant confirmation.</p>
+            <p className="font-body text-sm text-muted-foreground">Select one or more treatments. Secure your appointment with instant confirmation.</p>
           </motion.div>
 
           {/* Progress Steps */}
@@ -338,6 +410,59 @@ const BookingSystem = () => {
             {step === 0 && (
               <motion.div key="step0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
                 
+                {/* Selected treatments summary chips */}
+                {selectedTreatments.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {selectedTreatments.map(t => {
+                      const price = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
+                      return (
+                        <div key={t.id} className="flex items-center gap-2 border border-gold bg-gold/5 px-3 py-2">
+                          <span className="font-body text-xs">{t.name} · £{price}</span>
+                          <button onClick={(e) => { e.stopPropagation(); removeTreatment(t.id); }} className="text-muted-foreground hover:text-foreground">
+                            <X size={12} />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Course / Package Suggestions */}
+                {showCoursePrompt && courseSuggestions.length > 0 && (
+                  <div className="border border-gold/40 bg-gold/5 p-5 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Package size={16} strokeWidth={1.5} className="text-gold" />
+                      <h3 className="font-display text-base">Save with a Course</h3>
+                    </div>
+                    {courseSuggestions.map(({ treatment, pkg, savings, singleTotal }) => (
+                      <div key={pkg.id} className="flex items-start justify-between gap-3 border border-border p-3 bg-background">
+                        <div>
+                          <p className="font-body text-sm font-medium">{pkg.name}</p>
+                          <p className="font-body text-xs text-muted-foreground">
+                            {pkg.sessions_count} sessions of {treatment.name}
+                          </p>
+                          <p className="font-body text-xs text-muted-foreground mt-1">
+                            <span className="line-through">£{singleTotal.toFixed(0)}</span>
+                            {" → "}
+                            <span className="text-gold font-semibold">£{Number(pkg.total_price).toFixed(0)}</span>
+                            {" · "}
+                            <span className="text-gold">Save £{savings.toFixed(0)}</span>
+                          </p>
+                        </div>
+                        <a
+                          href={`/contact?subject=Course%20Enquiry%20-%20${encodeURIComponent(pkg.name)}`}
+                          className="px-4 py-2 bg-foreground text-background font-body text-xs tracking-wider uppercase hover:bg-accent transition-colors flex-shrink-0"
+                        >
+                          Enquire
+                        </a>
+                      </div>
+                    ))}
+                    <button onClick={() => setShowCoursePrompt(false)} className="font-body text-xs text-muted-foreground hover:text-foreground">
+                      No thanks, continue with single session
+                    </button>
+                  </div>
+                )}
+
                 {/* Most Popular */}
                 {popularTreatments.length > 0 && !expandedCategory && (
                   <div>
@@ -395,7 +520,7 @@ const BookingSystem = () => {
                 </div>
 
                 {/* Collapsible Add-ons */}
-                {selectedTreatment && applicableAddons.length > 0 && (
+                {selectedTreatments.length > 0 && applicableAddons.length > 0 && (
                   <Collapsible open={addonsOpen} onOpenChange={setAddonsOpen}>
                     <CollapsibleTrigger className="w-full flex items-center justify-between p-3 border border-border hover:border-gold/40 transition-colors">
                       <span className="font-body text-sm flex items-center gap-2">
@@ -430,14 +555,19 @@ const BookingSystem = () => {
                 )}
 
                 {/* Selection summary */}
-                {selectedTreatment && (
+                {selectedTreatments.length > 0 && (
                   <div className="border border-gold/30 bg-gold/5 p-4">
                     <div className="flex justify-between items-center">
                       <div>
-                        <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">Selected</p>
-                        <p className="font-display text-base">{selectedTreatment.name}</p>
+                        <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">
+                          {selectedTreatments.length} treatment{selectedTreatments.length > 1 ? "s" : ""} selected
+                        </p>
+                        <p className="font-display text-sm">
+                          {selectedTreatments.map(t => t.name).join(" + ")}
+                        </p>
+                        <p className="font-body text-xs text-muted-foreground mt-1">{totalDuration} mins total</p>
                       </div>
-                      <p className="font-display text-lg text-gold">£{(effectivePrice + addonsTotal).toFixed(0)}</p>
+                      <p className="font-display text-lg text-gold">£{(treatmentsTotal + addonsTotal).toFixed(0)}</p>
                     </div>
                   </div>
                 )}
@@ -504,18 +634,21 @@ const BookingSystem = () => {
             )}
 
             {/* Step 3: Payment Summary */}
-            {step === 3 && selectedTreatment && selectedDate && selectedTime && (
+            {step === 3 && selectedTreatments.length > 0 && selectedDate && selectedTime && (
               <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                 <div className="max-w-lg mx-auto">
                   <div className="border border-border p-6 mb-6">
                     <h3 className="font-display text-lg mb-4">Booking Summary</h3>
                     <div className="space-y-3 font-body text-sm">
-                      <div className="flex justify-between"><span className="text-muted-foreground">Treatment</span><span>{selectedTreatment.name}</span></div>
+                      <div className="flex justify-between"><span className="text-muted-foreground">Treatment{selectedTreatments.length > 1 ? "s" : ""}</span><span>{selectedTreatments.map(t => t.name).join(", ")}</span></div>
                       <div className="flex justify-between"><span className="text-muted-foreground">Date</span><span>{format(selectedDate, "EEEE, d MMMM yyyy")}</span></div>
                       <div className="flex justify-between"><span className="text-muted-foreground">Time</span><span>{selectedTime}</span></div>
                       <div className="flex justify-between"><span className="text-muted-foreground">Duration</span><span>{totalDuration} mins</span></div>
                       <div className="border-t border-border pt-3">
-                        <div className="flex justify-between"><span className="text-muted-foreground">Treatment</span><span>£{effectivePrice.toFixed(2)}</span></div>
+                        {selectedTreatments.map(t => {
+                          const p = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
+                          return <div key={t.id} className="flex justify-between"><span className="text-muted-foreground">{t.name}</span><span>£{p.toFixed(2)}</span></div>;
+                        })}
                         {selectedAddons.length > 0 && selectedAddons.map(id => {
                           const addon = addons.find(a => a.id === id);
                           return addon ? <div key={id} className="flex justify-between text-xs text-muted-foreground"><span>+ {addon.name}</span><span>£{Number(addon.price).toFixed(2)}</span></div> : null;
@@ -538,13 +671,13 @@ const BookingSystem = () => {
                     </div>
                   )}
 
-                  {selectedTreatment.deposit_required && totalPrice > 0 && (
+                  {depositRequired && totalPrice > 0 && (
                     <div className="mb-6">
                       <label className="font-body text-sm block mb-3">Payment Option</label>
                       <div className="grid grid-cols-2 gap-3">
                         <button onClick={() => setPaymentMode("deposit")} className={`p-4 border text-left transition-all ${paymentMode === "deposit" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
                           <p className="font-display text-sm">Pay Deposit</p>
-                          <p className="font-body text-xs text-muted-foreground mt-1">£{Number(selectedTreatment.deposit_amount).toFixed(0)} now</p>
+                          <p className="font-body text-xs text-muted-foreground mt-1">£{totalDeposit.toFixed(0)} now</p>
                         </button>
                         <button onClick={() => setPaymentMode("full")} className={`p-4 border text-left transition-all ${paymentMode === "full" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
                           <p className="font-display text-sm">Pay in Full</p>
@@ -558,7 +691,7 @@ const BookingSystem = () => {
                     <div className="border border-gold bg-gold/5 p-4 mb-6 text-center">
                       <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">Amount to pay now</p>
                       <p className="font-display text-3xl text-gold">£{chargeAmount.toFixed(2)}</p>
-                      {paymentMode === "deposit" && selectedTreatment.deposit_required && (
+                      {paymentMode === "deposit" && depositRequired && (
                         <p className="font-body text-xs text-muted-foreground mt-1">Remaining £{(totalPrice - chargeAmount).toFixed(2)} due at appointment</p>
                       )}
                     </div>

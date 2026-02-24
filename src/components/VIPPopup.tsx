@@ -55,7 +55,7 @@ const VIPPopup = () => {
 
       // Sync to Mailchimp in background (don't block UI)
       supabase.functions.invoke("mailchimp-subscribe", {
-        body: { email: trimmedEmail },
+        body: { email: trimmedEmail, tags: ["VIP Subscriber", "Website Popup"] },
       }).catch(console.error);
     }
 

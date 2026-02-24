@@ -106,7 +106,7 @@ serve(async (req) => {
         if (validFrom && now < validFrom) throw new Error("Discount code is not yet valid");
         if (validUntil && now > validUntil) throw new Error("Discount code has expired");
         if (discount.max_uses && discount.used_count >= discount.max_uses) throw new Error("Discount code usage limit reached");
-        if (Number(treatment.price) < Number(discount.min_spend)) throw new Error(`Minimum spend of £${discount.min_spend} required for this code`);
+        if (allTreatmentsPrice < Number(discount.min_spend)) throw new Error(`Minimum spend of £${discount.min_spend} required for this code`);
 
         if (discount.applicable_treatments && discount.applicable_treatments.length > 0) {
           if (!discount.applicable_treatments.includes(treatmentId)) {

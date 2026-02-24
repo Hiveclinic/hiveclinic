@@ -36,6 +36,7 @@ serve(async (req) => {
 
     const {
       treatmentId,
+      treatmentIds,
       bookingDate,
       bookingTime,
       customerName,
@@ -51,6 +52,17 @@ serve(async (req) => {
     if (!treatmentId || !bookingDate || !bookingTime || !customerName || !customerEmail) {
       throw new Error("Missing required booking fields");
     }
+
+    // Fetch all selected treatments for multi-treatment bookings
+    const allTreatmentIds: string[] = treatmentIds && Array.isArray(treatmentIds) && treatmentIds.length > 0 ? treatmentIds : [treatmentId];
+    
+    const { data: allTreatments, error: allTreatmentsError } = await supabaseClient
+      .from("treatments")
+      .select("*")
+      .in("id", allTreatmentIds)
+      .eq("active", true);
+
+    if (allTreatmentsError || !allTreatments || allTreatments.length === 0) throw new Error("One or more treatments not found or inactive");
 
     // Get treatment details
     const { data: treatment, error: treatmentError } = await supabaseClient

@@ -36,6 +36,7 @@ serve(async (req) => {
 
     const {
       treatmentId,
+      treatmentIds,
       bookingDate,
       bookingTime,
       customerName,
@@ -52,16 +53,25 @@ serve(async (req) => {
       throw new Error("Missing required booking fields");
     }
 
-    // Get treatment details
-    const { data: treatment, error: treatmentError } = await supabaseClient
+    // Fetch all selected treatments for multi-treatment bookings
+    const allTreatmentIds: string[] = treatmentIds && Array.isArray(treatmentIds) && treatmentIds.length > 0 ? treatmentIds : [treatmentId];
+    
+    const { data: allTreatments, error: allTreatmentsError } = await supabaseClient
       .from("treatments")
       .select("*")
-      .eq("id", treatmentId)
-      .eq("active", true)
-      .single();
+      .in("id", allTreatmentIds)
+      .eq("active", true);
 
-    if (treatmentError || !treatment) throw new Error("Treatment not found or inactive");
-    logStep("Treatment found", { name: treatment.name, price: treatment.price });
+    if (allTreatmentsError || !allTreatments || allTreatments.length === 0) throw new Error("One or more treatments not found or inactive");
+
+    // Use primary treatment for backwards compat, but calculate totals from all
+    const treatment = allTreatments.find(t => t.id === treatmentId) || allTreatments[0];
+    const allTreatmentsPrice = allTreatments.reduce((sum, t) => sum + Number(t.price), 0);
+    const allTreatmentsDuration = allTreatments.reduce((sum, t) => sum + Number(t.duration_mins), 0);
+    const allTreatmentsDeposit = allTreatments.reduce((sum, t) => t.deposit_required ? sum + Number(t.deposit_amount) : sum, 0);
+    const anyDepositRequired = allTreatments.some(t => t.deposit_required);
+    const treatmentNames = allTreatments.map(t => t.name).join(" + ");
+    logStep("Treatments found", { names: treatmentNames, totalPrice: allTreatmentsPrice });
 
     // Check for existing booking at this slot
     const { data: existingBooking } = await supabaseClient
@@ -96,16 +106,17 @@ serve(async (req) => {
         if (validFrom && now < validFrom) throw new Error("Discount code is not yet valid");
         if (validUntil && now > validUntil) throw new Error("Discount code has expired");
         if (discount.max_uses && discount.used_count >= discount.max_uses) throw new Error("Discount code usage limit reached");
-        if (Number(treatment.price) < Number(discount.min_spend)) throw new Error(`Minimum spend of £${discount.min_spend} required for this code`);
+        if (allTreatmentsPrice < Number(discount.min_spend)) throw new Error(`Minimum spend of £${discount.min_spend} required for this code`);
 
         if (discount.applicable_treatments && discount.applicable_treatments.length > 0) {
-          if (!discount.applicable_treatments.includes(treatmentId)) {
-            throw new Error("Discount code not valid for this treatment");
+          const hasApplicable = allTreatmentIds.some(id => discount.applicable_treatments.includes(id));
+          if (!hasApplicable) {
+            throw new Error("Discount code not valid for these treatments");
           }
         }
 
         if (discount.discount_type === "percentage") {
-          discountAmount = (Number(treatment.price) * Number(discount.discount_value)) / 100;
+          discountAmount = (allTreatmentsPrice * Number(discount.discount_value)) / 100;
         } else {
           discountAmount = Number(discount.discount_value);
         }
@@ -118,9 +129,9 @@ serve(async (req) => {
     }
 
     const addonTotalNum = Number(addonTotal) || 0;
-    const totalPrice = Math.max(0, Number(treatment.price) + addonTotalNum - discountAmount);
-    const isDeposit = paymentMode === "deposit" && treatment.deposit_required;
-    const chargeAmount = isDeposit ? Number(treatment.deposit_amount) : totalPrice;
+    const totalPrice = Math.max(0, allTreatmentsPrice + addonTotalNum - discountAmount);
+    const isDeposit = paymentMode === "deposit" && anyDepositRequired;
+    const chargeAmount = isDeposit ? allTreatmentsDeposit : totalPrice;
 
     // Check if authenticated user
     let userId: string | null = null;
@@ -137,13 +148,14 @@ serve(async (req) => {
         .from("bookings")
         .insert({
           treatment_id: treatmentId,
+          treatment_ids: allTreatmentIds,
           user_id: userId,
           customer_name: customerName,
           customer_email: customerEmail,
           customer_phone: customerPhone,
           booking_date: bookingDate,
           booking_time: bookingTime,
-          duration_mins: treatment.duration_mins,
+          duration_mins: allTreatmentsDuration,
           status: "confirmed",
           payment_status: "fully_paid",
           total_price: 0,
@@ -190,17 +202,18 @@ serve(async (req) => {
       .from("bookings")
       .insert({
         treatment_id: treatmentId,
+        treatment_ids: allTreatmentIds,
         user_id: userId,
         customer_name: customerName,
         customer_email: customerEmail,
         customer_phone: customerPhone,
         booking_date: bookingDate,
         booking_time: bookingTime,
-        duration_mins: treatment.duration_mins,
+        duration_mins: allTreatmentsDuration,
         status: "pending",
         payment_status: "pending",
         total_price: totalPrice,
-        deposit_amount: isDeposit ? Number(treatment.deposit_amount) : 0,
+        deposit_amount: isDeposit ? allTreatmentsDeposit : 0,
         discount_code_id: discountCodeId,
         discount_amount: discountAmount,
         addon_ids: addonIds || [],
@@ -226,7 +239,7 @@ serve(async (req) => {
             price_data: {
               currency: "gbp",
               product_data: {
-                name: `${treatment.name}${isDeposit ? " (Deposit)" : ""}`,
+                name: `${treatmentNames}${isDeposit ? " (Deposit)" : ""}`,
                 description: `${bookingDate} at ${bookingTime}${isDeposit ? ` — Remaining £${(totalPrice - chargeAmount).toFixed(2)} due at appointment` : ""}`,
               },
               unit_amount: Math.round(chargeAmount * 100),
@@ -239,7 +252,7 @@ serve(async (req) => {
         cancel_url: `${origin}/booking-cancelled?booking_id=${booking.id}`,
         metadata: {
           booking_id: booking.id,
-          treatment_name: treatment.name,
+          treatment_name: treatmentNames,
           is_deposit: String(isDeposit),
         },
       });

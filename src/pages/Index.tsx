@@ -37,7 +37,32 @@ const trustPoints = [
   { icon: Clock, text: "Same-Week Appointments Available" },
 ];
 
+type Offer = {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  offer_price: number | null;
+  offer_label: string | null;
+  description: string | null;
+  duration_mins: number;
+};
+
 const Index = () => {
+  const [offers, setOffers] = useState<Offer[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("treatments")
+      .select("id, name, slug, price, offer_price, offer_label, description, duration_mins")
+      .eq("active", true)
+      .eq("on_offer", true)
+      .order("sort_order")
+      .then(({ data }) => {
+        if (data) setOffers(data as Offer[]);
+      });
+  }, []);
+
   return (
     <Layout>
       {/* Hero */}

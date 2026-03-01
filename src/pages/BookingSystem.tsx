@@ -449,12 +449,23 @@ const BookingSystem = () => {
                             <span className="text-gold">Save £{savings.toFixed(0)}</span>
                           </p>
                         </div>
-                        <a
-                          href={`/contact?subject=Course%20Enquiry%20-%20${encodeURIComponent(pkg.name)}`}
+                        <button
+                          onClick={() => {
+                            // Replace selection with course: use treatment as base but override price
+                            setSelectedTreatments([treatment]);
+                            setSelectedAddons([]);
+                            // Store package info in notes for checkout
+                            setNotes(prev => {
+                              const cleaned = prev.replace(/\[COURSE:.*?\]/g, "").trim();
+                              return `[COURSE:${pkg.id}:${pkg.name}:${pkg.total_price}:${pkg.sessions_count}] ${cleaned}`.trim();
+                            });
+                            setShowCoursePrompt(false);
+                            setStep(1);
+                          }}
                           className="px-4 py-2 bg-foreground text-background font-body text-xs tracking-wider uppercase hover:bg-accent transition-colors flex-shrink-0"
                         >
-                          Enquire
-                        </a>
+                          Book Course
+                        </button>
                       </div>
                     ))}
                     <button onClick={() => setShowCoursePrompt(false)} className="font-body text-xs text-muted-foreground hover:text-foreground">

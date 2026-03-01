@@ -5,6 +5,8 @@ project_id = "kyjzjgdcfisuxogledux"
     verify_jwt = false
   [functions.ai-treatment-chat]
     verify_jwt = false
+  [functions.ai-treatment-suggest]
+    verify_jwt = false
   [functions.auth-email-hook]
     verify_jwt = false
   [functions.confirm-booking]
@@ -18,6 +20,8 @@ project_id = "kyjzjgdcfisuxogledux"
   [functions.send-booking-email]
     verify_jwt = false
   [functions.send-reminders]
+    verify_jwt = false
+  [functions.stripe-webhook]
     verify_jwt = false
   [functions.validate-discount]
     verify_jwt = false

@@ -1,133 +1,117 @@
 
+# Phase 4: Webhook, Offers, Admin Cleanup, Notifications, and Email Fixes
 
-# Phase 3: Admin Enhancements, Multi-Treatment Booking, and Fixes
+## 1. Stripe Webhook for Reliable Booking Confirmation
 
-## 1. Fix 404 on Admin Login (Published Site)
-
-The route `/hive-admin-login` exists in the code and works in preview. The 404 on the published site (`hiveclinicuk.com//hive-admin-login`) is caused by the double slash `//` in the URL. This is a hosting/domain redirect issue -- the custom domain is likely appending a trailing slash to the base URL before the path.
-
-**Fix:** The app needs to be re-published so the latest routes are deployed. No code change needed -- the route is correctly defined at line 82 of `App.tsx`. The double slash in the URL you shared is the problem -- use `hiveclinicuk.com/hive-admin-login` (single slash).
-
----
-
-## 2. Website Image Management via Admin
-
-Currently there's no way to update hero images, gallery images, or page images from the admin dashboard. These are hardcoded in component files.
+Currently bookings are confirmed via the redirect URL (`confirm-booking` called from `BookingSuccess.tsx`). This is fragile -- if the user closes the browser before the redirect completes, the booking stays "pending" forever.
 
 **Changes:**
-- Add a new "Images" section to `AdminSiteTab.tsx` that stores editable image URLs in the `site_settings` table (or a new `site_images` table)
-- Create a `site_images` table with fields: `key` (text, e.g. "hero_home", "gallery_1"), `image_url` (text), `alt_text` (text), `updated_at`
-- Admin can upload images to the `client-images` bucket (or a new public `site-images` bucket) and the URL is saved
-- Frontend pages read from this table and fall back to the hardcoded defaults if no override exists
-- Create a public storage bucket `site-images` for website content images
+- Create a new edge function `stripe-webhook` that listens for `checkout.session.completed` events
+- Verify the webhook signature using the Stripe webhook secret
+- Extract `booking_id` from session metadata, confirm the booking, send confirmation email, and send admin notification
+- Add `STRIPE_WEBHOOK_SECRET` as a new secret (you'll get this from your Stripe dashboard after creating the webhook endpoint)
+- Keep the existing `confirm-booking` function as a fallback (idempotent -- skip if already confirmed)
+- The webhook URL will be: `https://kyjzjgdcfisuxogledux.supabase.co/functions/v1/stripe-webhook`
 
----
+## 2. Admin Booking Notification (Email + SMS-ready)
 
-## 3. Treatment Menu Reordering
+Every new confirmed booking should notify you immediately.
 
-Drag-and-drop reordering already exists in `AdminTreatmentsTab.tsx` (lines 144-155). The `sort_order` is saved on drag end. This already works. If it feels unresponsive, I will add visual feedback (highlight, ghost element).
+**Changes to `confirm-booking` and the new `stripe-webhook`:**
+- After confirming a booking, call `send-booking-email` with a new `emailType: "admin_new_booking"` that sends an email to `hello@hiveclinicuk.com` with the customer name, treatment, date/time, and payment status
+- Add the `admin_new_booking` email template to `send-booking-email` edge function
+- For SMS: add a note in the admin email suggesting WhatsApp Business API integration as a future enhancement (no SMS provider is currently connected)
 
-**Enhancement:** Add category-level reordering so you can control the order categories appear on the booking page (not just treatments within a category).
+## 3. Fix Emails Going to Junk
 
----
+Booking emails currently send from `noreply@hiveclinic.lovable.app` via Resend. This is a generic subdomain which triggers spam filters.
 
-## 4. Take Payment from Calendar (Admin)
+**Fix:**
+- Update the `from` address in `send-booking-email` to use your verified custom domain: `Hive Clinic <noreply@notify.hiveclinicuk.com>` (since `notify.hiveclinicuk.com` is already DNS-verified for auth emails)
+- This single change across all `resend.emails.send()` calls will dramatically improve deliverability
 
-Add a "Take Payment" button in the calendar edit modal that creates a Stripe Payment Link for the outstanding balance and copies it to clipboard (so admin can send it to the client).
+## 4. Make Course Sessions Bookable (Not Contact Page)
 
-**Changes to `AdminCalendarView.tsx`:**
-- Add a "Send Payment Link" button in the edit modal for bookings with `payment_status` of "pending" or "deposit_paid"
-- This calls an edge function that creates a Stripe Payment Link for the remaining balance
-- Link is copied to clipboard so admin can share via WhatsApp/SMS
-- Add a "Mark as Paid" button for in-person/cash payments that updates `payment_status` to "fully_paid"
-
-**New edge function:** `create-payment-link` -- creates a Stripe Payment Link for a given amount and booking reference.
-
----
-
-## 5. Payment Plan Customisation
-
-Currently `AdminPaymentPlansTab.tsx` allows creating plans and recording payments, but you cannot edit the instalment amount after creation.
-
-**Changes:**
-- Add an "Edit" button on each active plan
-- Allow editing: `instalment_amount`, `total_instalments`, `total_amount`, `next_payment_date`
-- Add a "Record Custom Amount" option when recording a payment (instead of always recording the fixed instalment amount)
-- Show remaining balance clearly
-
----
-
-## 6. Cancellation Sync Between Admin and Client
-
-Currently:
-- Admin cancels via calendar -> updates DB status to "cancelled" and sends cancellation email to client. Client sees it in their portal (already works via DB read).
-- Client cancels via portal -> updates DB status to "cancelled". Admin sees it in bookings/calendar (already works via DB read).
-
-**Missing:** When a client cancels, the admin doesn't get notified.
-
-**Fix:** In `CustomerPortal.tsx` `cancelBooking` function, after updating the booking status, trigger `send-booking-email` with a new `emailType: "client_cancelled"` that sends a notification to the admin email.
-
----
-
-## 7. Mailchimp Email Automations
-
-The `mailchimp-subscribe` edge function already exists and works. It's already wired into the booking checkout flow. To set up automations:
-
-**What I will do:**
-- Update `mailchimp-subscribe` to accept and pass `firstName`, `lastName`, and `tags` (e.g. "Booked Client", treatment category)
-- Add tags based on treatment category so you can create targeted automations in Mailchimp
-- Ensure the VIP popup signup also triggers the function (it already does via `email_subscribers` table insert, but needs to call the edge function too)
-
-**What you need to do in Mailchimp:**
-- Log into your Mailchimp account
-- Go to Automations and create journeys based on tags (e.g. "Welcome" email for new subscribers, "Post-Treatment" for booked clients)
-- The integration will automatically tag contacts when they book
-
----
-
-## 8. Multiple Treatment Selection + Course Suggestions
-
-This is the biggest feature. Currently only one treatment can be selected per booking.
+Currently course suggestions link to `/contact?subject=Course%20Enquiry`. Instead, they should be directly bookable.
 
 **Changes to `BookingSystem.tsx`:**
-- Allow selecting multiple treatments (change `selectedTreatment` from single to array `selectedTreatments`)
-- Show a running total of all selected treatments
-- After selection, check if any selected treatment has packages in `treatment_packages` and show a "Save with a Course" prompt
-- Display savings: "Book 3 sessions of Level 1 Face Peel and save £25 (£230 vs £255)"
-- Duration and time slot calculation accounts for combined treatment time
-- Checkout sends all treatment IDs
+- Replace the "Enquire" link with a "Book Course" button
+- When clicked, replace the single treatment selection with the course package: set the price to the package `total_price`, update duration to `duration_mins * sessions_count`, and store the `package_id`
+- Pass `packageId` to `create-booking-checkout` so the booking records which package was purchased
+- The checkout line item will show the course name and price
 
 **Changes to `create-booking-checkout`:**
-- Accept an array of treatment IDs
-- Create line items for each treatment in the Stripe checkout session
-- Store multiple treatment references in the booking (use the existing `addon_ids` pattern or add a `treatment_ids` array column)
+- Accept optional `packageId` parameter
+- If provided, fetch the package and use its `total_price` instead of summing individual treatment prices
+- Set `package_id` on the booking record
 
-**Database change:**
-- Add `treatment_ids` (uuid array) column to `bookings` table to support multi-treatment bookings
-- Keep `treatment_id` for backwards compatibility (primary treatment)
+## 5. Offers Section on Homepage
+
+Add a dedicated "Current Offers" section to the homepage that pulls treatments where `on_offer = true`.
+
+**Changes to `Index.tsx`:**
+- Add a new section after the highlights grid titled "Current Offers"
+- Query `treatments` table for `on_offer = true` and `active = true`
+- Display each offer as a card showing: treatment name, original price (crossed out), offer price, offer label, and a "Book Now" link to `/bookings`
+- If no offers exist, the section is hidden entirely
+- Style matches the existing luxury aesthetic (gold accents, serif headings)
+
+## 6. Admin Dashboard Cleanup and Simplification
+
+The current dashboard has 11 tabs displayed as a long horizontal row of buttons. This is hard to navigate, especially on mobile.
+
+**Changes to `Admin.tsx`:**
+- Replace the flat tab bar with a **sidebar navigation** layout on desktop (collapsible on mobile)
+- Group tabs into sections:
+  - **Bookings**: Calendar, Bookings
+  - **Business**: Treatments, Payment Plans, Discounts
+  - **Clients**: Clients, Enquiries, VIP List
+  - **Settings**: Site Settings, Availability, Blocked Dates
+- Add a quick-stats bar at the top showing: today's bookings count, pending enquiries, and total revenue this month
+- Keep all existing functionality -- just reorganize the navigation
+
+## 7. AI-Assisted Treatment Creation in Admin
+
+Add an AI helper to the treatment creation form that auto-fills fields based on a treatment name.
+
+**Changes to `AdminTreatmentsTab.tsx`:**
+- Add a "Generate with AI" button next to the treatment name input
+- When clicked, call a new edge function `ai-treatment-suggest` that takes a treatment name and returns suggested: description, category, duration, price range, and slug
+- Admin can review and edit the suggestions before saving
+- Uses the Lovable AI integration (no external API key needed)
+
+**New edge function: `ai-treatment-suggest`**
+- Accepts `{ name: string }` 
+- Calls the Lovable AI model to generate treatment metadata
+- Returns `{ description, category, duration_mins, suggested_price, slug }`
+
+## 8. Email Template Preview
+
+Preview the signup email template to verify branding is correct.
+
+**Action:** After implementation, provide preview links for all auth email templates so you can verify logo, colors, and copy visually.
 
 ---
 
 ## Technical Summary
 
-### Database Changes:
-- New table: `site_images` (key, image_url, alt_text, updated_at) with RLS for admin write, public read
-- New storage bucket: `site-images` (public)
-- Add column `treatment_ids` (uuid[]) to `bookings` table
+### New Edge Functions:
+- `stripe-webhook` -- Stripe webhook handler for `checkout.session.completed`
+- `ai-treatment-suggest` -- AI-powered treatment field suggestions
 
-### Edge Functions:
-- New: `create-payment-link` -- generates Stripe Payment Link
-- Update: `mailchimp-subscribe` -- accept firstName, lastName, tags
-- Update: `send-booking-email` -- add "client_cancelled" email type for admin notification
+### Edge Functions to Update:
+- `send-booking-email` -- add `admin_new_booking` email type; change `from` address to `notify.hiveclinicuk.com`
+- `create-booking-checkout` -- accept `packageId` for course bookings
+- `confirm-booking` -- trigger admin notification after confirmation
+
+### New Secrets Needed:
+- `STRIPE_WEBHOOK_SECRET` -- from Stripe dashboard after creating the webhook endpoint
 
 ### Frontend Files to Edit:
-- `AdminCalendarView.tsx` -- add payment link + mark as paid buttons
-- `AdminPaymentPlansTab.tsx` -- add edit and custom payment recording
-- `AdminSiteTab.tsx` -- add image management section
-- `BookingSystem.tsx` -- multi-treatment selection + course suggestions
-- `CustomerPortal.tsx` -- trigger admin notification on client cancellation
-- `create-booking-checkout` -- support multiple treatments
+- `src/pages/Index.tsx` -- add Offers section
+- `src/pages/Admin.tsx` -- sidebar nav layout with grouped sections and stats bar
+- `src/pages/BookingSystem.tsx` -- make courses bookable directly (replace "Enquire" with "Book Course")
+- `src/components/admin/AdminTreatmentsTab.tsx` -- add AI-assisted treatment creation
 
-### Frontend Files to Create:
-- None (all changes are to existing files)
-
+### Database Changes:
+- None (existing `package_id` column on `bookings` already supports course bookings)

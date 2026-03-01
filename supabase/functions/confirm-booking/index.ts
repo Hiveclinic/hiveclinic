@@ -22,6 +22,37 @@ serve(async (req) => {
     const { bookingId, sessionId } = await req.json();
     if (!bookingId || !sessionId) throw new Error("Missing booking or session ID");
 
+    // Get the booking first to check idempotency
+    const { data: booking, error: bookingError } = await supabaseClient
+      .from("bookings")
+      .select("*, treatments(*)")
+      .eq("id", bookingId)
+      .single();
+
+    if (bookingError || !booking) throw new Error("Booking not found");
+
+    // Idempotent: if already confirmed (e.g. by webhook), return success
+    if (booking.status === "confirmed") {
+      console.log(`[CONFIRM-BOOKING] Already confirmed by webhook, skipping: ${bookingId}`);
+      return new Response(JSON.stringify({
+        success: true,
+        booking: {
+          id: booking.id,
+          treatment: booking.treatments?.name,
+          date: booking.booking_date,
+          time: booking.booking_time,
+          customerName: booking.customer_name,
+          customerEmail: booking.customer_email,
+          totalPrice: booking.total_price,
+          depositAmount: booking.deposit_amount,
+          paymentStatus: booking.payment_status,
+        }
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
+    }
+
     // Verify Stripe payment
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
@@ -32,15 +63,6 @@ serve(async (req) => {
     if (session.payment_status !== "paid") {
       throw new Error("Payment not completed");
     }
-
-    // Get the booking
-    const { data: booking, error: bookingError } = await supabaseClient
-      .from("bookings")
-      .select("*, treatments(*)")
-      .eq("id", bookingId)
-      .single();
-
-    if (bookingError || !booking) throw new Error("Booking not found");
 
     const isDeposit = Number(booking.deposit_amount) > 0 && Number(booking.deposit_amount) < Number(booking.total_price);
 
@@ -56,10 +78,17 @@ serve(async (req) => {
 
     // Increment discount code usage if applicable
     if (booking.discount_code_id) {
-      await supabaseClient
+      const { data: dc } = await supabaseClient
         .from("discount_codes")
-        .update({ used_count: booking.discount_codes?.used_count + 1 || 1 })
-        .eq("id", booking.discount_code_id);
+        .select("used_count")
+        .eq("id", booking.discount_code_id)
+        .single();
+      if (dc) {
+        await supabaseClient
+          .from("discount_codes")
+          .update({ used_count: (dc.used_count || 0) + 1 })
+          .eq("id", booking.discount_code_id);
+      }
     }
 
     console.log(`[CONFIRM-BOOKING] Booking ${bookingId} confirmed`);
@@ -68,14 +97,22 @@ serve(async (req) => {
     try {
       await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-booking-email`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}` },
         body: JSON.stringify({ bookingId, emailType: "confirmation" }),
       });
     } catch (emailErr) {
       console.log("[CONFIRM-BOOKING] Email send failed (non-blocking)");
+    }
+
+    // Send admin notification (non-blocking)
+    try {
+      await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-booking-email`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}` },
+        body: JSON.stringify({ bookingId, emailType: "admin_new_booking" }),
+      });
+    } catch (_) {
+      console.log("[CONFIRM-BOOKING] Admin notification failed (non-blocking)");
     }
 
     return new Response(JSON.stringify({

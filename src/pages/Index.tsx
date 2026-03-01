@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Star, Shield, Award, Clock } from "lucide-react";
+import { ArrowRight, Star, Shield, Award, Clock, Sparkles } from "lucide-react";
 import Layout from "@/components/Layout";
 import TreatmentHelper from "@/components/TreatmentHelper";
+import { supabase } from "@/integrations/supabase/client";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
@@ -35,7 +37,32 @@ const trustPoints = [
   { icon: Clock, text: "Same-Week Appointments Available" },
 ];
 
+type Offer = {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  offer_price: number | null;
+  offer_label: string | null;
+  description: string | null;
+  duration_mins: number;
+};
+
 const Index = () => {
+  const [offers, setOffers] = useState<Offer[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("treatments")
+      .select("id, name, slug, price, offer_price, offer_label, description, duration_mins")
+      .eq("active", true)
+      .eq("on_offer", true)
+      .order("sort_order")
+      .then(({ data }) => {
+        if (data) setOffers(data as Offer[]);
+      });
+  }, []);
+
   return (
     <Layout>
       {/* Hero */}
@@ -131,6 +158,65 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Current Offers */}
+      {offers.length > 0 && (
+        <section className="py-24 bg-secondary">
+          <div className="max-w-7xl mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Sparkles size={20} className="text-gold" />
+                <h2 className="font-display text-4xl md:text-5xl">Current Offers</h2>
+              </div>
+              <p className="font-body text-muted-foreground max-w-lg mx-auto">
+                Limited-time savings on our most popular treatments.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {offers.map((offer, i) => (
+                <motion.div
+                  key={offer.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <div className="border border-gold/30 bg-background p-6 h-full flex flex-col group hover:border-gold transition-colors">
+                    {offer.offer_label && (
+                      <span className="self-start px-3 py-1 bg-gold/10 text-gold font-body text-xs tracking-wider uppercase mb-4">
+                        {offer.offer_label}
+                      </span>
+                    )}
+                    <h3 className="font-display text-xl mb-2 group-hover:text-gold transition-colors">{offer.name}</h3>
+                    {offer.description && (
+                      <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">{offer.description}</p>
+                    )}
+                    <div className="mt-auto">
+                      <div className="flex items-baseline gap-3 mb-4">
+                        <span className="font-body text-sm line-through text-muted-foreground">£{Number(offer.price).toFixed(0)}</span>
+                        <span className="font-display text-2xl text-gold">£{Number(offer.offer_price).toFixed(0)}</span>
+                        <span className="font-body text-xs text-muted-foreground">· {offer.duration_mins} mins</span>
+                      </div>
+                      <Link
+                        to="/bookings"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors w-full justify-center"
+                      >
+                        Book Now <ArrowRight size={12} />
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Before/After Gallery */}
       <section className="py-24 bg-secondary">

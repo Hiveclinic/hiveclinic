@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GripVertical, Save, Plus, Pencil, Trash2, ChevronDown, ChevronRight, Tag, Package, Layers, X } from "lucide-react";
+import { GripVertical, Save, Plus, Pencil, Trash2, ChevronDown, ChevronRight, Tag, Package, Layers, X, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 type Variant = {
@@ -62,6 +62,7 @@ const AdminTreatmentsTab = () => {
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [showNewTreatment, setShowNewTreatment] = useState(false);
   const [newTreatment, setNewTreatment] = useState({ ...EMPTY_TREATMENT });
+  const [aiLoading, setAiLoading] = useState(false);
 
   // Variant/package forms
   const [newVariant, setNewVariant] = useState({ name: "", price: 0, duration_mins: 60, deposit_amount: 0 });
@@ -236,7 +237,40 @@ const AdminTreatmentsTab = () => {
             <button onClick={() => setShowNewTreatment(false)} className="text-muted-foreground hover:text-foreground"><X size={14} /></button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            <input value={newTreatment.name} onChange={e => setNewTreatment(p => ({ ...p, name: e.target.value, slug: generateSlug(e.target.value) }))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Treatment name" />
+            <div className="relative">
+              <input value={newTreatment.name} onChange={e => setNewTreatment(p => ({ ...p, name: e.target.value, slug: generateSlug(e.target.value) }))} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none pr-24" placeholder="Treatment name" />
+              {newTreatment.name.trim().length >= 3 && (
+                <button
+                  onClick={async () => {
+                    setAiLoading(true);
+                    try {
+                      const { data, error } = await supabase.functions.invoke("ai-treatment-suggest", {
+                        body: { name: newTreatment.name },
+                      });
+                      if (error || data?.error) throw new Error(data?.error || "AI request failed");
+                      setNewTreatment(p => ({
+                        ...p,
+                        description: data.description || p.description,
+                        category: data.category || p.category,
+                        duration_mins: data.duration_mins || p.duration_mins,
+                        price: data.suggested_price || p.price,
+                        slug: data.slug || p.slug,
+                      }));
+                      toast.success("AI suggestions applied — review and adjust");
+                    } catch (err) {
+                      toast.error("AI suggestion failed");
+                    } finally {
+                      setAiLoading(false);
+                    }
+                  }}
+                  disabled={aiLoading}
+                  className="absolute right-1 top-1 bottom-1 px-2 bg-gold/10 text-gold font-body text-[10px] uppercase tracking-wider hover:bg-gold/20 transition-colors flex items-center gap-1 disabled:opacity-50"
+                >
+                  {aiLoading ? <Loader2 size={10} className="animate-spin" /> : <Sparkles size={10} />}
+                  {aiLoading ? "..." : "AI Fill"}
+                </button>
+              )}
+            </div>
             <input value={newTreatment.category} onChange={e => setNewTreatment(p => ({ ...p, category: e.target.value }))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Category" list="category-list" />
             <datalist id="category-list">
               {categories.map(c => <option key={c} value={c} />)}

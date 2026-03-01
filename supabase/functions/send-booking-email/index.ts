@@ -12,6 +12,7 @@ const logStep = (step: string, details?: unknown) => {
 };
 
 const ADMIN_EMAIL = "hello@hiveclinicuk.com";
+const FROM_EMAIL = "Hive Clinic <noreply@notify.hiveclinicuk.com>";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -25,7 +26,7 @@ serve(async (req) => {
     const resend = new Resend(resendKey);
 
     const { bookingId, emailType, oldDate, oldTime } = await req.json();
-    // emailType: "confirmation" | "reminder" | "aftercare" | "cancellation" | "reschedule"
+    // emailType: "confirmation" | "reminder" | "aftercare" | "cancellation" | "reschedule" | "client_cancelled" | "admin_new_booking"
 
     if (!bookingId || !emailType) throw new Error("Missing bookingId or emailType");
     logStep("Processing email", { bookingId, emailType });
@@ -63,12 +64,46 @@ serve(async (req) => {
       <div style="background:#f5f0eb;padding:30px;text-align:center;border-top:1px solid #e5ddd5;">
         <p style="font-size:12px;color:#999;margin:0;">Hive Clinic - Manchester City Centre, Deansgate</p>
         <p style="font-size:11px;color:#bbb;margin-top:8px;">
-          <a href="https://hiveclinic.lovable.app" style="color:#c9a96e;">Website</a> - 
+          <a href="https://hiveclinicuk.com" style="color:#c9a96e;">Website</a> - 
           <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a> - 
           <a href="https://instagram.com/hiveclinicuk" style="color:#c9a96e;">Instagram</a>
         </p>
       </div>
     `;
+
+    // ====== ADMIN NEW BOOKING NOTIFICATION ======
+    if (emailType === "admin_new_booking") {
+      subject = `New Booking: ${booking.customer_name} - ${treatmentName}`;
+      html = `
+        <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
+          ${headerHtml}
+          <div style="padding:40px 30px;">
+            <h2 style="font-family:Georgia,serif;font-size:24px;color:#0d0d0d;margin:0 0 20px;">New Booking Received</h2>
+            <p style="color:#555;font-size:14px;line-height:1.6;">A new booking has been confirmed:</p>
+            
+            <div style="background:#f9f7f5;border-left:3px solid #c9a96e;padding:20px;margin:24px 0;">
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Client:</strong> ${booking.customer_name}</p>
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Email:</strong> ${booking.customer_email}</p>
+              ${booking.customer_phone ? `<p style="margin:0 0 8px;font-size:14px;"><strong>Phone:</strong> ${booking.customer_phone}</p>` : ""}
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Treatment:</strong> ${treatmentName}</p>
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Date:</strong> ${dateFormatted}</p>
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Time:</strong> ${timeFormatted}</p>
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Duration:</strong> ${booking.duration_mins} minutes</p>
+              <p style="margin:0 0 8px;font-size:14px;"><strong>Total:</strong> £${Number(booking.total_price).toFixed(2)}</p>
+              ${Number(booking.deposit_amount) > 0 ? `<p style="margin:0 0 8px;font-size:14px;"><strong>Deposit Paid:</strong> £${Number(booking.deposit_amount).toFixed(2)}</p>` : ""}
+              <p style="margin:0;font-size:14px;"><strong>Payment Status:</strong> ${booking.payment_status}</p>
+            </div>
+
+            ${booking.notes ? `<p style="color:#555;font-size:14px;line-height:1.6;"><strong>Client Notes:</strong> ${booking.notes}</p>` : ""}
+          </div>
+          ${footerHtml}
+        </div>
+      `;
+
+      logStep("Sending admin notification", { to: ADMIN_EMAIL });
+      await resend.emails.send({ from: FROM_EMAIL, to: [ADMIN_EMAIL], subject, html });
+      return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 });
+    }
 
     if (emailType === "confirmation") {
       subject = `Booking Confirmed - ${treatmentName}`;
@@ -145,11 +180,11 @@ serve(async (req) => {
               </ul>
             </div>
             
-            <p style="color:#555;font-size:14px;line-height:1.6;">For personalised aftercare advice, visit our <a href="https://hiveclinic.lovable.app/aftercare" style="color:#c9a96e;">aftercare page</a> or chat with our AI aftercare assistant.</p>
+            <p style="color:#555;font-size:14px;line-height:1.6;">For personalised aftercare advice, visit our <a href="https://hiveclinicuk.com/aftercare" style="color:#c9a96e;">aftercare page</a> or chat with our AI aftercare assistant.</p>
             <p style="color:#555;font-size:14px;line-height:1.6;">If you experience any concerns, please contact us immediately via <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a>.</p>
             
             <div style="text-align:center;margin:30px 0;">
-              <a href="https://hiveclinic.lovable.app/bookings" style="display:inline-block;background:#0d0d0d;color:#fff;padding:14px 32px;font-size:13px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;">Book Your Next Treatment</a>
+              <a href="https://hiveclinicuk.com/bookings" style="display:inline-block;background:#0d0d0d;color:#fff;padding:14px 32px;font-size:13px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;">Book Your Next Treatment</a>
             </div>
           </div>
           ${footerHtml}
@@ -168,18 +203,17 @@ serve(async (req) => {
             <p style="color:#555;font-size:14px;line-height:1.6;">Your appointment for <strong>${treatmentName}</strong> on <strong>${dateFormatted}</strong> at <strong>${timeFormatted}</strong> has been cancelled.</p>
             
             <div style="background:#f9f7f5;border-left:3px solid #c9a96e;padding:20px;margin:24px 0;">
-              <p style="margin:0;font-size:14px;color:#555;">If you'd like to rebook, please contact us via <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a> or visit our <a href="https://hiveclinic.lovable.app/bookings" style="color:#c9a96e;">booking page</a>.</p>
+              <p style="margin:0;font-size:14px;color:#555;">If you'd like to rebook, please contact us via <a href="https://wa.me/447795008114" style="color:#c9a96e;">WhatsApp</a> or visit our <a href="https://hiveclinicuk.com/bookings" style="color:#c9a96e;">booking page</a>.</p>
             </div>
             
             <div style="text-align:center;margin:30px 0;">
-              <a href="https://hiveclinic.lovable.app/bookings" style="display:inline-block;background:#0d0d0d;color:#fff;padding:14px 32px;font-size:13px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;">Rebook Now</a>
+              <a href="https://hiveclinicuk.com/bookings" style="display:inline-block;background:#0d0d0d;color:#fff;padding:14px 32px;font-size:13px;letter-spacing:2px;text-decoration:none;text-transform:uppercase;">Rebook Now</a>
             </div>
           </div>
           ${footerHtml}
         </div>
       `;
     } else if (emailType === "reschedule") {
-      // Send to customer
       subject = `Appointment Rescheduled - ${treatmentName}`;
       html = `
         <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
@@ -203,12 +237,7 @@ serve(async (req) => {
 
       // Send customer email
       logStep("Sending reschedule email to customer", { to: booking.customer_email });
-      await resend.emails.send({
-        from: "Hive Clinic <noreply@hiveclinic.lovable.app>",
-        to: [booking.customer_email],
-        subject,
-        html,
-      });
+      await resend.emails.send({ from: FROM_EMAIL, to: [booking.customer_email], subject, html });
 
       // Send admin notification
       const oldDateFormatted = oldDate ? new Date(oldDate + "T00:00:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }) : "Unknown";
@@ -237,19 +266,10 @@ serve(async (req) => {
       `;
 
       logStep("Sending reschedule notification to admin");
-      await resend.emails.send({
-        from: "Hive Clinic <noreply@hiveclinic.lovable.app>",
-        to: [ADMIN_EMAIL],
-        subject: `Reschedule: ${booking.customer_name} - ${treatmentName}`,
-        html: adminHtml,
-      });
+      await resend.emails.send({ from: FROM_EMAIL, to: [ADMIN_EMAIL], subject: `Reschedule: ${booking.customer_name} - ${treatmentName}`, html: adminHtml });
 
-      return new Response(JSON.stringify({ success: true }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      });
+      return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 });
     } else if (emailType === "client_cancelled") {
-      // Send admin notification that a client cancelled
       const adminCancelHtml = `
         <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;">
           ${headerHtml}
@@ -270,17 +290,9 @@ serve(async (req) => {
       `;
 
       logStep("Sending client cancellation notification to admin");
-      await resend.emails.send({
-        from: "Hive Clinic <noreply@hiveclinic.lovable.app>",
-        to: [ADMIN_EMAIL],
-        subject: `Client Cancelled: ${booking.customer_name} - ${treatmentName}`,
-        html: adminCancelHtml,
-      });
+      await resend.emails.send({ from: FROM_EMAIL, to: [ADMIN_EMAIL], subject: `Client Cancelled: ${booking.customer_name} - ${treatmentName}`, html: adminCancelHtml });
 
-      return new Response(JSON.stringify({ success: true }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      });
+      return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 });
     } else {
       throw new Error(`Unknown email type: ${emailType}`);
     }
@@ -288,7 +300,7 @@ serve(async (req) => {
     logStep("Sending email", { to: booking.customer_email, subject });
 
     const emailResponse = await resend.emails.send({
-      from: "Hive Clinic <noreply@hiveclinic.lovable.app>",
+      from: FROM_EMAIL,
       to: [booking.customer_email],
       subject,
       html,

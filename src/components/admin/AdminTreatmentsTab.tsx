@@ -62,6 +62,7 @@ const AdminTreatmentsTab = () => {
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [showNewTreatment, setShowNewTreatment] = useState(false);
   const [newTreatment, setNewTreatment] = useState({ ...EMPTY_TREATMENT });
+  const [aiLoading, setAiLoading] = useState(false);
 
   // Variant/package forms
   const [newVariant, setNewVariant] = useState({ name: "", price: 0, duration_mins: 60, deposit_amount: 0 });

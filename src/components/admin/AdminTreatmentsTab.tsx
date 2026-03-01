@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { GripVertical, Save, Plus, Pencil, Trash2, ChevronDown, ChevronRight, Tag, Package, Layers, X } from "lucide-react";
+import { GripVertical, Save, Plus, Pencil, Trash2, ChevronDown, ChevronRight, Tag, Package, Layers, X, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 type Variant = {

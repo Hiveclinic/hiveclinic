@@ -59,7 +59,6 @@ const Index = () => {
   const gal5 = useSiteImage("gallery_5", gallery5);
   const gal6 = useSiteImage("gallery_6", gallery6);
   const galleryImages = [gal1, gal2, gal3, gal4, gal5, gal6];
-  const [offers, setOffers] = useState<Offer[]>([]);
 
   useEffect(() => {
     supabase

@@ -74,6 +74,7 @@ const CATEGORY_ROUTES: Record<string, string> = {
 const POPULAR_SLUGS = ["lip-filler-05ml", "anti-wrinkle-2-areas", "glass-skin-boost", "dermal-filler-lips-1ml", "profhilo"];
 
 const BookingSystem = () => {
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(0);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
   const [addons, setAddons] = useState<Addon[]>([]);

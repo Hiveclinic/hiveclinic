@@ -1,82 +1,133 @@
 
-# Phase 5: Admin Payments, Price Editing, Pre-selected Bookings, and Image Fix
 
-## 1. Manual Payment via Calendar (Stripe or Custom)
+# Phase 3: Admin Enhancements, Multi-Treatment Booking, and Fixes
 
-Currently the calendar edit modal shows "Send Payment Link" and "Mark as Paid". We will enhance this with:
+## 1. Fix 404 on Admin Login (Published Site)
 
-- **Take Payment via Stripe**: Add a "Take Card Payment" button that creates a Stripe Checkout session for a custom amount (admin can type the amount). This generates a payment URL the admin can open on their device or share with the client.
-- **Editable payment amount**: Admin can adjust the charge amount in the modal (e.g. for partial payments, adjustments, or Tide transfers).
-- **Record manual payment**: Extend "Mark as Paid" to allow choosing a method (Cash, Bank Transfer/Tide, Card) and entering an optional reference. This updates `payment_status` and stores the method in notes.
+The route `/hive-admin-login` exists in the code and works in preview. The 404 on the published site (`hiveclinicuk.com//hive-admin-login`) is caused by the double slash `//` in the URL. This is a hosting/domain redirect issue -- the custom domain is likely appending a trailing slash to the base URL before the path.
 
-### Changes:
-- `AdminCalendarView.tsx`: Add amount input field, payment method selector, and custom Stripe checkout button.
-- `create-payment-link` edge function: Already supports custom amounts -- will reuse this.
+**Fix:** The app needs to be re-published so the latest routes are deployed. No code change needed -- the route is correctly defined at line 82 of `App.tsx`. The double slash in the URL you shared is the problem -- use `hiveclinicuk.com/hive-admin-login` (single slash).
 
-## 2. Edit Treatment Price and Payment Plan from Calendar
+---
 
-The edit modal currently shows treatment info as read-only. We will add:
+## 2. Website Image Management via Admin
 
-- **Editable price**: Add a "Total Price" input field to the edit form so admins can override the booking price directly.
-- **Payment plan quick-create**: Add a "Create Payment Plan" button that opens an inline form to split the total into instalments (number of payments, amount per instalment, next date). This inserts into `payment_plans` table.
-- **View/edit existing plan**: If a payment plan already exists for the booking, show it inline with edit controls.
+Currently there's no way to update hero images, gallery images, or page images from the admin dashboard. These are hardcoded in component files.
 
-### Changes:
-- `AdminCalendarView.tsx`: Add `total_price` to edit form, fetch and display payment plans for the selected booking, and add create/edit plan UI.
+**Changes:**
+- Add a new "Images" section to `AdminSiteTab.tsx` that stores editable image URLs in the `site_settings` table (or a new `site_images` table)
+- Create a `site_images` table with fields: `key` (text, e.g. "hero_home", "gallery_1"), `image_url` (text), `alt_text` (text), `updated_at`
+- Admin can upload images to the `client-images` bucket (or a new public `site-images` bucket) and the URL is saved
+- Frontend pages read from this table and fall back to the hardcoded defaults if no override exists
+- Create a public storage bucket `site-images` for website content images
 
-## 3. Fix Admin Image Updates Not Working
+---
 
-The current `AdminSiteTab.tsx` image management updates the `site_images` table, but the frontend pages (Index.tsx, Treatments.tsx, etc.) use hardcoded imports (`import gallery1 from "@/assets/gallery-1.jpg"`). The `site_images` table is never read by these pages, so changes have no effect.
+## 3. Treatment Menu Reordering
 
-### Fix:
-- Create a reusable hook `useSiteImage(key: string, fallback: string)` that queries `site_images` for the given key and returns the URL (or fallback if not found).
-- Update `Index.tsx` hero image to use `useSiteImage("hero_home", gallery6)`.
-- Update gallery images on the homepage to use `useSiteImage("gallery_1", gallery1)`, etc.
-- Pre-populate the `site_images` table with standard keys: `hero_home`, `gallery_1` through `gallery_6`.
-- This way, when you upload/paste a URL in admin, it actually takes effect on the live site.
+Drag-and-drop reordering already exists in `AdminTreatmentsTab.tsx` (lines 144-155). The `sort_order` is saved on drag end. This already works. If it feels unresponsive, I will add visual feedback (highlight, ghost element).
 
-### Changes:
-- New hook: `src/hooks/use-site-image.ts`
-- `Index.tsx`: Replace hardcoded gallery imports with the hook for key images.
-- Database: Insert default rows into `site_images` for the standard keys.
+**Enhancement:** Add category-level reordering so you can control the order categories appear on the booking page (not just treatments within a category).
 
-## 4. Pre-select Treatment When Linking to Bookings
+---
 
-Currently all "Book Now" links go to `/bookings` without any context. Treatment pages and offer cards should pre-select the relevant treatment.
+## 4. Take Payment from Calendar (Admin)
 
-### Fix:
-- `BookingSystem.tsx`: Read URL search params on mount (e.g. `?treatment=lip-filler-05ml` or `?category=Consultations`). If a `treatment` slug is provided, auto-select that treatment and optionally skip to step 1. If a `category` is provided, auto-expand that category.
-- Update key links across the site to include the slug:
-  - `Index.tsx` offer cards: `to={"/bookings?treatment=" + offer.slug}`
-  - `Index.tsx` "Book Free Consultation" CTA: `to="/bookings?category=Consultations"`
-  - `Consultations.tsx` links: add `?treatment=free-online-consultation` (or appropriate slug)
-  - Treatment pages (LipFillers, AntiWrinkle, etc.): Update their "Book Now" links to pass the category.
+Add a "Take Payment" button in the calendar edit modal that creates a Stripe Payment Link for the outstanding balance and copies it to clipboard (so admin can send it to the client).
 
-### Changes:
-- `BookingSystem.tsx`: Add `useSearchParams` to read `treatment` and `category` query params, auto-select on mount.
-- `Index.tsx`: Update offer card links and hero CTA.
-- `Consultations.tsx`: Update booking links with treatment slugs.
-- Other treatment pages: Update "Book Now" links with `?category=CategoryName`.
+**Changes to `AdminCalendarView.tsx`:**
+- Add a "Send Payment Link" button in the edit modal for bookings with `payment_status` of "pending" or "deposit_paid"
+- This calls an edge function that creates a Stripe Payment Link for the remaining balance
+- Link is copied to clipboard so admin can share via WhatsApp/SMS
+- Add a "Mark as Paid" button for in-person/cash payments that updates `payment_status` to "fully_paid"
 
-## 5. Homepage Offers Section Verification
+**New edge function:** `create-payment-link` -- creates a Stripe Payment Link for a given amount and booking reference.
 
-The offers section in `Index.tsx` already queries `treatments` where `on_offer = true`. If no treatments are marked as on offer, the section is hidden. This is working correctly in code -- the section just needs data. We will insert a test offer via the database to verify it displays.
+---
+
+## 5. Payment Plan Customisation
+
+Currently `AdminPaymentPlansTab.tsx` allows creating plans and recording payments, but you cannot edit the instalment amount after creation.
+
+**Changes:**
+- Add an "Edit" button on each active plan
+- Allow editing: `instalment_amount`, `total_instalments`, `total_amount`, `next_payment_date`
+- Add a "Record Custom Amount" option when recording a payment (instead of always recording the fixed instalment amount)
+- Show remaining balance clearly
+
+---
+
+## 6. Cancellation Sync Between Admin and Client
+
+Currently:
+- Admin cancels via calendar -> updates DB status to "cancelled" and sends cancellation email to client. Client sees it in their portal (already works via DB read).
+- Client cancels via portal -> updates DB status to "cancelled". Admin sees it in bookings/calendar (already works via DB read).
+
+**Missing:** When a client cancels, the admin doesn't get notified.
+
+**Fix:** In `CustomerPortal.tsx` `cancelBooking` function, after updating the booking status, trigger `send-booking-email` with a new `emailType: "client_cancelled"` that sends a notification to the admin email.
+
+---
+
+## 7. Mailchimp Email Automations
+
+The `mailchimp-subscribe` edge function already exists and works. It's already wired into the booking checkout flow. To set up automations:
+
+**What I will do:**
+- Update `mailchimp-subscribe` to accept and pass `firstName`, `lastName`, and `tags` (e.g. "Booked Client", treatment category)
+- Add tags based on treatment category so you can create targeted automations in Mailchimp
+- Ensure the VIP popup signup also triggers the function (it already does via `email_subscribers` table insert, but needs to call the edge function too)
+
+**What you need to do in Mailchimp:**
+- Log into your Mailchimp account
+- Go to Automations and create journeys based on tags (e.g. "Welcome" email for new subscribers, "Post-Treatment" for booked clients)
+- The integration will automatically tag contacts when they book
+
+---
+
+## 8. Multiple Treatment Selection + Course Suggestions
+
+This is the biggest feature. Currently only one treatment can be selected per booking.
+
+**Changes to `BookingSystem.tsx`:**
+- Allow selecting multiple treatments (change `selectedTreatment` from single to array `selectedTreatments`)
+- Show a running total of all selected treatments
+- After selection, check if any selected treatment has packages in `treatment_packages` and show a "Save with a Course" prompt
+- Display savings: "Book 3 sessions of Level 1 Face Peel and save £25 (£230 vs £255)"
+- Duration and time slot calculation accounts for combined treatment time
+- Checkout sends all treatment IDs
+
+**Changes to `create-booking-checkout`:**
+- Accept an array of treatment IDs
+- Create line items for each treatment in the Stripe checkout session
+- Store multiple treatment references in the booking (use the existing `addon_ids` pattern or add a `treatment_ids` array column)
+
+**Database change:**
+- Add `treatment_ids` (uuid array) column to `bookings` table to support multi-treatment bookings
+- Keep `treatment_id` for backwards compatibility (primary treatment)
 
 ---
 
 ## Technical Summary
 
-### Frontend Files to Edit:
-- `src/components/admin/AdminCalendarView.tsx` -- manual payments, price editing, payment plan management
-- `src/pages/BookingSystem.tsx` -- pre-select treatment from URL params
-- `src/pages/Index.tsx` -- update links with treatment slugs, use site images hook
-- `src/pages/Consultations.tsx` -- update booking links with slugs
-
-### Frontend Files to Create:
-- `src/hooks/use-site-image.ts` -- reusable hook for dynamic site images
-
 ### Database Changes:
-- Insert default `site_images` rows for hero and gallery keys (data insert, not schema change)
+- New table: `site_images` (key, image_url, alt_text, updated_at) with RLS for admin write, public read
+- New storage bucket: `site-images` (public)
+- Add column `treatment_ids` (uuid[]) to `bookings` table
 
 ### Edge Functions:
-- No new functions needed (reuse `create-payment-link`)
+- New: `create-payment-link` -- generates Stripe Payment Link
+- Update: `mailchimp-subscribe` -- accept firstName, lastName, tags
+- Update: `send-booking-email` -- add "client_cancelled" email type for admin notification
+
+### Frontend Files to Edit:
+- `AdminCalendarView.tsx` -- add payment link + mark as paid buttons
+- `AdminPaymentPlansTab.tsx` -- add edit and custom payment recording
+- `AdminSiteTab.tsx` -- add image management section
+- `BookingSystem.tsx` -- multi-treatment selection + course suggestions
+- `CustomerPortal.tsx` -- trigger admin notification on client cancellation
+- `create-booking-checkout` -- support multiple treatments
+
+### Frontend Files to Create:
+- None (all changes are to existing files)
+

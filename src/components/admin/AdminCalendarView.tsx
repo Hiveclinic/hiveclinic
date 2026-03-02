@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ChevronLeft, ChevronRight, Clock, User, X, Mail, Phone, StickyNote, Check, CreditCard, Link as LinkIcon, DollarSign } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, User, X, Mail, Phone, StickyNote, Check, CreditCard, Link as LinkIcon, DollarSign, PoundSterling, Banknote, CalendarPlus } from "lucide-react";
 import { format, addDays, startOfWeek, isSameDay } from "date-fns";
 
 type CalendarBooking = {
@@ -33,6 +33,17 @@ type Treatment = {
   name: string;
 };
 
+type PaymentPlan = {
+  id: string;
+  booking_id: string;
+  total_amount: number;
+  total_instalments: number;
+  paid_instalments: number;
+  instalment_amount: number;
+  next_payment_date: string | null;
+  status: string;
+};
+
 const STATUS_BG: Record<string, string> = {
   confirmed: "bg-blue-500/20 border-blue-500/40 text-blue-700",
   completed: "bg-green-500/20 border-green-500/40 text-green-700",
@@ -43,6 +54,7 @@ const STATUS_BG: Record<string, string> = {
 
 const STATUSES = ["pending", "confirmed", "completed", "cancelled", "no_show"];
 const HOURS = Array.from({ length: 14 }, (_, i) => i + 8);
+const PAYMENT_METHODS = ["Card (Stripe)", "Cash", "Bank Transfer (Tide)", "Other"];
 
 const AdminCalendarView = () => {
   const [bookings, setBookings] = useState<CalendarBooking[]>([]);
@@ -60,9 +72,24 @@ const AdminCalendarView = () => {
     notes: string;
     booking_date: string;
     booking_time: string;
+    total_price: string;
   } | null>(null);
   const [saving, setSaving] = useState(false);
   const [creatingPaymentLink, setCreatingPaymentLink] = useState(false);
+
+  // Payment controls
+  const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentRef, setPaymentRef] = useState("");
+  const [showPaymentMethodPicker, setShowPaymentMethodPicker] = useState(false);
+
+  // Payment plan
+  const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
+  const [showCreatePlan, setShowCreatePlan] = useState(false);
+  const [planInstalments, setPlanInstalments] = useState("3");
+  const [planAmount, setPlanAmount] = useState("");
+  const [planNextDate, setPlanNextDate] = useState("");
+  const [loadingPlan, setLoadingPlan] = useState(false);
 
   const weekDays = useMemo(() => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)), [weekStart]);
 
@@ -86,6 +113,11 @@ const AdminCalendarView = () => {
 
   useEffect(() => { fetchData(); }, [weekStart]);
 
+  const fetchPaymentPlan = async (bookingId: string) => {
+    const { data } = await supabase.from("payment_plans").select("*").eq("booking_id", bookingId).maybeSingle();
+    setPaymentPlan(data as PaymentPlan | null);
+  };
+
   const openEdit = (booking: CalendarBooking) => {
     setEditBooking(booking);
     setEditForm({
@@ -96,7 +128,15 @@ const AdminCalendarView = () => {
       notes: booking.notes || "",
       booking_date: booking.booking_date,
       booking_time: booking.booking_time.slice(0, 5),
+      total_price: String(booking.total_price),
     });
+    setPaymentAmount(String((Number(booking.total_price) - Number(booking.deposit_amount || 0)).toFixed(2)));
+    setPaymentMethod("");
+    setPaymentRef("");
+    setShowPaymentMethodPicker(false);
+    setShowCreatePlan(false);
+    setPaymentPlan(null);
+    fetchPaymentPlan(booking.id);
   };
 
   const saveEdit = async () => {
@@ -116,6 +156,7 @@ const AdminCalendarView = () => {
       notes: editForm.notes || null,
       booking_date: editForm.booking_date,
       booking_time: editForm.booking_time.length === 5 ? `${editForm.booking_time}:00` : editForm.booking_time,
+      total_price: Number(editForm.total_price),
     }).eq("id", editBooking.id);
 
     if (error) {
@@ -147,10 +188,10 @@ const AdminCalendarView = () => {
     if (!editBooking) return;
     setCreatingPaymentLink(true);
     try {
-      const remaining = Number(editBooking.total_price) - Number(editBooking.deposit_amount || 0);
+      const amount = Number(paymentAmount) || (Number(editBooking.total_price) - Number(editBooking.deposit_amount || 0));
       const { data, error } = await supabase.functions.invoke("create-payment-link", {
         body: {
-          amount: remaining,
+          amount,
           bookingId: editBooking.id,
           treatmentName: (editBooking.treatments as any)?.name || "Treatment",
           customerEmail: editBooking.customer_email,
@@ -158,7 +199,7 @@ const AdminCalendarView = () => {
       });
       if (error || data?.error) throw new Error(data?.error || "Failed");
       await navigator.clipboard.writeText(data.url);
-      toast.success("Payment link copied to clipboard! Send it to the client.");
+      toast.success("Payment link copied to clipboard!");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to create payment link");
     } finally {
@@ -166,12 +207,80 @@ const AdminCalendarView = () => {
     }
   };
 
-  const handleMarkPaid = async () => {
+  const handleTakeCardPayment = async () => {
     if (!editBooking) return;
-    const { error } = await supabase.from("bookings").update({ payment_status: "fully_paid" }).eq("id", editBooking.id);
+    setCreatingPaymentLink(true);
+    try {
+      const amount = Number(paymentAmount) || (Number(editBooking.total_price) - Number(editBooking.deposit_amount || 0));
+      const { data, error } = await supabase.functions.invoke("create-payment-link", {
+        body: {
+          amount,
+          bookingId: editBooking.id,
+          treatmentName: (editBooking.treatments as any)?.name || "Treatment",
+          customerEmail: editBooking.customer_email,
+        },
+      });
+      if (error || data?.error) throw new Error(data?.error || "Failed");
+      window.open(data.url, "_blank");
+      toast.success("Payment page opened in new tab");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to create payment link");
+    } finally {
+      setCreatingPaymentLink(false);
+    }
+  };
+
+  const handleMarkPaid = async (method?: string) => {
+    if (!editBooking) return;
+    const noteAddition = method ? `\n[Paid via ${method}${paymentRef ? ` — Ref: ${paymentRef}` : ""}]` : "";
+    const currentNotes = editForm?.notes || editBooking.notes || "";
+    const { error } = await supabase.from("bookings").update({
+      payment_status: "fully_paid",
+      notes: noteAddition ? `${currentNotes}${noteAddition}` : currentNotes,
+    }).eq("id", editBooking.id);
     if (error) { toast.error("Failed to update"); return; }
-    toast.success("Marked as fully paid");
+    toast.success(`Marked as fully paid${method ? ` (${method})` : ""}`);
     setEditBooking(prev => prev ? { ...prev, payment_status: "fully_paid" } : null);
+    setShowPaymentMethodPicker(false);
+    fetchData();
+  };
+
+  const handleCreatePlan = async () => {
+    if (!editBooking) return;
+    setLoadingPlan(true);
+    const total = Number(editForm?.total_price || editBooking.total_price);
+    const instalments = Number(planInstalments) || 3;
+    const amount = Number(planAmount) || (total / instalments);
+    const { error } = await supabase.from("payment_plans").insert({
+      booking_id: editBooking.id,
+      total_amount: total,
+      total_instalments: instalments,
+      instalment_amount: Number(amount.toFixed(2)),
+      next_payment_date: planNextDate || null,
+      paid_instalments: 0,
+      status: "active",
+    });
+    if (error) { toast.error("Failed to create plan"); setLoadingPlan(false); return; }
+    toast.success("Payment plan created");
+    setShowCreatePlan(false);
+    setLoadingPlan(false);
+    fetchPaymentPlan(editBooking.id);
+  };
+
+  const handleRecordInstalment = async () => {
+    if (!paymentPlan) return;
+    const newPaid = paymentPlan.paid_instalments + 1;
+    const newStatus = newPaid >= paymentPlan.total_instalments ? "completed" : "active";
+    const { error } = await supabase.from("payment_plans").update({
+      paid_instalments: newPaid,
+      status: newStatus,
+    }).eq("id", paymentPlan.id);
+    if (error) { toast.error("Failed to update"); return; }
+    if (newStatus === "completed" && editBooking) {
+      await supabase.from("bookings").update({ payment_status: "fully_paid" }).eq("id", editBooking.id);
+    }
+    toast.success(`Instalment ${newPaid}/${paymentPlan.total_instalments} recorded`);
+    if (editBooking) fetchPaymentPlan(editBooking.id);
     fetchData();
   };
 
@@ -308,6 +417,14 @@ const AdminCalendarView = () => {
                     className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" />
                 </div>
               </div>
+
+              {/* Editable Price */}
+              <div>
+                <label className="font-body text-xs uppercase tracking-wider text-muted-foreground block mb-1">Total Price (£)</label>
+                <input type="number" step="0.01" value={editForm.total_price} onChange={e => setEditForm({ ...editForm, total_price: e.target.value })}
+                  className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" />
+              </div>
+
               <div>
                 <label className="font-body text-xs uppercase tracking-wider text-muted-foreground block mb-1">Status</label>
                 <div className="flex flex-wrap gap-2">
@@ -330,26 +447,132 @@ const AdminCalendarView = () => {
                 <div className="border border-gold/30 bg-gold/5 p-4 space-y-3">
                   <p className="font-body text-xs uppercase tracking-wider text-gold flex items-center gap-1"><CreditCard size={12} /> Payment Actions</p>
                   <p className="font-body text-xs text-muted-foreground">
-                    Outstanding: £{(Number(editBooking.total_price) - Number(editBooking.deposit_amount || 0)).toFixed(2)}
+                    Outstanding: £{(Number(editForm.total_price || editBooking.total_price) - Number(editBooking.deposit_amount || 0)).toFixed(2)}
                     {editBooking.payment_status === "deposit_paid" && ` (deposit of £${Number(editBooking.deposit_amount).toFixed(2)} received)`}
                   </p>
+
+                  {/* Custom amount */}
+                  <div>
+                    <label className="font-body text-xs text-muted-foreground block mb-1">Charge Amount (£)</label>
+                    <input type="number" step="0.01" value={paymentAmount} onChange={e => setPaymentAmount(e.target.value)}
+                      className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" />
+                  </div>
+
                   <div className="flex gap-2 flex-wrap">
-                    <button onClick={handleSendPaymentLink} disabled={creatingPaymentLink}
+                    <button onClick={handleTakeCardPayment} disabled={creatingPaymentLink}
                       className="flex items-center gap-1 px-3 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors disabled:opacity-50">
-                      <LinkIcon size={12} /> {creatingPaymentLink ? "Creating..." : "Send Payment Link"}
+                      <CreditCard size={12} /> {creatingPaymentLink ? "Creating..." : "Take Card Payment"}
                     </button>
-                    <button onClick={handleMarkPaid}
-                      className="flex items-center gap-1 px-3 py-2 border border-green-600/30 text-green-600 font-body text-xs uppercase tracking-wider hover:bg-green-600/10 transition-colors">
-                      <DollarSign size={12} /> Mark as Paid
+                    <button onClick={handleSendPaymentLink} disabled={creatingPaymentLink}
+                      className="flex items-center gap-1 px-3 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-gold transition-colors disabled:opacity-50">
+                      <LinkIcon size={12} /> Send Link
                     </button>
                   </div>
+
+                  {/* Mark as Paid with method */}
+                  {!showPaymentMethodPicker ? (
+                    <button onClick={() => setShowPaymentMethodPicker(true)}
+                      className="flex items-center gap-1 px-3 py-2 border border-green-600/30 text-green-600 font-body text-xs uppercase tracking-wider hover:bg-green-600/10 transition-colors w-full justify-center">
+                      <DollarSign size={12} /> Mark as Paid
+                    </button>
+                  ) : (
+                    <div className="border border-border p-3 space-y-2">
+                      <p className="font-body text-xs text-muted-foreground">Payment method:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {PAYMENT_METHODS.map(m => (
+                          <button key={m} onClick={() => setPaymentMethod(m)}
+                            className={`px-3 py-1.5 border font-body text-xs transition-colors ${paymentMethod === m ? "border-gold bg-gold/10 text-gold" : "border-border text-muted-foreground hover:border-foreground"}`}>
+                            {m}
+                          </button>
+                        ))}
+                      </div>
+                      <input value={paymentRef} onChange={e => setPaymentRef(e.target.value)} placeholder="Reference (optional)"
+                        className="w-full border border-border bg-transparent px-3 py-2 font-body text-xs focus:border-gold focus:outline-none" />
+                      <div className="flex gap-2">
+                        <button onClick={() => handleMarkPaid(paymentMethod || "Manual")}
+                          className="flex-1 px-3 py-2 bg-green-600 text-white font-body text-xs uppercase tracking-wider hover:bg-green-700 transition-colors">
+                          Confirm Paid
+                        </button>
+                        <button onClick={() => setShowPaymentMethodPicker(false)}
+                          className="px-3 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
+
+              {/* Payment Plan Section */}
+              <div className="border border-border p-4 space-y-3">
+                <p className="font-body text-xs uppercase tracking-wider text-muted-foreground flex items-center gap-1"><Banknote size={12} /> Payment Plan</p>
+                
+                {paymentPlan ? (
+                  <div className="space-y-2">
+                    <div className="font-body text-xs space-y-1">
+                      <p>Total: £{Number(paymentPlan.total_amount).toFixed(2)} — {paymentPlan.total_instalments} instalments of £{Number(paymentPlan.instalment_amount).toFixed(2)}</p>
+                      <p>Paid: {paymentPlan.paid_instalments}/{paymentPlan.total_instalments} — Status: <span className={paymentPlan.status === "completed" ? "text-green-600" : "text-gold"}>{paymentPlan.status}</span></p>
+                      {paymentPlan.next_payment_date && <p>Next payment: {paymentPlan.next_payment_date}</p>}
+                    </div>
+                    {paymentPlan.status === "active" && (
+                      <button onClick={handleRecordInstalment}
+                        className="flex items-center gap-1 px-3 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">
+                        <Check size={12} /> Record Instalment
+                      </button>
+                    )}
+                  </div>
+                ) : !showCreatePlan ? (
+                  <button onClick={() => {
+                    const total = Number(editForm?.total_price || editBooking.total_price);
+                    setPlanAmount(String((total / 3).toFixed(2)));
+                    setPlanNextDate(format(addDays(new Date(), 30), "yyyy-MM-dd"));
+                    setShowCreatePlan(true);
+                  }}
+                    className="flex items-center gap-1 px-3 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-gold transition-colors">
+                    <CalendarPlus size={12} /> Create Payment Plan
+                  </button>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="font-body text-[10px] text-muted-foreground block mb-1">Instalments</label>
+                        <input type="number" value={planInstalments} onChange={e => {
+                          setPlanInstalments(e.target.value);
+                          const total = Number(editForm?.total_price || editBooking.total_price);
+                          const n = Number(e.target.value) || 1;
+                          setPlanAmount(String((total / n).toFixed(2)));
+                        }}
+                          className="w-full border border-border bg-transparent px-3 py-2 font-body text-xs focus:border-gold focus:outline-none" />
+                      </div>
+                      <div>
+                        <label className="font-body text-[10px] text-muted-foreground block mb-1">Per Instalment (£)</label>
+                        <input type="number" step="0.01" value={planAmount} onChange={e => setPlanAmount(e.target.value)}
+                          className="w-full border border-border bg-transparent px-3 py-2 font-body text-xs focus:border-gold focus:outline-none" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="font-body text-[10px] text-muted-foreground block mb-1">Next Payment Date</label>
+                      <input type="date" value={planNextDate} onChange={e => setPlanNextDate(e.target.value)}
+                        className="w-full border border-border bg-transparent px-3 py-2 font-body text-xs focus:border-gold focus:outline-none" />
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={handleCreatePlan} disabled={loadingPlan}
+                        className="flex-1 px-3 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors disabled:opacity-50">
+                        {loadingPlan ? "Creating..." : "Create Plan"}
+                      </button>
+                      <button onClick={() => setShowCreatePlan(false)}
+                        className="px-3 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <div className="border-t border-border pt-4 flex items-center justify-between">
                 <div className="font-body text-xs text-muted-foreground">
                   <p>Treatment: {(editBooking.treatments as any)?.name}</p>
-                  <p>Total: £{Number(editBooking.total_price).toFixed(2)} — <span className={editBooking.payment_status === "fully_paid" ? "text-green-600" : "text-gold"}>{editBooking.payment_status}</span></p>
+                  <p>Total: £{Number(editForm.total_price).toFixed(2)} — <span className={editBooking.payment_status === "fully_paid" ? "text-green-600" : "text-gold"}>{editBooking.payment_status}</span></p>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => { setEditBooking(null); setEditForm(null); }} className="px-4 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">Cancel</button>

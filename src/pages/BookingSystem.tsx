@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, Sparkles, ChevronDown, X, Package } from "lucide-react";
 import { format, addDays, startOfDay } from "date-fns";
@@ -73,6 +74,7 @@ const CATEGORY_ROUTES: Record<string, string> = {
 const POPULAR_SLUGS = ["lip-filler-05ml", "anti-wrinkle-2-areas", "glass-skin-boost", "dermal-filler-lips-1ml", "profhilo"];
 
 const BookingSystem = () => {
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(0);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
   const [addons, setAddons] = useState<Addon[]>([]);
@@ -101,6 +103,22 @@ const BookingSystem = () => {
   const [showCoursePrompt, setShowCoursePrompt] = useState(false);
 
   useEffect(() => { loadData(); }, []);
+
+  // Auto-select treatment or category from URL params
+  useEffect(() => {
+    if (treatments.length === 0) return;
+    const treatmentSlug = searchParams.get("treatment");
+    const categoryParam = searchParams.get("category");
+    if (treatmentSlug) {
+      const found = treatments.find(t => t.slug === treatmentSlug);
+      if (found && !selectedTreatments.some(s => s.id === found.id)) {
+        setSelectedTreatments([found]);
+        setStep(1);
+      }
+    } else if (categoryParam) {
+      setExpandedCategory(categoryParam);
+    }
+  }, [treatments, searchParams]);
 
   const loadData = async () => {
     setLoading(true);

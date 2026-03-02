@@ -11,6 +11,7 @@ import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
+import { useSiteImage } from "@/hooks/use-site-image";
 import klarnaLogo from "@/assets/klarna-logo.png";
 import clearpayLogo from "@/assets/clearpay-logo.png";
 
@@ -50,6 +51,14 @@ type Offer = {
 
 const Index = () => {
   const [offers, setOffers] = useState<Offer[]>([]);
+  const heroImg = useSiteImage("hero_home", gallery6);
+  const gal1 = useSiteImage("gallery_1", gallery1);
+  const gal2 = useSiteImage("gallery_2", gallery2);
+  const gal3 = useSiteImage("gallery_3", gallery3);
+  const gal4 = useSiteImage("gallery_4", gallery4);
+  const gal5 = useSiteImage("gallery_5", gallery5);
+  const gal6 = useSiteImage("gallery_6", gallery6);
+  const galleryImages = [gal1, gal2, gal3, gal4, gal5, gal6];
 
   useEffect(() => {
     supabase
@@ -68,7 +77,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={gallery6} alt="Hive Clinic - Premium Aesthetics Manchester" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="Hive Clinic - Premium Aesthetics Manchester" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -94,7 +103,7 @@ const Index = () => {
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                to="/bookings"
+                to="/bookings?category=Consultations"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors"
               >
                 Book Free Consultation <ArrowRight size={14} />
@@ -204,7 +213,7 @@ const Index = () => {
                         <span className="font-body text-xs text-muted-foreground">· {offer.duration_mins} mins</span>
                       </div>
                       <Link
-                        to="/bookings"
+                        to={`/bookings?treatment=${offer.slug}`}
                         className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors w-full justify-center"
                       >
                         Book Now <ArrowRight size={12} />
@@ -226,7 +235,7 @@ const Index = () => {
             <p className="font-body text-muted-foreground">See the transformations for yourself.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[gallery1, gallery2, gallery3, gallery4, gallery5, gallery6].map((img, i) => (
+            {galleryImages.map((img, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -341,7 +350,7 @@ const Index = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                to="/bookings"
+                to="/bookings?category=Consultations"
                 className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors"
               >
                 Book Free Consultation <ArrowRight size={14} />

@@ -104,6 +104,22 @@ const BookingSystem = () => {
 
   useEffect(() => { loadData(); }, []);
 
+  // Auto-select treatment or category from URL params
+  useEffect(() => {
+    if (treatments.length === 0) return;
+    const treatmentSlug = searchParams.get("treatment");
+    const categoryParam = searchParams.get("category");
+    if (treatmentSlug) {
+      const found = treatments.find(t => t.slug === treatmentSlug);
+      if (found && !selectedTreatments.some(s => s.id === found.id)) {
+        setSelectedTreatments([found]);
+        setStep(1);
+      }
+    } else if (categoryParam) {
+      setExpandedCategory(categoryParam);
+    }
+  }, [treatments, searchParams]);
+
   const loadData = async () => {
     setLoading(true);
     const [treatRes, availRes, blockedRes, bookingsRes, addonsRes, packagesRes] = await Promise.all([

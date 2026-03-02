@@ -236,7 +236,7 @@ const Index = () => {
             <p className="font-body text-muted-foreground">See the transformations for yourself.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[gallery1, gallery2, gallery3, gallery4, gallery5, gallery6].map((img, i) => (
+            {galleryImages.map((img, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.95 }}

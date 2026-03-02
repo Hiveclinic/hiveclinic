@@ -51,6 +51,15 @@ type Offer = {
 
 const Index = () => {
   const [offers, setOffers] = useState<Offer[]>([]);
+  const heroImg = useSiteImage("hero_home", gallery6);
+  const gal1 = useSiteImage("gallery_1", gallery1);
+  const gal2 = useSiteImage("gallery_2", gallery2);
+  const gal3 = useSiteImage("gallery_3", gallery3);
+  const gal4 = useSiteImage("gallery_4", gallery4);
+  const gal5 = useSiteImage("gallery_5", gallery5);
+  const gal6 = useSiteImage("gallery_6", gallery6);
+  const galleryImages = [gal1, gal2, gal3, gal4, gal5, gal6];
+  const [offers, setOffers] = useState<Offer[]>([]);
 
   useEffect(() => {
     supabase

@@ -20,7 +20,7 @@ const Consultations = () => (
             <h3 className="font-display text-2xl mb-2">Free Online Consultation</h3>
             <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">30 minutes · Free</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Suitability check, treatment planning, and pre-book guidance — all from the comfort of your home.</p>
-            <Link to="/bookings" className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">Book Free Consultation <ArrowRight size={12} /></Link>
+            <Link to="/bookings?category=Consultations" className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">Book Free Consultation <ArrowRight size={12} /></Link>
           </div>
 
           <div className="border border-border p-8 text-center">

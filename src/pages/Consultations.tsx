@@ -28,7 +28,7 @@ const Consultations = () => (
             <h3 className="font-display text-2xl mb-2">In-Person Consultation</h3>
             <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">30 minutes · £25</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Full skin analysis, personalised treatment plan, and aftercare advice. Redeemable against any course or treatment booked.</p>
-            <Link to="/bookings" className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">Book Now <ArrowRight size={12} /></Link>
+            <Link to="/bookings?category=Consultations" className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">Book Now <ArrowRight size={12} /></Link>
           </div>
 
           <div className="border border-border p-8 text-center">

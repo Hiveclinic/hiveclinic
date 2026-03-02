@@ -104,7 +104,7 @@ const Index = () => {
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                to="/bookings"
+                to="/bookings?category=Consultations"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors"
               >
                 Book Free Consultation <ArrowRight size={14} />

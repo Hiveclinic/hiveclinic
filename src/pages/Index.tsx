@@ -214,7 +214,7 @@ const Index = () => {
                         <span className="font-body text-xs text-muted-foreground">· {offer.duration_mins} mins</span>
                       </div>
                       <Link
-                        to="/bookings"
+                        to={`/bookings?treatment=${offer.slug}`}
                         className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors w-full justify-center"
                       >
                         Book Now <ArrowRight size={12} />

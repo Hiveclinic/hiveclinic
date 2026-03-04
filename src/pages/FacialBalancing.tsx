@@ -68,7 +68,7 @@ const FacialBalancing = () => (
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Transform Your Profile</h2>
         <p className="font-body text-muted-foreground mb-8">Book a facial balancing consultation.</p>
-        <Link to="/bookings" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">Book Consultation <ArrowRight size={14} /></Link>
+        <Link to="/bookings?category=Facial Balancing" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">Book Consultation <ArrowRight size={14} /></Link>
       </div>
     </section>
   </Layout>

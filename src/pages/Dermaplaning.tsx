@@ -30,7 +30,7 @@ const Dermaplaning = () => (
             <div className="flex items-center gap-2"><Award size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">5-Star Rated</span></div>
             <div className="flex items-center gap-2"><Clock size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">30 Min Treatment</span></div>
           </div>
-          <Link to="/bookings" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
+          <Link to="/bookings?category=Dermaplaning" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
             Book Now <ArrowRight size={14} />
           </Link>
         </motion.div>
@@ -77,7 +77,7 @@ const Dermaplaning = () => (
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready for Radiant Skin?</h2>
         <p className="font-body text-muted-foreground mb-8">Book your dermaplaning treatment today.</p>
-        <Link to="/bookings" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
+        <Link to="/bookings?category=Dermaplaning" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
           Book Now <ArrowRight size={14} />
         </Link>
       </div>

@@ -107,7 +107,7 @@ const BlogPost = () => {
             <p className="font-body text-sm text-muted-foreground mb-6">Book a free consultation to discuss your treatment goals.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                to="/bookings"
+                to="/bookings?category=Consultations"
                 className="inline-flex items-center gap-2 px-8 py-3 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors"
               >
                 Book Consultation <ArrowRight size={14} />

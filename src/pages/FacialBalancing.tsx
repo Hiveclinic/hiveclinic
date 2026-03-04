@@ -29,7 +29,7 @@ const FacialBalancing = () => (
             <div className="flex items-center gap-2"><Award size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">Premium Fillers</span></div>
             <div className="flex items-center gap-2"><Clock size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">60-90 Mins</span></div>
           </div>
-          <Link to="/bookings" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">Book Consultation <ArrowRight size={14} /></Link>
+          <Link to="/bookings?category=Facial Balancing" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">Book Consultation <ArrowRight size={14} /></Link>
         </motion.div>
       </div>
     </section>
@@ -68,7 +68,7 @@ const FacialBalancing = () => (
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Transform Your Profile</h2>
         <p className="font-body text-muted-foreground mb-8">Book a facial balancing consultation.</p>
-        <Link to="/bookings" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">Book Consultation <ArrowRight size={14} /></Link>
+        <Link to="/bookings?category=Facial Balancing" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">Book Consultation <ArrowRight size={14} /></Link>
       </div>
     </section>
   </Layout>

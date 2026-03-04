@@ -160,7 +160,7 @@ const Pricing = () => (
 
         <div className="text-center mt-16">
           <Link
-            to="/bookings"
+            to="/bookings?category=Consultations"
             className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors"
           >
             Book Your Consultation

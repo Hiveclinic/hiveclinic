@@ -23,7 +23,7 @@ const Results = () => (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-16">
           <h1 className="font-display text-5xl md:text-6xl mb-4">Results Gallery</h1>
           <p className="font-body text-muted-foreground max-w-lg mx-auto">
-            Real results from real clients. Individual results may vary.
+Real results from real clients. Individual results may vary.
           </p>
         </motion.div>
 

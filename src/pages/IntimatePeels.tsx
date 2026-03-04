@@ -51,7 +51,7 @@ const IntimatePeels = () => (
         </div>
 
         <div className="mt-16 text-center">
-          <Link to="/bookings" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">Book Now <ArrowRight size={14} /></Link>
+          <Link to="/bookings?category=Intimate %26 Body Peels" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">Book Now <ArrowRight size={14} /></Link>
         </div>
       </div>
     </section>

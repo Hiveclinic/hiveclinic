@@ -1,133 +1,63 @@
 
 
-# Phase 3: Admin Enhancements, Multi-Treatment Booking, and Fixes
+# Phase 6: Testing, Deep-Linking Fix, Mailchimp & Email Setup
 
-## 1. Fix 404 on Admin Login (Published Site)
+This plan covers the user's requests: testing admin features, fixing deep-links across all treatment pages, ensuring Mailchimp is connected, and answering the email/notifications question.
 
-The route `/hive-admin-login` exists in the code and works in preview. The 404 on the published site (`hiveclinicuk.com//hive-admin-login`) is caused by the double slash `//` in the URL. This is a hosting/domain redirect issue -- the custom domain is likely appending a trailing slash to the base URL before the path.
+## 1. Update All Treatment Page "Book Now" Links with Deep-Linking
 
-**Fix:** The app needs to be re-published so the latest routes are deployed. No code change needed -- the route is correctly defined at line 82 of `App.tsx`. The double slash in the URL you shared is the problem -- use `hiveclinicuk.com/hive-admin-login` (single slash).
+Currently 21 treatment pages link to `/bookings` without any `?category=` or `?treatment=` parameter. Each page should use the appropriate category parameter so the booking system auto-expands the right category.
 
----
+**Files to update (each page's `to="/bookings"` links become `to="/bookings?category=CategoryName"`):**
 
-## 2. Website Image Management via Admin
+- `HydraFacial.tsx` → `?category=HydraFacial`
+- `DermalFiller.tsx` → `?category=Dermal Filler`
+- `FacialBalancing.tsx` → `?category=Facial Balancing`
+- `Mesotherapy.tsx` → `?category=Mesotherapy`
+- `LipFillers.tsx` → `?category=Lip Fillers`
+- `AntiWrinkle.tsx` → `?category=Anti-Wrinkle`
+- `ChemicalPeels.tsx` → `?category=Chemical Peels`
+- `SkinBoosters.tsx` → `?category=Skin Boosters`
+- `FatDissolve.tsx` → `?category=Fat Dissolve`
+- `Microneedling.tsx` → `?category=Microneedling`
+- `Dermaplaning.tsx` → `?category=Dermaplaning`
+- `LEDTherapy.tsx` → `?category=LED Light Therapy`
+- `PRP.tsx` → `?category=PRP`
+- `MicroSclerotherapy.tsx` → `?category=Micro Sclerotherapy`
+- `IntimatePeels.tsx` → `?category=Intimate & Body Peels`
+- `Pricing.tsx`, `Treatments.tsx`, `Results.tsx`, `Aftercare.tsx`, `BlogPost.tsx` → `?category=Consultations` (for generic "Book Now" CTAs)
 
-Currently there's no way to update hero images, gallery images, or page images from the admin dashboard. These are hardcoded in component files.
+Pages like `BookingCancelled.tsx` and `BookingSuccess.tsx` should remain as `/bookings` (no pre-selection needed for retry flows).
 
-**Changes:**
-- Add a new "Images" section to `AdminSiteTab.tsx` that stores editable image URLs in the `site_settings` table (or a new `site_images` table)
-- Create a `site_images` table with fields: `key` (text, e.g. "hero_home", "gallery_1"), `image_url` (text), `alt_text` (text), `updated_at`
-- Admin can upload images to the `client-images` bucket (or a new public `site-images` bucket) and the URL is saved
-- Frontend pages read from this table and fall back to the hardcoded defaults if no override exists
-- Create a public storage bucket `site-images` for website content images
+## 2. Mailchimp Connection Status
 
----
+Mailchimp is already connected. The secrets `MAILCHIMP_API_KEY` and `MAILCHIMP_AUDIENCE_ID` are configured. The `mailchimp-subscribe` edge function syncs VIP popup subscribers and can be extended. To ensure you get notified of bookings:
 
-## 3. Treatment Menu Reordering
+- Admin booking notifications are already implemented: `send-booking-email` sends an `admin_new_booking` email to `hello@hiveclinicuk.com` whenever a booking is confirmed (via the stripe webhook and confirm-booking function).
+- Mailchimp is for marketing list management (VIP subscribers, newsletter). It does not handle transactional booking notifications -- those go through Resend via `notify.hiveclinicuk.com`.
 
-Drag-and-drop reordering already exists in `AdminTreatmentsTab.tsx` (lines 144-155). The `sort_order` is saved on drag end. This already works. If it feels unresponsive, I will add visual feedback (highlight, ghost element).
+**No code changes needed for Mailchimp.** The integration is live. You can verify subscribers are syncing by checking your Mailchimp audience for the "Website Popup" and "VIP Subscriber" tags.
 
-**Enhancement:** Add category-level reordering so you can control the order categories appear on the booking page (not just treatments within a category).
+## 3. Browser Testing Plan
 
----
+After implementing the deep-link updates, I will use browser automation to:
 
-## 4. Take Payment from Calendar (Admin)
-
-Add a "Take Payment" button in the calendar edit modal that creates a Stripe Payment Link for the outstanding balance and copies it to clipboard (so admin can send it to the client).
-
-**Changes to `AdminCalendarView.tsx`:**
-- Add a "Send Payment Link" button in the edit modal for bookings with `payment_status` of "pending" or "deposit_paid"
-- This calls an edge function that creates a Stripe Payment Link for the remaining balance
-- Link is copied to clipboard so admin can share via WhatsApp/SMS
-- Add a "Mark as Paid" button for in-person/cash payments that updates `payment_status` to "fully_paid"
-
-**New edge function:** `create-payment-link` -- creates a Stripe Payment Link for a given amount and booking reference.
-
----
-
-## 5. Payment Plan Customisation
-
-Currently `AdminPaymentPlansTab.tsx` allows creating plans and recording payments, but you cannot edit the instalment amount after creation.
-
-**Changes:**
-- Add an "Edit" button on each active plan
-- Allow editing: `instalment_amount`, `total_instalments`, `total_amount`, `next_payment_date`
-- Add a "Record Custom Amount" option when recording a payment (instead of always recording the fixed instalment amount)
-- Show remaining balance clearly
-
----
-
-## 6. Cancellation Sync Between Admin and Client
-
-Currently:
-- Admin cancels via calendar -> updates DB status to "cancelled" and sends cancellation email to client. Client sees it in their portal (already works via DB read).
-- Client cancels via portal -> updates DB status to "cancelled". Admin sees it in bookings/calendar (already works via DB read).
-
-**Missing:** When a client cancels, the admin doesn't get notified.
-
-**Fix:** In `CustomerPortal.tsx` `cancelBooking` function, after updating the booking status, trigger `send-booking-email` with a new `emailType: "client_cancelled"` that sends a notification to the admin email.
-
----
-
-## 7. Mailchimp Email Automations
-
-The `mailchimp-subscribe` edge function already exists and works. It's already wired into the booking checkout flow. To set up automations:
-
-**What I will do:**
-- Update `mailchimp-subscribe` to accept and pass `firstName`, `lastName`, and `tags` (e.g. "Booked Client", treatment category)
-- Add tags based on treatment category so you can create targeted automations in Mailchimp
-- Ensure the VIP popup signup also triggers the function (it already does via `email_subscribers` table insert, but needs to call the edge function too)
-
-**What you need to do in Mailchimp:**
-- Log into your Mailchimp account
-- Go to Automations and create journeys based on tags (e.g. "Welcome" email for new subscribers, "Post-Treatment" for booked clients)
-- The integration will automatically tag contacts when they book
-
----
-
-## 8. Multiple Treatment Selection + Course Suggestions
-
-This is the biggest feature. Currently only one treatment can be selected per booking.
-
-**Changes to `BookingSystem.tsx`:**
-- Allow selecting multiple treatments (change `selectedTreatment` from single to array `selectedTreatments`)
-- Show a running total of all selected treatments
-- After selection, check if any selected treatment has packages in `treatment_packages` and show a "Save with a Course" prompt
-- Display savings: "Book 3 sessions of Level 1 Face Peel and save £25 (£230 vs £255)"
-- Duration and time slot calculation accounts for combined treatment time
-- Checkout sends all treatment IDs
-
-**Changes to `create-booking-checkout`:**
-- Accept an array of treatment IDs
-- Create line items for each treatment in the Stripe checkout session
-- Store multiple treatment references in the booking (use the existing `addon_ids` pattern or add a `treatment_ids` array column)
-
-**Database change:**
-- Add `treatment_ids` (uuid array) column to `bookings` table to support multi-treatment bookings
-- Keep `treatment_id` for backwards compatibility (primary treatment)
+1. Navigate to the admin dashboard, click a booking in the calendar, and verify the edit modal shows price editing, payment plan creation, and Take Card Payment button.
+2. Visit `/bookings?category=Consultations` and verify the Consultations category auto-expands.
+3. Check the homepage for the Current Offers section (if any treatments are marked as on offer).
+4. Verify the Site Settings image upload flow works with the `useSiteImage` hook.
 
 ---
 
 ## Technical Summary
 
-### Database Changes:
-- New table: `site_images` (key, image_url, alt_text, updated_at) with RLS for admin write, public read
-- New storage bucket: `site-images` (public)
-- Add column `treatment_ids` (uuid[]) to `bookings` table
+### Files to Edit:
+- 15+ treatment pages: Update `to="/bookings"` → `to="/bookings?category=X"` (simple find-and-replace per file)
 
-### Edge Functions:
-- New: `create-payment-link` -- generates Stripe Payment Link
-- Update: `mailchimp-subscribe` -- accept firstName, lastName, tags
-- Update: `send-booking-email` -- add "client_cancelled" email type for admin notification
+### No New Edge Functions or Database Changes Needed
 
-### Frontend Files to Edit:
-- `AdminCalendarView.tsx` -- add payment link + mark as paid buttons
-- `AdminPaymentPlansTab.tsx` -- add edit and custom payment recording
-- `AdminSiteTab.tsx` -- add image management section
-- `BookingSystem.tsx` -- multi-treatment selection + course suggestions
-- `CustomerPortal.tsx` -- trigger admin notification on client cancellation
-- `create-booking-checkout` -- support multiple treatments
-
-### Frontend Files to Create:
-- None (all changes are to existing files)
+### Answers to User Questions:
+- **Mailchimp**: Already connected via `MAILCHIMP_API_KEY` + `MAILCHIMP_AUDIENCE_ID` secrets. The `mailchimp-subscribe` function handles audience sync.
+- **Booking notifications**: Already sending to `hello@hiveclinicuk.com` via the `admin_new_booking` email type in `send-booking-email`. This triggers on every confirmed booking.
+- **Email sender**: Already using `noreply@notify.hiveclinicuk.com` (verified domain) for all booking emails.
 

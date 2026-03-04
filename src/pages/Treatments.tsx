@@ -67,7 +67,7 @@ const Treatments = () => (
                   <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">{cat.desc}</p>
                   <div className="flex items-center justify-between">
                     <span className="inline-flex items-center gap-2 font-body text-xs text-gold uppercase tracking-widest group-hover:gap-3 transition-all">Learn More <ArrowRight size={12} /></span>
-                    <Link to={`/bookings?category=${encodeURIComponent(treatment.category)}`} onClick={(e) => e.stopPropagation()} className="px-4 py-2 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">Book Now</Link>
+                    <Link to={`/bookings?category=${encodeURIComponent(cat.title)}`} onClick={(e) => e.stopPropagation()} className="px-4 py-2 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">Book Now</Link>
                   </div>
                 </div>
               </Link>

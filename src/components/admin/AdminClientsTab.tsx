@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { User, Mail, Phone, Search, Download, Upload, Plus, Trash2, StickyNote, Image, ChevronDown, ChevronRight, X } from "lucide-react";
+import { User, Mail, Phone, Search, Download, Upload, Plus, Trash2, StickyNote, Image, ChevronDown, ChevronRight, X, RefreshCw } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 type Client = {

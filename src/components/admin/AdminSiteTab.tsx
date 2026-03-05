@@ -327,6 +327,15 @@ const AdminSiteTab = () => {
           </div>
         )}
       </div>
+      {/* Image Crop Modal */}
+      {cropFile && (
+        <ImageCropModal
+          imageFile={cropFile.file}
+          aspectRatio={cropFile.key.includes("hero") ? 16 / 9 : cropFile.key.includes("gallery") ? 1 : 0}
+          onCrop={onCropComplete}
+          onCancel={() => setCropFile(null)}
+        />
+      )}
     </div>
   );
 };

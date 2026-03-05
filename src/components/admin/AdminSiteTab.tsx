@@ -248,7 +248,7 @@ const AdminSiteTab = () => {
                     <label className="flex items-center gap-1 px-3 py-1.5 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors cursor-pointer">
                       <Upload size={10} />
                       <span className="font-body text-[10px] uppercase tracking-wider">{uploadingKey === img.key ? "Uploading..." : "Upload"}</span>
-                      <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) handleImageUpload(img.key, e.target.files[0]); }} disabled={uploadingKey === img.key} />
+                      <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) onFileSelected(img.key, e.target.files[0]); }} disabled={uploadingKey === img.key} />
                     </label>
                   </div>
                 </div>

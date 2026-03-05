@@ -85,6 +85,16 @@ const AdminBookingsTab = () => {
     }
   };
 
+  const deleteBooking = async (id: string) => {
+    const booking = bookings.find(b => b.id === id);
+    if (!booking) return;
+    if (!confirm(`Permanently delete ${booking.customer_name}'s booking on ${booking.booking_date}? This cannot be undone.`)) return;
+    const { error } = await supabase.from("bookings").delete().eq("id", id);
+    if (error) { toast.error("Failed to delete booking"); return; }
+    setBookings(prev => prev.filter(b => b.id !== id));
+    toast.success("Booking deleted");
+  };
+
   const sendReminder = async (id: string) => {
     const booking = bookings.find(b => b.id === id);
     if (!booking) return;

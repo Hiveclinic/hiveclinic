@@ -31,6 +31,7 @@ type ClientImage = {
 };
 
 const AdminClientsTab = () => {
+  const navigate = useNavigate();
   const [clients, setClients] = useState<Client[]>([]);
   const [notes, setNotes] = useState<AdminNote[]>([]);
   const [images, setImages] = useState<ClientImage[]>([]);

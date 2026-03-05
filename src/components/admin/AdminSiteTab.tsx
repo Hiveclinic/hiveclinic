@@ -73,12 +73,12 @@ const AdminSiteTab = () => {
     toast.success("Settings saved");
   };
 
-  const handleImageUpload = async (key: string, file: File) => {
+  const handleImageUpload = async (key: string, blob: Blob, fileName?: string) => {
     setUploadingKey(key);
-    const ext = file.name.split(".").pop();
+    const ext = fileName?.split(".").pop() || "jpg";
     const path = `${key}-${Date.now()}.${ext}`;
 
-    const { error: uploadError } = await supabase.storage.from("site-images").upload(path, file, { upsert: true });
+    const { error: uploadError } = await supabase.storage.from("site-images").upload(path, blob, { upsert: true, contentType: blob.type || "image/jpeg" });
     if (uploadError) { toast.error("Upload failed"); setUploadingKey(null); return; }
 
     const { data: { publicUrl } } = supabase.storage.from("site-images").getPublicUrl(path);
@@ -93,6 +93,16 @@ const AdminSiteTab = () => {
     setSiteImages(prev => prev.map(img => img.key === key ? { ...img, image_url: publicUrl } : img));
     toast.success("Image updated");
     setUploadingKey(null);
+  };
+
+  const onFileSelected = (key: string, file: File) => {
+    setCropFile({ key, file });
+  };
+
+  const onCropComplete = async (blob: Blob) => {
+    if (!cropFile) return;
+    await handleImageUpload(cropFile.key, blob, cropFile.file.name);
+    setCropFile(null);
   };
 
   const updateImageUrl = async (key: string, url: string) => {

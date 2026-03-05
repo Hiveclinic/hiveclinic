@@ -104,11 +104,15 @@ const BookingSystem = () => {
 
   useEffect(() => { loadData(); }, []);
 
-  // Auto-select treatment or category from URL params
+  // Auto-select treatment or category from URL params + pre-fill customer details
   useEffect(() => {
     if (treatments.length === 0) return;
     const treatmentSlug = searchParams.get("treatment");
     const categoryParam = searchParams.get("category");
+    const emailParam = searchParams.get("email");
+    const nameParam = searchParams.get("name");
+    if (emailParam) setCustomerEmail(emailParam);
+    if (nameParam) setCustomerName(nameParam);
     if (treatmentSlug) {
       const found = treatments.find(t => t.slug === treatmentSlug);
       if (found && !selectedTreatments.some(s => s.id === found.id)) {

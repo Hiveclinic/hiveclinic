@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar, Clock, User, Mail, Phone, Check, X, AlertTriangle, Download, Search, Filter, Bell } from "lucide-react";
+import { Calendar, Clock, User, Mail, Phone, Check, X, AlertTriangle, Download, Search, Filter, Bell, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -83,6 +83,16 @@ const AdminBookingsTab = () => {
         .then(() => toast.success("Cancellation email sent"))
         .catch(() => toast.error("Failed to send cancellation email"));
     }
+  };
+
+  const deleteBooking = async (id: string) => {
+    const booking = bookings.find(b => b.id === id);
+    if (!booking) return;
+    if (!confirm(`Permanently delete ${booking.customer_name}'s booking on ${booking.booking_date}? This cannot be undone.`)) return;
+    const { error } = await supabase.from("bookings").delete().eq("id", id);
+    if (error) { toast.error("Failed to delete booking"); return; }
+    setBookings(prev => prev.filter(b => b.id !== id));
+    toast.success("Booking deleted");
   };
 
   const sendReminder = async (id: string) => {
@@ -237,6 +247,12 @@ const AdminBookingsTab = () => {
                       {s === "no_show" ? "No Show" : s}
                     </button>
                   ))}
+                  <button
+                    onClick={() => deleteBooking(b.id)}
+                    className="px-2 py-1 border border-red-500/30 text-red-500 hover:bg-red-500/10 font-body text-xs tracking-wider uppercase transition-colors flex items-center gap-1"
+                  >
+                    <Trash2 size={12} /> Delete
+                  </button>
                 </div>
               </div>
               {b.notes && <p className="font-body text-xs text-muted-foreground mt-2 italic">Note: {b.notes}</p>}

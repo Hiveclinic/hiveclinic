@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { User, Mail, Phone, Search, Download, Upload, Plus, Trash2, StickyNote, Image, ChevronDown, ChevronRight, X } from "lucide-react";
+import { User, Mail, Phone, Search, Download, Upload, Plus, Trash2, StickyNote, Image, ChevronDown, ChevronRight, X, RefreshCw } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 type Client = {
@@ -30,6 +31,7 @@ type ClientImage = {
 };
 
 const AdminClientsTab = () => {
+  const navigate = useNavigate();
   const [clients, setClients] = useState<Client[]>([]);
   const [notes, setNotes] = useState<AdminNote[]>([]);
   const [images, setImages] = useState<ClientImage[]>([]);
@@ -359,10 +361,35 @@ const AdminClientsTab = () => {
                       </div>
                     </div>
 
-                    {/* Last Visit */}
-                    <p className="font-body text-xs text-muted-foreground">
-                      Last visit: {client.lastVisit ? new Date(client.lastVisit + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "N/A"}
-                    </p>
+                    {/* Last Visit + Actions */}
+                    <div className="flex items-center justify-between">
+                      <p className="font-body text-xs text-muted-foreground">
+                        Last visit: {client.lastVisit ? new Date(client.lastVisit + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "N/A"}
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => navigate(`/bookings?email=${encodeURIComponent(client.email)}&name=${encodeURIComponent(client.name)}`)}
+                          className="flex items-center gap-1 px-3 py-1 border border-gold/30 text-gold hover:bg-gold/10 font-body text-xs tracking-wider uppercase transition-colors"
+                        >
+                          <RefreshCw size={12} /> Rebook
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (!confirm(`Delete ${client.name || client.email} and all their data (bookings, notes, images)? This cannot be undone.`)) return;
+                            await Promise.all([
+                              supabase.from("bookings").delete().eq("customer_email", client.email),
+                              supabase.from("admin_client_notes").delete().eq("customer_email", client.email),
+                              supabase.from("client_images").delete().eq("customer_email", client.email),
+                            ]);
+                            setClients(prev => prev.filter(c => c.email !== client.email));
+                            toast.success("Client deleted");
+                          }}
+                          className="flex items-center gap-1 px-3 py-1 border border-red-500/30 text-red-500 hover:bg-red-500/10 font-body text-xs tracking-wider uppercase transition-colors"
+                        >
+                          <Trash2 size={12} /> Delete
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

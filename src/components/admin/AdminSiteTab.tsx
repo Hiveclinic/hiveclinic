@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Trash2, Pencil, Save, X, Megaphone, Layers, Image, Upload } from "lucide-react";
+import { Plus, Trash2, Pencil, Save, X, Megaphone, Layers, Image, Upload, Crop } from "lucide-react";
 import { toast } from "sonner";
+import ImageCropModal from "./ImageCropModal";
 
 type Addon = {
   id: string;
@@ -37,6 +38,7 @@ const AdminSiteTab = () => {
   const [newAddon, setNewAddon] = useState({ name: "", description: "", price: 0, duration_mins: 0, applicable_categories: "" });
   const [categories, setCategories] = useState<string[]>([]);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
+  const [cropFile, setCropFile] = useState<{ key: string; file: File } | null>(null);
 
   const fetchAll = async () => {
     const [addonsRes, settingsRes, treatRes, imagesRes] = await Promise.all([
@@ -71,12 +73,12 @@ const AdminSiteTab = () => {
     toast.success("Settings saved");
   };
 
-  const handleImageUpload = async (key: string, file: File) => {
+  const handleImageUpload = async (key: string, blob: Blob, fileName?: string) => {
     setUploadingKey(key);
-    const ext = file.name.split(".").pop();
+    const ext = fileName?.split(".").pop() || "jpg";
     const path = `${key}-${Date.now()}.${ext}`;
 
-    const { error: uploadError } = await supabase.storage.from("site-images").upload(path, file, { upsert: true });
+    const { error: uploadError } = await supabase.storage.from("site-images").upload(path, blob, { upsert: true, contentType: blob.type || "image/jpeg" });
     if (uploadError) { toast.error("Upload failed"); setUploadingKey(null); return; }
 
     const { data: { publicUrl } } = supabase.storage.from("site-images").getPublicUrl(path);
@@ -91,6 +93,16 @@ const AdminSiteTab = () => {
     setSiteImages(prev => prev.map(img => img.key === key ? { ...img, image_url: publicUrl } : img));
     toast.success("Image updated");
     setUploadingKey(null);
+  };
+
+  const onFileSelected = (key: string, file: File) => {
+    setCropFile({ key, file });
+  };
+
+  const onCropComplete = async (blob: Blob) => {
+    if (!cropFile) return;
+    await handleImageUpload(cropFile.key, blob, cropFile.file.name);
+    setCropFile(null);
   };
 
   const updateImageUrl = async (key: string, url: string) => {
@@ -236,7 +248,7 @@ const AdminSiteTab = () => {
                     <label className="flex items-center gap-1 px-3 py-1.5 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors cursor-pointer">
                       <Upload size={10} />
                       <span className="font-body text-[10px] uppercase tracking-wider">{uploadingKey === img.key ? "Uploading..." : "Upload"}</span>
-                      <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) handleImageUpload(img.key, e.target.files[0]); }} disabled={uploadingKey === img.key} />
+                      <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) onFileSelected(img.key, e.target.files[0]); }} disabled={uploadingKey === img.key} />
                     </label>
                   </div>
                 </div>
@@ -315,6 +327,15 @@ const AdminSiteTab = () => {
           </div>
         )}
       </div>
+      {/* Image Crop Modal */}
+      {cropFile && (
+        <ImageCropModal
+          imageFile={cropFile.file}
+          aspectRatio={cropFile.key.includes("hero") ? 16 / 9 : cropFile.key.includes("gallery") ? 1 : 0}
+          onCrop={onCropComplete}
+          onCancel={() => setCropFile(null)}
+        />
+      )}
     </div>
   );
 };

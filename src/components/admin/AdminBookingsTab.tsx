@@ -247,6 +247,12 @@ const AdminBookingsTab = () => {
                       {s === "no_show" ? "No Show" : s}
                     </button>
                   ))}
+                  <button
+                    onClick={() => deleteBooking(b.id)}
+                    className="px-2 py-1 border border-red-500/30 text-red-500 hover:bg-red-500/10 font-body text-xs tracking-wider uppercase transition-colors flex items-center gap-1"
+                  >
+                    <Trash2 size={12} /> Delete
+                  </button>
                 </div>
               </div>
               {b.notes && <p className="font-body text-xs text-muted-foreground mt-2 italic">Note: {b.notes}</p>}

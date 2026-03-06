@@ -267,7 +267,7 @@ const AdminClientsTab = () => {
                   }}
                   className={`border p-4 cursor-pointer transition-colors ${isExpanded ? "border-gold bg-gold/5" : "border-border hover:border-gold/30"}`}
                 >
-                  <div className="flex flex-wrap gap-4 items-center">
+                    <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 sm:items-center">
                     <span className="text-muted-foreground">{isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</span>
                     <div className="flex items-center gap-2">
                       <User size={14} className="text-gold" />
@@ -281,10 +281,12 @@ const AdminClientsTab = () => {
                         <Phone size={12} /> {client.phone}
                       </a>
                     )}
-                    <span className="ml-auto font-body text-xs text-muted-foreground">{client.bookingCount} bookings</span>
-                    <span className="font-body text-xs font-medium text-gold">£{client.totalSpent.toFixed(0)}</span>
-                    {clientNotes.length > 0 && <span className="font-body text-xs text-muted-foreground"><StickyNote size={12} className="inline" /> {clientNotes.length}</span>}
-                    {clientImages.length > 0 && <span className="font-body text-xs text-muted-foreground"><Image size={12} className="inline" /> {clientImages.length}</span>}
+                    <div className="flex items-center gap-3 sm:ml-auto">
+                      <span className="font-body text-xs text-muted-foreground">{client.bookingCount} bookings</span>
+                      <span className="font-body text-xs font-medium text-gold">£{client.totalSpent.toFixed(0)}</span>
+                      {clientNotes.length > 0 && <span className="font-body text-xs text-muted-foreground"><StickyNote size={12} className="inline" /> {clientNotes.length}</span>}
+                      {clientImages.length > 0 && <span className="font-body text-xs text-muted-foreground"><Image size={12} className="inline" /> {clientImages.length}</span>}
+                    </div>
                   </div>
                 </div>
 

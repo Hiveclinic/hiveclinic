@@ -248,13 +248,16 @@ const Layout = ({
             <div>
               <h4 className="font-display text-lg mb-4">Opening Hours</h4>
               <div className="font-body text-sm text-background/60 space-y-1">
-                <p>Mon: 10am - 4pm</p>
-                <p>Tue: 10am - 5pm</p>
-                <p>Thu: 12pm - 8pm</p>
-                <p>Fri: 10am - 6pm</p>
-                <p>Sat: 10am - 5pm</p>
-                <p>Wed / Sun: Closed</p>
+                <p>Mon: 10:00 - 17:00</p>
+                <p>Tue: 10:00 - 17:00</p>
+                <p>Wed: Closed</p>
+                <p>Thu: 11:00 - 18:30</p>
+                <p>Fri: 10:00 - 17:00</p>
+                <p>Sat: 10:00 - 15:00</p>
+                <p>Sun: Closed</p>
               </div>
+              <p className="font-body text-xs text-background/40 mt-3">Bank holiday hours may vary.</p>
+              <p className="font-body text-xs text-background/40 mt-1">Appointments are required. Limited same-week availability may be released.</p>
               <div className="mt-4 flex gap-4 items-center">
                 <a href="https://instagram.com/hiveclinicuk" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                   <img src={instagramLogo} alt="Instagram" className="h-7 w-7 opacity-80 hover:opacity-100 transition-opacity" />

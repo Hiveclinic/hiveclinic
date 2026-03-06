@@ -323,6 +323,30 @@ const Admin = () => {
             </div>
           </div>
         </div>
+
+        {/* Mobile Bottom Nav */}
+        <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-background border-t border-border">
+          <div className="grid grid-cols-5 gap-0">
+            {[
+              { key: "calendar" as TabKey, label: "Calendar", icon: <LayoutGrid size={18} /> },
+              { key: "bookings" as TabKey, label: "Bookings", icon: <Calendar size={18} /> },
+              { key: "clients" as TabKey, label: "Clients", icon: <UserCheck size={18} /> },
+              { key: "treatments" as TabKey, label: "Treatments", icon: <Stethoscope size={18} /> },
+              { key: "site" as TabKey, label: "Settings", icon: <Settings size={18} /> },
+            ].map(item => (
+              <button
+                key={item.key}
+                onClick={() => { setTab(item.key); setSidebarOpen(false); }}
+                className={`flex flex-col items-center gap-0.5 py-2.5 font-body text-[10px] tracking-wider uppercase transition-colors ${
+                  tab === item.key ? "text-gold" : "text-muted-foreground"
+                }`}
+              >
+                {item.icon}
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </section>
     </Layout>
   );

@@ -427,8 +427,8 @@ const AdminCalendarView = () => {
 
       {/* Edit Modal */}
       {editBooking && editForm && (
-        <div className="fixed inset-0 z-50 bg-foreground/50 flex items-center justify-center p-4" onClick={() => { setEditBooking(null); setEditForm(null); }}>
-          <div className="bg-background border border-border w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-foreground/50 flex items-center justify-center p-0 lg:p-4" onClick={() => { setEditBooking(null); setEditForm(null); }}>
+          <div className="bg-background border border-border w-full h-full lg:h-auto lg:max-w-lg lg:max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between p-5 border-b border-border">
               <h3 className="font-display text-xl">Edit Booking</h3>
               <button onClick={() => { setEditBooking(null); setEditForm(null); }} className="text-muted-foreground hover:text-foreground"><X size={16} strokeWidth={1.5} /></button>

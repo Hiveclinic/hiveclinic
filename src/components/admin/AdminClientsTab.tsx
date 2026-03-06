@@ -363,15 +363,15 @@ const AdminClientsTab = () => {
                       </div>
                     </div>
 
-                    {/* Last Visit + Actions */}
-                    <div className="flex items-center justify-between">
+                     {/* Last Visit + Actions */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <p className="font-body text-xs text-muted-foreground">
                         Last visit: {client.lastVisit ? new Date(client.lastVisit + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "N/A"}
                       </p>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 w-full sm:w-auto">
                         <button
                           onClick={() => navigate(`/bookings?email=${encodeURIComponent(client.email)}&name=${encodeURIComponent(client.name)}`)}
-                          className="flex items-center gap-1 px-3 py-1 border border-gold/30 text-gold hover:bg-gold/10 font-body text-xs tracking-wider uppercase transition-colors"
+                          className="flex-1 sm:flex-initial flex items-center justify-center gap-1 px-3 py-2 sm:py-1 border border-gold/30 text-gold hover:bg-gold/10 font-body text-xs tracking-wider uppercase transition-colors"
                         >
                           <RefreshCw size={12} /> Rebook
                         </button>
@@ -386,7 +386,7 @@ const AdminClientsTab = () => {
                             setClients(prev => prev.filter(c => c.email !== client.email));
                             toast.success("Client deleted");
                           }}
-                          className="flex items-center gap-1 px-3 py-1 border border-red-500/30 text-red-500 hover:bg-red-500/10 font-body text-xs tracking-wider uppercase transition-colors"
+                          className="flex-1 sm:flex-initial flex items-center justify-center gap-1 px-3 py-2 sm:py-1 border border-red-500/30 text-red-500 hover:bg-red-500/10 font-body text-xs tracking-wider uppercase transition-colors"
                         >
                           <Trash2 size={12} /> Delete
                         </button>

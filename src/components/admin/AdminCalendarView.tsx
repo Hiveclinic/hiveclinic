@@ -58,10 +58,12 @@ const HOURS = Array.from({ length: 14 }, (_, i) => i + 8);
 const PAYMENT_METHODS = ["Card (Stripe)", "Cash", "Bank Transfer (Tide)", "Other"];
 
 const AdminCalendarView = () => {
+  const isMobile = useIsMobile();
   const [bookings, setBookings] = useState<CalendarBooking[]>([]);
   const [availability, setAvailability] = useState<Availability[]>([]);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [mobileDate, setMobileDate] = useState(new Date());
   const [dragBooking, setDragBooking] = useState<CalendarBooking | null>(null);
   const [loading, setLoading] = useState(true);
   const [editBooking, setEditBooking] = useState<CalendarBooking | null>(null);

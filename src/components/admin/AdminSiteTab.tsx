@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Trash2, Pencil, Save, X, Megaphone, Layers, Image, Upload, Crop } from "lucide-react";
+import { Plus, Trash2, Pencil, Save, X, Megaphone, Layers, Image, Upload } from "lucide-react";
 import { toast } from "sonner";
-import ImageCropModal from "./ImageCropModal";
 
 type Addon = {
   id: string;
@@ -38,7 +37,6 @@ const AdminSiteTab = () => {
   const [newAddon, setNewAddon] = useState({ name: "", description: "", price: 0, duration_mins: 0, applicable_categories: "" });
   const [categories, setCategories] = useState<string[]>([]);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
-  const [cropFile, setCropFile] = useState<{ key: string; file: File } | null>(null);
 
   const fetchAll = async () => {
     const [addonsRes, settingsRes, treatRes, imagesRes] = await Promise.all([
@@ -96,13 +94,7 @@ const AdminSiteTab = () => {
   };
 
   const onFileSelected = (key: string, file: File) => {
-    setCropFile({ key, file });
-  };
-
-  const onCropComplete = async (blob: Blob) => {
-    if (!cropFile) return;
-    await handleImageUpload(cropFile.key, blob, cropFile.file.name);
-    setCropFile(null);
+    handleImageUpload(key, file, file.name);
   };
 
   const updateImageUrl = async (key: string, url: string) => {
@@ -327,15 +319,6 @@ const AdminSiteTab = () => {
           </div>
         )}
       </div>
-      {/* Image Crop Modal */}
-      {cropFile && (
-        <ImageCropModal
-          imageFile={cropFile.file}
-          aspectRatio={cropFile.key.includes("hero") ? 16 / 9 : cropFile.key.includes("gallery") ? 1 : 0}
-          onCrop={onCropComplete}
-          onCancel={() => setCropFile(null)}
-        />
-      )}
     </div>
   );
 };

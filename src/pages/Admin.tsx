@@ -198,8 +198,8 @@ const Admin = () => {
 
   return (
     <Layout>
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="pt-16 pb-24 lg:pb-20">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
@@ -214,7 +214,7 @@ const Admin = () => {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
             <div className="border border-border p-4">
               <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">Today</p>
               <p className="font-display text-2xl">{stats.todayBookings}</p>
@@ -321,6 +321,30 @@ const Admin = () => {
                 </>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Mobile Bottom Nav */}
+        <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-background border-t border-border">
+          <div className="grid grid-cols-5 gap-0">
+            {[
+              { key: "calendar" as TabKey, label: "Calendar", icon: <LayoutGrid size={18} /> },
+              { key: "bookings" as TabKey, label: "Bookings", icon: <Calendar size={18} /> },
+              { key: "clients" as TabKey, label: "Clients", icon: <UserCheck size={18} /> },
+              { key: "treatments" as TabKey, label: "Treatments", icon: <Stethoscope size={18} /> },
+              { key: "site" as TabKey, label: "Settings", icon: <Settings size={18} /> },
+            ].map(item => (
+              <button
+                key={item.key}
+                onClick={() => { setTab(item.key); setSidebarOpen(false); }}
+                className={`flex flex-col items-center gap-0.5 py-2.5 font-body text-[10px] tracking-wider uppercase transition-colors ${
+                  tab === item.key ? "text-gold" : "text-muted-foreground"
+                }`}
+              >
+                {item.icon}
+                {item.label}
+              </button>
+            ))}
           </div>
         </div>
       </section>

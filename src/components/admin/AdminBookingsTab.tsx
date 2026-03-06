@@ -167,8 +167,8 @@ const AdminBookingsTab = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 mb-6 items-center">
-        <div className="relative flex-1 min-w-[200px]">
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <div className="relative flex-1 min-w-0">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
@@ -178,18 +178,18 @@ const AdminBookingsTab = () => {
             className="w-full pl-9 pr-4 py-2 border border-border bg-transparent font-body text-sm focus:border-gold focus:outline-none"
           />
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
           {["all", ...STATUS_OPTIONS].map(s => (
             <button
               key={s}
               onClick={() => setStatusFilter(s)}
-              className={`px-3 py-2 font-body text-xs tracking-wider uppercase border transition-colors ${statusFilter === s ? "border-gold text-gold" : "border-border text-muted-foreground hover:border-foreground"}`}
+              className={`px-3 py-2 font-body text-xs tracking-wider uppercase border transition-colors whitespace-nowrap ${statusFilter === s ? "border-gold text-gold" : "border-border text-muted-foreground hover:border-foreground"}`}
             >
               {s === "no_show" ? "No Show" : s}
             </button>
           ))}
         </div>
-        <button onClick={exportCSV} className="flex items-center gap-2 px-4 py-2 border border-border font-body text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground hover:border-foreground transition-colors">
+        <button onClick={exportCSV} className="flex items-center justify-center gap-2 px-4 py-2 border border-border font-body text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground hover:border-foreground transition-colors whitespace-nowrap">
           <Download size={14} /> Export
         </button>
       </div>
@@ -202,8 +202,8 @@ const AdminBookingsTab = () => {
       ) : (
         <div className="space-y-3">
           {filtered.map(b => (
-            <div key={b.id} className="border border-border p-5 hover:border-gold/30 transition-colors">
-              <div className="flex flex-wrap gap-4 items-center mb-3">
+            <div key={b.id} className="border border-border p-4 sm:p-5 hover:border-gold/30 transition-colors">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 sm:items-center mb-3">
                 <div className="flex items-center gap-2">
                   <User size={14} className="text-gold" />
                   <span className="font-body text-sm font-medium">{b.customer_name}</span>
@@ -218,23 +218,25 @@ const AdminBookingsTab = () => {
                     <a href={`tel:${b.customer_phone}`} className="font-body text-xs">{b.customer_phone}</a>
                   </div>
                 )}
-                <div className="ml-auto flex items-center gap-2">
+                <div className="sm:ml-auto flex items-center gap-2">
                   <Calendar size={14} className="text-muted-foreground" />
                   <span className="font-body text-xs text-muted-foreground">{b.booking_date} at {b.booking_time?.slice(0, 5)}</span>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-3 items-center">
-                <span className="font-body text-xs bg-secondary px-2 py-1">{(b.treatments as any)?.name || "Treatment"}</span>
-                <span className="font-body text-xs text-muted-foreground">{b.duration_mins} mins</span>
-                <span className="font-body text-xs font-medium">£{Number(b.total_price).toFixed(2)}</span>
-                {Number(b.deposit_amount) > 0 && (
-                  <span className="font-body text-xs text-gold">Deposit: £{Number(b.deposit_amount).toFixed(2)}</span>
-                )}
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
+                <div className="flex flex-wrap gap-2 items-center">
+                  <span className="font-body text-xs bg-secondary px-2 py-1">{(b.treatments as any)?.name || "Treatment"}</span>
+                  <span className="font-body text-xs text-muted-foreground">{b.duration_mins} mins</span>
+                  <span className="font-body text-xs font-medium">£{Number(b.total_price).toFixed(2)}</span>
+                  {Number(b.deposit_amount) > 0 && (
+                    <span className="font-body text-xs text-gold">Deposit: £{Number(b.deposit_amount).toFixed(2)}</span>
+                  )}
+                </div>
 
-                <div className="ml-auto flex gap-2 flex-wrap">
+                <div className="sm:ml-auto grid grid-cols-3 sm:flex gap-1.5 sm:gap-2">
                   {b.status === "confirmed" && (
-                    <button onClick={() => sendReminder(b.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-gold hover:border-gold font-body text-xs tracking-wider uppercase transition-colors flex items-center gap-1">
+                    <button onClick={() => sendReminder(b.id)} className="px-2 py-1.5 border border-border text-muted-foreground hover:text-gold hover:border-gold font-body text-[10px] sm:text-xs tracking-wider uppercase transition-colors flex items-center justify-center gap-1">
                       <Bell size={12} /> Remind
                     </button>
                   )}
@@ -242,14 +244,14 @@ const AdminBookingsTab = () => {
                     <button
                       key={s}
                       onClick={() => updateStatus(b.id, s)}
-                      className={`px-2 py-1 border font-body text-xs tracking-wider uppercase transition-colors ${b.status === s ? STATUS_COLORS[s] || "" : "border-border text-muted-foreground hover:border-foreground opacity-50 hover:opacity-100"}`}
+                      className={`px-2 py-1.5 border font-body text-[10px] sm:text-xs tracking-wider uppercase transition-colors ${b.status === s ? STATUS_COLORS[s] || "" : "border-border text-muted-foreground hover:border-foreground opacity-50 hover:opacity-100"}`}
                     >
                       {s === "no_show" ? "No Show" : s}
                     </button>
                   ))}
                   <button
                     onClick={() => deleteBooking(b.id)}
-                    className="px-2 py-1 border border-red-500/30 text-red-500 hover:bg-red-500/10 font-body text-xs tracking-wider uppercase transition-colors flex items-center gap-1"
+                    className="px-2 py-1.5 border border-red-500/30 text-red-500 hover:bg-red-500/10 font-body text-[10px] sm:text-xs tracking-wider uppercase transition-colors flex items-center justify-center gap-1"
                   >
                     <Trash2 size={12} /> Delete
                   </button>

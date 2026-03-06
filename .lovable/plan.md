@@ -1,76 +1,133 @@
 
 
-# Phase 8: Opening Hours Update, Remove Image Cropper, Mobile-Friendly Admin
+# Phase 3: Admin Enhancements, Multi-Treatment Booking, and Fixes
 
-## 1. Remove Image Cropper
+## 1. Fix 404 on Admin Login (Published Site)
 
-Delete `src/components/admin/ImageCropModal.tsx` and remove its usage from `AdminSiteTab.tsx`. Revert the upload flow to directly upload the selected file without a crop step (the `onFileSelected` function will call `handleImageUpload` directly with the raw file).
+The route `/hive-admin-login` exists in the code and works in preview. The 404 on the published site (`hiveclinicuk.com//hive-admin-login`) is caused by the double slash `//` in the URL. This is a hosting/domain redirect issue -- the custom domain is likely appending a trailing slash to the base URL before the path.
 
-### Changes:
-- Delete `src/components/admin/ImageCropModal.tsx`
-- `AdminSiteTab.tsx`: Remove `ImageCropModal` import, remove `cropFile` state, remove `onCropComplete`, change `onFileSelected` to upload directly. Remove the crop modal render at the bottom.
+**Fix:** The app needs to be re-published so the latest routes are deployed. No code change needed -- the route is correctly defined at line 82 of `App.tsx`. The double slash in the URL you shared is the problem -- use `hiveclinicuk.com/hive-admin-login` (single slash).
 
-## 2. Update Opening Hours in Footer
+---
 
-Update the text-only content in `Layout.tsx` footer (lines 249-257).
+## 2. Website Image Management via Admin
 
-Replace with:
-```
-Mon: 10:00 - 17:00
-Tue: 10:00 - 17:00
-Wed: Closed
-Thu: 11:00 - 18:30
-Fri: 10:00 - 17:00
-Sat: 10:00 - 15:00
-Sun: Closed
-```
+Currently there's no way to update hero images, gallery images, or page images from the admin dashboard. These are hardcoded in component files.
 
-Add two small notes underneath:
-- "Bank holiday hours may vary."
-- "Appointments are required. Limited same-week availability may be released."
+**Changes:**
+- Add a new "Images" section to `AdminSiteTab.tsx` that stores editable image URLs in the `site_settings` table (or a new `site_images` table)
+- Create a `site_images` table with fields: `key` (text, e.g. "hero_home", "gallery_1"), `image_url` (text), `alt_text` (text), `updated_at`
+- Admin can upload images to the `client-images` bucket (or a new public `site-images` bucket) and the URL is saved
+- Frontend pages read from this table and fall back to the hardcoded defaults if no override exists
+- Create a public storage bucket `site-images` for website content images
 
-No layout, styling, font, colour, or spacing changes.
+---
 
-## 3. Mobile-Friendly Admin Dashboard
+## 3. Treatment Menu Reordering
 
-The current admin has several mobile pain points: the calendar grid has `min-w-[900px]`, booking cards stack poorly, stats overflow on small screens. The goal is to make it feel like a premium booking app (think Fresha/Square Appointments) on mobile.
+Drag-and-drop reordering already exists in `AdminTreatmentsTab.tsx` (lines 144-155). The `sort_order` is saved on drag end. This already works. If it feels unresponsive, I will add visual feedback (highlight, ghost element).
 
-### Changes to `Admin.tsx`:
-- Make quick stats responsive: `grid-cols-1 sm:grid-cols-3` instead of `grid-cols-3`
-- Add bottom navigation bar on mobile (visible only on `lg:hidden`) with the 5 most-used tabs (Calendar, Bookings, Clients, Treatments, Settings) as icon buttons — replacing the hamburger sidebar pattern for faster access
-- Reduce header padding on mobile
+**Enhancement:** Add category-level reordering so you can control the order categories appear on the booking page (not just treatments within a category).
 
-### Changes to `AdminCalendarView.tsx`:
-- **Mobile day view**: On mobile (`< lg`), show a single-day view instead of the 7-day week grid. Add left/right arrows to navigate between days. Show bookings as a vertical list for that day.
-- Keep the full week grid on desktop (no changes there)
-- Make the edit modal full-screen on mobile (`max-w-lg` → `w-full h-full lg:max-w-lg lg:h-auto lg:max-h-[90vh]`)
+---
 
-### Changes to `AdminBookingsTab.tsx`:
-- Make booking cards stack better on mobile: status buttons wrap into a 2-column grid on small screens
-- Stats grid: `grid-cols-2 sm:grid-cols-3 md:grid-cols-6`
-- Filter buttons scroll horizontally on mobile with `overflow-x-auto`
+## 4. Take Payment from Calendar (Admin)
 
-### Changes to `AdminClientsTab.tsx`:
-- Client cards: stack info vertically on mobile instead of flex-row
-- Action buttons (Delete, Rebook) full-width on mobile
+Add a "Take Payment" button in the calendar edit modal that creates a Stripe Payment Link for the outstanding balance and copies it to clipboard (so admin can send it to the client).
 
-### Changes to `AdminSiteTab.tsx`:
-- Image management cards: stack preview and inputs vertically on mobile
+**Changes to `AdminCalendarView.tsx`:**
+- Add a "Send Payment Link" button in the edit modal for bookings with `payment_status` of "pending" or "deposit_paid"
+- This calls an edge function that creates a Stripe Payment Link for the remaining balance
+- Link is copied to clipboard so admin can share via WhatsApp/SMS
+- Add a "Mark as Paid" button for in-person/cash payments that updates `payment_status` to "fully_paid"
+
+**New edge function:** `create-payment-link` -- creates a Stripe Payment Link for a given amount and booking reference.
+
+---
+
+## 5. Payment Plan Customisation
+
+Currently `AdminPaymentPlansTab.tsx` allows creating plans and recording payments, but you cannot edit the instalment amount after creation.
+
+**Changes:**
+- Add an "Edit" button on each active plan
+- Allow editing: `instalment_amount`, `total_instalments`, `total_amount`, `next_payment_date`
+- Add a "Record Custom Amount" option when recording a payment (instead of always recording the fixed instalment amount)
+- Show remaining balance clearly
+
+---
+
+## 6. Cancellation Sync Between Admin and Client
+
+Currently:
+- Admin cancels via calendar -> updates DB status to "cancelled" and sends cancellation email to client. Client sees it in their portal (already works via DB read).
+- Client cancels via portal -> updates DB status to "cancelled". Admin sees it in bookings/calendar (already works via DB read).
+
+**Missing:** When a client cancels, the admin doesn't get notified.
+
+**Fix:** In `CustomerPortal.tsx` `cancelBooking` function, after updating the booking status, trigger `send-booking-email` with a new `emailType: "client_cancelled"` that sends a notification to the admin email.
+
+---
+
+## 7. Mailchimp Email Automations
+
+The `mailchimp-subscribe` edge function already exists and works. It's already wired into the booking checkout flow. To set up automations:
+
+**What I will do:**
+- Update `mailchimp-subscribe` to accept and pass `firstName`, `lastName`, and `tags` (e.g. "Booked Client", treatment category)
+- Add tags based on treatment category so you can create targeted automations in Mailchimp
+- Ensure the VIP popup signup also triggers the function (it already does via `email_subscribers` table insert, but needs to call the edge function too)
+
+**What you need to do in Mailchimp:**
+- Log into your Mailchimp account
+- Go to Automations and create journeys based on tags (e.g. "Welcome" email for new subscribers, "Post-Treatment" for booked clients)
+- The integration will automatically tag contacts when they book
+
+---
+
+## 8. Multiple Treatment Selection + Course Suggestions
+
+This is the biggest feature. Currently only one treatment can be selected per booking.
+
+**Changes to `BookingSystem.tsx`:**
+- Allow selecting multiple treatments (change `selectedTreatment` from single to array `selectedTreatments`)
+- Show a running total of all selected treatments
+- After selection, check if any selected treatment has packages in `treatment_packages` and show a "Save with a Course" prompt
+- Display savings: "Book 3 sessions of Level 1 Face Peel and save £25 (£230 vs £255)"
+- Duration and time slot calculation accounts for combined treatment time
+- Checkout sends all treatment IDs
+
+**Changes to `create-booking-checkout`:**
+- Accept an array of treatment IDs
+- Create line items for each treatment in the Stripe checkout session
+- Store multiple treatment references in the booking (use the existing `addon_ids` pattern or add a `treatment_ids` array column)
+
+**Database change:**
+- Add `treatment_ids` (uuid array) column to `bookings` table to support multi-treatment bookings
+- Keep `treatment_id` for backwards compatibility (primary treatment)
 
 ---
 
 ## Technical Summary
 
-### Files to Delete:
-- `src/components/admin/ImageCropModal.tsx`
+### Database Changes:
+- New table: `site_images` (key, image_url, alt_text, updated_at) with RLS for admin write, public read
+- New storage bucket: `site-images` (public)
+- Add column `treatment_ids` (uuid[]) to `bookings` table
 
-### Files to Edit:
-- `src/components/Layout.tsx` — update opening hours text
-- `src/components/admin/AdminSiteTab.tsx` — remove cropper, improve mobile layout
-- `src/pages/Admin.tsx` — add mobile bottom nav, responsive stats
-- `src/components/admin/AdminCalendarView.tsx` — mobile day view, full-screen modal
-- `src/components/admin/AdminBookingsTab.tsx` — responsive cards and filters
-- `src/components/admin/AdminClientsTab.tsx` — responsive client cards
+### Edge Functions:
+- New: `create-payment-link` -- generates Stripe Payment Link
+- Update: `mailchimp-subscribe` -- accept firstName, lastName, tags
+- Update: `send-booking-email` -- add "client_cancelled" email type for admin notification
 
-### No database or edge function changes needed.
+### Frontend Files to Edit:
+- `AdminCalendarView.tsx` -- add payment link + mark as paid buttons
+- `AdminPaymentPlansTab.tsx` -- add edit and custom payment recording
+- `AdminSiteTab.tsx` -- add image management section
+- `BookingSystem.tsx` -- multi-treatment selection + course suggestions
+- `CustomerPortal.tsx` -- trigger admin notification on client cancellation
+- `create-booking-checkout` -- support multiple treatments
+
+### Frontend Files to Create:
+- None (all changes are to existing files)
 

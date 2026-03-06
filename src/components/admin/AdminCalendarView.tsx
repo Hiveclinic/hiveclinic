@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ChevronLeft, ChevronRight, Clock, User, X, Mail, Phone, StickyNote, Check, CreditCard, Link as LinkIcon, DollarSign, PoundSterling, Banknote, CalendarPlus } from "lucide-react";
 import { format, addDays, startOfWeek, isSameDay } from "date-fns";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type CalendarBooking = {
   id: string;
@@ -57,10 +58,12 @@ const HOURS = Array.from({ length: 14 }, (_, i) => i + 8);
 const PAYMENT_METHODS = ["Card (Stripe)", "Cash", "Bank Transfer (Tide)", "Other"];
 
 const AdminCalendarView = () => {
+  const isMobile = useIsMobile();
   const [bookings, setBookings] = useState<CalendarBooking[]>([]);
   const [availability, setAvailability] = useState<Availability[]>([]);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [mobileDate, setMobileDate] = useState(new Date());
   const [dragBooking, setDragBooking] = useState<CalendarBooking | null>(null);
   const [loading, setLoading] = useState(true);
   const [editBooking, setEditBooking] = useState<CalendarBooking | null>(null);
@@ -317,19 +320,29 @@ const AdminCalendarView = () => {
 
   const showPaymentActions = editBooking && (editBooking.payment_status === "pending" || editBooking.payment_status === "deposit_paid");
 
+  const mobileDayBookings = useMemo(() => {
+    const dateStr = format(mobileDate, "yyyy-MM-dd");
+    return bookings
+      .filter(b => b.booking_date === dateStr && b.status !== "cancelled")
+      .sort((a, b) => a.booking_time.localeCompare(b.booking_time));
+  }, [bookings, mobileDate]);
+
   return (
     <div>
       {/* Week Navigation */}
-      <div className="flex items-center justify-between mb-6">
-        <button onClick={() => setWeekStart(addDays(weekStart, -7))} className="p-2 border border-border hover:border-gold transition-colors">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <button onClick={() => isMobile ? setMobileDate(addDays(mobileDate, -1)) : setWeekStart(addDays(weekStart, -7))} className="p-2 border border-border hover:border-gold transition-colors">
           <ChevronLeft size={14} strokeWidth={1.5} />
         </button>
-        <h3 className="font-display text-xl">
-          {format(weekDays[0], "d MMM")} - {format(weekDays[6], "d MMM yyyy")}
+        <h3 className="font-display text-lg sm:text-xl text-center">
+          {isMobile
+            ? format(mobileDate, "EEE d MMM yyyy")
+            : `${format(weekDays[0], "d MMM")} - ${format(weekDays[6], "d MMM yyyy")}`
+          }
         </h3>
         <div className="flex gap-2">
-          <button onClick={() => setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 }))} className="px-3 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-gold transition-colors">Today</button>
-          <button onClick={() => setWeekStart(addDays(weekStart, 7))} className="p-2 border border-border hover:border-gold transition-colors">
+          <button onClick={() => { setWeekStart(startOfWeek(new Date(), { weekStartsOn: 1 })); setMobileDate(new Date()); }} className="px-2 sm:px-3 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-gold transition-colors">Today</button>
+          <button onClick={() => isMobile ? setMobileDate(addDays(mobileDate, 1)) : setWeekStart(addDays(weekStart, 7))} className="p-2 border border-border hover:border-gold transition-colors">
             <ChevronRight size={14} strokeWidth={1.5} />
           </button>
         </div>
@@ -337,7 +350,38 @@ const AdminCalendarView = () => {
 
       {loading ? (
         <div className="py-12 text-center"><p className="font-body text-muted-foreground animate-pulse">Loading calendar...</p></div>
+      ) : isMobile ? (
+        /* Mobile Day View */
+        <div>
+          {!isDayAvailable(mobileDate) && (
+            <div className="p-4 bg-secondary text-center mb-3">
+              <p className="font-body text-sm text-muted-foreground">Closed</p>
+            </div>
+          )}
+          {mobileDayBookings.length === 0 && isDayAvailable(mobileDate) ? (
+            <div className="p-8 bg-secondary text-center">
+              <p className="font-body text-sm text-muted-foreground">No bookings</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {mobileDayBookings.map(b => (
+                <div key={b.id} onClick={() => openEdit(b)}
+                  className={`border p-3 cursor-pointer transition-colors hover:border-gold/30 ${STATUS_BG[b.status] || "bg-secondary"}`}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-body text-sm font-medium">{b.customer_name}</span>
+                    <span className="font-body text-xs">{b.booking_time.slice(0, 5)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-body text-xs opacity-70">{(b.treatments as any)?.name} — {b.duration_mins}m</span>
+                    <span className="font-body text-xs font-medium">£{Number(b.total_price).toFixed(0)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       ) : (
+        /* Desktop Week Grid */
         <div className="overflow-x-auto">
           <div className="min-w-[900px]">
             <div className="grid grid-cols-8 border-b border-border">
@@ -377,12 +421,14 @@ const AdminCalendarView = () => {
         </div>
       )}
 
-      <p className="font-body text-xs text-muted-foreground mt-4 text-center">Click a booking to edit details. Drag and drop to reschedule.</p>
+      <p className="font-body text-xs text-muted-foreground mt-4 text-center">
+        {isMobile ? "Tap a booking to edit details." : "Click a booking to edit details. Drag and drop to reschedule."}
+      </p>
 
       {/* Edit Modal */}
       {editBooking && editForm && (
-        <div className="fixed inset-0 z-50 bg-foreground/50 flex items-center justify-center p-4" onClick={() => { setEditBooking(null); setEditForm(null); }}>
-          <div className="bg-background border border-border w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-foreground/50 flex items-center justify-center p-0 lg:p-4" onClick={() => { setEditBooking(null); setEditForm(null); }}>
+          <div className="bg-background border border-border w-full h-full lg:h-auto lg:max-w-lg lg:max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between p-5 border-b border-border">
               <h3 className="font-display text-xl">Edit Booking</h3>
               <button onClick={() => { setEditBooking(null); setEditForm(null); }} className="text-muted-foreground hover:text-foreground"><X size={16} strokeWidth={1.5} /></button>

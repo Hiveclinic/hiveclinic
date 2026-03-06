@@ -37,7 +37,6 @@ const AdminSiteTab = () => {
   const [newAddon, setNewAddon] = useState({ name: "", description: "", price: 0, duration_mins: 0, applicable_categories: "" });
   const [categories, setCategories] = useState<string[]>([]);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
-  const [cropFile, setCropFile] = useState<{ key: string; file: File } | null>(null);
 
   const fetchAll = async () => {
     const [addonsRes, settingsRes, treatRes, imagesRes] = await Promise.all([

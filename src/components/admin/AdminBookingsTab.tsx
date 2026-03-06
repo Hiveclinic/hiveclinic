@@ -167,8 +167,8 @@ const AdminBookingsTab = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 mb-6 items-center">
-        <div className="relative flex-1 min-w-[200px]">
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <div className="relative flex-1 min-w-0">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
@@ -178,18 +178,18 @@ const AdminBookingsTab = () => {
             className="w-full pl-9 pr-4 py-2 border border-border bg-transparent font-body text-sm focus:border-gold focus:outline-none"
           />
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
           {["all", ...STATUS_OPTIONS].map(s => (
             <button
               key={s}
               onClick={() => setStatusFilter(s)}
-              className={`px-3 py-2 font-body text-xs tracking-wider uppercase border transition-colors ${statusFilter === s ? "border-gold text-gold" : "border-border text-muted-foreground hover:border-foreground"}`}
+              className={`px-3 py-2 font-body text-xs tracking-wider uppercase border transition-colors whitespace-nowrap ${statusFilter === s ? "border-gold text-gold" : "border-border text-muted-foreground hover:border-foreground"}`}
             >
               {s === "no_show" ? "No Show" : s}
             </button>
           ))}
         </div>
-        <button onClick={exportCSV} className="flex items-center gap-2 px-4 py-2 border border-border font-body text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground hover:border-foreground transition-colors">
+        <button onClick={exportCSV} className="flex items-center justify-center gap-2 px-4 py-2 border border-border font-body text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground hover:border-foreground transition-colors whitespace-nowrap">
           <Download size={14} /> Export
         </button>
       </div>

@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Trash2, Pencil, Save, X, Megaphone, Layers, Image, Upload, Crop } from "lucide-react";
+import { Plus, Trash2, Pencil, Save, X, Megaphone, Layers, Image, Upload } from "lucide-react";
 import { toast } from "sonner";
-import ImageCropModal from "./ImageCropModal";
 
 type Addon = {
   id: string;

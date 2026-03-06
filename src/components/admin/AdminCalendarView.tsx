@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ChevronLeft, ChevronRight, Clock, User, X, Mail, Phone, StickyNote, Check, CreditCard, Link as LinkIcon, DollarSign, PoundSterling, Banknote, CalendarPlus } from "lucide-react";
 import { format, addDays, startOfWeek, isSameDay } from "date-fns";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type CalendarBooking = {
   id: string;

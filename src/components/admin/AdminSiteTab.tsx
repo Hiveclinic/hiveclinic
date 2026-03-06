@@ -94,13 +94,7 @@ const AdminSiteTab = () => {
   };
 
   const onFileSelected = (key: string, file: File) => {
-    setCropFile({ key, file });
-  };
-
-  const onCropComplete = async (blob: Blob) => {
-    if (!cropFile) return;
-    await handleImageUpload(cropFile.key, blob, cropFile.file.name);
-    setCropFile(null);
+    handleImageUpload(key, file, file.name);
   };
 
   const updateImageUrl = async (key: string, url: string) => {

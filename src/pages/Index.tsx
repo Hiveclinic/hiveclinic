@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Star, Shield, Award, Clock, Sparkles } from "lucide-react";
+import { ArrowRight, Star, Shield, Award, Clock, Sparkles, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import TreatmentHelper from "@/components/TreatmentHelper";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageMeta } from "@/hooks/use-page-meta";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";

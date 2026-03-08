@@ -295,6 +295,19 @@ const Layout = ({
         </div>
       </footer>
 
+      {/* Sticky Mobile Booking Button */}
+      {!["/bookings", "/admin", "/auth", "/my-appointments"].some(p => location.pathname.startsWith(p)) && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-background border-t border-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <Link
+            to="/bookings"
+            className="flex items-center justify-center gap-2 w-full py-3.5 bg-foreground text-background font-body text-sm tracking-widest uppercase"
+          >
+            <CalendarDays size={16} />
+            Book Appointment
+          </Link>
+        </div>
+      )}
+
       <VIPPopup />
       <TreatmentChatbot />
     </div>;

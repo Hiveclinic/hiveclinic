@@ -341,6 +341,81 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Meet Bianca */}
+      <section className="py-24 bg-secondary">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="aspect-[4/5] overflow-hidden">
+              <img src={gal2} alt="Bianca - practitioner at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
+            </div>
+            <div>
+              <p className="font-body text-xs tracking-[0.3em] uppercase text-gold mb-4">The Practitioner</p>
+              <h2 className="font-display text-4xl md:text-5xl mb-6">Meet Bianca</h2>
+              <p className="font-body text-muted-foreground leading-relaxed mb-6">
+                Bianca is the practitioner behind Hive Clinic, specialising in advanced skin treatments and aesthetic procedures designed to improve skin quality and enhance natural features. Treatments are delivered with a focus on consultation, safety and personalised results.
+              </p>
+              <p className="font-body text-muted-foreground leading-relaxed mb-8">
+                With a conservative, anatomy-led approach, every treatment at Hive Clinic is tailored to enhance your natural beauty — never to change it.
+              </p>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 font-body text-sm tracking-widest uppercase text-gold hover:text-foreground transition-colors"
+              >
+                Learn More About Bianca <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Instagram */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="font-display text-4xl md:text-5xl mb-4">Follow Us on Instagram</h2>
+          <p className="font-body text-muted-foreground mb-12">Stay up to date with our latest treatments, results, and clinic news.</p>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+            {galleryImages.map((img, i) => (
+              <a
+                key={i}
+                href="https://instagram.com/hiveclinicuk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="aspect-square overflow-hidden group"
+              >
+                <img src={img} alt={`Hive Clinic Instagram post ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+              </a>
+            ))}
+          </div>
+          <a
+            href="https://instagram.com/hiveclinicuk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-body text-sm tracking-widest uppercase text-gold hover:text-foreground transition-colors mt-8"
+          >
+            @hiveclinicuk <ArrowRight size={14} />
+          </a>
+        </div>
+      </section>
+
+      {/* Trust Signals */}
+      <section className="py-16 border-y border-border">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { icon: Shield, text: "Fully insured aesthetic clinic" },
+              { icon: CheckCircle, text: "Professional consultation process" },
+              { icon: Award, text: "Medical grade skincare products used" },
+              { icon: Sparkles, text: "Professional sterile treatment environment" },
+            ].map(({ icon: Icon, text }) => (
+              <div key={text} className="flex flex-col items-center gap-3">
+                <Icon size={24} className="text-gold" />
+                <p className="font-body text-sm text-muted-foreground">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">

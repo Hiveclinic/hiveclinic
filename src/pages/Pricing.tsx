@@ -3,7 +3,9 @@ import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
 import klarnaLogo from "@/assets/klarna-logo.png";
 import clearpayLogo from "@/assets/clearpay-logo.png";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
+// usePageMeta is called inside the component below
 const menu = [
   {
     category: "Chemical Peels",

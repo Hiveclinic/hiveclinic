@@ -7,6 +7,7 @@ import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const categories = [
   { title: "Lip Fillers", desc: "Natural-looking lip enhancement tailored to your face shape. From subtle hydration to a fuller pout.", img: gallery1, link: "/treatments/lip-fillers-manchester", highlight: "Most Popular", startingFrom: "£90" },
@@ -27,7 +28,9 @@ const categories = [
   { title: "Consultations", desc: "Free online, in-person, and prescriber consultations. Your journey starts here.", img: gallery3, link: "/treatments/consultations", highlight: "Start Here", startingFrom: "Free" },
 ];
 
-const Treatments = () => (
+const Treatments = () => {
+  usePageMeta("Treatments | Hive Clinic Manchester City Centre", "Browse all aesthetic treatments at Hive Clinic, Manchester City Centre. Lip fillers, skin boosters, chemical peels, microneedling and more.");
+  return (
   <Layout>
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-6">
@@ -88,6 +91,7 @@ const Treatments = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default Treatments;

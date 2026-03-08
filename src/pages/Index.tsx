@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Star, Shield, Award, Clock, Sparkles } from "lucide-react";
+import { ArrowRight, Star, Shield, Award, Clock, Sparkles, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import TreatmentHelper from "@/components/TreatmentHelper";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageMeta } from "@/hooks/use-page-meta";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
@@ -19,7 +20,7 @@ const highlights = [
   { title: "Chemical Peels", desc: "Targeted peels for face, back, and body to transform skin tone and texture.", link: "/treatments/chemical-peels-manchester" },
   { title: "HydraFacial", desc: "Deep cleansing facials for glass-like, refreshed skin.", link: "/treatments/hydrafacial-manchester" },
   { title: "Dermal Filler", desc: "Expert lip, cheek, jawline, and facial balancing treatments.", link: "/treatments/dermal-filler-manchester" },
-  { title: "Anti-Wrinkle", desc: "Precision injections for a naturally refreshed appearance.", link: "/treatments/anti-wrinkle-injections-manchester" },
+  { title: "Anti-Wrinkle Consultation", desc: "Wrinkle relaxing treatment — consultation required for a naturally refreshed appearance.", link: "/treatments/anti-wrinkle-injections-manchester" },
   { title: "Skin Boosters", desc: "Deep hydration for luminous, glass-like skin.", link: "/treatments/skin-boosters-manchester" },
 ];
 
@@ -50,6 +51,10 @@ type Offer = {
 };
 
 const Index = () => {
+  usePageMeta(
+    "Hive Clinic | Aesthetic Clinic Manchester City Centre",
+    "Hive Clinic offers advanced skin treatments in Manchester City Centre including chemical peels, hydrafacial, microneedling, skin boosters and lip enhancement. Book a consultation today."
+  );
   const [offers, setOffers] = useState<Offer[]>([]);
   const heroImg = useSiteImage("hero_home", gallery6);
   const gal1 = useSiteImage("gallery_1", gallery1);
@@ -91,7 +96,7 @@ const Index = () => {
               Manchester's most trusted aesthetics clinic.
             </h1>
             <p className="font-body text-lg text-white/80 mb-4">
-              Expert lip fillers, anti-wrinkle injections, and skin treatments in Deansgate. Results you'll love - guaranteed.
+              Hive Clinic is a specialist aesthetic clinic located in Manchester City Centre offering advanced skin treatments, lip fillers, and aesthetic procedures in Deansgate.
             </p>
             <div className="flex flex-wrap gap-4 mb-8">
               {trustPoints.map(({ icon: Icon, text }) => (
@@ -278,7 +283,7 @@ const Index = () => {
       {/* Reviews */}
       <section className="py-24 bg-secondary">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="font-display text-4xl md:text-5xl text-center mb-4">What Our Clients Say</h2>
+          <h2 className="font-display text-4xl md:text-5xl text-center mb-4">Client Reviews</h2>
           <p className="font-body text-muted-foreground text-center mb-16">Rated 5 stars across 100+ Google reviews</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {reviews.map((r) => (
@@ -332,6 +337,81 @@ const Index = () => {
             <Link to="/blog" className="inline-flex items-center gap-2 font-body text-sm tracking-widest uppercase text-gold hover:text-foreground transition-colors">
               Read All Posts <ArrowRight size={14} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Meet Bianca */}
+      <section className="py-24 bg-secondary">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="aspect-[4/5] overflow-hidden">
+              <img src={gal2} alt="Bianca - practitioner at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
+            </div>
+            <div>
+              <p className="font-body text-xs tracking-[0.3em] uppercase text-gold mb-4">The Practitioner</p>
+              <h2 className="font-display text-4xl md:text-5xl mb-6">Meet Bianca</h2>
+              <p className="font-body text-muted-foreground leading-relaxed mb-6">
+                Bianca is the practitioner behind Hive Clinic, specialising in advanced skin treatments and aesthetic procedures designed to improve skin quality and enhance natural features. Treatments are delivered with a focus on consultation, safety and personalised results.
+              </p>
+              <p className="font-body text-muted-foreground leading-relaxed mb-8">
+                With a conservative, anatomy-led approach, every treatment at Hive Clinic is tailored to enhance your natural beauty — never to change it.
+              </p>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 font-body text-sm tracking-widest uppercase text-gold hover:text-foreground transition-colors"
+              >
+                Learn More About Bianca <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Instagram */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="font-display text-4xl md:text-5xl mb-4">Follow Us on Instagram</h2>
+          <p className="font-body text-muted-foreground mb-12">Stay up to date with our latest treatments, results, and clinic news.</p>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+            {galleryImages.map((img, i) => (
+              <a
+                key={i}
+                href="https://instagram.com/hiveclinicuk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="aspect-square overflow-hidden group"
+              >
+                <img src={img} alt={`Hive Clinic Instagram post ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+              </a>
+            ))}
+          </div>
+          <a
+            href="https://instagram.com/hiveclinicuk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-body text-sm tracking-widest uppercase text-gold hover:text-foreground transition-colors mt-8"
+          >
+            @hiveclinicuk <ArrowRight size={14} />
+          </a>
+        </div>
+      </section>
+
+      {/* Trust Signals */}
+      <section className="py-16 border-y border-border">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { icon: Shield, text: "Fully insured aesthetic clinic" },
+              { icon: CheckCircle, text: "Professional consultation process" },
+              { icon: Award, text: "Medical grade skincare products used" },
+              { icon: Sparkles, text: "Professional sterile treatment environment" },
+            ].map(({ icon: Icon, text }) => (
+              <div key={text} className="flex flex-col items-center gap-3">
+                <Icon size={24} className="text-gold" />
+                <p className="font-body text-sm text-muted-foreground">{text}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

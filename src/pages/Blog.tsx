@@ -7,6 +7,7 @@ import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const posts = [
   {
@@ -53,7 +54,9 @@ const posts = [
   },
 ];
 
-const Blog = () => (
+const Blog = () => {
+  usePageMeta("Blog | Hive Clinic Manchester City Centre", "Skincare tips, treatment guides and clinic news from Hive Clinic, Manchester City Centre.");
+  return (
   <Layout>
     <section className="py-24">
       <div className="max-w-5xl mx-auto px-6">
@@ -82,6 +85,7 @@ const Blog = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default Blog;

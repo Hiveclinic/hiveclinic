@@ -2,8 +2,11 @@ import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
-const About = () => (
+const About = () => {
+  usePageMeta("About Hive Clinic | Aesthetic Clinic Manchester City Centre", "Meet Bianca, the practitioner behind Hive Clinic in Manchester City Centre. Specialising in advanced skin treatments and aesthetic procedures.");
+  return (
   <Layout>
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-6">
@@ -68,6 +71,7 @@ const About = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default About;

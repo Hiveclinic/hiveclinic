@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const faqs = [
   { q: "Does lip filler hurt?", a: "We use a topical numbing cream and the filler itself contains anaesthetic, so most clients describe it as a mild pressure. Comfort is our priority." },
@@ -14,7 +15,13 @@ const faqs = [
   { q: "Is there any downtime?", a: "You may experience mild swelling for 24-48 hours. Most clients return to normal activities immediately after treatment." },
 ];
 
-const LipFillers = () => (
+const LipFillers = () => {
+  usePageMeta(
+    "Lip Filler Manchester City Centre | Hive Clinic",
+    "Natural-looking lip filler from £80 at Hive Clinic, Manchester City Centre. Expert lip enhancement by a qualified prescriber in Deansgate. Book your free consultation."
+  );
+
+  return (
   <Layout>
     {/* Hero */}
     <section className="relative min-h-[80vh] flex items-center">
@@ -129,6 +136,18 @@ const LipFillers = () => (
       </div>
     </section>
 
+    {/* Related Treatments */}
+    <section className="py-16 border-t border-border">
+      <div className="max-w-7xl mx-auto px-6">
+        <h3 className="font-display text-2xl text-center mb-8">Related Treatments</h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link to="/treatments/dermal-filler-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Dermal Filler</Link>
+          <Link to="/treatments/facial-balancing-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Facial Balancing</Link>
+          <Link to="/treatments/skin-boosters-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Skin Boosters</Link>
+        </div>
+      </div>
+    </section>
+
     {/* Final CTA */}
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
@@ -146,6 +165,7 @@ const LipFillers = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default LipFillers;

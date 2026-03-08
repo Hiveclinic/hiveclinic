@@ -4,6 +4,7 @@ import { ArrowRight, Star, Shield, Award, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery6 from "@/assets/gallery-6.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const treatments = [
   { name: "Small Area", desc: "Chin, bra fat, jawline, upper arms, or lower abdomen.", price: "£120" },
@@ -19,7 +20,13 @@ const faqs = [
   { q: "How much does fat dissolving cost in Manchester?", a: "Fat dissolving treatments at Hive Clinic start from £120 for a small area. Larger areas are priced at £180-£250 per session." },
 ];
 
-const FatDissolve = () => (
+const FatDissolve = () => {
+  usePageMeta(
+    "Fat Dissolving Manchester City Centre | Hive Clinic",
+    "Non-surgical fat dissolving injections from £120 at Hive Clinic, Manchester City Centre. Target stubborn fat on chin, abdomen, flanks and more. Book today."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
@@ -124,6 +131,17 @@ const FatDissolve = () => (
       </div>
     </section>
 
+    {/* Related Treatments */}
+    <section className="py-16 border-t border-border">
+      <div className="max-w-7xl mx-auto px-6">
+        <h3 className="font-display text-2xl text-center mb-8">Related Treatments</h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link to="/treatments/micro-sclerotherapy-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Micro Sclerotherapy</Link>
+          <Link to="/treatments/skin-boosters-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Skin Boosters</Link>
+        </div>
+      </div>
+    </section>
+
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready to Contour?</h2>
@@ -140,6 +158,7 @@ const FatDissolve = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default FatDissolve;

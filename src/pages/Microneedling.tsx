@@ -4,6 +4,7 @@ import { ArrowRight, Star, Shield, Award, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const treatments = [
   { name: "Face Texture Repair", desc: "Microneedling combined with a chemical peel to treat scars, enlarged pores, and uneven texture.", price: "£130" },
@@ -18,7 +19,13 @@ const faqs = [
   { q: "How much does microneedling cost in Manchester?", a: "Microneedling at Hive Clinic starts from £130 for face texture repair. Stretch mark repair with salmon DNA is £150 per session." },
 ];
 
-const Microneedling = () => (
+const Microneedling = () => {
+  usePageMeta(
+    "Microneedling Manchester City Centre | Hive Clinic",
+    "Advanced microneedling with chemical peel from £130 at Hive Clinic, Manchester City Centre. Repair scars, texture, pores and stretch marks. Book now."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
@@ -122,6 +129,18 @@ const Microneedling = () => (
       </div>
     </section>
 
+    {/* Related Treatments */}
+    <section className="py-16 border-t border-border">
+      <div className="max-w-7xl mx-auto px-6">
+        <h3 className="font-display text-2xl text-center mb-8">Related Treatments</h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link to="/treatments/chemical-peels-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Chemical Peels</Link>
+          <Link to="/treatments/prp-therapy-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">PRP Therapy</Link>
+          <Link to="/treatments/skin-boosters-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Skin Boosters</Link>
+        </div>
+      </div>
+    </section>
+
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready to Repair and Renew?</h2>
@@ -138,6 +157,7 @@ const Microneedling = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default Microneedling;

@@ -4,6 +4,7 @@ import { ArrowRight, Star, Shield, Award, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const treatments = [
   { name: "Level 1 Chemical Peel - Face", desc: "For hormonal breakouts, scarring, and rough texture. Includes antibacterial cleanse and clarifying mask.", price: "£85" },
@@ -22,7 +23,13 @@ const faqs = [
   { q: "How much do chemical peels cost in Manchester?", a: "Chemical peels at Hive Clinic start from £85 for a single session. Course packages of 3 are available from £230, offering better value for ongoing treatment plans." },
 ];
 
-const ChemicalPeels = () => (
+const ChemicalPeels = () => {
+  usePageMeta(
+    "Chemical Peels Manchester City Centre | Hive Clinic",
+    "Professional chemical peels from £85 at Hive Clinic, Manchester City Centre. Treat acne, scarring, pigmentation and uneven texture. Book a consultation."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
@@ -129,6 +136,18 @@ const ChemicalPeels = () => (
       </div>
     </section>
 
+    {/* Related Treatments */}
+    <section className="py-16 border-t border-border">
+      <div className="max-w-7xl mx-auto px-6">
+        <h3 className="font-display text-2xl text-center mb-8">Related Treatments</h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link to="/treatments/microneedling-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Microneedling</Link>
+          <Link to="/treatments/hydrafacial-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">HydraFacial</Link>
+          <Link to="/treatments/intimate-body-peels-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Intimate & Body Peels</Link>
+        </div>
+      </div>
+    </section>
+
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready to Transform Your Skin?</h2>
@@ -145,6 +164,7 @@ const ChemicalPeels = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default ChemicalPeels;

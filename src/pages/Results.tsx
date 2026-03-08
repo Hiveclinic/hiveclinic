@@ -6,6 +6,7 @@ import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const results = [
   { img: gallery1, label: "Skin Glow Treatment" },
@@ -16,7 +17,9 @@ const results = [
   { img: gallery6, label: "Skincare Ritual" },
 ];
 
-const Results = () => (
+const Results = () => {
+  usePageMeta("Results Gallery | Hive Clinic Manchester City Centre", "See real treatment results from Hive Clinic, Manchester City Centre. Before and after photos from lip fillers, skin treatments and more.");
+  return (
   <Layout>
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-6">
@@ -59,6 +62,7 @@ Real results from real clients. Individual results may vary.
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default Results;

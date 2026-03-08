@@ -1,7 +1,10 @@
 import Layout from "@/components/Layout";
 import { motion } from "framer-motion";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
-const Privacy = () => (
+const Privacy = () => {
+  usePageMeta("Privacy Policy | Hive Clinic Manchester", "Privacy policy for Hive Clinic, Manchester City Centre. How we handle your personal data.");
+  return (
   <Layout>
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6">
@@ -136,6 +139,7 @@ const Privacy = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default Privacy;

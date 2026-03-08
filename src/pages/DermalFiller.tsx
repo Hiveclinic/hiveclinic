@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const treatments = [
   { name: "Lip Filler", desc: "Natural-looking volume and shape enhancement.", from: "£80" },
@@ -25,7 +26,13 @@ const faqs = [
   { q: "How much does dermal filler cost in Manchester?", a: "Dermal filler at Hive Clinic starts from £80 for lip filler (0.5ml). Facial balancing packages start from £350 for 3ml. All treatments include a free consultation." },
 ];
 
-const DermalFiller = () => (
+const DermalFiller = () => {
+  usePageMeta(
+    "Dermal Filler Manchester City Centre | Hive Clinic",
+    "Expert dermal filler treatments from £80 at Hive Clinic, Manchester City Centre. Lip, cheek, jawline and facial balancing by a qualified prescriber. Book today."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
@@ -144,6 +151,18 @@ const DermalFiller = () => (
       </div>
     </section>
 
+    {/* Related Treatments */}
+    <section className="py-16 border-t border-border">
+      <div className="max-w-7xl mx-auto px-6">
+        <h3 className="font-display text-2xl text-center mb-8">Related Treatments</h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link to="/treatments/lip-fillers-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Lip Fillers</Link>
+          <Link to="/treatments/facial-balancing-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Facial Balancing</Link>
+          <Link to="/treatments/anti-wrinkle-injections-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Anti-Wrinkle Consultation</Link>
+        </div>
+      </div>
+    </section>
+
     <section className="py-24 bg-secondary">
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready to Enhance?</h2>
@@ -160,6 +179,7 @@ const DermalFiller = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default DermalFiller;

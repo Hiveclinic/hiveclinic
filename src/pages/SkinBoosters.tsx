@@ -4,6 +4,7 @@ import { ArrowRight, Star, Shield, Award, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const treatments = [
   { name: "Lumi Eyes", desc: "Brighten and rejuvenate the under-eye area with this specialist polynucleotide treatment.", price: "£140" },
@@ -20,7 +21,13 @@ const faqs = [
   { q: "How much do skin boosters cost in Manchester?", a: "Skin boosters at Hive Clinic start from £140 for Lumi Eyes. Our injectable skin remodelling treatment, our most popular skin booster, is £250 per session." },
 ];
 
-const SkinBoosters = () => (
+const SkinBoosters = () => {
+  usePageMeta(
+    "Skin Boosters Manchester City Centre | Hive Clinic",
+    "Advanced skin boosters and injectable remodelling from £140 at Hive Clinic, Manchester City Centre. Deep hydration and collagen stimulation. Book today."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
@@ -124,6 +131,18 @@ const SkinBoosters = () => (
       </div>
     </section>
 
+    {/* Related Treatments */}
+    <section className="py-16 border-t border-border">
+      <div className="max-w-7xl mx-auto px-6">
+        <h3 className="font-display text-2xl text-center mb-8">Related Treatments</h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link to="/treatments/mesotherapy-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Mesotherapy</Link>
+          <Link to="/treatments/hydrafacial-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">HydraFacial</Link>
+          <Link to="/treatments/prp-therapy-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">PRP Therapy</Link>
+        </div>
+      </div>
+    </section>
+
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready to Glow?</h2>
@@ -140,6 +159,7 @@ const SkinBoosters = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default SkinBoosters;

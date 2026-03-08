@@ -4,6 +4,7 @@ import { ArrowRight, Star, Shield, Award, Clock, CheckCircle } from "lucide-reac
 import Layout from "@/components/Layout";
 import gallery3 from "@/assets/gallery-3.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const treatments = [
   { name: "Glass Skin Boost", desc: "Deep cleansing and intense hydration for a luminous, glass-like finish.", price: "£140" },
@@ -19,7 +20,13 @@ const faqs = [
   { q: "How much does a HydraFacial cost in Manchester?", a: "HydraFacials at Hive Clinic start from £120. Each treatment is tailored to your skin's needs and includes a full consultation." },
 ];
 
-const HydraFacial = () => (
+const HydraFacial = () => {
+  usePageMeta(
+    "Hydrafacial Manchester City Centre | Hive Clinic",
+    "Deep cleansing Hydrafacial treatments from £120 at Hive Clinic, Manchester City Centre. Achieve glass-like radiant skin with zero downtime. Book today."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
@@ -124,6 +131,18 @@ const HydraFacial = () => (
       </div>
     </section>
 
+    {/* Related Treatments */}
+    <section className="py-16 border-t border-border">
+      <div className="max-w-7xl mx-auto px-6">
+        <h3 className="font-display text-2xl text-center mb-8">Related Treatments</h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link to="/treatments/chemical-peels-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Chemical Peels</Link>
+          <Link to="/treatments/dermaplaning-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Dermaplaning</Link>
+          <Link to="/treatments/led-light-therapy-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">LED Light Therapy</Link>
+        </div>
+      </div>
+    </section>
+
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready for Your Best Skin?</h2>
@@ -140,6 +159,7 @@ const HydraFacial = () => (
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default HydraFacial;

@@ -5,6 +5,7 @@ import { MapPin, Clock, Phone, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(200, "Name is too long"),
@@ -14,6 +15,7 @@ const contactSchema = z.object({
 });
 
 const Contact = () => {
+  usePageMeta("Contact Hive Clinic | Aesthetic Clinic Manchester City Centre", "Get in touch with Hive Clinic, Manchester City Centre. Book a consultation, ask a question or find our location at 25 Saint John Street.");
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);

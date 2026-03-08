@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { CalendarDays } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Menu, X, Search as SearchIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -243,7 +244,8 @@ const Layout = ({
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Services</h4>
-              {["Chemical Peels", "HydraFacial", "Dermal Filler", "Anti-Wrinkle", "Skin Boosters", "Fat Dissolve"].map(s => <p key={s} className="font-body text-sm text-background/60 mb-2">{s}</p>)}
+              {["Chemical Peels", "HydraFacial", "Dermal Filler", "Anti-Wrinkle Consultation", "Skin Boosters", "Fat Dissolve"].map(s => <p key={s} className="font-body text-sm text-background/60 mb-2">{s}</p>)}
+              <p className="font-body text-xs text-background/40 mt-3 italic">A consultation with a qualified prescriber is required prior to treatment where applicable.</p>
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Opening Hours</h4>
@@ -282,6 +284,9 @@ const Layout = ({
               <Link to="/privacy" className="font-body text-xs text-background/40 hover:text-background/60 transition-colors">
                 Privacy
               </Link>
+              <Link to="/terms#cancellation" className="font-body text-xs text-background/40 hover:text-background/60 transition-colors">
+                Cancellation Policy
+              </Link>
               <Link to="/auth" className="font-body text-xs text-background/20 hover:text-background/40 transition-colors">
                 Admin
               </Link>
@@ -289,6 +294,19 @@ const Layout = ({
           </div>
         </div>
       </footer>
+
+      {/* Sticky Mobile Booking Button */}
+      {!["/bookings", "/admin", "/auth", "/my-appointments"].some(p => location.pathname.startsWith(p)) && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-background border-t border-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <Link
+            to="/bookings"
+            className="flex items-center justify-center gap-2 w-full py-3.5 bg-foreground text-background font-body text-sm tracking-widest uppercase"
+          >
+            <CalendarDays size={16} />
+            Book Appointment
+          </Link>
+        </div>
+      )}
 
       <VIPPopup />
       <TreatmentChatbot />

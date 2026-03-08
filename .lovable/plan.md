@@ -1,133 +1,132 @@
 
 
-# Phase 3: Admin Enhancements, Multi-Treatment Booking, and Fixes
+# Phase 9: Pre-Launch SEO, Compliance, Credibility & Conversion Optimisation
 
-## 1. Fix 404 on Admin Login (Published Site)
+This is a large scope with 18 items. I'll group them by what's already done, what needs code changes, and what's not feasible in this stack.
 
-The route `/hive-admin-login` exists in the code and works in preview. The 404 on the published site (`hiveclinicuk.com//hive-admin-login`) is caused by the double slash `//` in the URL. This is a hosting/domain redirect issue -- the custom domain is likely appending a trailing slash to the base URL before the path.
+## Already Done (No Changes Needed)
+- **#9 Policy Pages**: Privacy (`/privacy`) and Terms (`/terms`) already exist with full content and footer links
+- **#15 Favicon**: Already set in `index.html` line 121 (Hive Clinic logo PNG)
+- **#16 Tracking**: GA (`G-V16HNNVZ90`) and Meta Pixel (`1385983552443887`) already in `index.html`. Google Search Console just needs the site verified via GA (no code change)
+- **#17 Footer**: Already has clinic name, Manchester City Centre, Instagram, TikTok, booking link, Terms, Privacy links
 
-**Fix:** The app needs to be re-published so the latest routes are deployed. No code change needed -- the route is correctly defined at line 82 of `App.tsx`. The double slash in the URL you shared is the problem -- use `hiveclinicuk.com/hive-admin-login` (single slash).
+## Changes to Implement
+
+### 1. SEO Page Titles & Meta Descriptions (Items #1, #2)
+
+No pages currently set `document.title` or page-level meta descriptions. Create a reusable `usePageMeta` hook that sets both `document.title` and a `<meta name="description">` tag via DOM manipulation in `useEffect`.
+
+Apply to every page:
+- Homepage: "Hive Clinic | Aesthetic Clinic Manchester City Centre"
+- Lip Fillers: "Lip Filler Manchester City Centre | Hive Clinic"
+- HydraFacial: "Hydrafacial Manchester City Centre | Hive Clinic"
+- Chemical Peels: "Chemical Peels Manchester City Centre | Hive Clinic"
+- Microneedling: "Microneedling Manchester City Centre | Hive Clinic"
+- Skin Boosters: "Skin Boosters Manchester City Centre | Hive Clinic"
+- Mesotherapy: "Mesotherapy Manchester City Centre | Hive Clinic"
+- Anti-Wrinkle: "Anti-Wrinkle Consultation Manchester City Centre | Hive Clinic"
+- Dermal Filler: "Dermal Filler Manchester City Centre | Hive Clinic"
+- Fat Dissolve: "Fat Dissolving Manchester City Centre | Hive Clinic"
+- Dermaplaning: "Dermaplaning Manchester City Centre | Hive Clinic"
+- LED Therapy: "LED Light Therapy Manchester City Centre | Hive Clinic"
+- PRP: "PRP Therapy Manchester City Centre | Hive Clinic"
+- Facial Balancing: "Facial Balancing Manchester City Centre | Hive Clinic"
+- Micro Sclerotherapy: "Micro Sclerotherapy Manchester City Centre | Hive Clinic"
+- Intimate Peels: "Intimate & Body Peels Manchester City Centre | Hive Clinic"
+- Consultations: "Free Consultation Manchester City Centre | Hive Clinic"
+- Pricing, About, Contact, Blog, Results, Bookings, Aftercare, Terms, Privacy — all get unique titles + descriptions
+
+**New file**: `src/hooks/use-page-meta.ts`
+**Files edited**: All ~25 page components (add one-line hook call each)
+
+### 2. Local SEO Copy (Item #3)
+
+Add a brief local SEO paragraph to the homepage hero subtitle and the "About" intro. Update `index.html` structured data opening hours to match the current actual hours.
+
+**Files edited**: `src/pages/Index.tsx` (hero subtitle), `index.html` (structured data hours)
+
+### 3. Meet Bianca Section on Homepage (Item #4)
+
+Add a new section between the Reviews and Blog sections on the homepage with title "Meet Bianca", short practitioner bio text, and a placeholder photo (using existing `gallery2` image which is already used on the About page for Bianca).
+
+**File edited**: `src/pages/Index.tsx`
+
+### 4. Compliance Wording (Item #5)
+
+Update `AntiWrinkle.tsx` page to use "Anti-Wrinkle Consultation" / "Wrinkle Relaxing Treatment — Consultation Required" language. Add a small compliance note: "A consultation with a qualified prescriber is required prior to treatment where applicable."
+
+Also add the compliance note to the homepage highlights where Anti-Wrinkle is mentioned, and to the footer Services list.
+
+**Files edited**: `src/pages/AntiWrinkle.tsx`, `src/pages/Index.tsx`, `src/components/Layout.tsx`
+
+### 5. Treatment Page Structure Consistency (Item #6)
+
+Most treatment pages already follow: Hero → Overview/Benefits → Who it's for (implicit) → FAQ → CTA. The pages that are thinner (Mesotherapy, PRP, Dermaplaning, LEDTherapy, IntimatePeels, MicroSclerotherapy, FacialBalancing) are missing a "Who is this suitable for" and "Downtime & Recovery" section. Add these as brief content blocks between the overview and FAQ sections.
+
+**Files edited**: ~7 thinner treatment pages
+
+### 6. Booking Button Placement (Item #7)
+
+Most pages already have hero CTA + bottom CTA. Ensure every treatment page has a mid-page "Book Appointment" or "Book Consultation" button in the overview/benefits section. Pages like LipFillers and AntiWrinkle already have this pattern. Apply to those that don't.
+
+**Files edited**: Treatment pages missing mid-page CTA
+
+### 7. Trust Signals Section (Item #8)
+
+Add a trust signals strip near the bottom of the homepage (before the final CTA) with 4 items: "Fully insured aesthetic clinic", "Professional consultation process", "Medical grade skincare products", "Professional sterile treatment environment".
+
+**File edited**: `src/pages/Index.tsx`
+
+### 8. Google Reviews Section (Item #10)
+
+The homepage already has a "What Our Clients Say" section with 6 reviews and a "Read All Google Reviews" link to the Google review page. Rename the section heading to "Client Reviews" per request.
+
+**File edited**: `src/pages/Index.tsx`
+
+### 9. Instagram Embed (Item #11)
+
+Embed an Instagram feed section on the homepage. Since we can't use server-side APIs, use a simple approach: link grid to the Instagram profile with a "Follow us on Instagram" CTA. A true embed would require an Instagram embed widget or third-party service.
+
+**File edited**: `src/pages/Index.tsx`
+
+### 10. Image Alt Text (Item #12)
+
+Audit and update all `alt` attributes across treatment pages to be descriptive and include location keywords. Most already have good alt text but some are generic like "gallery image".
+
+**Files edited**: Multiple pages (alt text updates)
+
+### 11. Mobile Spacing & Sticky Booking Button (Items #13, #14)
+
+Add a sticky "Book Appointment" button on mobile (fixed bottom bar, visible only on non-admin, non-booking pages). Audit and tighten vertical padding on mobile for key sections.
+
+**Files edited**: `src/components/Layout.tsx` (add sticky mobile booking bar)
+
+### 12. Internal Linking (Item #18)
+
+Add a "Related Treatments" section at the bottom of each treatment page (before final CTA) with 2-3 links to related treatments.
+
+**Files edited**: All treatment pages
+
+### 13. Cancellation Policy Footer Link (Item #9 partial)
+
+Terms page already covers cancellation policy in detail. Add a "Cancellation Policy" link in the footer that anchors to the Terms page cancellation section.
+
+**File edited**: `src/components/Layout.tsx`
 
 ---
 
-## 2. Website Image Management via Admin
+## Summary of Files
 
-Currently there's no way to update hero images, gallery images, or page images from the admin dashboard. These are hardcoded in component files.
+**New files:**
+- `src/hooks/use-page-meta.ts` — reusable hook for title + meta description
 
-**Changes:**
-- Add a new "Images" section to `AdminSiteTab.tsx` that stores editable image URLs in the `site_settings` table (or a new `site_images` table)
-- Create a `site_images` table with fields: `key` (text, e.g. "hero_home", "gallery_1"), `image_url` (text), `alt_text` (text), `updated_at`
-- Admin can upload images to the `client-images` bucket (or a new public `site-images` bucket) and the URL is saved
-- Frontend pages read from this table and fall back to the hardcoded defaults if no override exists
-- Create a public storage bucket `site-images` for website content images
+**Edited files (~30+):**
+- `index.html` — update structured data opening hours
+- `src/pages/Index.tsx` — Meet Bianca section, trust signals, client reviews rename, Instagram section, compliance note
+- `src/components/Layout.tsx` — sticky mobile booking button, cancellation policy link, compliance note in footer
+- `src/pages/AntiWrinkle.tsx` — compliance wording
+- All 16 treatment pages — `usePageMeta` hook, alt text, related treatments section, mid-page CTA where missing, suitability/downtime sections for thinner pages
+- `src/pages/About.tsx`, `Pricing.tsx`, `Contact.tsx`, `Blog.tsx`, `Results.tsx`, `Aftercare.tsx`, `Terms.tsx`, `Privacy.tsx`, `Bookings.tsx` — `usePageMeta` hook
 
----
-
-## 3. Treatment Menu Reordering
-
-Drag-and-drop reordering already exists in `AdminTreatmentsTab.tsx` (lines 144-155). The `sort_order` is saved on drag end. This already works. If it feels unresponsive, I will add visual feedback (highlight, ghost element).
-
-**Enhancement:** Add category-level reordering so you can control the order categories appear on the booking page (not just treatments within a category).
-
----
-
-## 4. Take Payment from Calendar (Admin)
-
-Add a "Take Payment" button in the calendar edit modal that creates a Stripe Payment Link for the outstanding balance and copies it to clipboard (so admin can send it to the client).
-
-**Changes to `AdminCalendarView.tsx`:**
-- Add a "Send Payment Link" button in the edit modal for bookings with `payment_status` of "pending" or "deposit_paid"
-- This calls an edge function that creates a Stripe Payment Link for the remaining balance
-- Link is copied to clipboard so admin can share via WhatsApp/SMS
-- Add a "Mark as Paid" button for in-person/cash payments that updates `payment_status` to "fully_paid"
-
-**New edge function:** `create-payment-link` -- creates a Stripe Payment Link for a given amount and booking reference.
-
----
-
-## 5. Payment Plan Customisation
-
-Currently `AdminPaymentPlansTab.tsx` allows creating plans and recording payments, but you cannot edit the instalment amount after creation.
-
-**Changes:**
-- Add an "Edit" button on each active plan
-- Allow editing: `instalment_amount`, `total_instalments`, `total_amount`, `next_payment_date`
-- Add a "Record Custom Amount" option when recording a payment (instead of always recording the fixed instalment amount)
-- Show remaining balance clearly
-
----
-
-## 6. Cancellation Sync Between Admin and Client
-
-Currently:
-- Admin cancels via calendar -> updates DB status to "cancelled" and sends cancellation email to client. Client sees it in their portal (already works via DB read).
-- Client cancels via portal -> updates DB status to "cancelled". Admin sees it in bookings/calendar (already works via DB read).
-
-**Missing:** When a client cancels, the admin doesn't get notified.
-
-**Fix:** In `CustomerPortal.tsx` `cancelBooking` function, after updating the booking status, trigger `send-booking-email` with a new `emailType: "client_cancelled"` that sends a notification to the admin email.
-
----
-
-## 7. Mailchimp Email Automations
-
-The `mailchimp-subscribe` edge function already exists and works. It's already wired into the booking checkout flow. To set up automations:
-
-**What I will do:**
-- Update `mailchimp-subscribe` to accept and pass `firstName`, `lastName`, and `tags` (e.g. "Booked Client", treatment category)
-- Add tags based on treatment category so you can create targeted automations in Mailchimp
-- Ensure the VIP popup signup also triggers the function (it already does via `email_subscribers` table insert, but needs to call the edge function too)
-
-**What you need to do in Mailchimp:**
-- Log into your Mailchimp account
-- Go to Automations and create journeys based on tags (e.g. "Welcome" email for new subscribers, "Post-Treatment" for booked clients)
-- The integration will automatically tag contacts when they book
-
----
-
-## 8. Multiple Treatment Selection + Course Suggestions
-
-This is the biggest feature. Currently only one treatment can be selected per booking.
-
-**Changes to `BookingSystem.tsx`:**
-- Allow selecting multiple treatments (change `selectedTreatment` from single to array `selectedTreatments`)
-- Show a running total of all selected treatments
-- After selection, check if any selected treatment has packages in `treatment_packages` and show a "Save with a Course" prompt
-- Display savings: "Book 3 sessions of Level 1 Face Peel and save £25 (£230 vs £255)"
-- Duration and time slot calculation accounts for combined treatment time
-- Checkout sends all treatment IDs
-
-**Changes to `create-booking-checkout`:**
-- Accept an array of treatment IDs
-- Create line items for each treatment in the Stripe checkout session
-- Store multiple treatment references in the booking (use the existing `addon_ids` pattern or add a `treatment_ids` array column)
-
-**Database change:**
-- Add `treatment_ids` (uuid array) column to `bookings` table to support multi-treatment bookings
-- Keep `treatment_id` for backwards compatibility (primary treatment)
-
----
-
-## Technical Summary
-
-### Database Changes:
-- New table: `site_images` (key, image_url, alt_text, updated_at) with RLS for admin write, public read
-- New storage bucket: `site-images` (public)
-- Add column `treatment_ids` (uuid[]) to `bookings` table
-
-### Edge Functions:
-- New: `create-payment-link` -- generates Stripe Payment Link
-- Update: `mailchimp-subscribe` -- accept firstName, lastName, tags
-- Update: `send-booking-email` -- add "client_cancelled" email type for admin notification
-
-### Frontend Files to Edit:
-- `AdminCalendarView.tsx` -- add payment link + mark as paid buttons
-- `AdminPaymentPlansTab.tsx` -- add edit and custom payment recording
-- `AdminSiteTab.tsx` -- add image management section
-- `BookingSystem.tsx` -- multi-treatment selection + course suggestions
-- `CustomerPortal.tsx` -- trigger admin notification on client cancellation
-- `create-booking-checkout` -- support multiple treatments
-
-### Frontend Files to Create:
-- None (all changes are to existing files)
+**No database or edge function changes needed.**
 

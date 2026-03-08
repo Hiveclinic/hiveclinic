@@ -17,7 +17,9 @@ const results = [
   { img: gallery6, label: "Skincare Ritual" },
 ];
 
-const Results = () => (
+const Results = () => {
+  usePageMeta("Results Gallery | Hive Clinic Manchester City Centre", "See real treatment results from Hive Clinic, Manchester City Centre. Before and after photos from lip fillers, skin treatments and more.");
+  return (
   <Layout>
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-6">

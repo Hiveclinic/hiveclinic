@@ -54,7 +54,9 @@ const posts = [
   },
 ];
 
-const Blog = () => (
+const Blog = () => {
+  usePageMeta("Blog | Hive Clinic Manchester City Centre", "Skincare tips, treatment guides and clinic news from Hive Clinic, Manchester City Centre.");
+  return (
   <Layout>
     <section className="py-24">
       <div className="max-w-5xl mx-auto px-6">

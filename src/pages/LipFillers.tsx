@@ -136,6 +136,18 @@ const LipFillers = () => {
       </div>
     </section>
 
+    {/* Related Treatments */}
+    <section className="py-16 border-t border-border">
+      <div className="max-w-7xl mx-auto px-6">
+        <h3 className="font-display text-2xl text-center mb-8">Related Treatments</h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link to="/treatments/dermal-filler-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Dermal Filler</Link>
+          <Link to="/treatments/facial-balancing-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Facial Balancing</Link>
+          <Link to="/treatments/skin-boosters-manchester" className="px-6 py-3 border border-border hover:border-gold transition-colors font-body text-sm tracking-wider">Skin Boosters</Link>
+        </div>
+      </div>
+    </section>
+
     {/* Final CTA */}
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
@@ -153,6 +165,7 @@ const LipFillers = () => {
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default LipFillers;

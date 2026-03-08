@@ -4,6 +4,7 @@ import { ArrowRight, Star, Shield, Award, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const treatments = [
   { name: "Face Texture Repair", desc: "Microneedling combined with a chemical peel to treat scars, enlarged pores, and uneven texture.", price: "£130" },

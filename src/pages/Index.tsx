@@ -20,7 +20,7 @@ const highlights = [
   { title: "Chemical Peels", desc: "Targeted peels for face, back, and body to transform skin tone and texture.", link: "/treatments/chemical-peels-manchester" },
   { title: "HydraFacial", desc: "Deep cleansing facials for glass-like, refreshed skin.", link: "/treatments/hydrafacial-manchester" },
   { title: "Dermal Filler", desc: "Expert lip, cheek, jawline, and facial balancing treatments.", link: "/treatments/dermal-filler-manchester" },
-  { title: "Anti-Wrinkle", desc: "Precision injections for a naturally refreshed appearance.", link: "/treatments/anti-wrinkle-injections-manchester" },
+  { title: "Anti-Wrinkle Consultation", desc: "Wrinkle relaxing treatment — consultation required for a naturally refreshed appearance.", link: "/treatments/anti-wrinkle-injections-manchester" },
   { title: "Skin Boosters", desc: "Deep hydration for luminous, glass-like skin.", link: "/treatments/skin-boosters-manchester" },
 ];
 

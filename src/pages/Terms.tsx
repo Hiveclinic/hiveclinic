@@ -205,6 +205,7 @@ const Terms = () => {
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default Terms;

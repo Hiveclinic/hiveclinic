@@ -60,6 +60,7 @@ const Consultations = () => {
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default Consultations;

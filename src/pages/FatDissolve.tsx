@@ -20,7 +20,13 @@ const faqs = [
   { q: "How much does fat dissolving cost in Manchester?", a: "Fat dissolving treatments at Hive Clinic start from £120 for a small area. Larger areas are priced at £180-£250 per session." },
 ];
 
-const FatDissolve = () => (
+const FatDissolve = () => {
+  usePageMeta(
+    "Fat Dissolving Manchester City Centre | Hive Clinic",
+    "Non-surgical fat dissolving injections from £120 at Hive Clinic, Manchester City Centre. Target stubborn fat on chin, abdomen, flanks and more. Book today."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">

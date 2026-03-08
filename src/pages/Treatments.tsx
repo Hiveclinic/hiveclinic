@@ -91,6 +91,7 @@ const Treatments = () => {
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default Treatments;

@@ -62,6 +62,7 @@ Real results from real clients. Individual results may vary.
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default Results;

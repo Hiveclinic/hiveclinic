@@ -85,6 +85,7 @@ const Blog = () => {
       </div>
     </section>
   </Layout>
-);
+  );
+};
 
 export default Blog;

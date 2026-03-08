@@ -15,7 +15,13 @@ const faqs = [
   { q: "Is there any downtime?", a: "You may experience mild swelling for 24-48 hours. Most clients return to normal activities immediately after treatment." },
 ];
 
-const LipFillers = () => (
+const LipFillers = () => {
+  usePageMeta(
+    "Lip Filler Manchester City Centre | Hive Clinic",
+    "Natural-looking lip filler from £80 at Hive Clinic, Manchester City Centre. Expert lip enhancement by a qualified prescriber in Deansgate. Book your free consultation."
+  );
+
+  return (
   <Layout>
     {/* Hero */}
     <section className="relative min-h-[80vh] flex items-center">

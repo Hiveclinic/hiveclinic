@@ -20,7 +20,13 @@ const faqs = [
   { q: "How much does a HydraFacial cost in Manchester?", a: "HydraFacials at Hive Clinic start from £120. Each treatment is tailored to your skin's needs and includes a full consultation." },
 ];
 
-const HydraFacial = () => (
+const HydraFacial = () => {
+  usePageMeta(
+    "Hydrafacial Manchester City Centre | Hive Clinic",
+    "Deep cleansing Hydrafacial treatments from £120 at Hive Clinic, Manchester City Centre. Achieve glass-like radiant skin with zero downtime. Book today."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">

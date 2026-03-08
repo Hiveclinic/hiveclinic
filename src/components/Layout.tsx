@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { CalendarDays } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Menu, X, Search as SearchIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";

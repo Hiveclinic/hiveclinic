@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle, Video, MapPin, Stethoscope } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery3 from "@/assets/gallery-3.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const Consultations = () => (
   <Layout>

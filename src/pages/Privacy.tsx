@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import { motion } from "framer-motion";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const Privacy = () => (
   <Layout>

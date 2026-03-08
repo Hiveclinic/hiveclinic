@@ -23,7 +23,13 @@ const faqs = [
   { q: "How much do chemical peels cost in Manchester?", a: "Chemical peels at Hive Clinic start from £85 for a single session. Course packages of 3 are available from £230, offering better value for ongoing treatment plans." },
 ];
 
-const ChemicalPeels = () => (
+const ChemicalPeels = () => {
+  usePageMeta(
+    "Chemical Peels Manchester City Centre | Hive Clinic",
+    "Professional chemical peels from £85 at Hive Clinic, Manchester City Centre. Treat acne, scarring, pigmentation and uneven texture. Book a consultation."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">

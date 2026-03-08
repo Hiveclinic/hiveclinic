@@ -26,7 +26,13 @@ const faqs = [
   { q: "How much does dermal filler cost in Manchester?", a: "Dermal filler at Hive Clinic starts from £80 for lip filler (0.5ml). Facial balancing packages start from £350 for 3ml. All treatments include a free consultation." },
 ];
 
-const DermalFiller = () => (
+const DermalFiller = () => {
+  usePageMeta(
+    "Dermal Filler Manchester City Centre | Hive Clinic",
+    "Expert dermal filler treatments from £80 at Hive Clinic, Manchester City Centre. Lip, cheek, jawline and facial balancing by a qualified prescriber. Book today."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">

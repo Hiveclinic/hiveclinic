@@ -243,8 +243,23 @@ const Layout = ({
               </Link>
             </div>
             <div>
-              <h4 className="font-display text-lg mb-4">Services</h4>
-              {["Chemical Peels", "HydraFacial", "Dermal Filler", "Anti-Wrinkle Consultation", "Skin Boosters", "Fat Dissolve"].map(s => <p key={s} className="font-body text-sm text-background/60 mb-2">{s}</p>)}
+              <h4 className="font-display text-lg mb-4">Treatments</h4>
+              {[
+                { name: "Lip Filler", to: "/lip-filler-manchester" },
+                { name: "Dermal Filler", to: "/treatments/dermal-filler-manchester" },
+                { name: "Anti-Wrinkle Consultation", to: "/treatments/anti-wrinkle-injections-manchester" },
+                { name: "HydraFacial", to: "/treatments/hydrafacial-manchester" },
+                { name: "Chemical Peels", to: "/treatments/chemical-peels-manchester" },
+                { name: "Skin Boosters", to: "/treatments/skin-boosters-manchester" },
+                { name: "Microneedling", to: "/treatments/microneedling-manchester" },
+                { name: "Acne Treatment", to: "/acne-treatment-manchester" },
+                { name: "Hyperpigmentation", to: "/hyperpigmentation-treatment-manchester" },
+                { name: "Fat Dissolve", to: "/treatments/fat-dissolving-manchester" },
+                { name: "Mesotherapy", to: "/treatments/mesotherapy-manchester" },
+                { name: "All Treatments", to: "/treatments" },
+              ].map(s => (
+                <Link key={s.to} to={s.to} className="block font-body text-sm text-background/60 hover:text-background mb-2">{s.name}</Link>
+              ))}
               <p className="font-body text-xs text-background/40 mt-3 italic">A consultation with a qualified prescriber is required prior to treatment where applicable.</p>
             </div>
             <div>

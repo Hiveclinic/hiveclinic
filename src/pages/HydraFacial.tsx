@@ -4,6 +4,7 @@ import { ArrowRight, Star, Shield, Award, Clock, CheckCircle } from "lucide-reac
 import Layout from "@/components/Layout";
 import gallery3 from "@/assets/gallery-3.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const treatments = [
   { name: "Glass Skin Boost", desc: "Deep cleansing and intense hydration for a luminous, glass-like finish.", price: "£140" },

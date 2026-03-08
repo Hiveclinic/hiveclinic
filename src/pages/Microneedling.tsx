@@ -19,7 +19,13 @@ const faqs = [
   { q: "How much does microneedling cost in Manchester?", a: "Microneedling at Hive Clinic starts from £130 for face texture repair. Stretch mark repair with salmon DNA is £150 per session." },
 ];
 
-const Microneedling = () => (
+const Microneedling = () => {
+  usePageMeta(
+    "Microneedling Manchester City Centre | Hive Clinic",
+    "Advanced microneedling with chemical peel from £130 at Hive Clinic, Manchester City Centre. Repair scars, texture, pores and stretch marks. Book now."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">

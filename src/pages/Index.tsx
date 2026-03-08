@@ -283,7 +283,7 @@ const Index = () => {
       {/* Reviews */}
       <section className="py-24 bg-secondary">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="font-display text-4xl md:text-5xl text-center mb-4">What Our Clients Say</h2>
+          <h2 className="font-display text-4xl md:text-5xl text-center mb-4">Client Reviews</h2>
           <p className="font-body text-muted-foreground text-center mb-16">Rated 5 stars across 100+ Google reviews</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {reviews.map((r) => (

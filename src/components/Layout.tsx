@@ -284,6 +284,9 @@ const Layout = ({
               <Link to="/privacy" className="font-body text-xs text-background/40 hover:text-background/60 transition-colors">
                 Privacy
               </Link>
+              <Link to="/terms#cancellation" className="font-body text-xs text-background/40 hover:text-background/60 transition-colors">
+                Cancellation Policy
+              </Link>
               <Link to="/auth" className="font-body text-xs text-background/20 hover:text-background/40 transition-colors">
                 Admin
               </Link>

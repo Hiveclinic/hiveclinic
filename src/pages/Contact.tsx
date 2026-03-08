@@ -15,6 +15,7 @@ const contactSchema = z.object({
 });
 
 const Contact = () => {
+  usePageMeta("Contact Hive Clinic | Aesthetic Clinic Manchester City Centre", "Get in touch with Hive Clinic, Manchester City Centre. Book a consultation, ask a question or find our location at 25 Saint John Street.");
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);

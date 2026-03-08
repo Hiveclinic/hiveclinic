@@ -2,7 +2,9 @@ import Layout from "@/components/Layout";
 import { motion } from "framer-motion";
 import { usePageMeta } from "@/hooks/use-page-meta";
 
-const Terms = () => (
+const Terms = () => {
+  usePageMeta("Terms & Conditions | Hive Clinic Manchester", "Terms and conditions for Hive Clinic, Manchester City Centre. Booking, cancellation, and treatment policies.");
+  return (
   <Layout>
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6">

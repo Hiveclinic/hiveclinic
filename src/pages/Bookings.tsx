@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const faqs = [
   { q: "Do I need a consultation first?", a: "Yes - for all injectable treatments, an initial consultation is required. This ensures your safety and allows us to create a personalised treatment plan." },
@@ -12,6 +13,7 @@ const faqs = [
 ];
 
 const Bookings = () => {
+  usePageMeta("Book Appointment | Hive Clinic Manchester City Centre", "Book your aesthetic treatment at Hive Clinic, Manchester City Centre. Online booking for lip fillers, skin treatments and consultations.");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (

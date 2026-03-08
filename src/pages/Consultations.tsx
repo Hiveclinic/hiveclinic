@@ -5,7 +5,9 @@ import Layout from "@/components/Layout";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 
-const Consultations = () => (
+const Consultations = () => {
+  usePageMeta("Free Consultation Manchester City Centre | Hive Clinic", "Book a free consultation at Hive Clinic, Manchester City Centre. Online or in-person consultations available for all treatments.");
+  return (
   <Layout>
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-6">

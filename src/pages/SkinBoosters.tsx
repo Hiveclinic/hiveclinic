@@ -21,7 +21,13 @@ const faqs = [
   { q: "How much do skin boosters cost in Manchester?", a: "Skin boosters at Hive Clinic start from £140 for Lumi Eyes. Our injectable skin remodelling treatment, our most popular skin booster, is £250 per session." },
 ];
 
-const SkinBoosters = () => (
+const SkinBoosters = () => {
+  usePageMeta(
+    "Skin Boosters Manchester City Centre | Hive Clinic",
+    "Advanced skin boosters and injectable remodelling from £140 at Hive Clinic, Manchester City Centre. Deep hydration and collagen stimulation. Book today."
+  );
+
+  return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">

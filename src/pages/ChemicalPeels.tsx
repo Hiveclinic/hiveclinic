@@ -4,6 +4,7 @@ import { ArrowRight, Star, Shield, Award, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const treatments = [
   { name: "Level 1 Chemical Peel - Face", desc: "For hormonal breakouts, scarring, and rough texture. Includes antibacterial cleanse and clarifying mask.", price: "£85" },

@@ -96,7 +96,7 @@ const Index = () => {
               Manchester's most trusted aesthetics clinic.
             </h1>
             <p className="font-body text-lg text-white/80 mb-4">
-              Expert lip fillers, anti-wrinkle injections, and skin treatments in Deansgate. Results you'll love - guaranteed.
+              Hive Clinic is a specialist aesthetic clinic located in Manchester City Centre offering advanced skin treatments, lip fillers, and aesthetic procedures in Deansgate.
             </p>
             <div className="flex flex-wrap gap-4 mb-8">
               {trustPoints.map(({ icon: Icon, text }) => (

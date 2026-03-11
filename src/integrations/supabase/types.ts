@@ -448,6 +448,36 @@ export type Database = {
           },
         ]
       }
+      reviews: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          name: string
+          source: string
+          stars: number
+          text: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          source?: string
+          stars?: number
+          text: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          source?: string
+          stars?: number
+          text?: string
+        }
+        Relationships: []
+      }
       site_images: {
         Row: {
           alt_text: string | null

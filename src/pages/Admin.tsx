@@ -4,7 +4,7 @@ import { Session } from "@supabase/supabase-js";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Calendar, Tag, Clock, CalendarX, Users, Mail, Stethoscope, Download, CreditCard, LayoutGrid, UserCheck, Settings, Menu, X, ChevronDown, ChevronRight } from "lucide-react";
+import { LogOut, Calendar, Tag, Clock, CalendarX, Users, Mail, Stethoscope, Download, CreditCard, LayoutGrid, UserCheck, Settings, Menu, X, ChevronDown, ChevronRight, Star } from "lucide-react";
 import { toast } from "sonner";
 import AdminBookingsTab from "@/components/admin/AdminBookingsTab";
 import AdminAvailabilityTab from "@/components/admin/AdminAvailabilityTab";
@@ -15,8 +15,9 @@ import AdminPaymentPlansTab from "@/components/admin/AdminPaymentPlansTab";
 import AdminCalendarView from "@/components/admin/AdminCalendarView";
 import AdminClientsTab from "@/components/admin/AdminClientsTab";
 import AdminSiteTab from "@/components/admin/AdminSiteTab";
+import AdminReviewsTab from "@/components/admin/AdminReviewsTab";
 
-type TabKey = "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers" | "site";
+type TabKey = "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers" | "site" | "reviews";
 
 const NAV_GROUPS = [
   {
@@ -32,6 +33,7 @@ const NAV_GROUPS = [
       { key: "treatments" as TabKey, label: "Treatments", icon: <Stethoscope size={14} /> },
       { key: "payments" as TabKey, label: "Payment Plans", icon: <CreditCard size={14} /> },
       { key: "discounts" as TabKey, label: "Discounts", icon: <Tag size={14} /> },
+      { key: "reviews" as TabKey, label: "Reviews", icon: <Star size={14} /> },
     ],
   },
   {
@@ -198,7 +200,7 @@ const Admin = () => {
 
   return (
     <Layout>
-      <section className="pt-16 pb-24 lg:pb-20">
+      <section className="pt-16 pb-28 lg:pb-20">
         <div className="max-w-7xl mx-auto px-3 sm:px-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -266,6 +268,7 @@ const Admin = () => {
               {tab === "blocked" && <AdminBlockedDatesTab />}
               {tab === "discounts" && <AdminDiscountCodesTab />}
               {tab === "site" && <AdminSiteTab />}
+              {tab === "reviews" && <AdminReviewsTab />}
 
               {tab === "contacts" && (
                 <>

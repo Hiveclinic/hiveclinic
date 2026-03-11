@@ -24,7 +24,7 @@ const highlights = [
   { title: "Skin Boosters", desc: "Deep hydration for luminous, glass-like skin.", link: "/treatments/skin-boosters-manchester" },
 ];
 
-const reviews = [
+const staticReviews = [
   { name: "Aisha M.", text: "Absolutely the best clinic in Manchester. Bianca is incredible - my skin has never looked better.", stars: 5 },
   { name: "Georgia L.", text: "The attention to detail is unreal. I felt so comfortable and the results were beyond what I expected.", stars: 5 },
   { name: "Priya K.", text: "Finally found somewhere that actually listens. Subtle, natural results every time.", stars: 5 },
@@ -56,6 +56,7 @@ const Index = () => {
     "Hive Clinic offers advanced skin treatments in Manchester City Centre including chemical peels, hydrafacial, microneedling, skin boosters and lip enhancement. Book a consultation today."
   );
   const [offers, setOffers] = useState<Offer[]>([]);
+  const [reviews, setReviews] = useState(staticReviews);
   const heroImg = useSiteImage("hero_home", gallery6);
   const gal1 = useSiteImage("gallery_1", gallery1);
   const gal2 = useSiteImage("gallery_2", gallery2);
@@ -74,6 +75,17 @@ const Index = () => {
       .order("sort_order")
       .then(({ data }) => {
         if (data) setOffers(data as Offer[]);
+      });
+
+    // Fetch reviews from DB, fallback to static
+    supabase
+      .from("reviews")
+      .select("name, text, stars")
+      .eq("active", true)
+      .order("created_at", { ascending: false })
+      .limit(6)
+      .then(({ data }) => {
+        if (data && data.length > 0) setReviews(data as { name: string; text: string; stars: number }[]);
       });
   }, []);
 

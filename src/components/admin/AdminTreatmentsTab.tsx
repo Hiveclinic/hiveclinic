@@ -297,10 +297,10 @@ const AdminTreatmentsTab = () => {
       )}
 
       {/* Category Filter */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        <button onClick={() => setCategoryFilter(null)} className={`px-3 py-1 font-body text-xs tracking-wider uppercase border transition-colors ${!categoryFilter ? "bg-foreground text-background border-foreground" : "border-border hover:border-gold"}`}>All</button>
+      <div className="flex gap-2 mb-6 overflow-x-auto pb-1 -mx-1 px-1">
+        <button onClick={() => setCategoryFilter(null)} className={`px-3 py-1 font-body text-xs tracking-wider uppercase border transition-colors whitespace-nowrap ${!categoryFilter ? "bg-foreground text-background border-foreground" : "border-border hover:border-gold"}`}>All</button>
         {categories.map(c => (
-          <button key={c} onClick={() => setCategoryFilter(c)} className={`px-3 py-1 font-body text-xs tracking-wider uppercase border transition-colors ${categoryFilter === c ? "bg-foreground text-background border-foreground" : "border-border hover:border-gold"}`}>{c}</button>
+          <button key={c} onClick={() => setCategoryFilter(c)} className={`px-3 py-1 font-body text-xs tracking-wider uppercase border transition-colors whitespace-nowrap ${categoryFilter === c ? "bg-foreground text-background border-foreground" : "border-border hover:border-gold"}`}>{c}</button>
         ))}
       </div>
 
@@ -358,39 +358,44 @@ const AdminTreatmentsTab = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3">
-                    <GripVertical size={16} className="text-muted-foreground flex-shrink-0" />
-                    <button onClick={() => setExpandedId(isExpanded ? null : t.id)} className="text-muted-foreground hover:text-gold transition-colors">
-                      {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                    </button>
-                    <span className="font-body text-xs text-muted-foreground w-6">{i + 1}</span>
-                    <span className="font-body text-sm font-medium flex-1">{t.name}</span>
-                    <span className="font-body text-xs text-muted-foreground">{t.category}</span>
-                    {t.on_offer ? (
-                      <span className="font-body text-xs">
-                        <span className="line-through text-muted-foreground mr-1">£{Number(t.price).toFixed(0)}</span>
-                        <span className="text-gold">£{Number(t.offer_price).toFixed(0)}</span>
-                      </span>
-                    ) : (
-                      <span className="font-body text-xs">£{Number(t.price).toFixed(0)}</span>
-                    )}
-                    <span className="font-body text-xs text-muted-foreground">{t.duration_mins}m</span>
-                    {t.deposit_required && <span className="font-body text-xs text-gold">Dep: £{Number(t.deposit_amount).toFixed(0)}</span>}
-                    {tVariants.length > 0 && <span className="font-body text-xs text-muted-foreground"><Layers size={12} className="inline" /> {tVariants.length}</span>}
-                    {tPackages.length > 0 && <span className="font-body text-xs text-muted-foreground"><Package size={12} className="inline" /> {tPackages.length}</span>}
-                    {t.on_offer && <span className="px-2 py-0.5 bg-gold/20 text-gold font-body text-[10px] uppercase tracking-wider">{t.offer_label || "Offer"}</span>}
-                    <button onClick={() => toggleOffer(t.id, t.on_offer)} className={`px-2 py-1 border font-body text-xs transition-colors ${t.on_offer ? "border-gold/30 text-gold" : "border-border text-muted-foreground hover:text-gold"}`}>
-                      <Tag size={12} />
-                    </button>
-                    <button onClick={() => toggleActive(t.id, t.active)} className={`px-2 py-1 border font-body text-xs transition-colors ${t.active ? "border-green-600/30 text-green-600" : "border-border text-muted-foreground"}`}>
-                      {t.active ? "Active" : "Off"}
-                    </button>
-                    <button onClick={() => setEditingId(t.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors">
-                      <Pencil size={14} />
-                    </button>
-                    <button onClick={() => deleteTreatment(t.id, t.name)} className="px-2 py-1 border border-border text-muted-foreground hover:text-red-500 hover:border-red-500 transition-colors">
-                      <Trash2 size={14} />
-                    </button>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <GripVertical size={16} className="text-muted-foreground flex-shrink-0 hidden sm:block" />
+                      <button onClick={() => setExpandedId(isExpanded ? null : t.id)} className="text-muted-foreground hover:text-gold transition-colors flex-shrink-0">
+                        {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                      </button>
+                      <span className="font-body text-sm font-medium truncate">{t.name}</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                      <span className="font-body text-xs text-muted-foreground">{t.category}</span>
+                      {t.on_offer ? (
+                        <span className="font-body text-xs">
+                          <span className="line-through text-muted-foreground mr-1">£{Number(t.price).toFixed(0)}</span>
+                          <span className="text-gold">£{Number(t.offer_price).toFixed(0)}</span>
+                        </span>
+                      ) : (
+                        <span className="font-body text-xs">£{Number(t.price).toFixed(0)}</span>
+                      )}
+                      <span className="font-body text-xs text-muted-foreground">{t.duration_mins}m</span>
+                      {t.deposit_required && <span className="font-body text-xs text-gold">Dep: £{Number(t.deposit_amount).toFixed(0)}</span>}
+                      {tVariants.length > 0 && <span className="font-body text-xs text-muted-foreground"><Layers size={12} className="inline" /> {tVariants.length}</span>}
+                      {tPackages.length > 0 && <span className="font-body text-xs text-muted-foreground"><Package size={12} className="inline" /> {tPackages.length}</span>}
+                      {t.on_offer && <span className="px-2 py-0.5 bg-gold/20 text-gold font-body text-[10px] uppercase tracking-wider">{t.offer_label || "Offer"}</span>}
+                    </div>
+                    <div className="flex gap-1.5 flex-shrink-0">
+                      <button onClick={() => toggleOffer(t.id, t.on_offer)} className={`px-2 py-1 border font-body text-xs transition-colors ${t.on_offer ? "border-gold/30 text-gold" : "border-border text-muted-foreground hover:text-gold"}`}>
+                        <Tag size={12} />
+                      </button>
+                      <button onClick={() => toggleActive(t.id, t.active)} className={`px-2 py-1 border font-body text-xs transition-colors ${t.active ? "border-green-600/30 text-green-600" : "border-border text-muted-foreground"}`}>
+                        {t.active ? "Active" : "Off"}
+                      </button>
+                      <button onClick={() => setEditingId(t.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors">
+                        <Pencil size={14} />
+                      </button>
+                      <button onClick={() => deleteTreatment(t.id, t.name)} className="px-2 py-1 border border-border text-muted-foreground hover:text-red-500 hover:border-red-500 transition-colors">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>

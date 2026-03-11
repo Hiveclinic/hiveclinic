@@ -297,10 +297,10 @@ const AdminTreatmentsTab = () => {
       )}
 
       {/* Category Filter */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        <button onClick={() => setCategoryFilter(null)} className={`px-3 py-1 font-body text-xs tracking-wider uppercase border transition-colors ${!categoryFilter ? "bg-foreground text-background border-foreground" : "border-border hover:border-gold"}`}>All</button>
+      <div className="flex gap-2 mb-6 overflow-x-auto pb-1 -mx-1 px-1">
+        <button onClick={() => setCategoryFilter(null)} className={`px-3 py-1 font-body text-xs tracking-wider uppercase border transition-colors whitespace-nowrap ${!categoryFilter ? "bg-foreground text-background border-foreground" : "border-border hover:border-gold"}`}>All</button>
         {categories.map(c => (
-          <button key={c} onClick={() => setCategoryFilter(c)} className={`px-3 py-1 font-body text-xs tracking-wider uppercase border transition-colors ${categoryFilter === c ? "bg-foreground text-background border-foreground" : "border-border hover:border-gold"}`}>{c}</button>
+          <button key={c} onClick={() => setCategoryFilter(c)} className={`px-3 py-1 font-body text-xs tracking-wider uppercase border transition-colors whitespace-nowrap ${categoryFilter === c ? "bg-foreground text-background border-foreground" : "border-border hover:border-gold"}`}>{c}</button>
         ))}
       </div>
 

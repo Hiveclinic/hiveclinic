@@ -137,6 +137,7 @@ const AdminClientsTab = () => {
     setClients(Array.from(clientMap.values()).sort((a, b) => (b.lastVisit || "").localeCompare(a.lastVisit || "")));
     if (notesRes.data) setNotes(notesRes.data as AdminNote[]);
     if (imagesRes.data) setImages(imagesRes.data as ClientImage[]);
+    if (pkgRes.data) setClientPackages(pkgRes.data as ClientPackage[]);
     setLoading(false);
   };
 

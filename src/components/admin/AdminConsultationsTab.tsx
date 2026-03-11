@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { FileText, Plus, Check, Clock, X, Search, ChevronDown, ChevronRight, Trash2, Pencil } from "lucide-react";
+import { FileText, Plus, Check, Clock, X, Search, Trash2, Printer, PenTool } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -33,6 +33,74 @@ type Treatment = { id: string; name: string };
 
 const FORM_TYPES = ["consent", "consultation", "medical_history", "photo_consent", "aftercare", "patch_test"];
 
+// Signature Pad Component
+const SignaturePad = ({ onSave, onCancel }: { onSave: (dataUrl: string) => void; onCancel: () => void }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [drawing, setDrawing] = useState(false);
+
+  const getPos = (e: React.MouseEvent | React.TouchEvent) => {
+    const canvas = canvasRef.current!;
+    const rect = canvas.getBoundingClientRect();
+    if ("touches" in e) {
+      return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+    }
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  };
+
+  const startDraw = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    setDrawing(true);
+    const ctx = canvasRef.current!.getContext("2d")!;
+    const pos = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  };
+
+  const draw = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!drawing) return;
+    e.preventDefault();
+    const ctx = canvasRef.current!.getContext("2d")!;
+    const pos = getPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.stroke();
+  };
+
+  const stopDraw = () => setDrawing(false);
+
+  const clear = () => {
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext("2d")!;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
+  return (
+    <div className="space-y-3">
+      <p className="font-body text-xs uppercase tracking-wider text-muted-foreground flex items-center gap-1"><PenTool size={12} /> E-Signature</p>
+      <canvas
+        ref={canvasRef}
+        width={400}
+        height={150}
+        className="w-full border border-border rounded-lg bg-white cursor-crosshair touch-none"
+        onMouseDown={startDraw}
+        onMouseMove={draw}
+        onMouseUp={stopDraw}
+        onMouseLeave={stopDraw}
+        onTouchStart={startDraw}
+        onTouchMove={draw}
+        onTouchEnd={stopDraw}
+      />
+      <div className="flex gap-2">
+        <button onClick={clear} className="px-3 py-1.5 border border-border font-body text-xs uppercase tracking-wider rounded-lg hover:border-foreground transition-colors">Clear</button>
+        <button onClick={() => onSave(canvasRef.current!.toDataURL())} className="px-3 py-1.5 bg-foreground text-background font-body text-xs uppercase tracking-wider rounded-lg hover:bg-accent transition-colors">Save Signature</button>
+        <button onClick={onCancel} className="px-3 py-1.5 border border-border font-body text-xs uppercase tracking-wider rounded-lg hover:border-foreground transition-colors">Cancel</button>
+      </div>
+    </div>
+  );
+};
+
 const AdminConsultationsTab = () => {
   const [templates, setTemplates] = useState<FormTemplate[]>([]);
   const [submissions, setSubmissions] = useState<FormSubmission[]>([]);
@@ -43,6 +111,8 @@ const AdminConsultationsTab = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [showNewTemplate, setShowNewTemplate] = useState(false);
   const [newTemplate, setNewTemplate] = useState({ name: "", form_type: "consent", treatment_id: "" });
+  const [signingId, setSigningId] = useState<string | null>(null);
+  const [viewingSubmission, setViewingSubmission] = useState<FormSubmission | null>(null);
 
   useEffect(() => {
     const fetch = async () => {
@@ -92,12 +162,48 @@ const AdminConsultationsTab = () => {
     toast.success("Signed off");
   };
 
+  const handleSaveSignature = async (id: string, dataUrl: string) => {
+    const { error } = await supabase.from("consent_submissions").update({
+      signature_url: dataUrl,
+      signed_at: new Date().toISOString(),
+    }).eq("id", id);
+    if (error) { toast.error("Failed to save signature"); return; }
+    setSubmissions(prev => prev.map(s => s.id === id ? { ...s, signature_url: dataUrl, signed_at: new Date().toISOString() } : s));
+    setSigningId(null);
+    toast.success("Signature saved");
+  };
+
   const handleDeleteTemplate = async (id: string) => {
     if (!confirm("Delete this template?")) return;
     const { error } = await supabase.from("consent_form_templates").delete().eq("id", id);
     if (error) { toast.error("Failed"); return; }
     setTemplates(prev => prev.filter(t => t.id !== id));
     toast.success("Deleted");
+  };
+
+  const handlePrintPDF = (submission: FormSubmission) => {
+    const template = templates.find(t => t.id === submission.template_id);
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+    const formDataEntries = typeof submission.form_data === "object" && submission.form_data
+      ? Object.entries(submission.form_data as Record<string, any>).map(([k, v]) => `<tr><td style="padding:8px;border-bottom:1px solid #eee;font-weight:500;width:200px">${k}</td><td style="padding:8px;border-bottom:1px solid #eee">${v}</td></tr>`).join("")
+      : "<tr><td>No data</td></tr>";
+
+    printWindow.document.write(`<!DOCTYPE html><html><head><title>Consent Form - ${submission.customer_name}</title>
+      <style>body{font-family:system-ui,sans-serif;max-width:700px;margin:40px auto;padding:20px;color:#333}
+      h1{font-size:22px;margin-bottom:4px}h2{font-size:16px;color:#666;margin-bottom:24px}
+      table{width:100%;border-collapse:collapse}
+      .sig{margin-top:30px;border-top:2px solid #333;padding-top:10px}
+      .meta{color:#999;font-size:12px;margin-top:40px}
+      @media print{body{margin:20px}}</style></head><body>
+      <h1>Hive Clinic — ${template?.name || "Consent Form"}</h1>
+      <h2>${submission.customer_name} — ${format(new Date(submission.created_at), "d MMMM yyyy")}</h2>
+      <table>${formDataEntries}</table>
+      ${submission.signature_url ? `<div class="sig"><p style="font-size:12px;color:#666">Client Signature:</p><img src="${submission.signature_url}" style="max-height:80px" /></div>` : ""}
+      <p class="meta">Status: ${submission.status} | Practitioner sign-off: ${submission.practitioner_sign_off ? "Yes" : "No"}${submission.signed_at ? ` | Signed: ${format(new Date(submission.signed_at), "d MMM yyyy HH:mm")}` : ""}</p>
+      </body></html>`);
+    printWindow.document.close();
+    printWindow.print();
   };
 
   const filteredSubmissions = submissions.filter(s => {
@@ -155,9 +261,18 @@ const AdminConsultationsTab = () => {
                         <p className="font-body text-[11px] text-muted-foreground">{s.customer_email}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className={`font-body text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${s.status === "completed" ? "bg-green-500/10 text-green-600" : "bg-yellow-500/10 text-yellow-600"}`}>{s.status}</span>
+                      {s.signature_url && <span className="font-body text-[10px] text-green-600">✓ Signed</span>}
                       <span className="font-body text-[11px] text-muted-foreground">{format(new Date(s.created_at), "d MMM yyyy")}</span>
+                      <button onClick={() => handlePrintPDF(s)} className="p-1.5 text-muted-foreground hover:text-foreground transition-colors" title="Print / PDF">
+                        <Printer size={14} />
+                      </button>
+                      {!s.signature_url && (
+                        <button onClick={() => setSigningId(signingId === s.id ? null : s.id)} className="px-3 py-1 border border-border font-body text-[10px] uppercase tracking-wider rounded-lg hover:border-accent transition-colors">
+                          <PenTool size={10} className="inline mr-1" /> Sign
+                        </button>
+                      )}
                       {s.status === "pending" && (
                         <button onClick={() => handleSignOff(s.id)} className="px-3 py-1 bg-foreground text-background font-body text-[10px] uppercase tracking-wider rounded-lg hover:bg-accent transition-colors">
                           Sign Off
@@ -165,6 +280,11 @@ const AdminConsultationsTab = () => {
                       )}
                     </div>
                   </div>
+                  {signingId === s.id && (
+                    <div className="mt-4 pt-4 border-t border-border">
+                      <SignaturePad onSave={(dataUrl) => handleSaveSignature(s.id, dataUrl)} onCancel={() => setSigningId(null)} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

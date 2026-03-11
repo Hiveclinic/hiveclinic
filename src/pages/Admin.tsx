@@ -126,8 +126,10 @@ const Admin = () => {
   useEffect(() => {
     if (!session) return;
     const fetchData = async () => {
-      const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", session.user.id).eq("role", "admin");
+      const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", session.user.id);
       if (!roles || roles.length === 0) { setIsAdmin(false); setLoading(false); return; }
+      const role = roles[0].role;
+      setUserRole(role);
       setIsAdmin(true);
 
       const [contactsRes, subsRes, pendingRes] = await Promise.all([

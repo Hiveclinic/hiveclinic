@@ -1,133 +1,150 @@
+# Assessment: Current State vs. Requested Features
+
+After reviewing the entire admin codebase, **the system already implements the vast majority of what this prompt requests**. Here's the gap analysis:
+
+## Already Fully Implemented (No Changes Needed)
 
 
-# Phase 3: Admin Enhancements, Multi-Treatment Booking, and Fixes
+| Feature                                                          | Status                                                 |
+| ---------------------------------------------------------------- | ------------------------------------------------------ |
+| Authentication + admin role check                                | Done — `Auth.tsx` + `user_roles` table                 |
+| Sidebar navigation with all sections                             | Done — `Admin.tsx` with grouped sidebar                |
+| Dashboard with KPI cards + charts                                | Done — `AdminDashboardHome.tsx`                        |
+| Calendar with day/week views, drag-drop, colour-coded statuses   | Done — `AdminCalendarView.tsx`                         |
+| Client CRM with notes, images, search, edit                      | Done — `AdminClientsTab.tsx`                           |
+| Consent form templates + submissions + practitioner sign-off     | Done — `AdminConsultationsTab.tsx`                     |
+| Before/after photo upload + tagging                              | Done — integrated in `AdminClientsTab.tsx`             |
+| Treatment CRUD with variants, packages, categories, drag reorder | Done — `AdminTreatmentsTab.tsx`                        |
+| Package management with sessions tracking                        | Done — `AdminTreatmentsTab.tsx` (packages sub-section) |
+| Discount codes with expiry, usage limits, treatment restrictions | Done — `AdminDiscountCodesTab.tsx`                     |
+| Finance reports with revenue charts + CSV export                 | Done — `AdminFinanceTab.tsx`                           |
+| Marketing campaigns + client segmentation                        | Done — `AdminMarketingTab.tsx`                         |
+| Inventory with low-stock alerts                                  | Done — `AdminInventoryTab.tsx`                         |
+| Media library                                                    | Done — `AdminMediaLibraryTab.tsx`                      |
+| Staff management with roles + permissions                        | Done — `AdminStaffTab.tsx`                             |
+| Settings (clinic profile, booking rules, integrations)           | Done — `AdminSettingsTab.tsx`                          |
+| Site image management with drag-drop upload                      | Done — `AdminSiteTab.tsx`                              |
+| Reviews management                                               | Done — `AdminReviewsTab.tsx`                           |
+| Dynamic pricing page synced with admin                           | Done — `Pricing.tsx` reads from DB                     |
+| Dynamic treatments page synced with admin                        | Done — `Treatments.tsx` reads from DB                  |
 
-## 1. Fix 404 on Admin Login (Published Site)
 
-The route `/hive-admin-login` exists in the code and works in preview. The 404 on the published site (`hiveclinicuk.com//hive-admin-login`) is caused by the double slash `//` in the URL. This is a hosting/domain redirect issue -- the custom domain is likely appending a trailing slash to the base URL before the path.
+## Gaps to Close (What's Actually Missing)
 
-**Fix:** The app needs to be re-published so the latest routes are deployed. No code change needed -- the route is correctly defined at line 82 of `App.tsx`. The double slash in the URL you shared is the problem -- use `hiveclinicuk.com/hive-admin-login` (single slash).
+### 1. Payments Table
 
----
+The prompt requests a dedicated `payments` table. Currently payments are tracked inline on bookings (`payment_status`, `total_price`, `deposit_amount`). A dedicated payments table would enable:
 
-## 2. Website Image Management via Admin
+- Multiple payments per appointment (split payments, part-payments)
+- Payment method tracking (card, cash, bank transfer)
+- Refund records
+- Better finance reporting
 
-Currently there's no way to update hero images, gallery images, or page images from the admin dashboard. These are hardcoded in component files.
+**Action:** Create `payments` table + update `AdminFinanceTab.tsx` to show individual payment records.
 
-**Changes:**
-- Add a new "Images" section to `AdminSiteTab.tsx` that stores editable image URLs in the `site_settings` table (or a new `site_images` table)
-- Create a `site_images` table with fields: `key` (text, e.g. "hero_home", "gallery_1"), `image_url` (text), `alt_text` (text), `updated_at`
-- Admin can upload images to the `client-images` bucket (or a new public `site-images` bucket) and the URL is saved
-- Frontend pages read from this table and fall back to the hardcoded defaults if no override exists
-- Create a public storage bucket `site-images` for website content images
+### 2. Package Sessions Tracking (Client-Assigned)
 
----
+Current `treatment_packages` defines package templates. Missing: a `client_packages` table to track which client bought which package and how many sessions remain.
 
-## 3. Treatment Menu Reordering
+**Action:** Create `client_packages` table + add package assignment UI in `AdminClientsTab.tsx` and a "Packages" tab in `Admin.tsx`.
 
-Drag-and-drop reordering already exists in `AdminTreatmentsTab.tsx` (lines 144-155). The `sort_order` is saved on drag end. This already works. If it feels unresponsive, I will add visual feedback (highlight, ghost element).
+### 3. Month View on Calendar
 
-**Enhancement:** Add category-level reordering so you can control the order categories appear on the booking page (not just treatments within a category).
+Calendar currently has day and week views. Month view is referenced in the prompt.
 
----
+**Action:** Add a month grid view to `AdminCalendarView.tsx`.
 
-## 4. Take Payment from Calendar (Admin)
+### 4. E-Signature on Consent Forms
 
-Add a "Take Payment" button in the calendar edit modal that creates a Stripe Payment Link for the outstanding balance and copies it to clipboard (so admin can send it to the client).
+The `consent_submissions` table has `signature_url` but the UI doesn't include an actual signature pad for capturing signatures.
 
-**Changes to `AdminCalendarView.tsx`:**
-- Add a "Send Payment Link" button in the edit modal for bookings with `payment_status` of "pending" or "deposit_paid"
-- This calls an edge function that creates a Stripe Payment Link for the remaining balance
-- Link is copied to clipboard so admin can share via WhatsApp/SMS
-- Add a "Mark as Paid" button for in-person/cash payments that updates `payment_status` to "fully_paid"
+**Action:** Add a simple canvas-based signature capture component.
 
-**New edge function:** `create-payment-link` -- creates a Stripe Payment Link for a given amount and booking reference.
+### 5. PDF Export for Consent Forms
 
----
+Template says "PDF export" — not currently implemented.
 
-## 5. Payment Plan Customisation
+**Action:** Add a "Download PDF" button that generates a printable HTML-to-PDF view using `window.print()` with a styled print layout.
 
-Currently `AdminPaymentPlansTab.tsx` allows creating plans and recording payments, but you cannot edit the instalment amount after creation.
+### 6. Demo Data Population
 
-**Changes:**
-- Add an "Edit" button on each active plan
-- Allow editing: `instalment_amount`, `total_instalments`, `total_amount`, `next_payment_date`
-- Add a "Record Custom Amount" option when recording a payment (instead of always recording the fixed instalment amount)
-- Show remaining balance clearly
+The prompt asks for demo data so the dashboard looks functional in preview.
 
----
+**Action:** Insert realistic demo data (treatments, clients, bookings, reviews, inventory) via a database insert.
 
-## 6. Cancellation Sync Between Admin and Client
+### 7. Practitioner/Receptionist Roles in Auth
 
-Currently:
-- Admin cancels via calendar -> updates DB status to "cancelled" and sends cancellation email to client. Client sees it in their portal (already works via DB read).
-- Client cancels via portal -> updates DB status to "cancelled". Admin sees it in bookings/calendar (already works via DB read).
+Currently only `admin` role exists in practice. The prompt requests `practitioner` and `receptionist` roles with limited permissions.
 
-**Missing:** When a client cancels, the admin doesn't get notified.
-
-**Fix:** In `CustomerPortal.tsx` `cancelBooking` function, after updating the booking status, trigger `send-booking-email` with a new `emailType: "client_cancelled"` that sends a notification to the admin email.
-
----
-
-## 7. Mailchimp Email Automations
-
-The `mailchimp-subscribe` edge function already exists and works. It's already wired into the booking checkout flow. To set up automations:
-
-**What I will do:**
-- Update `mailchimp-subscribe` to accept and pass `firstName`, `lastName`, and `tags` (e.g. "Booked Client", treatment category)
-- Add tags based on treatment category so you can create targeted automations in Mailchimp
-- Ensure the VIP popup signup also triggers the function (it already does via `email_subscribers` table insert, but needs to call the edge function too)
-
-**What you need to do in Mailchimp:**
-- Log into your Mailchimp account
-- Go to Automations and create journeys based on tags (e.g. "Welcome" email for new subscribers, "Post-Treatment" for booked clients)
-- The integration will automatically tag contacts when they book
+**Action:** The `app_role` enum already supports custom roles. Add `practitioner` and `receptionist` values + implement permission checks in the admin UI to show/hide tabs based on role.
 
 ---
 
-## 8. Multiple Treatment Selection + Course Suggestions
+## Implementation Plan
 
-This is the biggest feature. Currently only one treatment can be selected per booking.
+### Database Migration
 
-**Changes to `BookingSystem.tsx`:**
-- Allow selecting multiple treatments (change `selectedTreatment` from single to array `selectedTreatments`)
-- Show a running total of all selected treatments
-- After selection, check if any selected treatment has packages in `treatment_packages` and show a "Save with a Course" prompt
-- Display savings: "Book 3 sessions of Level 1 Face Peel and save £25 (£230 vs £255)"
-- Duration and time slot calculation accounts for combined treatment time
-- Checkout sends all treatment IDs
+```sql
+-- 1. Payments table
+CREATE TABLE public.payments (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  booking_id uuid REFERENCES public.bookings(id) ON DELETE SET NULL,
+  customer_email text NOT NULL,
+  amount numeric NOT NULL,
+  payment_method text NOT NULL DEFAULT 'card',
+  refund boolean DEFAULT false,
+  notes text,
+  created_at timestamptz DEFAULT now()
+);
+ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
+-- RLS: admin ALL, client SELECT own
 
-**Changes to `create-booking-checkout`:**
-- Accept an array of treatment IDs
-- Create line items for each treatment in the Stripe checkout session
-- Store multiple treatment references in the booking (use the existing `addon_ids` pattern or add a `treatment_ids` array column)
+-- 2. Client packages (session tracking)
+CREATE TABLE public.client_packages (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  customer_email text NOT NULL,
+  package_id uuid REFERENCES public.treatment_packages(id),
+  sessions_total int NOT NULL,
+  sessions_used int DEFAULT 0,
+  expiry_date date,
+  created_at timestamptz DEFAULT now()
+);
+ALTER TABLE public.client_packages ENABLE ROW LEVEL SECURITY;
+-- RLS: admin ALL, client SELECT own
 
-**Database change:**
-- Add `treatment_ids` (uuid array) column to `bookings` table to support multi-treatment bookings
-- Keep `treatment_id` for backwards compatibility (primary treatment)
+-- 3. Add practitioner + receptionist to app_role enum
+ALTER TYPE public.app_role ADD VALUE IF NOT EXISTS 'practitioner';
+ALTER TYPE public.app_role ADD VALUE IF NOT EXISTS 'receptionist';
+```
 
----
+### Files to Edit
 
-## Technical Summary
+- `**AdminCalendarView.tsx**` — add month view toggle
+- `**AdminFinanceTab.tsx**` — add payments CRUD section with payment method tracking
+- `**AdminClientsTab.tsx**` — add "Packages" sub-tab showing assigned packages + sessions remaining
+- `**AdminConsultationsTab.tsx**` — add signature canvas + PDF export button
+- `**Admin.tsx**` — add role-based tab visibility (hide Finance from receptionist, etc.)
 
-### Database Changes:
-- New table: `site_images` (key, image_url, alt_text, updated_at) with RLS for admin write, public read
-- New storage bucket: `site-images` (public)
-- Add column `treatment_ids` (uuid[]) to `bookings` table
+### Demo Data Insert (via insert tool, not migration)
 
-### Edge Functions:
-- New: `create-payment-link` -- generates Stripe Payment Link
-- Update: `mailchimp-subscribe` -- accept firstName, lastName, tags
-- Update: `send-booking-email` -- add "client_cancelled" email type for admin notification
+Insert ~5 treatments, ~10 clients, ~20 bookings, ~5 reviews, ~3 inventory items with realistic Hive Clinic data.
 
-### Frontend Files to Edit:
-- `AdminCalendarView.tsx` -- add payment link + mark as paid buttons
-- `AdminPaymentPlansTab.tsx` -- add edit and custom payment recording
-- `AdminSiteTab.tsx` -- add image management section
-- `BookingSystem.tsx` -- multi-treatment selection + course suggestions
-- `CustomerPortal.tsx` -- trigger admin notification on client cancellation
-- `create-booking-checkout` -- support multiple treatments
+### No New Files Needed
 
-### Frontend Files to Create:
-- None (all changes are to existing files)
+All changes enhance existing components. No new component files required.
 
+This closes every gap between what exists and what the prompt requests, turning the current admin from "mostly complete" to "fully functional Fresha-level clinic OS."
+
+Add only these missing features:
+
+1. dedicated payments table plus finance records UI
+2. client assigned packages with sessions remaining
+3. month view in calendar
+4. canvas signature pad in consent forms
+5. printable PDF style consent export
+6. realistic seeded demo data
+7. practitioner and receptionist role permissions
+
+Keep current UI and existing files. Minimise code changes and preserve all working functionality.
+
+&nbsp;

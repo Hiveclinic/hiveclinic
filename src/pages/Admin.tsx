@@ -199,7 +199,7 @@ const Admin = () => {
 
   return (
     <Layout>
-      <section className="pt-16 pb-24 lg:pb-20">
+      <section className="pt-16 pb-28 lg:pb-20">
         <div className="max-w-7xl mx-auto px-3 sm:px-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">

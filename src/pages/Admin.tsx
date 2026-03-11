@@ -185,9 +185,14 @@ const Admin = () => {
   // Find active group for current tab
   const activeGroup = NAV_GROUPS.find(g => g.items.some(i => i.key === tab))?.label;
 
+  const allowedTabs = ROLE_PERMISSIONS[userRole];
+  const isTabAllowed = (key: TabKey) => !allowedTabs || allowedTabs.length === 0 || allowedTabs.includes(key);
+
   const SidebarContent = () => (
     <nav className="space-y-1 px-1">
       {NAV_GROUPS.map(group => {
+        const visibleItems = group.items.filter(i => isTabAllowed(i.key));
+        if (visibleItems.length === 0) return null;
         const isExpanded = expandedGroups.includes(group.label);
         const isActiveGroup = group.label === activeGroup;
         return (
@@ -203,7 +208,7 @@ const Admin = () => {
             </button>
             {isExpanded && (
               <div className="space-y-0.5 mt-0.5">
-                {group.items.map(item => (
+                {visibleItems.map(item => (
                   <button
                     key={item.key}
                     onClick={() => { setTab(item.key); setSidebarOpen(false); }}

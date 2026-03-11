@@ -4,7 +4,7 @@ import { Session } from "@supabase/supabase-js";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Calendar, Tag, Clock, CalendarX, Users, Mail, Stethoscope, Download, CreditCard, LayoutGrid, UserCheck, Settings, Menu, X, ChevronDown, ChevronRight } from "lucide-react";
+import { LogOut, Calendar, Tag, Clock, CalendarX, Users, Mail, Stethoscope, Download, CreditCard, LayoutGrid, UserCheck, Settings, Menu, X, ChevronDown, ChevronRight, Star } from "lucide-react";
 import { toast } from "sonner";
 import AdminBookingsTab from "@/components/admin/AdminBookingsTab";
 import AdminAvailabilityTab from "@/components/admin/AdminAvailabilityTab";

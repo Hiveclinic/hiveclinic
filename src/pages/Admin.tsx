@@ -15,8 +15,9 @@ import AdminPaymentPlansTab from "@/components/admin/AdminPaymentPlansTab";
 import AdminCalendarView from "@/components/admin/AdminCalendarView";
 import AdminClientsTab from "@/components/admin/AdminClientsTab";
 import AdminSiteTab from "@/components/admin/AdminSiteTab";
+import AdminReviewsTab from "@/components/admin/AdminReviewsTab";
 
-type TabKey = "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers" | "site";
+type TabKey = "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers" | "site" | "reviews";
 
 const NAV_GROUPS = [
   {

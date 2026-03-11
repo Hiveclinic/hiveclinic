@@ -91,10 +91,17 @@ interface EmailSubscriber {
   id: string; email: string; created_at: string;
 }
 
+const ROLE_PERMISSIONS: Record<string, TabKey[]> = {
+  admin: [], // empty = all tabs allowed
+  practitioner: ["dashboard", "calendar", "bookings", "clients", "consultations", "treatments"],
+  receptionist: ["dashboard", "calendar", "bookings", "clients", "contacts", "consultations"],
+};
+
 const Admin = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userRole, setUserRole] = useState<string>("admin");
   const [tab, setTab] = useState<TabKey>("dashboard");
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
   const [subscribers, setSubscribers] = useState<EmailSubscriber[]>([]);
@@ -119,8 +126,10 @@ const Admin = () => {
   useEffect(() => {
     if (!session) return;
     const fetchData = async () => {
-      const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", session.user.id).eq("role", "admin");
+      const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", session.user.id);
       if (!roles || roles.length === 0) { setIsAdmin(false); setLoading(false); return; }
+      const role = roles[0].role;
+      setUserRole(role);
       setIsAdmin(true);
 
       const [contactsRes, subsRes, pendingRes] = await Promise.all([
@@ -176,9 +185,14 @@ const Admin = () => {
   // Find active group for current tab
   const activeGroup = NAV_GROUPS.find(g => g.items.some(i => i.key === tab))?.label;
 
+  const allowedTabs = ROLE_PERMISSIONS[userRole];
+  const isTabAllowed = (key: TabKey) => !allowedTabs || allowedTabs.length === 0 || allowedTabs.includes(key);
+
   const SidebarContent = () => (
     <nav className="space-y-1 px-1">
       {NAV_GROUPS.map(group => {
+        const visibleItems = group.items.filter(i => isTabAllowed(i.key));
+        if (visibleItems.length === 0) return null;
         const isExpanded = expandedGroups.includes(group.label);
         const isActiveGroup = group.label === activeGroup;
         return (
@@ -194,7 +208,7 @@ const Admin = () => {
             </button>
             {isExpanded && (
               <div className="space-y-0.5 mt-0.5">
-                {group.items.map(item => (
+                {visibleItems.map(item => (
                   <button
                     key={item.key}
                     onClick={() => { setTab(item.key); setSidebarOpen(false); }}

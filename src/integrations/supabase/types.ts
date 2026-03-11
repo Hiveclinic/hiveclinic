@@ -233,6 +233,47 @@ export type Database = {
         }
         Relationships: []
       }
+      client_packages: {
+        Row: {
+          created_at: string | null
+          customer_email: string
+          expiry_date: string | null
+          id: string
+          package_id: string | null
+          package_name: string
+          sessions_total: number
+          sessions_used: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_email: string
+          expiry_date?: string | null
+          id?: string
+          package_id?: string | null
+          package_name?: string
+          sessions_total: number
+          sessions_used?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_email?: string
+          expiry_date?: string | null
+          id?: string
+          package_id?: string | null
+          package_name?: string
+          sessions_total?: number
+          sessions_used?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_packages_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       consent_form_templates: {
         Row: {
           active: boolean
@@ -645,6 +686,47 @@ export type Database = {
           },
         ]
       }
+      payments: {
+        Row: {
+          amount: number
+          booking_id: string | null
+          created_at: string | null
+          customer_email: string
+          id: string
+          notes: string | null
+          payment_method: string
+          refund: boolean | null
+        }
+        Insert: {
+          amount: number
+          booking_id?: string | null
+          created_at?: string | null
+          customer_email: string
+          id?: string
+          notes?: string | null
+          payment_method?: string
+          refund?: boolean | null
+        }
+        Update: {
+          amount?: number
+          booking_id?: string | null
+          created_at?: string | null
+          customer_email?: string
+          id?: string
+          notes?: string | null
+          payment_method?: string
+          refund?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reviews: {
         Row: {
           active: boolean
@@ -984,7 +1066,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "user" | "practitioner" | "receptionist"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1112,7 +1194,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user"],
+      app_role: ["admin", "user", "practitioner", "receptionist"],
     },
   },
 } as const

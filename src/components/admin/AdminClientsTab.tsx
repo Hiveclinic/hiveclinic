@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { User, Mail, Phone, Search, Download, Upload, Plus, Trash2, StickyNote, Image, ChevronDown, ChevronRight, X, RefreshCw } from "lucide-react";
+import { User, Mail, Phone, Search, Download, Upload, Plus, Trash2, StickyNote, Image, ChevronDown, ChevronRight, X, RefreshCw, Pencil } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -11,6 +11,9 @@ type Client = {
   bookingCount: number;
   totalSpent: number;
   lastVisit: string | null;
+  profileId?: string;
+  dateOfBirth?: string | null;
+  medicalNotes?: string | null;
 };
 
 type AdminNote = {
@@ -46,16 +49,27 @@ const AdminClientsTab = () => {
   const [importData, setImportData] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // New client form
+  const [showNewClient, setShowNewClient] = useState(false);
+  const [newClient, setNewClient] = useState({ name: "", email: "", phone: "", dob: "", medicalNotes: "" });
+
+  // Edit client
+  const [editingClient, setEditingClient] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState({ name: "", email: "", phone: "", dob: "", medicalNotes: "" });
+
   const fetchData = async () => {
     setLoading(true);
-    const [bookingsRes, notesRes, imagesRes] = await Promise.all([
+    const [bookingsRes, notesRes, imagesRes, profilesRes] = await Promise.all([
       supabase.from("bookings").select("customer_email, customer_name, customer_phone, total_price, booking_date, status"),
       supabase.from("admin_client_notes").select("*").order("created_at", { ascending: false }),
       supabase.from("client_images").select("*").order("uploaded_at", { ascending: false }),
+      supabase.from("customer_profiles").select("id, email, full_name, phone, date_of_birth, medical_notes"),
     ]);
 
+    const clientMap = new Map<string, Client>();
+
+    // Build from bookings
     if (bookingsRes.data) {
-      const clientMap = new Map<string, Client>();
       for (const b of bookingsRes.data) {
         const email = b.customer_email.toLowerCase();
         const existing = clientMap.get(email);
@@ -76,8 +90,36 @@ const AdminClientsTab = () => {
           });
         }
       }
-      setClients(Array.from(clientMap.values()).sort((a, b) => (b.lastVisit || "").localeCompare(a.lastVisit || "")));
     }
+
+    // Merge customer_profiles (add profiles that don't exist in bookings, enrich existing)
+    if (profilesRes.data) {
+      for (const p of profilesRes.data) {
+        const email = p.email.toLowerCase();
+        const existing = clientMap.get(email);
+        if (existing) {
+          existing.profileId = p.id;
+          existing.dateOfBirth = p.date_of_birth;
+          existing.medicalNotes = p.medical_notes;
+          if (!existing.name && p.full_name) existing.name = p.full_name;
+          if (!existing.phone && p.phone) existing.phone = p.phone;
+        } else {
+          clientMap.set(email, {
+            email,
+            name: p.full_name || "",
+            phone: p.phone,
+            bookingCount: 0,
+            totalSpent: 0,
+            lastVisit: null,
+            profileId: p.id,
+            dateOfBirth: p.date_of_birth,
+            medicalNotes: p.medical_notes,
+          });
+        }
+      }
+    }
+
+    setClients(Array.from(clientMap.values()).sort((a, b) => (b.lastVisit || "").localeCompare(a.lastVisit || "")));
     if (notesRes.data) setNotes(notesRes.data as AdminNote[]);
     if (imagesRes.data) setImages(imagesRes.data as ClientImage[]);
     setLoading(false);
@@ -110,17 +152,10 @@ const AdminClientsTab = () => {
     setUploading(true);
     const ext = file.name.split(".").pop();
     const path = `${email}/${Date.now()}.${ext}`;
-    
     const { error: uploadError } = await supabase.storage.from("client-images").upload(path, file);
     if (uploadError) { toast.error("Upload failed"); setUploading(false); return; }
-
-    // Store path only - signed URLs are loaded on expand
-    
     const { error } = await supabase.from("client_images").insert({
-      customer_email: email,
-      image_url: path,
-      image_type: imageType,
-      treatment_name: imageTreatment || null,
+      customer_email: email, image_url: path, image_type: imageType, treatment_name: imageTreatment || null,
     });
     if (error) { toast.error("Failed to save image record"); setUploading(false); return; }
     toast.success(`${imageType} image uploaded`);
@@ -136,16 +171,64 @@ const AdminClientsTab = () => {
     toast.success("Image deleted");
   };
 
-  const getSignedUrl = async (path: string): Promise<string | null> => {
-    const { data } = await supabase.storage.from("client-images").createSignedUrl(path, 3600);
-    return data?.signedUrl || null;
-  };
-
   const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
   const loadSignedUrl = async (path: string) => {
     if (signedUrls[path]) return;
-    const url = await getSignedUrl(path);
-    if (url) setSignedUrls(prev => ({ ...prev, [path]: url }));
+    const { data } = await supabase.storage.from("client-images").createSignedUrl(path, 3600);
+    if (data?.signedUrl) setSignedUrls(prev => ({ ...prev, [path]: data.signedUrl }));
+  };
+
+  const handleCreateClient = async () => {
+    if (!newClient.name.trim() || !newClient.email.trim()) { toast.error("Name and email required"); return; }
+    const { error } = await supabase.from("customer_profiles").insert({
+      email: newClient.email.toLowerCase().trim(),
+      full_name: newClient.name.trim(),
+      phone: newClient.phone || null,
+      date_of_birth: newClient.dob || null,
+      medical_notes: newClient.medicalNotes || null,
+      user_id: "00000000-0000-0000-0000-000000000000",
+    });
+    if (error) {
+      toast.error(error.message.includes("duplicate") ? "Client with this email already exists" : "Failed to create client");
+      return;
+    }
+    toast.success("Client created");
+    setNewClient({ name: "", email: "", phone: "", dob: "", medicalNotes: "" });
+    setShowNewClient(false);
+    fetchData();
+  };
+
+  const startEdit = (client: Client) => {
+    setEditingClient(client.email);
+    setEditForm({
+      name: client.name,
+      email: client.email,
+      phone: client.phone || "",
+      dob: client.dateOfBirth || "",
+      medicalNotes: client.medicalNotes || "",
+    });
+  };
+
+  const saveEdit = async (originalEmail: string) => {
+    // Update or create profile
+    const client = clients.find(c => c.email === originalEmail);
+    if (client?.profileId) {
+      const { error } = await supabase.from("customer_profiles").update({
+        full_name: editForm.name, phone: editForm.phone || null,
+        date_of_birth: editForm.dob || null, medical_notes: editForm.medicalNotes || null,
+      }).eq("id", client.profileId);
+      if (error) { toast.error("Failed to update"); return; }
+    } else {
+      const { error } = await supabase.from("customer_profiles").insert({
+        email: originalEmail, full_name: editForm.name, phone: editForm.phone || null,
+        date_of_birth: editForm.dob || null, medical_notes: editForm.medicalNotes || null,
+        user_id: "00000000-0000-0000-0000-000000000000",
+      });
+      if (error && !error.message.includes("duplicate")) { toast.error("Failed to save"); return; }
+    }
+    toast.success("Client updated");
+    setEditingClient(null);
+    fetchData();
   };
 
   const handleImport = async () => {
@@ -157,17 +240,11 @@ const AdminClientsTab = () => {
       if (parts.length < 2) continue;
       const [name, email, phone] = parts;
       if (!email || !email.includes("@")) continue;
-      
-      // Check if client already exists via a booking
       const existing = clients.find(c => c.email.toLowerCase() === email.toLowerCase());
       if (existing) continue;
-
-      // Create a placeholder profile entry via customer_profiles
       const { error } = await supabase.from("customer_profiles").insert({
-        email: email.toLowerCase(),
-        full_name: name,
-        phone: phone || null,
-        user_id: "00000000-0000-0000-0000-000000000000", // placeholder for imported clients
+        email: email.toLowerCase(), full_name: name, phone: phone || null,
+        user_id: "00000000-0000-0000-0000-000000000000",
       });
       if (!error) imported++;
     }
@@ -197,39 +274,66 @@ const AdminClientsTab = () => {
     <div>
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        <div className="border border-border p-4">
+        <div className="border border-border p-3 sm:p-4">
           <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1">Total Clients</p>
           <p className="font-display text-2xl">{clients.length}</p>
         </div>
-        <div className="border border-border p-4">
+        <div className="border border-border p-3 sm:p-4">
           <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1">Total Revenue</p>
           <p className="font-display text-2xl text-gold">£{clients.reduce((s, c) => s + c.totalSpent, 0).toFixed(0)}</p>
         </div>
-        <div className="border border-border p-4">
+        <div className="border border-border p-3 sm:p-4">
           <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1">Avg Spend</p>
           <p className="font-display text-2xl">£{clients.length ? (clients.reduce((s, c) => s + c.totalSpent, 0) / clients.length).toFixed(0) : 0}</p>
         </div>
-        <div className="border border-border p-4">
+        <div className="border border-border p-3 sm:p-4">
           <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1">Notes</p>
           <p className="font-display text-2xl">{notes.length}</p>
         </div>
       </div>
 
       {/* Controls */}
-      <div className="flex flex-wrap gap-3 mb-6 items-center">
-        <div className="relative flex-1 min-w-[200px]">
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <div className="relative flex-1 min-w-0">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Search by name, email, or phone..."
             className="w-full pl-9 pr-4 py-2 border border-border bg-transparent font-body text-sm focus:border-gold focus:outline-none" />
         </div>
-        <button onClick={() => setShowImport(!showImport)} className="flex items-center gap-2 px-4 py-2 border border-border font-body text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground hover:border-foreground transition-colors">
-          <Upload size={14} /> Import
-        </button>
-        <button onClick={exportCSV} className="flex items-center gap-2 px-4 py-2 border border-border font-body text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground hover:border-foreground transition-colors">
-          <Download size={14} /> Export
-        </button>
+        <div className="flex gap-2">
+          <button onClick={() => setShowNewClient(!showNewClient)} className="flex items-center gap-2 px-4 py-2 bg-foreground text-background font-body text-xs tracking-wider uppercase hover:bg-accent transition-colors">
+            <Plus size={14} /> New Client
+          </button>
+          <button onClick={() => setShowImport(!showImport)} className="flex items-center gap-2 px-3 py-2 border border-border font-body text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground hover:border-foreground transition-colors">
+            <Upload size={14} />
+          </button>
+          <button onClick={exportCSV} className="flex items-center gap-2 px-3 py-2 border border-border font-body text-xs tracking-wider uppercase text-muted-foreground hover:text-foreground hover:border-foreground transition-colors">
+            <Download size={14} />
+          </button>
+        </div>
       </div>
+
+      {/* New Client Form */}
+      {showNewClient && (
+        <div className="border border-gold/30 bg-gold/5 p-4 mb-6 space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="font-body text-sm font-medium">New Client</h4>
+            <button onClick={() => setShowNewClient(false)} className="text-muted-foreground hover:text-foreground"><X size={14} /></button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input value={newClient.name} onChange={e => setNewClient(p => ({ ...p, name: e.target.value }))} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Full Name *" />
+            <input value={newClient.email} onChange={e => setNewClient(p => ({ ...p, email: e.target.value }))} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Email *" type="email" />
+            <input value={newClient.phone} onChange={e => setNewClient(p => ({ ...p, phone: e.target.value }))} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Phone" />
+            <input value={newClient.dob} onChange={e => setNewClient(p => ({ ...p, dob: e.target.value }))} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Date of Birth" type="date" />
+          </div>
+          <textarea value={newClient.medicalNotes} onChange={e => setNewClient(p => ({ ...p, medicalNotes: e.target.value }))} rows={2}
+            className="w-full border border-border bg-transparent px-3 py-2 font-body text-xs focus:border-gold focus:outline-none resize-none" placeholder="Medical notes (optional)" />
+          <div className="flex gap-2">
+            <button onClick={handleCreateClient} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">Create Client</button>
+            <button onClick={() => setShowNewClient(false)} className="px-4 py-2 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">Cancel</button>
+          </div>
+        </div>
+      )}
 
       {/* Import Panel */}
       {showImport && (
@@ -255,29 +359,28 @@ const AdminClientsTab = () => {
             const isExpanded = expandedClient === client.email;
             const clientNotes = notes.filter(n => n.customer_email === client.email);
             const clientImages = images.filter(i => i.customer_email === client.email);
+            const isEditing = editingClient === client.email;
 
             return (
               <div key={client.email}>
                 <div
                   onClick={() => {
                     setExpandedClient(isExpanded ? null : client.email);
-                    if (!isExpanded) {
-                      clientImages.forEach(img => loadSignedUrl(img.image_url));
-                    }
+                    if (!isExpanded) clientImages.forEach(img => loadSignedUrl(img.image_url));
                   }}
-                  className={`border p-4 cursor-pointer transition-colors ${isExpanded ? "border-gold bg-gold/5" : "border-border hover:border-gold/30"}`}
+                  className={`border p-3 sm:p-4 cursor-pointer transition-colors ${isExpanded ? "border-gold bg-gold/5" : "border-border hover:border-gold/30"}`}
                 >
-                    <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 sm:items-center">
+                  <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 sm:items-center">
                     <span className="text-muted-foreground">{isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</span>
                     <div className="flex items-center gap-2">
                       <User size={14} className="text-gold" />
                       <span className="font-body text-sm font-medium">{client.name || "Unknown"}</span>
                     </div>
-                    <a href={`mailto:${client.email}`} className="font-body text-xs hover:text-gold transition-colors flex items-center gap-1">
+                    <a href={`mailto:${client.email}`} className="font-body text-xs hover:text-gold transition-colors flex items-center gap-1" onClick={e => e.stopPropagation()}>
                       <Mail size={12} /> {client.email}
                     </a>
                     {client.phone && (
-                      <a href={`tel:${client.phone}`} className="font-body text-xs flex items-center gap-1">
+                      <a href={`tel:${client.phone}`} className="font-body text-xs flex items-center gap-1" onClick={e => e.stopPropagation()}>
                         <Phone size={12} /> {client.phone}
                       </a>
                     )}
@@ -291,7 +394,32 @@ const AdminClientsTab = () => {
                 </div>
 
                 {isExpanded && (
-                  <div className="ml-4 border-l-2 border-gold/20 pl-4 py-3 space-y-4">
+                  <div className="ml-0 sm:ml-4 border-l-2 border-gold/20 pl-3 sm:pl-4 py-3 space-y-4">
+                    {/* Edit Client Info */}
+                    {isEditing ? (
+                      <div className="border border-gold/30 bg-gold/5 p-3 space-y-3">
+                        <h4 className="font-body text-xs uppercase tracking-wider text-muted-foreground">Edit Client</h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <input value={editForm.name} onChange={e => setEditForm(p => ({ ...p, name: e.target.value }))} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Full Name" />
+                          <input value={editForm.phone} onChange={e => setEditForm(p => ({ ...p, phone: e.target.value }))} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Phone" />
+                          <input type="date" value={editForm.dob} onChange={e => setEditForm(p => ({ ...p, dob: e.target.value }))} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" />
+                          <textarea value={editForm.medicalNotes} onChange={e => setEditForm(p => ({ ...p, medicalNotes: e.target.value }))} className="w-full border border-border bg-transparent px-3 py-2 font-body text-xs focus:border-gold focus:outline-none resize-none" placeholder="Medical notes" rows={2} />
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => saveEdit(client.email)} className="px-3 py-1.5 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">Save</button>
+                          <button onClick={() => setEditingClient(null)} className="px-3 py-1.5 border border-border font-body text-xs uppercase tracking-wider hover:border-foreground transition-colors">Cancel</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        <button onClick={() => startEdit(client)} className="flex items-center gap-1 px-3 py-1.5 border border-border text-muted-foreground hover:text-gold hover:border-gold font-body text-xs uppercase tracking-wider transition-colors">
+                          <Pencil size={12} /> Edit Client
+                        </button>
+                        {client.dateOfBirth && <span className="font-body text-xs text-muted-foreground self-center">DOB: {new Date(client.dateOfBirth + "T00:00:00").toLocaleDateString("en-GB")}</span>}
+                        {client.medicalNotes && <span className="font-body text-xs text-muted-foreground self-center italic">Medical: {client.medicalNotes.slice(0, 50)}...</span>}
+                      </div>
+                    )}
+
                     {/* Admin Notes */}
                     <div>
                       <h4 className="font-body text-xs uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1">
@@ -320,7 +448,7 @@ const AdminClientsTab = () => {
                         <Image size={12} /> Before & After Images ({clientImages.length})
                       </h4>
                       {clientImages.length > 0 && (
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mb-3">
                           {clientImages.map(img => (
                             <div key={img.id} className="relative group border border-border">
                               {signedUrls[img.image_url] ? (
@@ -345,25 +473,25 @@ const AdminClientsTab = () => {
                           ))}
                         </div>
                       )}
-                      <div className="flex flex-wrap gap-2 items-end">
+                      <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-end">
                         <select value={imageType} onChange={e => setImageType(e.target.value as "before" | "after")}
                           className="border border-border bg-transparent px-2 py-1 font-body text-xs focus:border-gold focus:outline-none">
                           <option value="before">Before</option>
                           <option value="after">After</option>
                         </select>
                         <input value={imageTreatment} onChange={e => setImageTreatment(e.target.value)}
-                          className="border border-border bg-transparent px-2 py-1 font-body text-xs focus:border-gold focus:outline-none"
+                          className="border border-border bg-transparent px-2 py-1 font-body text-xs focus:border-gold focus:outline-none flex-1"
                           placeholder="Treatment name" />
                         <input ref={fileInputRef} type="file" accept="image/*" className="hidden"
                           onChange={e => { if (e.target.files?.[0]) uploadImage(client.email, e.target.files[0]); }} />
                         <button onClick={() => fileInputRef.current?.click()} disabled={uploading}
-                          className="flex items-center gap-1 px-3 py-1 bg-foreground text-background font-body text-xs hover:bg-accent transition-colors disabled:opacity-50">
+                          className="flex items-center justify-center gap-1 px-3 py-1 bg-foreground text-background font-body text-xs hover:bg-accent transition-colors disabled:opacity-50">
                           <Upload size={12} /> {uploading ? "Uploading..." : "Upload"}
                         </button>
                       </div>
                     </div>
 
-                     {/* Last Visit + Actions */}
+                    {/* Last Visit + Actions */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <p className="font-body text-xs text-muted-foreground">
                         Last visit: {client.lastVisit ? new Date(client.lastVisit + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "N/A"}
@@ -382,6 +510,7 @@ const AdminClientsTab = () => {
                               supabase.from("bookings").delete().eq("customer_email", client.email),
                               supabase.from("admin_client_notes").delete().eq("customer_email", client.email),
                               supabase.from("client_images").delete().eq("customer_email", client.email),
+                              ...(client.profileId ? [supabase.from("customer_profiles").delete().eq("id", client.profileId)] : []),
                             ]);
                             setClients(prev => prev.filter(c => c.email !== client.email));
                             toast.success("Client deleted");

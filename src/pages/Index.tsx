@@ -76,6 +76,17 @@ const Index = () => {
       .then(({ data }) => {
         if (data) setOffers(data as Offer[]);
       });
+
+    // Fetch reviews from DB, fallback to static
+    supabase
+      .from("reviews")
+      .select("name, text, stars")
+      .eq("active", true)
+      .order("created_at", { ascending: false })
+      .limit(6)
+      .then(({ data }) => {
+        if (data && data.length > 0) setReviews(data as { name: string; text: string; stars: number }[]);
+      });
   }, []);
 
   return (

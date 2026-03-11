@@ -267,6 +267,7 @@ const Admin = () => {
               {tab === "blocked" && <AdminBlockedDatesTab />}
               {tab === "discounts" && <AdminDiscountCodesTab />}
               {tab === "site" && <AdminSiteTab />}
+              {tab === "reviews" && <AdminReviewsTab />}
 
               {tab === "contacts" && (
                 <>

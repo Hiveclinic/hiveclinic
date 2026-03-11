@@ -73,11 +73,12 @@ const AdminClientsTab = () => {
 
   const fetchData = async () => {
     setLoading(true);
-    const [bookingsRes, notesRes, imagesRes, profilesRes] = await Promise.all([
+    const [bookingsRes, notesRes, imagesRes, profilesRes, pkgRes] = await Promise.all([
       supabase.from("bookings").select("customer_email, customer_name, customer_phone, total_price, booking_date, status"),
       supabase.from("admin_client_notes").select("*").order("created_at", { ascending: false }),
       supabase.from("client_images").select("*").order("uploaded_at", { ascending: false }),
       supabase.from("customer_profiles").select("id, email, full_name, phone, date_of_birth, medical_notes"),
+      supabase.from("client_packages").select("*").order("created_at", { ascending: false }),
     ]);
 
     const clientMap = new Map<string, Client>();

@@ -233,6 +233,110 @@ export type Database = {
         }
         Relationships: []
       }
+      consent_form_templates: {
+        Row: {
+          active: boolean
+          created_at: string
+          fields: Json
+          form_type: string
+          id: string
+          name: string
+          treatment_id: string | null
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          fields?: Json
+          form_type?: string
+          id?: string
+          name: string
+          treatment_id?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          fields?: Json
+          form_type?: string
+          id?: string
+          name?: string
+          treatment_id?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consent_form_templates_treatment_id_fkey"
+            columns: ["treatment_id"]
+            isOneToOne: false
+            referencedRelation: "treatments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consent_submissions: {
+        Row: {
+          booking_id: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          form_data: Json
+          id: string
+          practitioner_sign_off: boolean
+          practitioner_signed_at: string | null
+          signature_url: string | null
+          signed_at: string | null
+          status: string
+          template_id: string | null
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          form_data?: Json
+          id?: string
+          practitioner_sign_off?: boolean
+          practitioner_signed_at?: string | null
+          signature_url?: string | null
+          signed_at?: string | null
+          status?: string
+          template_id?: string | null
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          form_data?: Json
+          id?: string
+          practitioner_sign_off?: boolean
+          practitioner_signed_at?: string | null
+          signature_url?: string | null
+          signed_at?: string | null
+          status?: string
+          template_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consent_submissions_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consent_submissions_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "consent_form_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_submissions: {
         Row: {
           contacted: boolean
@@ -398,6 +502,99 @@ export type Database = {
         }
         Relationships: []
       }
+      inventory_items: {
+        Row: {
+          active: boolean
+          batch_number: string | null
+          category: string
+          cost_price: number
+          created_at: string
+          expiry_date: string | null
+          id: string
+          linked_treatment_ids: string[] | null
+          low_stock_threshold: number
+          name: string
+          notes: string | null
+          retail_price: number | null
+          stock_level: number
+          supplier: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          batch_number?: string | null
+          category?: string
+          cost_price?: number
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          linked_treatment_ids?: string[] | null
+          low_stock_threshold?: number
+          name: string
+          notes?: string | null
+          retail_price?: number | null
+          stock_level?: number
+          supplier?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          batch_number?: string | null
+          category?: string
+          cost_price?: number
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          linked_treatment_ids?: string[] | null
+          low_stock_threshold?: number
+          name?: string
+          notes?: string | null
+          retail_price?: number | null
+          stock_level?: number
+          supplier?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      marketing_campaigns: {
+        Row: {
+          campaign_type: string
+          created_at: string
+          id: string
+          name: string
+          scheduled_at: string | null
+          segment_filter: Json
+          sent_at: string | null
+          sent_count: number | null
+          status: string
+          target_count: number | null
+        }
+        Insert: {
+          campaign_type?: string
+          created_at?: string
+          id?: string
+          name: string
+          scheduled_at?: string | null
+          segment_filter?: Json
+          sent_at?: string | null
+          sent_count?: number | null
+          status?: string
+          target_count?: number | null
+        }
+        Update: {
+          campaign_type?: string
+          created_at?: string
+          id?: string
+          name?: string
+          scheduled_at?: string | null
+          segment_filter?: Json
+          sent_at?: string | null
+          sent_count?: number | null
+          status?: string
+          target_count?: number | null
+        }
+        Relationships: []
+      }
       payment_plans: {
         Row: {
           booking_id: string
@@ -523,6 +720,45 @@ export type Database = {
           announcement_text?: string | null
           id?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      staff_profiles: {
+        Row: {
+          active: boolean
+          commission_rate: number | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          commission_rate?: number | null
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          commission_rate?: number | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          role?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

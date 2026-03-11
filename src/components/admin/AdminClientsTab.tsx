@@ -49,7 +49,10 @@ const AdminClientsTab = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [notes, setNotes] = useState<AdminNote[]>([]);
   const [images, setImages] = useState<ClientImage[]>([]);
+  const [clientPackages, setClientPackages] = useState<ClientPackage[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showAddPackage, setShowAddPackage] = useState<string | null>(null);
+  const [newPkg, setNewPkg] = useState({ name: "", sessions_total: "3", expiry_date: "" });
   const [search, setSearch] = useState("");
   const [expandedClient, setExpandedClient] = useState<string | null>(null);
   const [newNote, setNewNote] = useState("");

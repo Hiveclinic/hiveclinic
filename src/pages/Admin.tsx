@@ -91,10 +91,17 @@ interface EmailSubscriber {
   id: string; email: string; created_at: string;
 }
 
+const ROLE_PERMISSIONS: Record<string, TabKey[]> = {
+  admin: [], // empty = all tabs allowed
+  practitioner: ["dashboard", "calendar", "bookings", "clients", "consultations", "treatments"],
+  receptionist: ["dashboard", "calendar", "bookings", "clients", "contacts", "consultations"],
+};
+
 const Admin = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userRole, setUserRole] = useState<string>("admin");
   const [tab, setTab] = useState<TabKey>("dashboard");
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
   const [subscribers, setSubscribers] = useState<EmailSubscriber[]>([]);

@@ -24,7 +24,7 @@ const highlights = [
   { title: "Skin Boosters", desc: "Deep hydration for luminous, glass-like skin.", link: "/treatments/skin-boosters-manchester" },
 ];
 
-const reviews = [
+const staticReviews = [
   { name: "Aisha M.", text: "Absolutely the best clinic in Manchester. Bianca is incredible - my skin has never looked better.", stars: 5 },
   { name: "Georgia L.", text: "The attention to detail is unreal. I felt so comfortable and the results were beyond what I expected.", stars: 5 },
   { name: "Priya K.", text: "Finally found somewhere that actually listens. Subtle, natural results every time.", stars: 5 },

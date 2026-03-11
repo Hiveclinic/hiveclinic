@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Trash2, Pencil, Save, X, Megaphone, Layers, Image, Upload } from "lucide-react";
+import { Plus, Trash2, Pencil, Save, X, Megaphone, Layers, Image, Upload, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 type Addon = {
@@ -37,6 +37,7 @@ const AdminSiteTab = () => {
   const [newAddon, setNewAddon] = useState({ name: "", description: "", price: 0, duration_mins: 0, applicable_categories: "" });
   const [categories, setCategories] = useState<string[]>([]);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
+  const [dragOverKey, setDragOverKey] = useState<string | null>(null);
 
   const fetchAll = async () => {
     const [addonsRes, settingsRes, treatRes, imagesRes] = await Promise.all([
@@ -97,15 +98,14 @@ const AdminSiteTab = () => {
     handleImageUpload(key, file, file.name);
   };
 
-  const updateImageUrl = async (key: string, url: string) => {
-    const { error } = await supabase.from("site_images").update({
-      image_url: url,
-      updated_at: new Date().toISOString(),
-    }).eq("key", key);
-    if (error) { toast.error("Failed to save"); return; }
-    setSiteImages(prev => prev.map(img => img.key === key ? { ...img, image_url: url } : img));
-    toast.success("Image URL saved");
-  };
+  const handleDrop = useCallback((key: string, e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOverKey(null);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith("image/")) {
+      handleImageUpload(key, file, file.name);
+    }
+  }, []);
 
   const updateAltText = async (key: string, altText: string) => {
     await supabase.from("site_images").update({ alt_text: altText }).eq("key", key);
@@ -119,6 +119,13 @@ const AdminSiteTab = () => {
     if (error) { toast.error(error.message.includes("duplicate") ? "Key already exists" : "Failed to add"); return; }
     toast.success("Image slot added");
     fetchAll();
+  };
+
+  const deleteImageSlot = async (key: string) => {
+    if (!confirm(`Delete image slot "${key}"?`)) return;
+    await supabase.from("site_images").delete().eq("key", key);
+    setSiteImages(prev => prev.filter(img => img.key !== key));
+    toast.success("Image slot removed");
   };
 
   const createAddon = async () => {
@@ -141,12 +148,8 @@ const AdminSiteTab = () => {
 
   const updateAddon = async (addon: Addon) => {
     const { error } = await supabase.from("treatment_addons").update({
-      name: addon.name,
-      description: addon.description,
-      price: addon.price,
-      duration_mins: addon.duration_mins,
-      applicable_categories: addon.applicable_categories,
-      active: addon.active,
+      name: addon.name, description: addon.description, price: addon.price,
+      duration_mins: addon.duration_mins, applicable_categories: addon.applicable_categories, active: addon.active,
     }).eq("id", addon.id);
     if (error) { toast.error("Failed to update"); return; }
     toast.success("Updated");
@@ -196,7 +199,7 @@ const AdminSiteTab = () => {
         </div>
       </div>
 
-      {/* Website Images */}
+      {/* Website Images - Improved UX */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-display text-xl flex items-center gap-2"><Image size={18} /> Website Images ({siteImages.length})</h3>
@@ -204,46 +207,59 @@ const AdminSiteTab = () => {
             <Plus size={12} /> Add Image Slot
           </button>
         </div>
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {siteImages.map(img => (
-            <div key={img.id} className="border border-border p-4">
-              <div className="flex items-start gap-4">
-                {/* Preview */}
-                <div className="w-24 h-24 bg-secondary flex-shrink-0 flex items-center justify-center overflow-hidden border border-border">
-                  {img.image_url ? (
-                    <img src={img.image_url} alt={img.alt_text} className="w-full h-full object-cover" />
-                  ) : (
-                    <Image size={20} className="text-muted-foreground" />
-                  )}
-                </div>
-                <div className="flex-1 space-y-2">
+            <div key={img.id} className="border border-border overflow-hidden">
+              {/* Large Preview / Drop Zone */}
+              <div
+                className={`relative aspect-video bg-secondary flex items-center justify-center cursor-pointer transition-colors ${dragOverKey === img.key ? "ring-2 ring-gold bg-gold/10" : ""}`}
+                onDragOver={e => { e.preventDefault(); setDragOverKey(img.key); }}
+                onDragLeave={() => setDragOverKey(null)}
+                onDrop={e => handleDrop(img.key, e)}
+              >
+                {img.image_url ? (
+                  <img src={img.image_url} alt={img.alt_text} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="text-center p-6">
+                    <Upload size={24} className="text-muted-foreground mx-auto mb-2" />
+                    <p className="font-body text-xs text-muted-foreground">Drag image here or click Replace</p>
+                  </div>
+                )}
+                {uploadingKey === img.key && (
+                  <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
+                    <RefreshCw size={20} className="text-gold animate-spin" />
+                  </div>
+                )}
+                {/* Replace overlay */}
+                {img.image_url && (
+                  <label className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/40 transition-colors cursor-pointer group">
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 px-4 py-2 bg-white text-black font-body text-xs uppercase tracking-wider">
+                      <RefreshCw size={12} /> Replace
+                    </span>
+                    <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) onFileSelected(img.key, e.target.files[0]); }} disabled={uploadingKey === img.key} />
+                  </label>
+                )}
+              </div>
+              {/* Info */}
+              <div className="p-3 space-y-2">
+                <div className="flex items-center justify-between">
                   <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">{img.key.replace(/_/g, " ")}</p>
-                  <div className="flex gap-2">
-                    <input
-                      value={img.image_url}
-                      onChange={e => setSiteImages(prev => prev.map(i => i.key === img.key ? { ...i, image_url: e.target.value } : i))}
-                      className="flex-1 border border-border bg-transparent px-3 py-1.5 font-body text-xs focus:border-gold focus:outline-none"
-                      placeholder="Paste image URL or upload below"
-                    />
-                    <button onClick={() => updateImageUrl(img.key, img.image_url)} className="px-3 py-1.5 bg-foreground text-background font-body text-[10px] uppercase tracking-wider hover:bg-accent transition-colors">
-                      <Save size={10} className="inline mr-1" /> Save
-                    </button>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <input
-                      value={img.alt_text}
-                      onChange={e => setSiteImages(prev => prev.map(i => i.key === img.key ? { ...i, alt_text: e.target.value } : i))}
-                      onBlur={() => updateAltText(img.key, img.alt_text)}
-                      className="flex-1 border border-border bg-transparent px-3 py-1.5 font-body text-xs focus:border-gold focus:outline-none"
-                      placeholder="Alt text"
-                    />
-                    <label className="flex items-center gap-1 px-3 py-1.5 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors cursor-pointer">
-                      <Upload size={10} />
-                      <span className="font-body text-[10px] uppercase tracking-wider">{uploadingKey === img.key ? "Uploading..." : "Upload"}</span>
-                      <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) onFileSelected(img.key, e.target.files[0]); }} disabled={uploadingKey === img.key} />
-                    </label>
-                  </div>
+                  <button onClick={() => deleteImageSlot(img.key)} className="text-muted-foreground hover:text-red-500 transition-colors"><Trash2 size={12} /></button>
                 </div>
+                <input
+                  value={img.alt_text}
+                  onChange={e => setSiteImages(prev => prev.map(i => i.key === img.key ? { ...i, alt_text: e.target.value } : i))}
+                  onBlur={() => updateAltText(img.key, img.alt_text)}
+                  className="w-full border border-border bg-transparent px-3 py-1.5 font-body text-xs focus:border-gold focus:outline-none"
+                  placeholder="Alt text for accessibility"
+                />
+                {!img.image_url && (
+                  <label className="flex items-center justify-center gap-2 px-3 py-2 border-2 border-dashed border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors cursor-pointer w-full">
+                    <Upload size={14} />
+                    <span className="font-body text-xs uppercase tracking-wider">Upload Image</span>
+                    <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) onFileSelected(img.key, e.target.files[0]); }} />
+                  </label>
+                )}
               </div>
             </div>
           ))}
@@ -265,7 +281,7 @@ const AdminSiteTab = () => {
               <h4 className="font-body text-sm font-medium">New Add-on</h4>
               <button onClick={() => setShowNewAddon(false)} className="text-muted-foreground hover:text-foreground"><X size={14} /></button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <input value={newAddon.name} onChange={e => setNewAddon(p => ({ ...p, name: e.target.value }))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Name e.g. LED Therapy" />
               <input type="number" value={newAddon.price || ""} onChange={e => setNewAddon(p => ({ ...p, price: Number(e.target.value) }))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Price (£)" />
               <input type="number" value={newAddon.duration_mins || ""} onChange={e => setNewAddon(p => ({ ...p, duration_mins: Number(e.target.value) }))} className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="Extra mins" />
@@ -284,10 +300,10 @@ const AdminSiteTab = () => {
         ) : (
           <div className="space-y-2">
             {addons.map(addon => (
-              <div key={addon.id} className={`border p-4 transition-colors ${addon.active ? "border-border" : "border-border/50 opacity-60"}`}>
+              <div key={addon.id} className={`border p-3 sm:p-4 transition-colors ${addon.active ? "border-border" : "border-border/50 opacity-60"}`}>
                 {editingId === addon.id ? (
                   <div className="space-y-2">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       <input value={addon.name} onChange={e => setAddons(prev => prev.map(a => a.id === addon.id ? { ...a, name: e.target.value } : a))} className="border border-border bg-transparent px-2 py-1 font-body text-sm focus:border-gold focus:outline-none" />
                       <input type="number" value={addon.price} onChange={e => setAddons(prev => prev.map(a => a.id === addon.id ? { ...a, price: Number(e.target.value) } : a))} className="border border-border bg-transparent px-2 py-1 font-body text-sm focus:border-gold focus:outline-none" />
                       <input type="number" value={addon.duration_mins} onChange={e => setAddons(prev => prev.map(a => a.id === addon.id ? { ...a, duration_mins: Number(e.target.value) } : a))} className="border border-border bg-transparent px-2 py-1 font-body text-sm focus:border-gold focus:outline-none" />
@@ -299,19 +315,18 @@ const AdminSiteTab = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3 flex-wrap">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                     <span className="font-body text-sm font-medium flex-1">{addon.name}</span>
-                    {addon.description && <span className="font-body text-xs text-muted-foreground">{addon.description}</span>}
+                    {addon.description && <span className="font-body text-xs text-muted-foreground hidden sm:inline">{addon.description}</span>}
                     <span className="font-body text-xs">£{Number(addon.price).toFixed(0)}</span>
                     {addon.duration_mins > 0 && <span className="font-body text-xs text-muted-foreground">+{addon.duration_mins}m</span>}
-                    {addon.applicable_categories && addon.applicable_categories.length > 0 && (
-                      <span className="font-body text-[10px] text-muted-foreground">{(addon.applicable_categories as string[]).join(", ")}</span>
-                    )}
-                    <button onClick={() => toggleActive(addon.id, addon.active)} className={`px-2 py-1 border font-body text-xs transition-colors ${addon.active ? "border-green-600/30 text-green-600" : "border-border text-muted-foreground"}`}>
-                      {addon.active ? "Active" : "Off"}
-                    </button>
-                    <button onClick={() => setEditingId(addon.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors"><Pencil size={12} /></button>
-                    <button onClick={() => deleteAddon(addon.id, addon.name)} className="px-2 py-1 border border-border text-muted-foreground hover:text-red-500 hover:border-red-500 transition-colors"><Trash2 size={12} /></button>
+                    <div className="flex gap-1.5">
+                      <button onClick={() => toggleActive(addon.id, addon.active)} className={`px-2 py-1 border font-body text-xs transition-colors ${addon.active ? "border-green-600/30 text-green-600" : "border-border text-muted-foreground"}`}>
+                        {addon.active ? "Active" : "Off"}
+                      </button>
+                      <button onClick={() => setEditingId(addon.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors"><Pencil size={12} /></button>
+                      <button onClick={() => deleteAddon(addon.id, addon.name)} className="px-2 py-1 border border-border text-muted-foreground hover:text-red-500 hover:border-red-500 transition-colors"><Trash2 size={12} /></button>
+                    </div>
                   </div>
                 )}
               </div>

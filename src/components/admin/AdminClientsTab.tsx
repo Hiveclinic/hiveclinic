@@ -507,6 +507,68 @@ const AdminClientsTab = () => {
                       </div>
                     </div>
 
+                    {/* Client Packages */}
+                    <div>
+                      <h4 className="font-body text-xs uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1">
+                        📦 Packages ({clientPackages.filter(p => p.customer_email === client.email).length})
+                      </h4>
+                      {clientPackages.filter(p => p.customer_email === client.email).map(pkg => (
+                        <div key={pkg.id} className="flex items-center justify-between bg-secondary/50 p-2 mb-1 rounded">
+                          <div>
+                            <p className="font-body text-xs font-medium">{pkg.package_name}</p>
+                            <p className="font-body text-[10px] text-muted-foreground">
+                              {pkg.sessions_used}/{pkg.sessions_total} used
+                              {pkg.expiry_date && ` — Expires ${new Date(pkg.expiry_date + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}`}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {pkg.sessions_used < pkg.sessions_total && (
+                              <button onClick={async () => {
+                                const { error } = await supabase.from("client_packages").update({ sessions_used: pkg.sessions_used + 1 }).eq("id", pkg.id);
+                                if (!error) { toast.success("Session recorded"); fetchData(); }
+                              }} className="px-2 py-1 bg-foreground text-background font-body text-[10px] uppercase tracking-wider rounded hover:bg-accent transition-colors">
+                                +1 Session
+                              </button>
+                            )}
+                            <button onClick={async () => {
+                              await supabase.from("client_packages").delete().eq("id", pkg.id);
+                              toast.success("Package removed");
+                              fetchData();
+                            }} className="text-muted-foreground hover:text-red-500"><Trash2 size={10} /></button>
+                          </div>
+                        </div>
+                      ))}
+                      {showAddPackage === client.email ? (
+                        <div className="border border-accent/30 bg-accent/5 p-2 mt-2 space-y-2 rounded">
+                          <input value={newPkg.name} onChange={e => setNewPkg(p => ({ ...p, name: e.target.value }))} placeholder="Package name *" className="w-full border border-border bg-transparent px-2 py-1 font-body text-xs focus:border-accent focus:outline-none rounded" />
+                          <div className="flex gap-2">
+                            <input type="number" value={newPkg.sessions_total} onChange={e => setNewPkg(p => ({ ...p, sessions_total: e.target.value }))} placeholder="Sessions" className="w-20 border border-border bg-transparent px-2 py-1 font-body text-xs focus:border-accent focus:outline-none rounded" />
+                            <input type="date" value={newPkg.expiry_date} onChange={e => setNewPkg(p => ({ ...p, expiry_date: e.target.value }))} className="flex-1 border border-border bg-transparent px-2 py-1 font-body text-xs focus:border-accent focus:outline-none rounded" />
+                          </div>
+                          <div className="flex gap-2">
+                            <button onClick={async () => {
+                              if (!newPkg.name) { toast.error("Name required"); return; }
+                              const { error } = await supabase.from("client_packages").insert({
+                                customer_email: client.email, package_name: newPkg.name,
+                                sessions_total: Number(newPkg.sessions_total) || 3,
+                                expiry_date: newPkg.expiry_date || null,
+                              });
+                              if (error) { toast.error("Failed"); return; }
+                              toast.success("Package assigned");
+                              setShowAddPackage(null);
+                              setNewPkg({ name: "", sessions_total: "3", expiry_date: "" });
+                              fetchData();
+                            }} className="px-2 py-1 bg-foreground text-background font-body text-[10px] uppercase tracking-wider rounded hover:bg-accent transition-colors">Add</button>
+                            <button onClick={() => setShowAddPackage(null)} className="px-2 py-1 border border-border font-body text-[10px] uppercase tracking-wider rounded hover:border-foreground transition-colors">Cancel</button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button onClick={() => setShowAddPackage(client.email)} className="flex items-center gap-1 mt-1 px-2 py-1 border border-border text-muted-foreground hover:text-foreground hover:border-foreground font-body text-[10px] uppercase tracking-wider transition-colors rounded">
+                          <Plus size={10} /> Assign Package
+                        </button>
+                      )}
+                    </div>
+
                     {/* Last Visit + Actions */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <p className="font-body text-xs text-muted-foreground">

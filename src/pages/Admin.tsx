@@ -33,6 +33,7 @@ const NAV_GROUPS = [
       { key: "treatments" as TabKey, label: "Treatments", icon: <Stethoscope size={14} /> },
       { key: "payments" as TabKey, label: "Payment Plans", icon: <CreditCard size={14} /> },
       { key: "discounts" as TabKey, label: "Discounts", icon: <Tag size={14} /> },
+      { key: "reviews" as TabKey, label: "Reviews", icon: <Star size={14} /> },
     ],
   },
   {

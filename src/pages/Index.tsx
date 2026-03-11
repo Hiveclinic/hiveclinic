@@ -56,6 +56,7 @@ const Index = () => {
     "Hive Clinic offers advanced skin treatments in Manchester City Centre including chemical peels, hydrafacial, microneedling, skin boosters and lip enhancement. Book a consultation today."
   );
   const [offers, setOffers] = useState<Offer[]>([]);
+  const [reviews, setReviews] = useState(staticReviews);
   const heroImg = useSiteImage("hero_home", gallery6);
   const gal1 = useSiteImage("gallery_1", gallery1);
   const gal2 = useSiteImage("gallery_2", gallery2);

@@ -33,6 +33,17 @@ type ClientImage = {
   uploaded_at: string;
 };
 
+type ClientPackage = {
+  id: string;
+  customer_email: string;
+  package_id: string | null;
+  package_name: string;
+  sessions_total: number;
+  sessions_used: number;
+  expiry_date: string | null;
+  created_at: string;
+};
+
 const AdminClientsTab = () => {
   const navigate = useNavigate();
   const [clients, setClients] = useState<Client[]>([]);

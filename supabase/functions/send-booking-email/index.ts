@@ -1,5 +1,3 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
@@ -12,19 +10,34 @@ const logStep = (step: string, details?: unknown) => {
 };
 
 const ADMIN_EMAIL = "hello@hiveclinicuk.com";
-const FROM_EMAIL = "Hive Clinic <noreply@notify.hiveclinicuk.com>";
 
-serve(async (req) => {
+// Delegate all email sending to the centralised send-email function
+async function sendEmail(to: string | string[], subject: string, html: string, from?: string) {
+  const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+  const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+    body: JSON.stringify({ to: Array.isArray(to) ? to : [to], subject, html, ...(from ? { from } : {}) }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(`send-email failed: ${data.error || res.statusText}`);
+  }
+  return data;
+}
+
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const resendKey = Deno.env.get("RESEND_API_KEY");
-    if (!resendKey) throw new Error("RESEND_API_KEY is not configured");
-
-    const resend = new Resend(resendKey);
-
     const { bookingId, emailType, oldDate, oldTime } = await req.json();
     // emailType: "confirmation" | "reminder" | "aftercare" | "cancellation" | "reschedule" | "client_cancelled" | "admin_new_booking"
 
@@ -101,7 +114,7 @@ serve(async (req) => {
       `;
 
       logStep("Sending admin notification", { to: ADMIN_EMAIL });
-      await resend.emails.send({ from: FROM_EMAIL, to: [ADMIN_EMAIL], subject, html });
+      await sendEmail(ADMIN_EMAIL, subject, html);
       return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 });
     }
 
@@ -237,7 +250,7 @@ serve(async (req) => {
 
       // Send customer email
       logStep("Sending reschedule email to customer", { to: booking.customer_email });
-      await resend.emails.send({ from: FROM_EMAIL, to: [booking.customer_email], subject, html });
+      await sendEmail(booking.customer_email, subject, html);
 
       // Send admin notification
       const oldDateFormatted = oldDate ? new Date(oldDate + "T00:00:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }) : "Unknown";
@@ -266,7 +279,7 @@ serve(async (req) => {
       `;
 
       logStep("Sending reschedule notification to admin");
-      await resend.emails.send({ from: FROM_EMAIL, to: [ADMIN_EMAIL], subject: `Reschedule: ${booking.customer_name} - ${treatmentName}`, html: adminHtml });
+      await sendEmail(ADMIN_EMAIL, `Reschedule: ${booking.customer_name} - ${treatmentName}`, adminHtml);
 
       return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 });
     } else if (emailType === "client_cancelled") {
@@ -290,7 +303,7 @@ serve(async (req) => {
       `;
 
       logStep("Sending client cancellation notification to admin");
-      await resend.emails.send({ from: FROM_EMAIL, to: [ADMIN_EMAIL], subject: `Client Cancelled: ${booking.customer_name} - ${treatmentName}`, html: adminCancelHtml });
+      await sendEmail(ADMIN_EMAIL, `Client Cancelled: ${booking.customer_name} - ${treatmentName}`, adminCancelHtml);
 
       return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 });
     } else {
@@ -298,15 +311,8 @@ serve(async (req) => {
     }
 
     logStep("Sending email", { to: booking.customer_email, subject });
-
-    const emailResponse = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: [booking.customer_email],
-      subject,
-      html,
-    });
-
-    logStep("Email sent successfully", emailResponse);
+    await sendEmail(booking.customer_email, subject, html);
+    logStep("Email sent successfully");
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

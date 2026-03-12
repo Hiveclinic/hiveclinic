@@ -8,6 +8,7 @@ type FormField = {
   type: string;
   label: string;
   required: boolean;
+  [key: string]: any;
 };
 
 type FormTemplate = {

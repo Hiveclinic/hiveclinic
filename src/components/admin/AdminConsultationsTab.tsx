@@ -163,7 +163,7 @@ const AdminConsultationsTab = () => {
       ],
     }).select().single();
     if (error) { toast.error("Failed to create"); return; }
-    if (data) setTemplates(prev => [data as FormTemplate, ...prev]);
+    if (data) setTemplates(prev => [data as unknown as FormTemplate, ...prev]);
     toast.success("Template created");
     setShowNewTemplate(false);
     setNewTemplate({ name: "", form_type: "consent", treatment_id: "" });

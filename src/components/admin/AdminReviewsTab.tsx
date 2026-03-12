@@ -21,7 +21,6 @@ const AdminReviewsTab = () => {
   const [newReview, setNewReview] = useState({ name: "", text: "", stars: 5, source: "google" });
 
   const fetchReviews = async () => {
-    // Admin can see all reviews (active and inactive) via RLS
     const { data } = await supabase.from("reviews").select("*").order("created_at", { ascending: false });
     if (data) setReviews(data as Review[]);
     setLoading(false);
@@ -32,8 +31,8 @@ const AdminReviewsTab = () => {
   const createReview = async () => {
     if (!newReview.name.trim() || !newReview.text.trim()) { toast.error("Name and review text required"); return; }
     const { error } = await supabase.from("reviews").insert(newReview);
-    if (error) { toast.error("Failed to add review"); return; }
-    toast.success("Review added");
+    if (error) { toast.error("Failed to import review"); return; }
+    toast.success("Review imported");
     setNewReview({ name: "", text: "", stars: 5, source: "google" });
     setShowNew(false);
     fetchReviews();
@@ -68,16 +67,16 @@ const AdminReviewsTab = () => {
       <div className="flex items-center justify-between mb-6">
         <h3 className="font-display text-xl">Reviews ({reviews.length})</h3>
         <button onClick={() => setShowNew(!showNew)} className="flex items-center gap-1 px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">
-          <Plus size={12} /> Add Review
+          <Plus size={12} /> Import Review
         </button>
       </div>
 
-      <p className="font-body text-xs text-muted-foreground mb-6">Add your Google reviews here. Active reviews are shown on the homepage.</p>
+      <p className="font-body text-xs text-muted-foreground mb-6">Import reviews from your Google Business profile. Paste the reviewer name and review text. Active reviews are shown on the homepage.</p>
 
       {showNew && (
         <div className="border border-gold/30 bg-gold/5 p-4 mb-6 space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="font-body text-sm font-medium">New Review</h4>
+            <h4 className="font-body text-sm font-medium">Import Google Review</h4>
             <button onClick={() => setShowNew(false)} className="text-muted-foreground hover:text-foreground"><X size={14} /></button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -88,22 +87,18 @@ const AdminReviewsTab = () => {
                 className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none">
                 {[5, 4, 3, 2, 1].map(s => <option key={s} value={s}>{s} Stars</option>)}
               </select>
-              <select value={newReview.source} onChange={e => setNewReview(p => ({ ...p, source: e.target.value }))}
-                className="border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none">
-                <option value="google">Google</option>
-                <option value="manual">Manual</option>
-              </select>
+              <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider px-2 py-1 bg-secondary rounded">Google</span>
             </div>
           </div>
           <textarea value={newReview.text} onChange={e => setNewReview(p => ({ ...p, text: e.target.value }))} rows={3}
             className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none resize-none"
-            placeholder="Paste the review text here..." />
-          <button onClick={createReview} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">Add Review</button>
+            placeholder="Paste the Google review text here..." />
+          <button onClick={createReview} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">Import Review</button>
         </div>
       )}
 
       {reviews.length === 0 ? (
-        <div className="p-12 bg-secondary text-center"><p className="font-body text-muted-foreground">No reviews yet. Add your first Google review above.</p></div>
+        <div className="p-12 bg-secondary text-center"><p className="font-body text-muted-foreground">No reviews imported yet. Import your first Google review above.</p></div>
       ) : (
         <div className="space-y-3">
           {reviews.map(review => (

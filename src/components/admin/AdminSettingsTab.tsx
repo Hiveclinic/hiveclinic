@@ -119,15 +119,12 @@ const AdminSettingsTab = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {integrations.map(int => (
             <div key={int.name} className="flex items-center justify-between py-3 px-4 border border-border rounded-lg">
-              <div className="flex items-center gap-3">
-                <int.icon size={16} className="text-muted-foreground" />
-                <div>
-                  <p className="font-body text-sm font-medium">{int.name}</p>
-                  <p className="font-body text-[10px] text-muted-foreground">{int.desc}</p>
-                </div>
+              <div>
+                <p className="font-body text-sm font-medium">{int.name}</p>
+                <p className="font-body text-[10px] text-muted-foreground">{int.desc}</p>
               </div>
-              <span className={`font-body text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${int.connected ? "bg-green-500/10 text-green-600" : "bg-secondary text-muted-foreground"}`}>
-                {int.connected ? "Connected" : "Setup"}
+              <span className={`font-body text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${int.status === "Configured" ? "bg-green-500/10 text-green-600" : "bg-secondary text-muted-foreground"}`}>
+                {int.status}
               </span>
             </div>
           ))}

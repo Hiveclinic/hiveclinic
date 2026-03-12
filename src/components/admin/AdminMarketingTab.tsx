@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail, MessageSquare, Users, Plus, Calendar, Send, Clock, TrendingUp } from "lucide-react";
+import { Mail, Users, Plus, X, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { format, subDays } from "date-fns";
 
@@ -39,7 +39,6 @@ const AdminMarketingTab = () => {
       ]);
       if (campRes.data) setCampaigns(campRes.data as Campaign[]);
 
-      // Calculate segments
       const bookings = bookingsRes.data || [];
       const emails = new Map<string, { lastDate: string; count: number }>();
       bookings.forEach((b: any) => {
@@ -97,7 +96,7 @@ const AdminMarketingTab = () => {
         <h3 className="font-display text-lg mb-3">Client Segments</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {segments.map(seg => (
-            <div key={seg.filter} className="bg-card border border-border rounded-xl p-4 hover:border-accent/30 transition-colors cursor-pointer">
+            <div key={seg.filter} className="bg-card border border-border rounded-xl p-4 hover:border-accent/30 transition-colors">
               <div className="flex items-center gap-2 mb-2">
                 <Users size={14} className="text-accent" />
                 <span className="font-body text-xs font-medium">{seg.label}</span>
@@ -109,40 +108,30 @@ const AdminMarketingTab = () => {
         </div>
       </div>
 
-      {/* Automated Reminders */}
+      {/* Email Integration Status */}
       <div>
-        <h3 className="font-display text-lg mb-3">Automated Actions</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {[
-            { label: "Post-Treatment Follow-up", desc: "24h after appointment completion", icon: Clock, active: true },
-            { label: "Review Request", desc: "48h after completed appointment", icon: TrendingUp, active: true },
-            { label: "Rebooking Reminder", desc: "Sent when treatment cycle is due", icon: Calendar, active: false },
-            { label: "Birthday Offers", desc: "Automated birthday discount email", icon: Mail, active: false },
-            { label: "Win-Back Campaign", desc: "Targets clients inactive 90+ days", icon: Send, active: false },
-            { label: "Abandoned Booking", desc: "Follow up on incomplete bookings", icon: MessageSquare, active: false },
-          ].map(action => (
-            <div key={action.label} className="bg-card border border-border rounded-xl p-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${action.active ? "bg-green-500/10" : "bg-secondary"}`}>
-                  <action.icon size={14} className={action.active ? "text-green-600" : "text-muted-foreground"} />
-                </div>
-                <div>
-                  <p className="font-body text-sm font-medium">{action.label}</p>
-                  <p className="font-body text-[10px] text-muted-foreground">{action.desc}</p>
-                </div>
-              </div>
-              <span className={`font-body text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${action.active ? "bg-green-500/10 text-green-600" : "bg-secondary text-muted-foreground"}`}>
-                {action.active ? "Active" : "Coming Soon"}
-              </span>
+        <h3 className="font-display text-lg mb-3">Email Integration</h3>
+        <div className="bg-card border border-border rounded-xl p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-green-500/10">
+              <CheckCircle size={14} className="text-green-600" />
             </div>
-          ))}
+            <div>
+              <p className="font-body text-sm font-medium">Resend — Configured</p>
+              <p className="font-body text-[10px] text-muted-foreground">Delivery not yet tested — send a test campaign to verify</p>
+            </div>
+          </div>
+          <span className="font-body text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-green-500/10 text-green-600">Configured</span>
         </div>
       </div>
 
       {/* New Campaign Form */}
       {showNew && (
         <div className="bg-card border border-border rounded-xl p-5 space-y-4">
-          <h3 className="font-display text-lg">Create Campaign</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="font-display text-lg">Create Campaign</h3>
+            <button onClick={() => setShowNew(false)} className="text-muted-foreground hover:text-foreground"><X size={14} /></button>
+          </div>
           <input value={newCampaign.name} onChange={e => setNewCampaign(p => ({ ...p, name: e.target.value }))} placeholder="Campaign name..." className="w-full px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background focus:border-accent outline-none" />
           <select value={newCampaign.campaign_type} onChange={e => setNewCampaign(p => ({ ...p, campaign_type: e.target.value }))} className="w-full px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background">
             <option value="email">Email</option>

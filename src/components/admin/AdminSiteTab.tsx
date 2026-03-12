@@ -27,6 +27,26 @@ type SiteImage = {
   alt_text: string;
 };
 
+const IMAGE_SLOTS: Record<string, { label: string; location: string }> = {
+  hero_home: { label: "Homepage Hero", location: "Large banner at top of homepage" },
+  gallery_1: { label: "Gallery Image 1", location: "Homepage gallery section" },
+  gallery_2: { label: "Gallery Image 2", location: "Homepage gallery section" },
+  gallery_3: { label: "Gallery Image 3", location: "Homepage gallery section" },
+  gallery_4: { label: "Gallery Image 4", location: "Homepage gallery section" },
+  gallery_5: { label: "Gallery Image 5", location: "Homepage gallery section" },
+  gallery_6: { label: "Gallery Image 6", location: "Homepage gallery section" },
+  about_hero: { label: "About Page Hero", location: "Banner on the About page" },
+  treatments_hero: { label: "Treatments Hero", location: "Banner on the Treatments page" },
+  booking_hero: { label: "Booking Hero", location: "Banner on the Booking page" },
+  results_hero: { label: "Results Hero", location: "Banner on the Results page" },
+  contact_hero: { label: "Contact Hero", location: "Banner on the Contact page" },
+};
+
+const getSlotInfo = (key: string) => {
+  if (IMAGE_SLOTS[key]) return IMAGE_SLOTS[key];
+  return { label: key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()), location: "Custom image slot" };
+};
+
 const AdminSiteTab = () => {
   const [addons, setAddons] = useState<Addon[]>([]);
   const [settings, setSettings] = useState<SiteSettings>({ announcement_text: "", announcement_active: false, announcement_link: "" });
@@ -82,14 +102,21 @@ const AdminSiteTab = () => {
 
     const { data: { publicUrl } } = supabase.storage.from("site-images").getPublicUrl(path);
 
-    const { error } = await supabase.from("site_images").update({
-      image_url: publicUrl,
-      updated_at: new Date().toISOString(),
-    }).eq("key", key);
+    // Check if image slot exists in DB, if not create it
+    const existing = siteImages.find(img => img.key === key);
+    if (existing) {
+      const { error } = await supabase.from("site_images").update({
+        image_url: publicUrl,
+        updated_at: new Date().toISOString(),
+      }).eq("key", key);
+      if (error) { toast.error("Failed to save image URL"); setUploadingKey(null); return; }
+      setSiteImages(prev => prev.map(img => img.key === key ? { ...img, image_url: publicUrl } : img));
+    } else {
+      const { data, error } = await supabase.from("site_images").insert({ key, image_url: publicUrl, alt_text: "" }).select().single();
+      if (error) { toast.error("Failed to save image URL"); setUploadingKey(null); return; }
+      if (data) setSiteImages(prev => [...prev, data as SiteImage]);
+    }
 
-    if (error) { toast.error("Failed to save image URL"); setUploadingKey(null); return; }
-
-    setSiteImages(prev => prev.map(img => img.key === key ? { ...img, image_url: publicUrl } : img));
     toast.success("Image updated");
     setUploadingKey(null);
   };
@@ -105,24 +132,15 @@ const AdminSiteTab = () => {
     if (file && file.type.startsWith("image/")) {
       handleImageUpload(key, file, file.name);
     }
-  }, []);
+  }, [siteImages]);
 
   const updateAltText = async (key: string, altText: string) => {
     await supabase.from("site_images").update({ alt_text: altText }).eq("key", key);
     setSiteImages(prev => prev.map(img => img.key === key ? { ...img, alt_text: altText } : img));
   };
 
-  const addNewImageKey = async () => {
-    const key = prompt("Enter image key (e.g. 'treatment_hero', 'banner_promo'):");
-    if (!key) return;
-    const { error } = await supabase.from("site_images").insert({ key: key.trim(), image_url: "", alt_text: "" });
-    if (error) { toast.error(error.message.includes("duplicate") ? "Key already exists" : "Failed to add"); return; }
-    toast.success("Image slot added");
-    fetchAll();
-  };
-
   const deleteImageSlot = async (key: string) => {
-    if (!confirm(`Delete image slot "${key}"?`)) return;
+    if (!confirm(`Delete image slot "${getSlotInfo(key).label}"?`)) return;
     await supabase.from("site_images").delete().eq("key", key);
     setSiteImages(prev => prev.filter(img => img.key !== key));
     toast.success("Image slot removed");
@@ -171,6 +189,17 @@ const AdminSiteTab = () => {
 
   if (loading) return <div className="py-12 text-center"><p className="font-body text-muted-foreground animate-pulse">Loading...</p></div>;
 
+  // Merge predefined slots with existing DB images
+  const allSlotKeys = Object.keys(IMAGE_SLOTS);
+  const existingKeys = new Set(siteImages.map(img => img.key));
+  const displayImages: (SiteImage | { id: null; key: string; image_url: string; alt_text: string })[] = [
+    ...allSlotKeys.map(key => {
+      const existing = siteImages.find(img => img.key === key);
+      return existing || { id: null, key, image_url: "", alt_text: "" };
+    }),
+    ...siteImages.filter(img => !allSlotKeys.includes(img.key)),
+  ];
+
   return (
     <div className="space-y-10">
       {/* Announcement Banner */}
@@ -199,70 +228,80 @@ const AdminSiteTab = () => {
         </div>
       </div>
 
-      {/* Website Images - Improved UX */}
+      {/* Website Images */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-display text-xl flex items-center gap-2"><Image size={18} /> Website Images ({siteImages.length})</h3>
-          <button onClick={addNewImageKey} className="flex items-center gap-1 px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">
-            <Plus size={12} /> Add Image Slot
-          </button>
+          <h3 className="font-display text-xl flex items-center gap-2"><Image size={18} /> Website Images ({displayImages.length})</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {siteImages.map(img => (
-            <div key={img.id} className="border border-border overflow-hidden">
-              {/* Large Preview / Drop Zone */}
-              <div
-                className={`relative aspect-video bg-secondary flex items-center justify-center cursor-pointer transition-colors ${dragOverKey === img.key ? "ring-2 ring-gold bg-gold/10" : ""}`}
-                onDragOver={e => { e.preventDefault(); setDragOverKey(img.key); }}
-                onDragLeave={() => setDragOverKey(null)}
-                onDrop={e => handleDrop(img.key, e)}
-              >
-                {img.image_url ? (
-                  <img src={img.image_url} alt={img.alt_text} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="text-center p-6">
-                    <Upload size={24} className="text-muted-foreground mx-auto mb-2" />
-                    <p className="font-body text-xs text-muted-foreground">Drag image here or click Replace</p>
-                  </div>
-                )}
-                {uploadingKey === img.key && (
-                  <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
-                    <RefreshCw size={20} className="text-gold animate-spin" />
-                  </div>
-                )}
-                {/* Replace overlay */}
-                {img.image_url && (
-                  <label className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/40 transition-colors cursor-pointer group">
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 px-4 py-2 bg-white text-black font-body text-xs uppercase tracking-wider">
-                      <RefreshCw size={12} /> Replace
-                    </span>
-                    <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) onFileSelected(img.key, e.target.files[0]); }} disabled={uploadingKey === img.key} />
-                  </label>
-                )}
-              </div>
-              {/* Info */}
-              <div className="p-3 space-y-2">
-                <div className="flex items-center justify-between">
-                  <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">{img.key.replace(/_/g, " ")}</p>
-                  <button onClick={() => deleteImageSlot(img.key)} className="text-muted-foreground hover:text-red-500 transition-colors"><Trash2 size={12} /></button>
+          {displayImages.map(img => {
+            const slot = getSlotInfo(img.key);
+            const isPredefined = !!IMAGE_SLOTS[img.key];
+            return (
+              <div key={img.key} className="border border-border overflow-hidden">
+                {/* Large Preview / Drop Zone */}
+                <div
+                  className={`relative aspect-video bg-secondary flex items-center justify-center cursor-pointer transition-colors ${dragOverKey === img.key ? "ring-2 ring-gold bg-gold/10" : ""}`}
+                  onDragOver={e => { e.preventDefault(); setDragOverKey(img.key); }}
+                  onDragLeave={() => setDragOverKey(null)}
+                  onDrop={e => handleDrop(img.key, e)}
+                >
+                  {img.image_url ? (
+                    <img src={img.image_url} alt={img.alt_text} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-center p-6">
+                      <Upload size={24} className="text-muted-foreground mx-auto mb-2" />
+                      <p className="font-body text-xs text-muted-foreground">Drag image here or click Upload</p>
+                    </div>
+                  )}
+                  {uploadingKey === img.key && (
+                    <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
+                      <RefreshCw size={20} className="text-gold animate-spin" />
+                    </div>
+                  )}
+                  {img.image_url && (
+                    <label className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/40 transition-colors cursor-pointer group">
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 px-4 py-2 bg-white text-black font-body text-xs uppercase tracking-wider">
+                        <RefreshCw size={12} /> Replace
+                      </span>
+                      <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) onFileSelected(img.key, e.target.files[0]); }} disabled={uploadingKey === img.key} />
+                    </label>
+                  )}
                 </div>
-                <input
-                  value={img.alt_text}
-                  onChange={e => setSiteImages(prev => prev.map(i => i.key === img.key ? { ...i, alt_text: e.target.value } : i))}
-                  onBlur={() => updateAltText(img.key, img.alt_text)}
-                  className="w-full border border-border bg-transparent px-3 py-1.5 font-body text-xs focus:border-gold focus:outline-none"
-                  placeholder="Alt text for accessibility"
-                />
-                {!img.image_url && (
-                  <label className="flex items-center justify-center gap-2 px-3 py-2 border-2 border-dashed border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors cursor-pointer w-full">
-                    <Upload size={14} />
-                    <span className="font-body text-xs uppercase tracking-wider">Upload Image</span>
-                    <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) onFileSelected(img.key, e.target.files[0]); }} />
-                  </label>
-                )}
+                {/* Info */}
+                <div className="p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-body text-xs font-medium">{slot.label}</p>
+                      <p className="font-body text-[10px] text-muted-foreground">{slot.location}</p>
+                    </div>
+                    {!isPredefined && (
+                      <button onClick={() => deleteImageSlot(img.key)} className="text-muted-foreground hover:text-red-500 transition-colors"><Trash2 size={12} /></button>
+                    )}
+                  </div>
+                  <input
+                    value={img.alt_text}
+                    onChange={e => {
+                      const val = e.target.value;
+                      setSiteImages(prev => prev.map(i => i.key === img.key ? { ...i, alt_text: val } : i));
+                    }}
+                    onBlur={() => {
+                      if (img.id) updateAltText(img.key, img.alt_text);
+                    }}
+                    className="w-full border border-border bg-transparent px-3 py-1.5 font-body text-xs focus:border-gold focus:outline-none"
+                    placeholder="Alt text for accessibility"
+                  />
+                  {!img.image_url && (
+                    <label className="flex items-center justify-center gap-2 px-3 py-2 border-2 border-dashed border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors cursor-pointer w-full">
+                      <Upload size={14} />
+                      <span className="font-body text-xs uppercase tracking-wider">Upload Image</span>
+                      <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) onFileSelected(img.key, e.target.files[0]); }} />
+                    </label>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -315,17 +354,17 @@ const AdminSiteTab = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                    <span className="font-body text-sm font-medium flex-1">{addon.name}</span>
-                    {addon.description && <span className="font-body text-xs text-muted-foreground hidden sm:inline">{addon.description}</span>}
-                    <span className="font-body text-xs">£{Number(addon.price).toFixed(0)}</span>
-                    {addon.duration_mins > 0 && <span className="font-body text-xs text-muted-foreground">+{addon.duration_mins}m</span>}
-                    <div className="flex gap-1.5">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div>
+                      <p className="font-body text-sm font-medium">{addon.name}</p>
+                      <p className="font-body text-[11px] text-muted-foreground">£{addon.price} — {addon.duration_mins} mins{addon.description ? ` — ${addon.description}` : ""}</p>
+                    </div>
+                    <div className="flex gap-2 items-center">
                       <button onClick={() => toggleActive(addon.id, addon.active)} className={`px-2 py-1 border font-body text-xs transition-colors ${addon.active ? "border-green-600/30 text-green-600" : "border-border text-muted-foreground"}`}>
-                        {addon.active ? "Active" : "Off"}
+                        {addon.active ? "Active" : "Inactive"}
                       </button>
-                      <button onClick={() => setEditingId(addon.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors"><Pencil size={12} /></button>
-                      <button onClick={() => deleteAddon(addon.id, addon.name)} className="px-2 py-1 border border-border text-muted-foreground hover:text-red-500 hover:border-red-500 transition-colors"><Trash2 size={12} /></button>
+                      <button onClick={() => setEditingId(addon.id)} className="text-muted-foreground hover:text-gold transition-colors"><Pencil size={14} /></button>
+                      <button onClick={() => deleteAddon(addon.id, addon.name)} className="text-muted-foreground hover:text-red-500 transition-colors"><Trash2 size={14} /></button>
                     </div>
                   </div>
                 )}

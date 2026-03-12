@@ -138,7 +138,7 @@ const AdminConsultationsTab = () => {
         supabase.from("treatments").select("id, name").eq("active", true).order("name"),
         supabase.from("customer_profiles").select("id, email, full_name").order("full_name"),
       ]);
-      if (tRes.data) setTemplates(tRes.data as FormTemplate[]);
+      if (tRes.data) setTemplates(tRes.data as unknown as FormTemplate[]);
       if (sRes.data) setSubmissions(sRes.data as FormSubmission[]);
       if (trRes.data) setTreatments(trRes.data as Treatment[]);
       if (cRes.data) setClients(cRes.data as ClientProfile[]);

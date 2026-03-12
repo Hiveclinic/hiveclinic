@@ -278,6 +278,7 @@ export type Database = {
         Row: {
           active: boolean
           created_at: string
+          document_url: string | null
           fields: Json
           form_type: string
           id: string
@@ -289,6 +290,7 @@ export type Database = {
         Insert: {
           active?: boolean
           created_at?: string
+          document_url?: string | null
           fields?: Json
           form_type?: string
           id?: string
@@ -300,6 +302,7 @@ export type Database = {
         Update: {
           active?: boolean
           created_at?: string
+          document_url?: string | null
           fields?: Json
           form_type?: string
           id?: string

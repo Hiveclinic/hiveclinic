@@ -1,18 +1,26 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { FileText, Plus, Check, Clock, X, Search, Trash2, Printer, PenTool } from "lucide-react";
+import { FileText, Plus, Check, Clock, X, Search, Trash2, Printer, PenTool, Pencil, Save, Upload, Download, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+
+type FormField = {
+  type: string;
+  label: string;
+  required: boolean;
+  [key: string]: any;
+};
 
 type FormTemplate = {
   id: string;
   name: string;
   form_type: string;
   treatment_id: string | null;
-  fields: any[];
+  fields: FormField[];
   active: boolean;
   version: number;
   created_at: string;
+  document_url?: string | null;
 };
 
 type FormSubmission = {
@@ -30,8 +38,10 @@ type FormSubmission = {
 };
 
 type Treatment = { id: string; name: string };
+type ClientProfile = { id: string; email: string; full_name: string | null };
 
 const FORM_TYPES = ["consent", "consultation", "medical_history", "photo_consent", "aftercare", "patch_test"];
+const FIELD_TYPES = ["text", "textarea", "checkbox", "signature"];
 
 // Signature Pad Component
 const SignaturePad = ({ onSave, onCancel }: { onSave: (dataUrl: string) => void; onCancel: () => void }) => {
@@ -105,6 +115,7 @@ const AdminConsultationsTab = () => {
   const [templates, setTemplates] = useState<FormTemplate[]>([]);
   const [submissions, setSubmissions] = useState<FormSubmission[]>([]);
   const [treatments, setTreatments] = useState<Treatment[]>([]);
+  const [clients, setClients] = useState<ClientProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"submissions" | "templates">("submissions");
   const [search, setSearch] = useState("");
@@ -112,18 +123,25 @@ const AdminConsultationsTab = () => {
   const [showNewTemplate, setShowNewTemplate] = useState(false);
   const [newTemplate, setNewTemplate] = useState({ name: "", form_type: "consent", treatment_id: "" });
   const [signingId, setSigningId] = useState<string | null>(null);
-  const [viewingSubmission, setViewingSubmission] = useState<FormSubmission | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
+  const [showNewSubmission, setShowNewSubmission] = useState(false);
+  const [newSubmission, setNewSubmission] = useState({ template_id: "", client_id: "", manual_name: "", manual_email: "" });
+  const [clientSearch, setClientSearch] = useState("");
+  const [uploadingDocId, setUploadingDocId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetch = async () => {
-      const [tRes, sRes, trRes] = await Promise.all([
+      const [tRes, sRes, trRes, cRes] = await Promise.all([
         supabase.from("consent_form_templates").select("*").order("created_at", { ascending: false }),
         supabase.from("consent_submissions").select("*").order("created_at", { ascending: false }),
         supabase.from("treatments").select("id, name").eq("active", true).order("name"),
+        supabase.from("customer_profiles").select("id, email, full_name").order("full_name"),
       ]);
-      if (tRes.data) setTemplates(tRes.data as FormTemplate[]);
+      if (tRes.data) setTemplates(tRes.data as unknown as FormTemplate[]);
       if (sRes.data) setSubmissions(sRes.data as FormSubmission[]);
       if (trRes.data) setTreatments(trRes.data as Treatment[]);
+      if (cRes.data) setClients(cRes.data as ClientProfile[]);
       setLoading(false);
     };
     fetch();
@@ -145,10 +163,77 @@ const AdminConsultationsTab = () => {
       ],
     }).select().single();
     if (error) { toast.error("Failed to create"); return; }
-    if (data) setTemplates(prev => [data as FormTemplate, ...prev]);
+    if (data) setTemplates(prev => [data as unknown as FormTemplate, ...prev]);
     toast.success("Template created");
     setShowNewTemplate(false);
     setNewTemplate({ name: "", form_type: "consent", treatment_id: "" });
+  };
+
+  const handleUpdateTemplate = async (template: FormTemplate) => {
+    const { error } = await supabase.from("consent_form_templates").update({
+      name: template.name,
+      form_type: template.form_type,
+      treatment_id: template.treatment_id || null,
+      fields: template.fields as any,
+      updated_at: new Date().toISOString(),
+    }).eq("id", template.id);
+    if (error) { toast.error("Failed to update"); return; }
+    toast.success("Template updated");
+    setEditingTemplateId(null);
+  };
+
+  const handleDocUpload = async (templateId: string, file: File) => {
+    setUploadingDocId(templateId);
+    const ext = file.name.split(".").pop() || "pdf";
+    const path = `${templateId}-${Date.now()}.${ext}`;
+    const { error: uploadError } = await supabase.storage.from("consent-documents").upload(path, file, { upsert: true, contentType: file.type });
+    if (uploadError) { toast.error("Upload failed"); setUploadingDocId(null); return; }
+
+    // Store path for signed URL generation
+    const { error } = await supabase.from("consent_form_templates").update({
+      document_url: path,
+      updated_at: new Date().toISOString(),
+    }).eq("id", templateId);
+    if (error) { toast.error("Failed to save document reference"); setUploadingDocId(null); return; }
+
+    setTemplates(prev => prev.map(t => t.id === templateId ? { ...t, document_url: path } : t));
+    toast.success("Document uploaded");
+    setUploadingDocId(null);
+  };
+
+  const getDocDownloadUrl = async (path: string) => {
+    const { data, error } = await supabase.storage.from("consent-documents").createSignedUrl(path, 3600);
+    if (error || !data) { toast.error("Failed to generate download link"); return; }
+    window.open(data.signedUrl, "_blank");
+  };
+
+  const handleCreateSubmission = async () => {
+    if (!newSubmission.template_id) { toast.error("Select a template"); return; }
+    const selectedClient = clients.find(c => c.id === newSubmission.client_id);
+    const name = selectedClient?.full_name || newSubmission.manual_name;
+    const email = selectedClient?.email || newSubmission.manual_email;
+    if (!name || !email) { toast.error("Client name and email required"); return; }
+
+    const template = templates.find(t => t.id === newSubmission.template_id);
+    const formData: Record<string, string> = {};
+    if (template?.fields) {
+      template.fields.forEach((f: FormField) => {
+        formData[f.label] = "";
+      });
+    }
+
+    const { data, error } = await supabase.from("consent_submissions").insert({
+      template_id: newSubmission.template_id,
+      customer_name: name,
+      customer_email: email,
+      form_data: formData,
+      status: "pending",
+    }).select().single();
+    if (error) { toast.error("Failed to create submission"); return; }
+    if (data) setSubmissions(prev => [data as FormSubmission, ...prev]);
+    toast.success("Submission created");
+    setShowNewSubmission(false);
+    setNewSubmission({ template_id: "", client_id: "", manual_name: "", manual_email: "" });
   };
 
   const handleSignOff = async (id: string) => {
@@ -206,11 +291,30 @@ const AdminConsultationsTab = () => {
     printWindow.print();
   };
 
+  const addField = (templateId: string) => {
+    setTemplates(prev => prev.map(t => t.id === templateId ? { ...t, fields: [...t.fields, { type: "text", label: "", required: false }] } : t));
+  };
+
+  const removeField = (templateId: string, index: number) => {
+    setTemplates(prev => prev.map(t => t.id === templateId ? { ...t, fields: t.fields.filter((_, i) => i !== index) } : t));
+  };
+
+  const updateField = (templateId: string, index: number, updates: Partial<FormField>) => {
+    setTemplates(prev => prev.map(t => t.id === templateId ? {
+      ...t,
+      fields: t.fields.map((f, i) => i === index ? { ...f, ...updates } : f),
+    } : t));
+  };
+
   const filteredSubmissions = submissions.filter(s => {
     if (statusFilter !== "all" && s.status !== statusFilter) return false;
     if (search && !s.customer_name.toLowerCase().includes(search.toLowerCase()) && !s.customer_email.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
+
+  const filteredClients = clients.filter(c =>
+    !clientSearch || (c.full_name?.toLowerCase().includes(clientSearch.toLowerCase()) || c.email.toLowerCase().includes(clientSearch.toLowerCase()))
+  );
 
   if (loading) return <div className="py-12 text-center"><p className="font-body text-sm text-muted-foreground animate-pulse">Loading...</p></div>;
 
@@ -231,6 +335,9 @@ const AdminConsultationsTab = () => {
       {tab === "submissions" && (
         <>
           <div className="flex gap-3 flex-wrap">
+            <button onClick={() => setShowNewSubmission(!showNewSubmission)} className="flex items-center gap-2 px-4 py-2.5 bg-foreground text-background rounded-lg font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors">
+              <Plus size={14} /> New Submission
+            </button>
             <div className="relative flex-1 min-w-[200px]">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search client..." className="w-full pl-9 pr-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background focus:border-accent outline-none" />
@@ -242,6 +349,46 @@ const AdminConsultationsTab = () => {
             ))}
           </div>
 
+          {/* New Submission Form */}
+          {showNewSubmission && (
+            <div className="bg-card border border-border rounded-xl p-5 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-display text-lg">New Submission</h3>
+                <button onClick={() => setShowNewSubmission(false)} className="text-muted-foreground hover:text-foreground"><X size={14} /></button>
+              </div>
+              <div>
+                <label className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1 block">Template</label>
+                <select value={newSubmission.template_id} onChange={e => setNewSubmission(p => ({ ...p, template_id: e.target.value }))} className="w-full px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background">
+                  <option value="">Select template...</option>
+                  {templates.filter(t => t.active).map(t => <option key={t.id} value={t.id}>{t.name} ({t.form_type.replace("_", " ")})</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1 block">Client</label>
+                <input value={clientSearch} onChange={e => { setClientSearch(e.target.value); setNewSubmission(p => ({ ...p, client_id: "" })); }} placeholder="Search existing clients..." className="w-full px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background focus:border-accent outline-none mb-2" />
+                {clientSearch && filteredClients.length > 0 && !newSubmission.client_id && (
+                  <div className="border border-border rounded-lg max-h-32 overflow-y-auto">
+                    {filteredClients.slice(0, 8).map(c => (
+                      <button key={c.id} onClick={() => { setNewSubmission(p => ({ ...p, client_id: c.id })); setClientSearch(c.full_name || c.email); }} className="w-full text-left px-3 py-2 hover:bg-secondary font-body text-sm transition-colors">
+                        {c.full_name || "—"} <span className="text-muted-foreground text-xs">({c.email})</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {!newSubmission.client_id && (
+                  <div className="mt-3 space-y-2">
+                    <p className="font-body text-xs text-muted-foreground">Or enter manually:</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <input value={newSubmission.manual_name} onChange={e => setNewSubmission(p => ({ ...p, manual_name: e.target.value }))} placeholder="Client name" className="px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background focus:border-accent outline-none" />
+                      <input value={newSubmission.manual_email} onChange={e => setNewSubmission(p => ({ ...p, manual_email: e.target.value }))} placeholder="Client email" className="px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background focus:border-accent outline-none" />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <button onClick={handleCreateSubmission} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider rounded-lg hover:bg-accent transition-colors">Create Submission</button>
+            </div>
+          )}
+
           {filteredSubmissions.length === 0 ? (
             <div className="py-12 text-center bg-card border border-border rounded-xl">
               <FileText size={24} className="mx-auto text-muted-foreground mb-2" />
@@ -252,7 +399,7 @@ const AdminConsultationsTab = () => {
               {filteredSubmissions.map(s => (
                 <div key={s.id} className="bg-card border border-border rounded-xl p-4 hover:border-accent/30 transition-colors">
                   <div className="flex items-center justify-between flex-wrap gap-2">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 cursor-pointer" onClick={() => setExpandedId(expandedId === s.id ? null : s.id)}>
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${s.status === "completed" ? "bg-green-500/10" : "bg-yellow-500/10"}`}>
                         {s.status === "completed" ? <Check size={14} className="text-green-600" /> : <Clock size={14} className="text-yellow-600" />}
                       </div>
@@ -260,6 +407,7 @@ const AdminConsultationsTab = () => {
                         <p className="font-body text-sm font-medium">{s.customer_name}</p>
                         <p className="font-body text-[11px] text-muted-foreground">{s.customer_email}</p>
                       </div>
+                      {expandedId === s.id ? <ChevronUp size={14} className="text-muted-foreground" /> : <ChevronDown size={14} className="text-muted-foreground" />}
                     </div>
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className={`font-body text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${s.status === "completed" ? "bg-green-500/10 text-green-600" : "bg-yellow-500/10 text-yellow-600"}`}>{s.status}</span>
@@ -280,6 +428,33 @@ const AdminConsultationsTab = () => {
                       )}
                     </div>
                   </div>
+
+                  {/* Expanded form data view */}
+                  {expandedId === s.id && (
+                    <div className="mt-4 pt-4 border-t border-border space-y-3">
+                      <h4 className="font-body text-xs uppercase tracking-wider text-muted-foreground">Form Data</h4>
+                      {typeof s.form_data === "object" && s.form_data ? (
+                        <div className="space-y-1">
+                          {Object.entries(s.form_data as Record<string, any>).map(([key, value]) => (
+                            <div key={key} className="flex gap-3 py-1.5 border-b border-border/50 last:border-0">
+                              <span className="font-body text-xs font-medium w-40 shrink-0">{key}</span>
+                              <span className="font-body text-xs text-muted-foreground">{String(value) || "—"}</span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="font-body text-xs text-muted-foreground">No form data</p>
+                      )}
+                      {s.signature_url && (
+                        <div>
+                          <p className="font-body text-xs uppercase tracking-wider text-muted-foreground mb-1">Signature</p>
+                          <img src={s.signature_url} alt="Client signature" className="max-h-16 border border-border rounded" />
+                          {s.signed_at && <p className="font-body text-[10px] text-muted-foreground mt-1">Signed: {format(new Date(s.signed_at), "d MMM yyyy HH:mm")}</p>}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {signingId === s.id && (
                     <div className="mt-4 pt-4 border-t border-border">
                       <SignaturePad onSave={(dataUrl) => handleSaveSignature(s.id, dataUrl)} onCancel={() => setSigningId(null)} />
@@ -325,18 +500,78 @@ const AdminConsultationsTab = () => {
           ) : (
             <div className="space-y-2">
               {templates.map(t => (
-                <div key={t.id} className="bg-card border border-border rounded-xl p-4 flex items-center justify-between flex-wrap gap-2">
-                  <div className="flex items-center gap-3">
-                    <FileText size={16} className="text-accent" />
-                    <div>
-                      <p className="font-body text-sm font-medium">{t.name}</p>
-                      <p className="font-body text-[11px] text-muted-foreground">{t.form_type.replace("_", " ")} — v{t.version}</p>
+                <div key={t.id} className="bg-card border border-border rounded-xl p-4">
+                  {editingTemplateId === t.id ? (
+                    /* Inline Template Editor */
+                    <div className="space-y-4">
+                      <input value={t.name} onChange={e => setTemplates(prev => prev.map(tp => tp.id === t.id ? { ...tp, name: e.target.value } : tp))} className="w-full px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background focus:border-accent outline-none" />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <select value={t.form_type} onChange={e => setTemplates(prev => prev.map(tp => tp.id === t.id ? { ...tp, form_type: e.target.value } : tp))} className="px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background">
+                          {FORM_TYPES.map(ft => <option key={ft} value={ft}>{ft.replace("_", " ")}</option>)}
+                        </select>
+                        <select value={t.treatment_id || ""} onChange={e => setTemplates(prev => prev.map(tp => tp.id === t.id ? { ...tp, treatment_id: e.target.value || null } : tp))} className="px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background">
+                          <option value="">All treatments</option>
+                          {treatments.map(tr => <option key={tr.id} value={tr.id}>{tr.name}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="font-body text-xs text-muted-foreground uppercase tracking-wider">Fields</label>
+                          <button onClick={() => addField(t.id)} className="flex items-center gap-1 px-2 py-1 border border-border rounded font-body text-[10px] uppercase tracking-wider hover:border-accent transition-colors">
+                            <Plus size={10} /> Add Field
+                          </button>
+                        </div>
+                        <div className="space-y-2">
+                          {t.fields.map((field, idx) => (
+                            <div key={idx} className="flex items-center gap-2">
+                              <input value={field.label} onChange={e => updateField(t.id, idx, { label: e.target.value })} placeholder="Field label" className="flex-1 px-3 py-1.5 border border-border rounded font-body text-xs bg-background focus:border-accent outline-none" />
+                              <select value={field.type} onChange={e => updateField(t.id, idx, { type: e.target.value })} className="px-2 py-1.5 border border-border rounded font-body text-xs bg-background">
+                                {FIELD_TYPES.map(ft => <option key={ft} value={ft}>{ft}</option>)}
+                              </select>
+                              <label className="flex items-center gap-1 font-body text-[10px] text-muted-foreground whitespace-nowrap">
+                                <input type="checkbox" checked={field.required} onChange={e => updateField(t.id, idx, { required: e.target.checked })} className="accent-accent" />
+                                Req
+                              </label>
+                              <button onClick={() => removeField(t.id, idx)} className="text-muted-foreground hover:text-red-500"><X size={12} /></button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button onClick={() => handleUpdateTemplate(t)} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider rounded-lg hover:bg-accent transition-colors">
+                          <Save size={10} className="inline mr-1" /> Save
+                        </button>
+                        <button onClick={() => setEditingTemplateId(null)} className="px-4 py-2 border border-border font-body text-xs uppercase tracking-wider rounded-lg hover:border-foreground transition-colors">Cancel</button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className={`font-body text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${t.active ? "bg-green-500/10 text-green-600" : "bg-secondary text-muted-foreground"}`}>{t.active ? "Active" : "Inactive"}</span>
-                    <button onClick={() => handleDeleteTemplate(t.id)} className="p-1.5 text-muted-foreground hover:text-red-500 transition-colors"><Trash2 size={14} /></button>
-                  </div>
+                  ) : (
+                    /* Template Card View */
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div className="flex items-center gap-3">
+                        <FileText size={16} className="text-accent" />
+                        <div>
+                          <p className="font-body text-sm font-medium">{t.name}</p>
+                          <p className="font-body text-[11px] text-muted-foreground">{t.form_type.replace("_", " ")} — v{t.version} — {t.fields.length} fields</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {t.document_url && (
+                          <button onClick={() => getDocDownloadUrl(t.document_url!)} className="p-1.5 text-muted-foreground hover:text-foreground transition-colors" title="Download document">
+                            <Download size={14} />
+                          </button>
+                        )}
+                        <label className={`p-1.5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer ${uploadingDocId === t.id ? "animate-pulse" : ""}`} title="Upload PDF">
+                          <Upload size={14} />
+                          <input type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={e => { if (e.target.files?.[0]) handleDocUpload(t.id, e.target.files[0]); }} disabled={uploadingDocId === t.id} />
+                        </label>
+                        <button onClick={() => setEditingTemplateId(t.id)} className="p-1.5 text-muted-foreground hover:text-foreground transition-colors" title="Edit">
+                          <Pencil size={14} />
+                        </button>
+                        <span className={`font-body text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${t.active ? "bg-green-500/10 text-green-600" : "bg-secondary text-muted-foreground"}`}>{t.active ? "Active" : "Inactive"}</span>
+                        <button onClick={() => handleDeleteTemplate(t.id)} className="p-1.5 text-muted-foreground hover:text-red-500 transition-colors"><Trash2 size={14} /></button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

@@ -56,12 +56,12 @@ const AdminSettingsTab = () => {
   ];
 
   const integrations = [
-    { name: "Stripe", desc: "Payment processing", connected: true, icon: CreditCard },
-    { name: "Resend", desc: "Email delivery", connected: true, icon: Mail },
-    { name: "WhatsApp", desc: "Client messaging", connected: true, icon: MessageSquare },
-    { name: "Google Calendar", desc: "Calendar sync", connected: false, icon: Clock },
-    { name: "Meta Pixel", desc: "Ad tracking", connected: true, icon: Globe },
-    { name: "Mailchimp", desc: "Email marketing", connected: true, icon: Mail },
+    { name: "Stripe", desc: "Payment processing", status: "Configured" },
+    { name: "Resend", desc: "Email delivery", status: "Configured" },
+    { name: "WhatsApp", desc: "Client messaging", status: "Configured" },
+    { name: "Google Calendar", desc: "Calendar sync", status: "Not configured" },
+    { name: "Meta Pixel", desc: "Ad tracking", status: "Configured" },
+    { name: "Mailchimp", desc: "Email marketing", status: "Configured" },
   ];
 
   return (

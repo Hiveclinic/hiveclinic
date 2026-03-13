@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
+import ModelCTA from "@/components/ModelCTA";
 import gallery3 from "@/assets/gallery-3.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";

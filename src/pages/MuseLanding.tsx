@@ -117,7 +117,7 @@ const MuseLanding = () => {
                 View Model Pricing
               </a>
               <Link
-                to="/bookings"
+                to="/bookings?category=Content+Model"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/40 text-white font-body text-sm tracking-widest uppercase hover:border-white transition-colors"
               >
                 Book Model Appointment <ArrowRight size={14} />
@@ -233,7 +233,7 @@ const MuseLanding = () => {
               Secure your content session at exclusive rates.
             </p>
             <Link
-              to="/bookings"
+              to="/bookings?category=Content+Model"
               className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors"
             >
               Book Content Session <ArrowRight size={14} />
@@ -250,7 +250,7 @@ const MuseLanding = () => {
               Limited model appointments available each month
             </p>
             <Link
-              to="/bookings"
+              to="/bookings?category=Content+Model"
               className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors"
             >
               Book Now <ArrowRight size={14} />

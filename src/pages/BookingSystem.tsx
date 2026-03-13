@@ -365,6 +365,9 @@ const BookingSystem = () => {
         <div className="flex justify-between items-start gap-3">
           <div className="min-w-0 flex-1">
             <h4 className="font-display text-base leading-tight">{t.name}</h4>
+            {t.on_offer && t.offer_label && (
+              <span className="inline-block font-body text-[10px] text-gold uppercase tracking-wider mt-1 border border-gold/30 px-2 py-0.5">{t.offer_label}</span>
+            )}
             <p className="font-body text-xs text-muted-foreground mt-1">{t.duration_mins} mins</p>
             {t.description && <p className="font-body text-xs text-muted-foreground mt-1 line-clamp-1">{t.description}</p>}
           </div>

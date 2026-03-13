@@ -130,12 +130,18 @@ const Offers = () => {
                     )}
                     <div className="mt-auto">
                       <div className="flex items-baseline gap-3 mb-4">
-                        <span className="font-body text-sm line-through text-muted-foreground">
-                          £{Number(offer.price).toFixed(0)}
-                        </span>
-                        <span className="font-display text-2xl text-gold">
-                          £{Number(offer.offer_price).toFixed(0)}
-                        </span>
+                        {offer.offer_price != null && offer.offer_price > 0 ? (
+                          <>
+                            <span className="font-body text-sm line-through text-muted-foreground">
+                              £{Number(offer.price).toFixed(0)}
+                            </span>
+                            <span className="font-display text-2xl text-gold">
+                              £{Number(offer.offer_price).toFixed(0)}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="font-display text-2xl text-gold">£{Number(offer.price).toFixed(0)}</span>
+                        )}
                         <span className="font-body text-xs text-muted-foreground">· {offer.duration_mins} mins</span>
                       </div>
                       <Link

@@ -19,6 +19,9 @@ const navLinks = [{
   to: "/treatments",
   label: "Treatments"
 }, {
+  to: "/offers",
+  label: "Offers"
+}, {
   to: "/pricing",
   label: "Pricing"
 }, {

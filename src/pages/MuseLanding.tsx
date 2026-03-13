@@ -67,8 +67,8 @@ const fadeIn = {
 
 const MuseLanding = () => {
   usePageMeta(
-    "Become a Hive Clinic Muse | Content Sessions Manchester",
-    "Exclusive content pricing on aesthetic treatments at Hive Clinic, Deansgate Manchester. Book your Muse session for reduced rates on lip filler, dermal filler, anti-wrinkle and more."
+    "Become a Hive Clinic Model | Content Sessions Manchester",
+    "Exclusive content pricing on aesthetic treatments at Hive Clinic, Deansgate Manchester. Book your model session for reduced rates on lip filler, dermal filler, anti-wrinkle and more."
   );
 
   return (

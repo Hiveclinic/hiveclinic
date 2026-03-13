@@ -40,6 +40,7 @@ import Privacy from "./pages/Privacy";
 import AcneTreatment from "./pages/AcneTreatment";
 import HyperpigmentationTreatment from "./pages/HyperpigmentationTreatment";
 import LipFillerLanding from "./pages/LipFillerLanding";
+import MuseLanding from "./pages/MuseLanding";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 import ScrollToTop from "./components/ScrollToTop";

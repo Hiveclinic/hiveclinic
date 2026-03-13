@@ -250,7 +250,7 @@ const MuseLanding = () => {
               Limited model appointments available each month
             </p>
             <Link
-              to="/bookings"
+              to="/bookings?category=Content+Model"
               className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors"
             >
               Book Now <ArrowRight size={14} />

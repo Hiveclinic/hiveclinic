@@ -227,7 +227,7 @@ const MuseLanding = () => {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <motion.div {...fadeIn}>
             <h2 className="font-display text-4xl md:text-5xl mb-6">
-              Book Your Muse Appointment
+              Book Your Model Appointment
             </h2>
             <p className="font-body text-muted-foreground mb-8">
               Secure your content session at exclusive rates.

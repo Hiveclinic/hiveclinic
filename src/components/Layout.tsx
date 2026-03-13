@@ -289,7 +289,7 @@ const Layout = ({
             <p className="font-body text-xs text-background/40">
               © 2026 Hive Clinic. All rights reserved.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
               <p className="font-body text-xs text-background/40">
                 Manchester City Centre, Deansgate
               </p>

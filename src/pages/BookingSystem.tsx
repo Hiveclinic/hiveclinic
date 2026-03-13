@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, Sparkles, ChevronDown, X, Package, Camera } from "lucide-react";
+import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, ChevronDown, X, Package, Camera } from "lucide-react";
 import { format, addDays, startOfDay } from "date-fns";
 import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";

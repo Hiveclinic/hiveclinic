@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Filter } from "lucide-react";
+import { ArrowRight, Sparkles, Filter, ArrowUpDown } from "lucide-react";
 import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { usePageMeta } from "@/hooks/use-page-meta";
@@ -18,6 +18,15 @@ type Offer = {
   category: string;
 };
 
+type SortOption = "default" | "price-low" | "price-high" | "savings";
+
+const SORT_LABELS: Record<SortOption, string> = {
+  default: "Featured",
+  "price-low": "Price: Low to High",
+  "price-high": "Price: High to Low",
+  savings: "Biggest Savings",
+};
+
 const Offers = () => {
   usePageMeta(
     "Current Offers | Hive Clinic Manchester",
@@ -26,6 +35,7 @@ const Offers = () => {
 
   const [offers, setOffers] = useState<Offer[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [sortBy, setSortBy] = useState<SortOption>("default");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,9 +57,25 @@ const Offers = () => {
   }, [offers]);
 
   const filtered = useMemo(() => {
-    if (selectedCategory === "All") return offers;
-    return offers.filter((o) => o.category === selectedCategory);
-  }, [offers, selectedCategory]);
+    let items = selectedCategory === "All" ? [...offers] : offers.filter((o) => o.category === selectedCategory);
+
+    const getDisplayPrice = (o: Offer) => (o.offer_price != null && o.offer_price > 0 ? o.offer_price : o.price);
+    const getSavings = (o: Offer) => (o.offer_price != null && o.offer_price > 0 ? o.price - o.offer_price : 0);
+
+    switch (sortBy) {
+      case "price-low":
+        items.sort((a, b) => getDisplayPrice(a) - getDisplayPrice(b));
+        break;
+      case "price-high":
+        items.sort((a, b) => getDisplayPrice(b) - getDisplayPrice(a));
+        break;
+      case "savings":
+        items.sort((a, b) => getSavings(b) - getSavings(a));
+        break;
+    }
+
+    return items;
+  }, [offers, selectedCategory, sortBy]);
 
   return (
     <Layout>
@@ -69,30 +95,47 @@ const Offers = () => {
             </p>
           </motion.div>
 
-          {/* Category Filter */}
-          {categories.length > 2 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="flex flex-wrap items-center justify-center gap-3 mb-12"
-            >
-              <Filter size={14} className="text-muted-foreground" />
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 font-body text-xs tracking-widest uppercase border transition-colors ${
-                    selectedCategory === cat
-                      ? "border-gold bg-gold/10 text-gold"
-                      : "border-border text-muted-foreground hover:border-gold/50 hover:text-foreground"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </motion.div>
-          )}
+          {/* Filters & Sort */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col md:flex-row items-center justify-between gap-4 mb-12"
+          >
+            {/* Category Filter */}
+            {categories.length > 2 && (
+              <div className="flex flex-wrap items-center gap-3">
+                <Filter size={14} className="text-muted-foreground" />
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-4 py-2 font-body text-xs tracking-widest uppercase border transition-colors ${
+                      selectedCategory === cat
+                        ? "border-gold bg-gold/10 text-gold"
+                        : "border-border text-muted-foreground hover:border-gold/50 hover:text-foreground"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Sort */}
+            <div className="flex items-center gap-2">
+              <ArrowUpDown size={14} className="text-muted-foreground" />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="px-4 py-2 font-body text-xs tracking-widest uppercase border border-border bg-background text-foreground cursor-pointer hover:border-gold/50 transition-colors"
+              >
+                {(Object.keys(SORT_LABELS) as SortOption[]).map((key) => (
+                  <option key={key} value={key}>{SORT_LABELS[key]}</option>
+                ))}
+              </select>
+            </div>
+          </motion.div>
 
           {loading ? (
             <div className="text-center py-20">
@@ -137,6 +180,9 @@ const Offers = () => {
                             </span>
                             <span className="font-display text-2xl text-gold">
                               £{Number(offer.offer_price).toFixed(0)}
+                            </span>
+                            <span className="font-body text-xs text-green-600 font-medium">
+                              Save £{(Number(offer.price) - Number(offer.offer_price)).toFixed(0)}
                             </span>
                           </>
                         ) : (

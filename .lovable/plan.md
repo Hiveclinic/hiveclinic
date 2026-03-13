@@ -1,82 +1,133 @@
 
 
-# Redesign Booking Emails, Add Admin Notifications, Update Muse Pricing, Create Muse Landing Page
+# Phase 3: Admin Enhancements, Multi-Treatment Booking, and Fixes
 
-## 1. Redesign All Booking Email Templates (send-booking-email)
+## 1. Fix 404 on Admin Login (Published Site)
 
-The current emails use a basic text header ("Hive Clinic" in Georgia). The redesign will use the actual Hive Clinic logo from the `email-assets` storage bucket, match the brand palette (black `#0d0d0d`, cream `#f5f0eb`, gold `#c9a96e`), and use the Cormorant Garamond / Satoshi font stack with web-safe fallbacks.
+The route `/hive-admin-login` exists in the code and works in preview. The 404 on the published site (`hiveclinicuk.com//hive-admin-login`) is caused by the double slash `//` in the URL. This is a hosting/domain redirect issue -- the custom domain is likely appending a trailing slash to the base URL before the path.
 
-**Changes to `supabase/functions/send-booking-email/index.ts`:**
+**Fix:** The app needs to be re-published so the latest routes are deployed. No code change needed -- the route is correctly defined at line 82 of `App.tsx`. The double slash in the URL you shared is the problem -- use `hiveclinicuk.com/hive-admin-login` (single slash).
 
-- Replace `headerHtml` with a version that uses the logo image from `https://kyjzjgdcfisuxogledux.supabase.co/storage/v1/object/public/email-assets/logo.png` (matching the auth email templates), a gold divider line, and refined spacing
-- Replace `footerHtml` with a cleaner footer using gold accents, uppercase tracking, matching the auth email template style
-- Update all body typography: use `'Satoshi', 'Helvetica Neue', Arial, sans-serif` for body, `'Cormorant Garamond', Georgia, serif` for headings
-- Replace all em dashes with normal hyphens (`-`) throughout
-- Use gold `#c9a96e` for accent borders (already in place on the left-border cards)
-- Match the exact aesthetic of the existing auth email templates (signup, recovery, etc.)
+---
 
-## 2. Send Admin Copy on Every Booking Email Type
+## 2. Website Image Management via Admin
 
-Currently, only `confirmation` triggers a separate `admin_new_booking` email, and `reschedule` / `client_cancelled` send admin emails. But `reminder` and `aftercare` do not notify admin.
+Currently there's no way to update hero images, gallery images, or page images from the admin dashboard. These are hardcoded in component files.
 
-**Change:** After every client email is sent (confirmation, reminder, aftercare, cancellation), also send a copy to `hello@hiveclinicuk.com` with the subject prefixed (e.g. "Client Copy: Booking Confirmed - Lip Filler"). This way the admin always gets a notification of every email the client receives.
+**Changes:**
+- Add a new "Images" section to `AdminSiteTab.tsx` that stores editable image URLs in the `site_settings` table (or a new `site_images` table)
+- Create a `site_images` table with fields: `key` (text, e.g. "hero_home", "gallery_1"), `image_url` (text), `alt_text` (text), `updated_at`
+- Admin can upload images to the `client-images` bucket (or a new public `site-images` bucket) and the URL is saved
+- Frontend pages read from this table and fall back to the hardcoded defaults if no override exists
+- Create a public storage bucket `site-images` for website content images
 
-The `confirmation` flow already sends `admin_new_booking` separately. We will keep that and additionally send the client's confirmation email as a CC/copy to admin so the admin sees exactly what the client sees.
+---
 
-**Implementation:** At the bottom of the function, after `sendEmail(booking.customer_email, subject, html)`, add `sendEmail(ADMIN_EMAIL, \`[Copy] \${subject}\`, html)` for all standard email types. The reschedule and client_cancelled paths already handle admin emails, so those will continue as-is.
+## 3. Treatment Menu Reordering
 
-## 3. Update Muse/Model Pricing
+Drag-and-drop reordering already exists in `AdminTreatmentsTab.tsx` (lines 144-155). The `sort_order` is saved on drag end. This already works. If it feels unresponsive, I will add visual feedback (highlight, ghost element).
 
-Based on the uploaded pricing graphic, the prices differ from the previous plan. Key differences from the reference image:
+**Enhancement:** Add category-level reordering so you can control the order categories appear on the booking page (not just treatments within a category).
 
-| Category | Item | Muse Price |
-|---|---|---|
-| Lip Filler | 0.5ml | £65 |
-| Lip Filler | 0.8ml | £95 |
-| Lip Filler | 1ml | £110 |
-| Dermal Filler | Chin | £120 |
-| Dermal Filler | Cheek (per ml) | £120 |
-| Dermal Filler | Jawline (per ml) | £130 |
-| Dermal Filler | Tear Trough | £150 |
-| Facial Balancing | 3ml | £270 |
-| Facial Balancing | 5ml | £395 |
-| Facial Balancing | 7ml | £520 |
-| Anti Wrinkle | 1 Area | £99 |
-| Anti Wrinkle | 2 Areas | £145 |
-| Anti Wrinkle | 3 Areas | £175 |
-| Anti Wrinkle | Masseter Jaw Slimming | £195 |
-| Skin Boosters | Lumi Eyes | £110 |
-| Skin Boosters | Seventy Hyal | £125 |
-| Skin Boosters | Polynucleotides | £140 |
-| Skin Boosters | Profhilo | £195 |
-| Skin Treatments | Hydrafacial | £95 |
-| Skin Treatments | Chemical Peel | £65 |
+---
 
-The heading should say "Model Pricing" (not "Muse Pricing"). No RRP / strikethrough - just clean prices with a normal hyphen separator (e.g. "0.5ml Lip Filler - £65").
+## 4. Take Payment from Calendar (Admin)
 
-## 4. Create Muse/Model Landing Page
+Add a "Take Payment" button in the calendar edit modal that creates a Stripe Payment Link for the outstanding balance and copies it to clipboard (so admin can send it to the client).
 
-**New file: `src/pages/MuseLanding.tsx`**
+**Changes to `AdminCalendarView.tsx`:**
+- Add a "Send Payment Link" button in the edit modal for bookings with `payment_status` of "pending" or "deposit_paid"
+- This calls an edge function that creates a Stripe Payment Link for the remaining balance
+- Link is copied to clipboard so admin can share via WhatsApp/SMS
+- Add a "Mark as Paid" button for in-person/cash payments that updates `payment_status` to "fully_paid"
 
-A standalone, ad-optimised landing page at `/muse` with:
-- Hero: dark background with gallery image, "Become a Hive Clinic Muse" headline, location via Lucide MapPin, two CTAs
-- "What Are Muse Sessions" explainer on cream background
-- Model Pricing grid (data from the image above) - clean 2-col layout on desktop, 1-col mobile, no strikethrough/RRP, normal hyphens
-- Important Information bullets with gold indicators
-- Booking CTA linking to `/bookings`
-- Final CTA section
+**New edge function:** `create-payment-link` -- creates a Stripe Payment Link for a given amount and booking reference.
 
-Uses existing `Layout`, `usePageMeta`, `framer-motion`, gallery assets, brand fonts/colours.
+---
 
-**Updated file: `src/App.tsx`** - add route for `/muse`.
+## 5. Payment Plan Customisation
 
-## Files Changed
+Currently `AdminPaymentPlansTab.tsx` allows creating plans and recording payments, but you cannot edit the instalment amount after creation.
 
-| File | Action |
-|---|---|
-| `supabase/functions/send-booking-email/index.ts` | Redesign all email templates, add admin copy on all types |
-| `src/pages/MuseLanding.tsx` | Create - model landing page |
-| `src/App.tsx` | Add `/muse` route |
+**Changes:**
+- Add an "Edit" button on each active plan
+- Allow editing: `instalment_amount`, `total_instalments`, `total_amount`, `next_payment_date`
+- Add a "Record Custom Amount" option when recording a payment (instead of always recording the fixed instalment amount)
+- Show remaining balance clearly
 
-No database changes needed.
+---
+
+## 6. Cancellation Sync Between Admin and Client
+
+Currently:
+- Admin cancels via calendar -> updates DB status to "cancelled" and sends cancellation email to client. Client sees it in their portal (already works via DB read).
+- Client cancels via portal -> updates DB status to "cancelled". Admin sees it in bookings/calendar (already works via DB read).
+
+**Missing:** When a client cancels, the admin doesn't get notified.
+
+**Fix:** In `CustomerPortal.tsx` `cancelBooking` function, after updating the booking status, trigger `send-booking-email` with a new `emailType: "client_cancelled"` that sends a notification to the admin email.
+
+---
+
+## 7. Mailchimp Email Automations
+
+The `mailchimp-subscribe` edge function already exists and works. It's already wired into the booking checkout flow. To set up automations:
+
+**What I will do:**
+- Update `mailchimp-subscribe` to accept and pass `firstName`, `lastName`, and `tags` (e.g. "Booked Client", treatment category)
+- Add tags based on treatment category so you can create targeted automations in Mailchimp
+- Ensure the VIP popup signup also triggers the function (it already does via `email_subscribers` table insert, but needs to call the edge function too)
+
+**What you need to do in Mailchimp:**
+- Log into your Mailchimp account
+- Go to Automations and create journeys based on tags (e.g. "Welcome" email for new subscribers, "Post-Treatment" for booked clients)
+- The integration will automatically tag contacts when they book
+
+---
+
+## 8. Multiple Treatment Selection + Course Suggestions
+
+This is the biggest feature. Currently only one treatment can be selected per booking.
+
+**Changes to `BookingSystem.tsx`:**
+- Allow selecting multiple treatments (change `selectedTreatment` from single to array `selectedTreatments`)
+- Show a running total of all selected treatments
+- After selection, check if any selected treatment has packages in `treatment_packages` and show a "Save with a Course" prompt
+- Display savings: "Book 3 sessions of Level 1 Face Peel and save £25 (£230 vs £255)"
+- Duration and time slot calculation accounts for combined treatment time
+- Checkout sends all treatment IDs
+
+**Changes to `create-booking-checkout`:**
+- Accept an array of treatment IDs
+- Create line items for each treatment in the Stripe checkout session
+- Store multiple treatment references in the booking (use the existing `addon_ids` pattern or add a `treatment_ids` array column)
+
+**Database change:**
+- Add `treatment_ids` (uuid array) column to `bookings` table to support multi-treatment bookings
+- Keep `treatment_id` for backwards compatibility (primary treatment)
+
+---
+
+## Technical Summary
+
+### Database Changes:
+- New table: `site_images` (key, image_url, alt_text, updated_at) with RLS for admin write, public read
+- New storage bucket: `site-images` (public)
+- Add column `treatment_ids` (uuid[]) to `bookings` table
+
+### Edge Functions:
+- New: `create-payment-link` -- generates Stripe Payment Link
+- Update: `mailchimp-subscribe` -- accept firstName, lastName, tags
+- Update: `send-booking-email` -- add "client_cancelled" email type for admin notification
+
+### Frontend Files to Edit:
+- `AdminCalendarView.tsx` -- add payment link + mark as paid buttons
+- `AdminPaymentPlansTab.tsx` -- add edit and custom payment recording
+- `AdminSiteTab.tsx` -- add image management section
+- `BookingSystem.tsx` -- multi-treatment selection + course suggestions
+- `CustomerPortal.tsx` -- trigger admin notification on client cancellation
+- `create-booking-checkout` -- support multiple treatments
+
+### Frontend Files to Create:
+- None (all changes are to existing files)
 

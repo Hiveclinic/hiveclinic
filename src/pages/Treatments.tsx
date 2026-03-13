@@ -26,22 +26,15 @@ const CATEGORY_IMAGES: Record<string, string> = {
 
 // Fallback links by category slug
 const CATEGORY_LINKS: Record<string, string> = {
-  "Lip Fillers": "/treatments/lip-fillers-manchester",
+  "Fillers": "/treatments/lip-fillers-manchester",
   "Anti-Wrinkle": "/treatments/anti-wrinkle-injections-manchester",
-  "Dermal Filler": "/treatments/dermal-filler-manchester",
-  "HydraFacial": "/treatments/hydrafacial-manchester",
-  "Chemical Peels": "/treatments/chemical-peels-manchester",
-  "Skin Boosters": "/treatments/skin-boosters-manchester",
-  "Microneedling": "/treatments/microneedling-manchester",
+  "Facials": "/treatments/hydrafacial-manchester",
+  "Peels": "/treatments/chemical-peels-manchester",
+  "Skin Rejuvenation": "/treatments/skin-boosters-manchester",
   "Fat Dissolve": "/treatments/fat-dissolving-manchester",
-  "Dermaplaning": "/treatments/dermaplaning-manchester",
-  "LED Light Therapy": "/treatments/led-light-therapy-manchester",
-  "Mesotherapy": "/treatments/mesotherapy-manchester",
-  "PRP Therapy": "/treatments/prp-manchester",
-  "Facial Balancing": "/treatments/facial-balancing-manchester",
   "Micro Sclerotherapy": "/treatments/micro-sclerotherapy-manchester",
-  "Intimate and Body Peels": "/treatments/intimate-peels-manchester",
   "Consultations": "/treatments/consultations",
+  "Content Model": "/muse",
 };
 
 type CategoryCard = {

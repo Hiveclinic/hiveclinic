@@ -117,7 +117,7 @@ const MuseLanding = () => {
                 View Model Pricing
               </a>
               <Link
-                to="/bookings"
+                to="/bookings?category=Content+Model"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/40 text-white font-body text-sm tracking-widest uppercase hover:border-white transition-colors"
               >
                 Book Model Appointment <ArrowRight size={14} />

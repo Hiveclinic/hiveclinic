@@ -165,6 +165,8 @@ const LipFillers = () => {
         <p className="font-body text-xs text-muted-foreground mt-6">25 Saint John Street, Manchester M3 4DT</p>
       </div>
     </section>
+
+      <ModelCTA />
   </Layout>
   );
 };

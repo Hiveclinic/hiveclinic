@@ -69,6 +69,7 @@ const CATEGORY_ROUTES: Record<string, string> = {
   "Micro Sclerotherapy": "/treatments/micro-sclerotherapy-manchester",
   "Consultations": "/treatments/consultations",
   "Intimate & Body Peels": "/treatments/intimate-peels-manchester",
+  "Content Model": "/muse",
 };
 
 const POPULAR_SLUGS = ["lip-filler-05ml", "anti-wrinkle-2-areas", "glass-skin-boost", "dermal-filler-lips-1ml", "profhilo"];

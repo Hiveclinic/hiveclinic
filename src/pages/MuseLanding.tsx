@@ -67,8 +67,8 @@ const fadeIn = {
 
 const MuseLanding = () => {
   usePageMeta(
-    "Become a Hive Clinic Muse | Content Sessions Manchester",
-    "Exclusive content pricing on aesthetic treatments at Hive Clinic, Deansgate Manchester. Book your Muse session for reduced rates on lip filler, dermal filler, anti-wrinkle and more."
+    "Become a Hive Clinic Model | Content Sessions Manchester",
+    "Exclusive content pricing on aesthetic treatments at Hive Clinic, Deansgate Manchester. Book your model session for reduced rates on lip filler, dermal filler, anti-wrinkle and more."
   );
 
   return (
@@ -97,7 +97,7 @@ const MuseLanding = () => {
               </p>
             </div>
             <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">
-              Become a Hive Clinic Muse
+              Become a Hive Clinic Model
             </h1>
             <p className="font-body text-lg text-white/80 mb-4 max-w-xl mx-auto">
               Receive exclusive content pricing on selected aesthetic treatments
@@ -120,7 +120,7 @@ const MuseLanding = () => {
                 to="/bookings"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/40 text-white font-body text-sm tracking-widest uppercase hover:border-white transition-colors"
               >
-                Book Muse Appointment <ArrowRight size={14} />
+                Book Model Appointment <ArrowRight size={14} />
               </Link>
             </div>
           </motion.div>
@@ -132,10 +132,10 @@ const MuseLanding = () => {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <motion.div {...fadeIn}>
             <h2 className="font-display text-4xl md:text-5xl mb-6">
-              What Are Muse Sessions?
+              What Are Model Sessions?
             </h2>
             <p className="font-body text-muted-foreground leading-relaxed mb-4">
-              Hive Muse sessions are limited appointments where treatments are
+              Model sessions are limited appointments where treatments are
               offered at exclusive content rates in exchange for allowing Hive
               Clinic to photograph or film the treatment and results for social
               media and marketing.
@@ -227,7 +227,7 @@ const MuseLanding = () => {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <motion.div {...fadeIn}>
             <h2 className="font-display text-4xl md:text-5xl mb-6">
-              Book Your Muse Appointment
+              Book Your Model Appointment
             </h2>
             <p className="font-body text-muted-foreground mb-8">
               Secure your content session at exclusive rates.
@@ -247,7 +247,7 @@ const MuseLanding = () => {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <motion.div {...fadeIn}>
             <p className="font-display text-3xl md:text-5xl leading-tight mb-8">
-              Limited Hive Muse appointments available each month
+              Limited model appointments available each month
             </p>
             <Link
               to="/bookings"

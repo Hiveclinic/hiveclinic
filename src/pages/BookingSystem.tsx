@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, Sparkles, ChevronDown, X, Package } from "lucide-react";
+import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, Sparkles, ChevronDown, X, Package, Camera } from "lucide-react";
 import { format, addDays, startOfDay } from "date-fns";
 import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
@@ -409,7 +409,16 @@ const BookingSystem = () => {
         <div className="max-w-3xl mx-auto px-6">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-12">
             <h1 className="font-display text-4xl md:text-5xl mb-3">Book Your Treatment</h1>
-            <p className="font-body text-sm text-muted-foreground">Select one or more treatments. Secure your appointment with instant confirmation.</p>
+            <p className="font-body text-sm text-muted-foreground mb-4">Select one or more treatments. Secure your appointment with instant confirmation.</p>
+            
+            {/* Model Content Banner */}
+            <Link to="/muse" className="inline-flex items-center gap-3 border border-gold/40 bg-gold/5 px-5 py-3 hover:bg-gold/10 transition-colors group">
+              <Camera size={14} className="text-gold" strokeWidth={1.5} />
+              <span className="font-body text-xs text-foreground">
+                Want reduced pricing? <span className="text-gold font-medium">Become a content model</span>
+              </span>
+              <ArrowRight size={12} className="text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
+            </Link>
           </motion.div>
 
           {/* Progress Steps */}

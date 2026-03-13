@@ -41,6 +41,7 @@ import AcneTreatment from "./pages/AcneTreatment";
 import HyperpigmentationTreatment from "./pages/HyperpigmentationTreatment";
 import LipFillerLanding from "./pages/LipFillerLanding";
 import MuseLanding from "./pages/MuseLanding";
+import Offers from "./pages/Offers";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
 import ScrollToTop from "./components/ScrollToTop";
@@ -92,6 +93,7 @@ const AnimatedRoutes = () => {
           <Route path="/hyperpigmentation-treatment-manchester" element={<PageTransition><HyperpigmentationTreatment /></PageTransition>} />
           <Route path="/lip-filler-manchester" element={<PageTransition><LipFillerLanding /></PageTransition>} />
           <Route path="/muse" element={<PageTransition><MuseLanding /></PageTransition>} />
+          <Route path="/offers" element={<PageTransition><Offers /></PageTransition>} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>
       </AnimatePresence>

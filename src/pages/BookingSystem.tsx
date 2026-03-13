@@ -153,6 +153,10 @@ const BookingSystem = () => {
     return treatments.filter(t => POPULAR_SLUGS.includes(t.slug)).slice(0, 5);
   }, [treatments]);
 
+  const offerTreatments = useMemo(() => {
+    return treatments.filter(t => t.on_offer && t.offer_label);
+  }, [treatments]);
+
   const categoryTreatments = useMemo(() => {
     if (!expandedCategory) return [];
     return treatments.filter(t => t.category === expandedCategory);

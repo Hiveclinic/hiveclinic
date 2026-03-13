@@ -97,7 +97,7 @@ const MuseLanding = () => {
               </p>
             </div>
             <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">
-              Become a Hive Clinic Muse
+              Become a Hive Clinic Model
             </h1>
             <p className="font-body text-lg text-white/80 mb-4 max-w-xl mx-auto">
               Receive exclusive content pricing on selected aesthetic treatments

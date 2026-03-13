@@ -526,6 +526,27 @@ const BookingSystem = () => {
                   </div>
                 )}
 
+                {/* Current Offers */}
+                {offerTreatments.length > 0 && !expandedCategory && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <Tag size={14} strokeWidth={1.5} className="text-gold" />
+                      <h3 className="font-display text-lg">Current Offers</h3>
+                    </div>
+                    <div className="space-y-2">
+                      {offerTreatments.slice(0, 6).map(t => <TreatmentCard key={t.id} t={t} />)}
+                    </div>
+                    {offerTreatments.length > 6 && (
+                      <button
+                        onClick={() => setExpandedCategory("Content Model")}
+                        className="font-body text-xs text-gold hover:underline mt-3 inline-flex items-center gap-1"
+                      >
+                        View all {offerTreatments.length} offers <ChevronRight size={10} />
+                      </button>
+                    )}
+                  </div>
+                )}
+
                 {/* Category Browser */}
                 <div>
                   <h3 className="font-display text-lg mb-4">{expandedCategory ? expandedCategory : "Browse by Category"}</h3>

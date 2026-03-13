@@ -53,22 +53,14 @@ type TreatmentPackage = {
 const STEPS = ["Treatments", "Date & Time", "Your Details", "Payment"];
 
 const CATEGORY_ROUTES: Record<string, string> = {
-  "Lip Fillers": "/treatments/lip-fillers-manchester",
+  "Fillers": "/treatments/lip-fillers-manchester",
   "Anti-Wrinkle": "/treatments/anti-wrinkle-injections-manchester",
-  "Dermal Filler": "/treatments/dermal-filler-manchester",
-  "HydraFacial": "/treatments/hydrafacial-manchester",
-  "Chemical Peels": "/treatments/chemical-peels-manchester",
-  "Skin Boosters": "/treatments/skin-boosters-manchester",
+  "Facials": "/treatments/hydrafacial-manchester",
+  "Peels": "/treatments/chemical-peels-manchester",
+  "Skin Rejuvenation": "/treatments/skin-boosters-manchester",
   "Fat Dissolve": "/treatments/fat-dissolving-manchester",
-  "Microneedling": "/treatments/microneedling-manchester",
-  "Dermaplaning": "/treatments/dermaplaning-manchester",
-  "LED Light Therapy": "/treatments/led-light-therapy-manchester",
-  "Mesotherapy": "/treatments/mesotherapy-manchester",
-  "PRP": "/treatments/prp-manchester",
-  "Facial Balancing": "/treatments/facial-balancing-manchester",
   "Micro Sclerotherapy": "/treatments/micro-sclerotherapy-manchester",
   "Consultations": "/treatments/consultations",
-  "Intimate & Body Peels": "/treatments/intimate-peels-manchester",
   "Content Model": "/muse",
 };
 

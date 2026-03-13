@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, Sparkles, ChevronDown, X, Package, Camera } from "lucide-react";
+import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, ChevronDown, X, Package, Camera } from "lucide-react";
 import { format, addDays, startOfDay } from "date-fns";
 import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
@@ -72,7 +72,7 @@ const CATEGORY_ROUTES: Record<string, string> = {
   "Content Model": "/muse",
 };
 
-const POPULAR_SLUGS = ["lip-filler-05ml", "anti-wrinkle-2-areas", "glass-skin-boost", "dermal-filler-lips-1ml", "profhilo"];
+const POPULAR_SLUGS: string[] = [];
 
 const BookingSystem = () => {
   const [searchParams] = useSearchParams();
@@ -513,23 +513,10 @@ const BookingSystem = () => {
                   </div>
                 )}
 
-                {/* Most Popular */}
-                {popularTreatments.length > 0 && !expandedCategory && (
-                  <div>
-                    <div className="flex items-center gap-2 mb-4">
-                      <Sparkles size={14} strokeWidth={1.5} className="text-gold" />
-                      <h3 className="font-display text-lg">Most Popular</h3>
-                    </div>
-                    <div className="space-y-2">
-                      {popularTreatments.map(t => <TreatmentCard key={t.id} t={t} />)}
-                    </div>
-                  </div>
-                )}
-
                 {/* Current Offers */}
                 {offerTreatments.length > 0 && !expandedCategory && (
                   <div>
-                    <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-2 mb-3">
                       <Tag size={14} strokeWidth={1.5} className="text-gold" />
                       <h3 className="font-display text-lg">Current Offers</h3>
                     </div>
@@ -549,12 +536,12 @@ const BookingSystem = () => {
 
                 {/* Category Browser */}
                 <div>
-                  <h3 className="font-display text-lg mb-4">{expandedCategory ? expandedCategory : "Browse by Category"}</h3>
+                  <h3 className="font-display text-lg mb-3">{expandedCategory ? expandedCategory : "All Categories"}</h3>
                   
                   {expandedCategory ? (
                     <div>
                       <button onClick={() => setExpandedCategory(null)} className="font-body text-xs text-gold mb-4 flex items-center gap-1 hover:underline">
-                        <ChevronLeft size={12} /> All categories
+                        <ChevronLeft size={12} /> Back
                       </button>
                       <div className="space-y-2">
                         {categoryTreatments.map(t => <TreatmentCard key={t.id} t={t} />)}
@@ -566,7 +553,7 @@ const BookingSystem = () => {
                       )}
                     </div>
                   ) : (
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-1">
                       {categories.map(cat => {
                         const count = treatments.filter(t => t.category === cat).length;
                         const minPrice = Math.min(...treatments.filter(t => t.category === cat).map(t => Number(t.price)));
@@ -574,15 +561,16 @@ const BookingSystem = () => {
                           <button
                             key={cat}
                             onClick={() => setExpandedCategory(cat)}
-                            className="p-4 border border-border hover:border-gold/40 text-left transition-all group"
+                            className="w-full flex items-center justify-between py-3 px-4 border-b border-border/50 hover:bg-secondary/50 transition-colors group"
                           >
-                            <h4 className="font-display text-sm leading-tight">{cat}</h4>
-                            <p className="font-body text-xs text-muted-foreground mt-1">
-                              {count} treatment{count > 1 ? "s" : ""} · from £{minPrice === 0 ? "Free" : minPrice}
-                            </p>
-                            <span className="font-body text-[10px] text-gold uppercase tracking-wider mt-2 inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                              View <ChevronRight size={10} />
-                            </span>
+                            <div className="flex items-center gap-3">
+                              <span className="font-body text-sm">{cat}</span>
+                              <span className="font-body text-xs text-muted-foreground">{count}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-body text-xs text-muted-foreground">from {minPrice === 0 ? "Free" : `£${minPrice}`}</span>
+                              <ChevronRight size={14} className="text-muted-foreground group-hover:text-gold transition-colors" />
+                            </div>
                           </button>
                         );
                       })}

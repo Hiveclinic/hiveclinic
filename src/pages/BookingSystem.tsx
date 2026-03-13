@@ -72,7 +72,7 @@ const CATEGORY_ROUTES: Record<string, string> = {
   "Content Model": "/muse",
 };
 
-const POPULAR_SLUGS = ["lip-filler-05ml", "anti-wrinkle-2-areas", "glass-skin-boost", "dermal-filler-lips-1ml", "profhilo"];
+const POPULAR_SLUGS: string[] = [];
 
 const BookingSystem = () => {
   const [searchParams] = useSearchParams();

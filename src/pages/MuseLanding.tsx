@@ -132,10 +132,10 @@ const MuseLanding = () => {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <motion.div {...fadeIn}>
             <h2 className="font-display text-4xl md:text-5xl mb-6">
-              What Are Muse Sessions?
+              What Are Model Sessions?
             </h2>
             <p className="font-body text-muted-foreground leading-relaxed mb-4">
-              Hive Muse sessions are limited appointments where treatments are
+              Model sessions are limited appointments where treatments are
               offered at exclusive content rates in exchange for allowing Hive
               Clinic to photograph or film the treatment and results for social
               media and marketing.

@@ -205,7 +205,7 @@ const Index = () => {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {offers.map((offer, i) => (
+              {offers.slice(0, 4).map((offer, i) => (
                 <motion.div
                   key={offer.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -240,6 +240,17 @@ const Index = () => {
                 </motion.div>
               ))}
             </div>
+
+            {offers.length > 4 && (
+              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-10">
+                <Link
+                  to="/bookings"
+                  className="inline-flex items-center gap-2 px-10 py-4 border border-gold/40 font-body text-sm tracking-widest uppercase hover:bg-gold/10 hover:border-gold transition-colors"
+                >
+                  View All Offers <ArrowRight size={14} />
+                </Link>
+              </motion.div>
+            )}
           </div>
         </section>
       )}

@@ -247,7 +247,7 @@ const MuseLanding = () => {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <motion.div {...fadeIn}>
             <p className="font-display text-3xl md:text-5xl leading-tight mb-8">
-              Limited Hive Muse appointments available each month
+              Limited model appointments available each month
             </p>
             <Link
               to="/bookings"

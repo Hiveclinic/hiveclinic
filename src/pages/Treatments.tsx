@@ -13,22 +13,15 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Fallback images by category
 const CATEGORY_IMAGES: Record<string, string> = {
-  "Lip Fillers": gallery1,
+  "Fillers": gallery1,
   "Anti-Wrinkle": gallery3,
-  "Dermal Filler": gallery4,
-  "HydraFacial": gallery3,
-  "Chemical Peels": gallery4,
-  "Skin Boosters": gallery1,
-  "Microneedling": gallery5,
+  "Facials": gallery3,
+  "Peels": gallery4,
+  "Skin Rejuvenation": gallery1,
   "Fat Dissolve": gallery6,
-  "Dermaplaning": gallery3,
-  "LED Light Therapy": gallery5,
-  "Mesotherapy": gallery1,
-  "PRP Therapy": gallery4,
-  "Facial Balancing": gallery4,
   "Micro Sclerotherapy": gallery5,
-  "Intimate and Body Peels": gallery3,
   "Consultations": gallery3,
+  "Content Model": gallery5,
 };
 
 // Fallback links by category slug

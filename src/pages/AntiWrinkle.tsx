@@ -3,11 +3,9 @@ import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import ModelCTA from "@/components/ModelCTA";
-import gallery3 from "@/assets/gallery-3.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
   { name: "Anti-Wrinkle Consultation", desc: "Smooth forehead lines, frown lines, and crow's feet for a naturally refreshed look. Consultation required.", from: "£179" },

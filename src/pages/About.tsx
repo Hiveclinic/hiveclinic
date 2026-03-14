@@ -34,7 +34,7 @@ const About = () => {
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={gallery2} alt="Bianca - Hive Clinic founder" className="w-full h-full object-cover" />
+              <img src={heroImg} alt="Bianca - Hive Clinic founder" className="w-full h-full object-cover" />
             </div>
           </motion.div>
         </div>

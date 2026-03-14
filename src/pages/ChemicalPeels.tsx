@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Level 1 Chemical Peel - Face", desc: "For hormonal breakouts, scarring, and rough texture. Includes antibacterial cleanse and clarifying mask.", price: "£85" },

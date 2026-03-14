@@ -89,7 +89,7 @@ const AcneTreatment = () => {
               </Link>
             </div>
             <div>
-              <img src={gallery1} alt="Clear skin results after acne treatment at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
+              <img src={secondaryImg} alt="Clear skin results after acne treatment at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
             </div>
           </div>
         </div>

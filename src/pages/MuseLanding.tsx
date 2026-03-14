@@ -79,7 +79,7 @@ const MuseLanding = () => {
       <section className="relative min-h-[85vh] flex items-center">
         <div className="absolute inset-0">
           <img
-            src={gallery4}
+            src={heroImg}
             alt="Hive Clinic Muse content session"
             className="w-full h-full object-cover"
           />

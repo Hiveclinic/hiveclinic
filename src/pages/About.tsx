@@ -67,7 +67,7 @@ const About = () => {
           </div>
           <div className="lg:order-1">
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={gallery5} alt="Hive Clinic treatment" className="w-full h-full object-cover" />
+              <img src={secondaryImg} alt="Hive Clinic treatment" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>

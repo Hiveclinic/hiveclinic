@@ -152,7 +152,7 @@ const AntiWrinkle = () => {
           <h2 className="font-display text-4xl md:text-5xl mb-4">Real Results</h2>
           <p className="font-body text-muted-foreground mb-12">Subtle, natural, and refreshed.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[gallery3, gallery5, gallery6].map((img, i) => (
+            {[secondaryImg, tertiaryImg, heroImg].map((img, i) => (
               <div key={i} className="aspect-square overflow-hidden">
                 <img src={img} alt={`Wrinkle relaxing treatment result ${i + 1} at Hive Clinic Manchester City Centre`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
               </div>

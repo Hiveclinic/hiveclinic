@@ -53,7 +53,7 @@ const IntimatePeels = () => {
               </Link>
             </div>
             <div className="aspect-[4/5] overflow-hidden">
-              <img src={gallery3} alt="Body peel treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
+              <img src={heroImg} alt="Body peel treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </div>
 

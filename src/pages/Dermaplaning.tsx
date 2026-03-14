@@ -67,7 +67,7 @@ const Dermaplaning = () => {
                 Book Appointment <ArrowRight size={14} />
               </Link>
             </div>
-            <div className="aspect-[4/5] overflow-hidden"><img src={gallery1} alt="Dermaplaning results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
+            <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="Dermaplaning results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
           </div>
         </div>
       </section>

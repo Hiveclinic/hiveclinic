@@ -81,7 +81,7 @@ const SkinBoosters = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery2} alt="Skin booster results Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={secondaryImg} alt="Skin booster results Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
           <div>
             <h2 className="font-display text-4xl md:text-5xl mb-6">Why Skin Boosters at Hive</h2>

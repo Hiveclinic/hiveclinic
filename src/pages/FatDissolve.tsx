@@ -94,7 +94,7 @@ const FatDissolve = () => {
             </div>
           </div>
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery5} alt="Fat dissolving body contouring results" className="w-full h-full object-cover" loading="lazy" />
+            <img src={secondaryImg} alt="Fat dissolving body contouring results" className="w-full h-full object-cover" loading="lazy" />
           </div>
         </div>
       </div>

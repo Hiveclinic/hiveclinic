@@ -67,7 +67,7 @@ const MicroSclerotherapy = () => {
               Book Consultation <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="aspect-[4/5] overflow-hidden"><img src={gallery6} alt="Thread vein treatment results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
+          <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="Thread vein treatment results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
         </div>
       </section>
 

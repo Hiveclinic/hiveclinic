@@ -89,7 +89,7 @@ const HyperpigmentationTreatment = () => {
               </Link>
             </div>
             <div>
-              <img src={gallery2} alt="Skin brightening results after hyperpigmentation treatment at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
+              <img src={secondaryImg} alt="Skin brightening results after hyperpigmentation treatment at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
             </div>
           </div>
         </div>

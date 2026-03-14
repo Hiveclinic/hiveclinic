@@ -113,7 +113,7 @@ const LipFillerLanding = () => {
               </Link>
             </div>
             <div>
-              <img src={gallery1} alt="Natural lip filler results at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
+              <img src={secondaryImg} alt="Natural lip filler results at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
             </div>
           </div>
         </div>

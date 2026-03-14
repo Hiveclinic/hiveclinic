@@ -47,7 +47,7 @@ const Consultations = () => {
 
         <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery3} alt="Hive Clinic consultation room Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={heroImg} alt="Hive Clinic consultation room Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
           <div>
             <h2 className="font-display text-4xl mb-6">Why a Consultation Matters</h2>

@@ -117,7 +117,7 @@ const LipFillers = () => {
         <h2 className="font-display text-4xl md:text-5xl mb-4">Real Results</h2>
         <p className="font-body text-muted-foreground mb-12">See the difference for yourself.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[gallery1, gallery2, gallery4].map((img, i) => (
+          {[heroImg, secondaryImg, testimonialImg].map((img, i) => (
             <div key={i} className="aspect-square overflow-hidden">
               <img src={img} alt={`Lip filler result ${i + 1} at Hive Clinic Manchester`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
             </div>

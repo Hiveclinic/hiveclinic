@@ -66,7 +66,7 @@ const FacialBalancing = () => {
               Book Consultation <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="aspect-[4/5] overflow-hidden"><img src={gallery1} alt="Facial balancing results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
+          <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="Facial balancing results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
         </div>
       </section>
 

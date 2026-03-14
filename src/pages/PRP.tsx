@@ -63,7 +63,7 @@ const PRP = () => {
               Book Consultation <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="aspect-[4/5] overflow-hidden"><img src={gallery4} alt="PRP therapy results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
+          <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="PRP therapy results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
         </div>
       </section>
 

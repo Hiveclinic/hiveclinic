@@ -149,6 +149,10 @@ Deno.serve(async (req) => {
         </div>
         <p style="${pStyle}"><strong>⏰ Important:</strong> Please arrive at your exact appointment time. Do not arrive early or late as a member of the team will need to let you into the clinic.</p>
         <p style="${pStyle}">If you need to reschedule, contact us at least 48 hours in advance.</p>
+        <div style="text-align:center;margin:24px 0;">
+          <a href="https://hiveclinicuk.com/consent-form" style="${btnStyle}">Complete Consent Form</a>
+        </div>
+        <p style="${pStyle};font-size:12px;color:#999;">Please complete your consent form before your appointment to save time on the day.</p>
         <p style="${pStyle}">See you soon! 💛</p>
       `);
     } else if (emailType === "reminder") {

@@ -330,8 +330,13 @@ const AdminSiteTab = () => {
                   onDragLeave={() => setDragOverKey(null)}
                   onDrop={e => handleDrop(img.key, e)}
                 >
-                  {img.image_url ? (
-                    <img src={img.image_url} alt={img.alt_text} className="w-full h-full object-cover" />
+                  {(img.image_url || (img as any).fallbackUrl) ? (
+                    <>
+                      <img src={img.image_url || (img as any).fallbackUrl} alt={img.alt_text} className="w-full h-full object-cover" />
+                      {!img.image_url && (img as any).fallbackUrl && (
+                        <span className="absolute top-2 left-2 px-2 py-0.5 bg-background/80 font-body text-[9px] uppercase tracking-wider text-muted-foreground rounded">Current default</span>
+                      )}
+                    </>
                   ) : (
                     <div className="text-center p-6">
                       <Upload size={24} className="text-muted-foreground mx-auto mb-2" />
@@ -343,7 +348,7 @@ const AdminSiteTab = () => {
                       <RefreshCw size={20} className="text-gold animate-spin" />
                     </div>
                   )}
-                  {img.image_url && (
+                  {(img.image_url || (img as any).fallbackUrl) && (
                     <label className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/40 transition-colors cursor-pointer group">
                       <span className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 px-4 py-2 bg-white text-black font-body text-xs uppercase tracking-wider">
                         <RefreshCw size={12} /> Replace

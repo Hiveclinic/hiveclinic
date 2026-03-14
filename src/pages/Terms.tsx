@@ -99,7 +99,7 @@ const Terms = () => {
             <div>
               <h2 className="font-display text-3xl mb-4">9. Conduct & Clinic Etiquette</h2>
               <ul className="space-y-3 list-disc pl-5">
-                <li>We kindly ask that clients arrive on time. Late arrivals of more than 15 minutes may result in a shortened treatment or rescheduling at the practitioner's discretion, with no refund of the deposit.</li>
+                <li>Please arrive at your exact appointment time. Do not arrive early or late as a member of the team will need to let you into the clinic. Late arrivals of more than 15 minutes may result in a shortened treatment or rescheduling at the practitioner's discretion, with no refund of the booking fee.</li>
                 <li>Hive Clinic operates a zero-tolerance policy towards abusive, threatening, or disrespectful behaviour towards any member of our team. Clients who breach this policy will be refused service and may be banned from future appointments.</li>
                 <li>Children are not permitted in the treatment room during procedures for health and safety reasons.</li>
                 <li>We ask that mobile phones are switched to silent during your appointment.</li>

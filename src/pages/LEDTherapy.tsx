@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What does LED light therapy do?", a: "LED therapy uses different wavelengths of light to target specific skin concerns. Red light stimulates collagen, blue light targets acne-causing bacteria, green reduces pigmentation, and yellow soothes inflammation." },

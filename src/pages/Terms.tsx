@@ -46,7 +46,7 @@ const Terms = () => {
               <h2 className="font-display text-3xl mb-4">4. Refund Policy</h2>
               <ul className="space-y-3 list-disc pl-5">
                 <li>All treatments are non-refundable once administered. By consenting to treatment, you acknowledge that results cannot be guaranteed and individual outcomes may vary.</li>
-                <li>Deposits are non-refundable regardless of the reason for cancellation, except where Hive Clinic cancels the appointment (see Section 3).</li>
+                <li>Booking fees are non-refundable regardless of the reason for cancellation, except where Hive Clinic cancels the appointment (see Section 3).</li>
                 <li>If you are dissatisfied with your results, we encourage you to contact us to discuss your concerns. A complimentary review appointment may be offered where clinically appropriate, but this does not constitute entitlement to a refund.</li>
                 <li>Prepaid treatment courses or packages are non-refundable and non-transferable once purchased. Unused sessions will expire 12 months from the date of purchase unless otherwise agreed in writing.</li>
                 <li>Gift vouchers are non-refundable and must be used within 6 months of the date of issue. No change will be given for unused portions of a voucher.</li>

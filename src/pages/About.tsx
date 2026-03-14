@@ -7,8 +7,8 @@ import biancaImg from "@/assets/bianca.jpg";
 
 const About = () => {
   usePageMeta("About Hive Clinic | Aesthetic Clinic Manchester City Centre", "Meet Bianca, the practitioner behind Hive Clinic in Manchester City Centre. Specialising in advanced skin treatments and aesthetic procedures.");
-  const heroImg = useSiteImage("about_hero", STOCK.about_secondary);
-  const secondaryImg = useSiteImage("about_secondary", biancaImg);
+  const heroImg = useSiteImage("about_hero", biancaImg);
+  const secondaryImg = useSiteImage("about_secondary", STOCK.about_secondary);
   return (
   <Layout>
     <section className="py-24">

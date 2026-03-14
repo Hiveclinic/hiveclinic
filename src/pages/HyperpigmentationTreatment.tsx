@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What causes hyperpigmentation?", a: "Hyperpigmentation can be caused by sun exposure, hormonal changes (melasma), acne scarring, skin injuries or inflammation. A consultation helps identify the root cause." },

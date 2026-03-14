@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Tag, Plus, Trash2, X } from "lucide-react";
+import { Tag, Plus, Trash2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
 type Treatment = { id: string; name: string; category: string };
@@ -26,6 +26,7 @@ const AdminDiscountCodesTab = () => {
   const [treatments, setTreatments] = useState<Treatment[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   // Form state
   const [code, setCode] = useState("");
@@ -49,6 +50,37 @@ const AdminDiscountCodesTab = () => {
 
   useEffect(() => { fetchData(); }, []);
 
+  const resetForm = () => {
+    setCode(""); setDiscountType("percentage"); setDiscountValue(""); setMinSpend(""); setMaxUses(""); setValidUntil("");
+    setMode("all"); setSelectedTreatmentIds([]); setEditingId(null); setShowForm(false);
+  };
+
+  const openNew = () => {
+    resetForm();
+    setShowForm(true);
+  };
+
+  const openEdit = (c: DiscountCode) => {
+    setEditingId(c.id);
+    setCode(c.code);
+    setDiscountType(c.discount_type);
+    setDiscountValue(String(c.discount_value));
+    setMinSpend(c.min_spend ? String(c.min_spend) : "");
+    setMaxUses(c.max_uses ? String(c.max_uses) : "");
+    setValidUntil(c.valid_until ? c.valid_until.slice(0, 16) : "");
+    if (c.excluded_treatments && c.excluded_treatments.length > 0) {
+      setMode("exclude");
+      setSelectedTreatmentIds(c.excluded_treatments);
+    } else if (c.applicable_treatments && c.applicable_treatments.length > 0) {
+      setMode("include");
+      setSelectedTreatmentIds(c.applicable_treatments);
+    } else {
+      setMode("all");
+      setSelectedTreatmentIds([]);
+    }
+    setShowForm(true);
+  };
+
   const toggleTreatment = (id: string) => {
     setSelectedTreatmentIds(prev => prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]);
   };
@@ -63,10 +95,10 @@ const AdminDiscountCodesTab = () => {
     }
   };
 
-  const createCode = async () => {
+  const saveCode = async () => {
     if (!code.trim() || !discountValue) { toast.error("Code and value are required"); return; }
 
-    const insertData: Record<string, unknown> = {
+    const payload: Record<string, unknown> = {
       code: code.toUpperCase().trim(),
       discount_type: discountType,
       discount_value: Number(discountValue),
@@ -77,12 +109,16 @@ const AdminDiscountCodesTab = () => {
       excluded_treatments: mode === "exclude" ? selectedTreatmentIds : [],
     };
 
-    const { error } = await supabase.from("discount_codes").insert(insertData as any);
-    if (error) { toast.error("Failed to create discount code"); return; }
-    toast.success("Discount code created");
-    setShowForm(false);
-    setCode(""); setDiscountValue(""); setMinSpend(""); setMaxUses(""); setValidUntil("");
-    setMode("all"); setSelectedTreatmentIds([]);
+    if (editingId) {
+      const { error } = await supabase.from("discount_codes").update(payload as any).eq("id", editingId);
+      if (error) { toast.error("Failed to update discount code"); return; }
+      toast.success("Discount code updated");
+    } else {
+      const { error } = await supabase.from("discount_codes").insert(payload as any);
+      if (error) { toast.error("Failed to create discount code"); return; }
+      toast.success("Discount code created");
+    }
+    resetForm();
     fetchData();
   };
 
@@ -102,7 +138,6 @@ const AdminDiscountCodesTab = () => {
   };
 
   const getTreatmentName = (id: string) => treatments.find(t => t.id === id)?.name || id.slice(0, 8);
-
   const categories = [...new Set(treatments.map(t => t.category))];
 
   if (loading) return <div className="py-12 text-center"><p className="font-body text-muted-foreground animate-pulse">Loading...</p></div>;
@@ -111,16 +146,14 @@ const AdminDiscountCodesTab = () => {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h3 className="font-display text-xl flex items-center gap-2"><Tag size={18} /> Discount Codes</h3>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 px-6 py-2 bg-foreground text-background font-body text-sm tracking-wider uppercase hover:bg-accent transition-colors"
-        >
+        <button onClick={openNew} className="flex items-center gap-2 px-6 py-2 bg-foreground text-background font-body text-sm tracking-wider uppercase hover:bg-accent transition-colors">
           <Plus size={14} /> New Code
         </button>
       </div>
 
       {showForm && (
         <div className="border border-gold/30 bg-gold/5 p-6 mb-6 space-y-4">
+          <p className="font-body text-xs text-gold uppercase tracking-wider">{editingId ? "Edit Discount Code" : "New Discount Code"}</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="font-body text-xs block mb-1 text-muted-foreground">Code *</label>
@@ -153,7 +186,6 @@ const AdminDiscountCodesTab = () => {
             </div>
           </div>
 
-          {/* Treatment scope */}
           <div>
             <label className="font-body text-xs block mb-2 text-muted-foreground">Applies To</label>
             <div className="flex gap-2 mb-3">
@@ -164,14 +196,11 @@ const AdminDiscountCodesTab = () => {
                 </button>
               ))}
             </div>
-
             {mode !== "all" && (
               <div className="border border-border p-4 max-h-60 overflow-y-auto space-y-3">
                 {categories.map(cat => (
                   <div key={cat}>
-                    <button onClick={() => selectCategory(cat)} className="font-body text-xs text-gold uppercase tracking-wider mb-1 hover:underline">
-                      {cat}
-                    </button>
+                    <button onClick={() => selectCategory(cat)} className="font-body text-xs text-gold uppercase tracking-wider mb-1 hover:underline">{cat}</button>
                     <div className="flex flex-wrap gap-1.5 ml-2">
                       {treatments.filter(t => t.category === cat).map(t => (
                         <button key={t.id} onClick={() => toggleTreatment(t.id)}
@@ -192,8 +221,10 @@ const AdminDiscountCodesTab = () => {
           </div>
 
           <div className="flex gap-3">
-            <button onClick={createCode} className="px-6 py-2 bg-foreground text-background font-body text-sm tracking-wider uppercase hover:bg-accent transition-colors">Create</button>
-            <button onClick={() => setShowForm(false)} className="px-6 py-2 border border-border font-body text-sm tracking-wider uppercase hover:border-foreground transition-colors">Cancel</button>
+            <button onClick={saveCode} className="px-6 py-2 bg-foreground text-background font-body text-sm tracking-wider uppercase hover:bg-accent transition-colors">
+              {editingId ? "Save Changes" : "Create"}
+            </button>
+            <button onClick={resetForm} className="px-6 py-2 border border-border font-body text-sm tracking-wider uppercase hover:border-foreground transition-colors">Cancel</button>
           </div>
         </div>
       )}
@@ -213,20 +244,20 @@ const AdminDiscountCodesTab = () => {
                 Used: {c.used_count}{c.max_uses ? `/${c.max_uses}` : ""}
               </span>
               {c.valid_until && <span className="font-body text-xs text-muted-foreground">Expires: {new Date(c.valid_until).toLocaleDateString("en-GB")}</span>}
-              
-              {/* Show scope info */}
               {c.applicable_treatments && c.applicable_treatments.length > 0 && (
-                <span className="font-body text-xs text-green-600">Only: {c.applicable_treatments.length} treatments</span>
+                <span className="font-body text-xs text-accent-foreground/70">Only: {c.applicable_treatments.length} treatments</span>
               )}
               {c.excluded_treatments && c.excluded_treatments.length > 0 && (
-                <span className="font-body text-xs text-red-400">Excludes: {c.excluded_treatments.map(id => getTreatmentName(id)).join(", ")}</span>
+                <span className="font-body text-xs text-destructive/70">Excludes: {c.excluded_treatments.map(id => getTreatmentName(id)).join(", ")}</span>
               )}
-
               <div className="ml-auto flex gap-2">
-                <button onClick={() => toggleActive(c.id, c.active)} className={`px-3 py-1 border font-body text-xs tracking-wider uppercase transition-colors ${c.active ? "border-green-600/30 text-green-600" : "border-border text-muted-foreground"}`}>
+                <button onClick={() => openEdit(c)} className="px-2 py-1 border border-border text-muted-foreground hover:text-gold hover:border-gold transition-colors">
+                  <Pencil size={14} />
+                </button>
+                <button onClick={() => toggleActive(c.id, c.active)} className={`px-3 py-1 border font-body text-xs tracking-wider uppercase transition-colors ${c.active ? "border-accent/30 text-accent-foreground" : "border-border text-muted-foreground"}`}>
                   {c.active ? "Active" : "Inactive"}
                 </button>
-                <button onClick={() => deleteCode(c.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-red-500 hover:border-red-500 transition-colors">
+                <button onClick={() => deleteCode(c.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-destructive hover:border-destructive transition-colors">
                   <Trash2 size={14} />
                 </button>
               </div>

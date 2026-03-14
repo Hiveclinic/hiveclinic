@@ -26,6 +26,8 @@ const FatDissolve = () => {
     "Fat Dissolving Manchester City Centre | Hive Clinic",
     "Non-surgical fat dissolving injections from £120 at Hive Clinic, Manchester City Centre. Target stubborn fat on chin, abdomen, flanks and more. Book today."
   );
+  const heroImg = useSiteImage("fatdissolve_hero", gallery6);
+  const secondaryImg = useSiteImage("fatdissolve_secondary", gallery5);
 
   return (
   <Layout>

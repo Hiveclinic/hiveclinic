@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery4 from "@/assets/gallery-4.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "What is PRP?", a: "PRP (Platelet Rich Plasma) therapy uses your own blood to create a concentrated serum rich in growth factors that stimulates skin repair and regeneration." },

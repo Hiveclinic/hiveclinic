@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery5 from "@/assets/gallery-5.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "What is micro sclerotherapy?", a: "Micro sclerotherapy is a minimally invasive treatment for thread veins (spider veins) on the legs. A sclerosing solution is injected into the affected veins, causing them to collapse and fade." },
@@ -20,8 +19,8 @@ const MicroSclerotherapy = () => {
     "Micro Sclerotherapy Manchester City Centre | Hive Clinic",
     "Micro sclerotherapy for thread vein removal at Hive Clinic, Manchester City Centre. Effective treatment for spider veins on legs. Book your consultation."
   );
-  const heroImg = useSiteImage("microsclerotherapy_hero", gallery5);
-  const secondaryImg = useSiteImage("microsclerotherapy_secondary", gallery6);
+  const heroImg = useSiteImage("microsclerotherapy_hero", STOCK.microsclerotherapy_hero);
+  const secondaryImg = useSiteImage("microsclerotherapy_secondary", STOCK.microsclerotherapy_secondary);
 
   return (
     <Layout>

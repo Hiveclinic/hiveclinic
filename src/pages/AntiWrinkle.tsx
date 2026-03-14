@@ -3,11 +3,9 @@ import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import ModelCTA from "@/components/ModelCTA";
-import gallery3 from "@/assets/gallery-3.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
   { name: "Anti-Wrinkle Consultation", desc: "Smooth forehead lines, frown lines, and crow's feet for a naturally refreshed look. Consultation required.", from: "£179" },
@@ -30,9 +28,9 @@ const AntiWrinkle = () => {
     "Anti-Wrinkle Consultation Manchester City Centre | Hive Clinic",
     "Book a wrinkle relaxing treatment consultation at Hive Clinic, Manchester City Centre. Soften forehead lines, frown lines and crow's feet with a qualified prescriber. Consultation required."
   );
-  const heroImg = useSiteImage("antiwrinkle_hero", gallery6);
-  const secondaryImg = useSiteImage("antiwrinkle_secondary", gallery3);
-  const tertiaryImg = useSiteImage("antiwrinkle_tertiary", gallery5);
+  const heroImg = useSiteImage("antiwrinkle_hero", STOCK.antiwrinkle_hero);
+  const secondaryImg = useSiteImage("antiwrinkle_secondary", STOCK.antiwrinkle_secondary);
+  const tertiaryImg = useSiteImage("antiwrinkle_tertiary", STOCK.antiwrinkle_tertiary);
 
   return (
     <Layout>

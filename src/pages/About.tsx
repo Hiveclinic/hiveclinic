@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
-import gallery2 from "@/assets/gallery-2.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const About = () => {
   usePageMeta("About Hive Clinic | Aesthetic Clinic Manchester City Centre", "Meet Bianca, the practitioner behind Hive Clinic in Manchester City Centre. Specialising in advanced skin treatments and aesthetic procedures.");
-  const heroImg = useSiteImage("about_hero", gallery2);
-  const secondaryImg = useSiteImage("about_secondary", gallery5);
+  const heroImg = useSiteImage("about_hero", STOCK.about_hero);
+  const secondaryImg = useSiteImage("about_secondary", STOCK.about_secondary);
   return (
   <Layout>
     <section className="py-24">

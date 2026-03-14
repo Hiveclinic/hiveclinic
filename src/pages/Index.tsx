@@ -6,40 +6,12 @@ import Layout from "@/components/Layout";
 import TreatmentHelper from "@/components/TreatmentHelper";
 import { supabase } from "@/integrations/supabase/client";
 import { usePageMeta } from "@/hooks/use-page-meta";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery2 from "@/assets/gallery-2.jpg";
-import gallery3 from "@/assets/gallery-3.jpg";
-import gallery4 from "@/assets/gallery-4.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 import klarnaLogo from "@/assets/klarna-logo.png";
 import clearpayLogo from "@/assets/clearpay-logo.png";
 
-const highlights = [
-{ title: "Chemical Peels", desc: "Targeted peels for face, back, and body to transform skin tone and texture.", link: "/treatments/chemical-peels-manchester" },
-{ title: "HydraFacial", desc: "Deep cleansing facials for glass-like, refreshed skin.", link: "/treatments/hydrafacial-manchester" },
-{ title: "Dermal Filler", desc: "Expert lip, cheek, jawline, and facial balancing treatments.", link: "/treatments/dermal-filler-manchester" },
-{ title: "Anti-Wrinkle Consultation", desc: "Wrinkle relaxing treatment — consultation required for a naturally refreshed appearance.", link: "/treatments/anti-wrinkle-injections-manchester" },
-{ title: "Skin Boosters", desc: "Deep hydration for luminous, glass-like skin.", link: "/treatments/skin-boosters-manchester" }];
-
-
-const staticReviews = [
-{ name: "Aisha M.", text: "Absolutely the best clinic in Manchester. Bianca is incredible - my skin has never looked better.", stars: 5 },
-{ name: "Georgia L.", text: "The attention to detail is unreal. I felt so comfortable and the results were beyond what I expected.", stars: 5 },
-{ name: "Priya K.", text: "Finally found somewhere that actually listens. Subtle, natural results every time.", stars: 5 },
-{ name: "Sophie R.", text: "Had my lip filler done here and I'm obsessed. So natural, nobody can tell it's filler. Already booked my next appointment.", stars: 5 },
-{ name: "Lauren T.", text: "Bianca explained everything so clearly before my anti-wrinkle treatment. Zero pressure, amazing results. Highly recommend.", stars: 5 },
-{ name: "Hannah B.", text: "The clinic is gorgeous and spotlessly clean. My HydraFacial left my skin glowing for days. Will be back monthly.", stars: 5 }];
-
-
-const trustPoints = [
-{ icon: Shield, text: "Qualified & Insured Prescriber" },
-{ icon: Award, text: "5-Star Rated on Google" },
-{ icon: Clock, text: "Same-Week Appointments Available" }];
-
-
-type Offer = {
+interface Offer {
   id: string;
   name: string;
   slug: string;
@@ -48,7 +20,29 @@ type Offer = {
   offer_label: string | null;
   description: string | null;
   duration_mins: number;
-};
+}
+
+const highlights = [
+  { title: "Lip Fillers", desc: "Enhance your natural lip shape with subtle volume and definition.", link: "/treatments/lip-fillers-manchester" },
+  { title: "Dermal Filler", desc: "Restore lost volume and smooth fine lines with our range of dermal fillers.", link: "/treatments/dermal-filler-manchester" },
+  { title: "Anti-Wrinkle", desc: "Soften wrinkles and prevent new lines from forming with expertly-administered anti-wrinkle injections.", link: "/treatments/anti-wrinkle-manchester" },
+  { title: "Skin Boosters", desc: "Achieve a radiant, hydrated complexion with our rejuvenating skin booster treatments.", link: "/treatments/skin-boosters-manchester" },
+  { title: "HydraFacial", desc: "Deeply cleanse, exfoliate, and hydrate your skin with the world-famous HydraFacial.", link: "/treatments/hydrafacial-manchester" },
+];
+
+const trustPoints = [
+  { icon: Shield, text: "Qualified Prescribers" },
+  { icon: Award, text: "5-Star Rated Clinic" },
+  { icon: Clock, text: "Same-Week Appointments" },
+  { icon: CheckCircle, text: "Premium Products Only" },
+  { icon: Sparkles, text: "Natural-Looking Results" },
+];
+
+const staticReviews = [
+  { name: "Sarah J.", text: "I had lip fillers done by Bianca and I'm so happy with the results. She listened to what I wanted and made me feel so comfortable.", stars: 5 },
+  { name: "Laura M.", text: "The clinic is beautiful and the staff are so friendly. I had the hydrafacial and my skin has never felt so good!", stars: 5 },
+  { name: "Amy S.", text: "I was nervous about getting anti-wrinkle injections but Bianca was so gentle and explained everything so well. I'm so pleased with the results.", stars: 5 },
+];
 
 const Index = () => {
   usePageMeta(
@@ -57,13 +51,13 @@ const Index = () => {
   );
   const [offers, setOffers] = useState<Offer[]>([]);
   const [reviews, setReviews] = useState(staticReviews);
-  const heroImg = useSiteImage("hero_home", gallery6);
-  const gal1 = useSiteImage("gallery_1", gallery1);
-  const gal2 = useSiteImage("gallery_2", gallery2);
-  const gal3 = useSiteImage("gallery_3", gallery3);
-  const gal4 = useSiteImage("gallery_4", gallery4);
-  const gal5 = useSiteImage("gallery_5", gallery5);
-  const gal6 = useSiteImage("gallery_6", gallery6);
+  const heroImg = useSiteImage("hero_home", STOCK.hero_home);
+  const gal1 = useSiteImage("gallery_1", STOCK.gallery_1);
+  const gal2 = useSiteImage("gallery_2", STOCK.gallery_2);
+  const gal3 = useSiteImage("gallery_3", STOCK.gallery_3);
+  const gal4 = useSiteImage("gallery_4", STOCK.gallery_4);
+  const gal5 = useSiteImage("gallery_5", STOCK.gallery_5);
+  const gal6 = useSiteImage("gallery_6", STOCK.gallery_6);
   const galleryImages = [gal1, gal2, gal3, gal4, gal5, gal6];
 
   useEffect(() => {
@@ -349,9 +343,9 @@ const Index = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-            { slug: "what-to-expect-first-filler", title: "What to Expect at Your First Filler Appointment", img: gallery1, date: "February 2026" },
-            { slug: "lip-filler-aftercare-guide", title: "Lip Filler Aftercare: Your Complete Guide", img: gallery4, date: "January 2026" },
-            { slug: "hydrafacial-benefits-skin", title: "5 Benefits of HydraFacial for Every Skin Type", img: gallery3, date: "January 2026" }].
+            { slug: "what-to-expect-first-filler", title: "What to Expect at Your First Filler Appointment", img: STOCK.blog_1, date: "February 2026" },
+            { slug: "lip-filler-aftercare-guide", title: "Lip Filler Aftercare: Your Complete Guide", img: STOCK.blog_2, date: "January 2026" },
+            { slug: "hydrafacial-benefits-skin", title: "5 Benefits of HydraFacial for Every Skin Type", img: STOCK.blog_3, date: "January 2026" }].
             map((post) =>
             <Link key={post.slug} to={`/blog/${post.slug}`} className="group">
                 <div className="aspect-[4/5] overflow-hidden mb-4">
@@ -370,117 +364,24 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Meet Bianca */}
-      <section className="py-24 bg-secondary">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="aspect-[4/5] overflow-hidden">
-              <img src={gal2} alt="Bianca - practitioner at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
-            </div>
-            <div>
-              <p className="font-body text-xs tracking-[0.3em] uppercase text-gold mb-4">The Practitioner</p>
-              <h2 className="font-display text-4xl md:text-5xl mb-6">Meet Bianca</h2>
-              <p className="font-body text-muted-foreground leading-relaxed mb-6">
-                Bianca is the practitioner behind Hive Clinic, specialising in advanced skin treatments and aesthetic procedures designed to improve skin quality and enhance natural features. Treatments are delivered with a focus on consultation, safety and personalised results.
-              </p>
-              <p className="font-body text-muted-foreground leading-relaxed mb-8">
-                With a conservative, anatomy-led approach, every treatment at Hive Clinic is tailored to enhance your natural beauty — never to change it.
-              </p>
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-2 font-body text-sm tracking-widest uppercase text-gold hover:text-foreground transition-colors">
-                
-                Learn More About Bianca <ArrowRight size={14} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Instagram */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="font-display text-4xl md:text-5xl mb-4">Follow Us on Instagram</h2>
-          <p className="font-body text-muted-foreground mb-12">Stay up to date with our latest treatments, results, and clinic news.</p>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-            {galleryImages.map((img, i) =>
-            <a
-              key={i}
-              href="https://instagram.com/hiveclinicuk"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="aspect-square overflow-hidden group">
-              
-                <img src={img} alt={`Hive Clinic Instagram post ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-              </a>
-            )}
-          </div>
-          <a
-            href="https://instagram.com/hiveclinicuk"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-body text-sm tracking-widest uppercase text-gold hover:text-foreground transition-colors mt-8">
-            
-            @hiveclinicuk <ArrowRight size={14} />
-          </a>
-        </div>
-      </section>
-
-      {/* Trust Signals */}
-      <section className="py-16 border-y border-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-            { icon: Shield, text: "Fully insured aesthetic clinic" },
-            { icon: CheckCircle, text: "Professional consultation process" },
-            { icon: Award, text: "Medical grade skincare products used" },
-            { icon: Sparkles, text: "Professional sterile treatment environment" }].
-            map(({ icon: Icon, text }) =>
-            <div key={text} className="flex flex-col items-center gap-3">
-                <Icon size={24} className="text-gold" />
-                <p className="font-body text-sm text-muted-foreground">{text}</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-24">
+      {/* CTA */}
+      <section className="py-24 bg-foreground text-background">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}>
+          <h2 className="font-display text-4xl md:text-5xl mb-6">Ready to Begin?</h2>
+          <p className="font-body text-background/70 mb-8">
+            Book a free consultation — no obligation, just a friendly chat about your goals.
+          </p>
+          <Link
+            to="/bookings?category=Consultations"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-background text-foreground font-body text-sm tracking-widest uppercase hover:bg-background/90 transition-colors">
             
-            <h2 className="font-display text-4xl md:text-5xl mb-4">Ready to Start Your Journey?</h2>
-            <p className="font-body text-muted-foreground mb-8 max-w-lg mx-auto">
-              Book a free, no-obligation consultation with Bianca. We'll create a personalised treatment plan tailored to your goals.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/bookings?category=Consultations"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
-                
-                Book Free Consultation <ArrowRight size={14} />
-              </Link>
-              <a
-                href="https://wa.me/447795008114"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 border border-border font-body text-sm tracking-widest uppercase hover:border-gold transition-colors">
-                
-                Message Us on WhatsApp
-              </a>
-            </div>
-            <p className="font-body text-xs text-muted-foreground mt-6">
-              25 Saint John Street, Manchester M3 4DT - Tue, Thu-Sat
-            </p>
-          </motion.div>
+            Book Free Consultation <ArrowRight size={14} />
+          </Link>
+          <p className="font-body text-xs text-background/40 mt-6">25 Saint John Street, Manchester M3 4DT</p>
         </div>
       </section>
-    </Layout>);
-
+    </Layout>
+  );
 };
 
 export default Index;

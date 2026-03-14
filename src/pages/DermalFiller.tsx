@@ -3,11 +3,9 @@ import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import ModelCTA from "@/components/ModelCTA";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery2 from "@/assets/gallery-2.jpg";
-import gallery4 from "@/assets/gallery-4.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
   { name: "Lip Filler", desc: "Natural-looking volume and shape enhancement.", from: "£80" },
@@ -33,9 +31,9 @@ const DermalFiller = () => {
     "Dermal Filler Manchester City Centre | Hive Clinic",
     "Expert dermal filler treatments from £80 at Hive Clinic, Manchester City Centre. Lip, cheek, jawline and facial balancing by a qualified prescriber. Book today."
   );
-  const heroImg = useSiteImage("dermalfiller_hero", gallery4);
-  const secondaryImg = useSiteImage("dermalfiller_secondary", gallery1);
-  const testimonialImg = useSiteImage("dermalfiller_testimonial", gallery2);
+  const heroImg = useSiteImage("dermalfiller_hero", STOCK.dermalfiller_hero);
+  const secondaryImg = useSiteImage("dermalfiller_secondary", STOCK.dermalfiller_secondary);
+  const testimonialImg = useSiteImage("dermalfiller_testimonial", STOCK.dermalfiller_testimonial);
 
   return (
   <Layout>

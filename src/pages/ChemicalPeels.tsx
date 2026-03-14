@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery4 from "@/assets/gallery-4.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
   { name: "Level 1 Chemical Peel - Face", desc: "For hormonal breakouts, scarring, and rough texture. Includes antibacterial cleanse and clarifying mask.", price: "£85" },
@@ -29,8 +28,8 @@ const ChemicalPeels = () => {
     "Chemical Peels Manchester City Centre | Hive Clinic",
     "Professional chemical peels from £85 at Hive Clinic, Manchester City Centre. Treat acne, scarring, pigmentation and uneven texture. Book a consultation."
   );
-  const heroImg = useSiteImage("chemicalpeels_hero", gallery4);
-  const secondaryImg = useSiteImage("chemicalpeels_secondary", gallery5);
+  const heroImg = useSiteImage("chemicalpeels_hero", STOCK.chemicalpeels_hero);
+  const secondaryImg = useSiteImage("chemicalpeels_secondary", STOCK.chemicalpeels_secondary);
 
   return (
   <Layout>

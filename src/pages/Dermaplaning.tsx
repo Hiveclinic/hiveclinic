@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "What is dermaplaning?", a: "Dermaplaning is a gentle exfoliation treatment that uses a sterile surgical blade to remove dead skin cells and vellus hair (peach fuzz) from the face, leaving skin instantly smoother and brighter." },
@@ -20,8 +19,8 @@ const Dermaplaning = () => {
     "Dermaplaning Manchester City Centre | Hive Clinic",
     "Dermaplaning skin polish from £75 at Hive Clinic, Manchester City Centre. Instant smoothness and glow with zero downtime. Book your appointment."
   );
-  const heroImg = useSiteImage("dermaplaning_hero", gallery3);
-  const secondaryImg = useSiteImage("dermaplaning_secondary", gallery1);
+  const heroImg = useSiteImage("dermaplaning_hero", STOCK.dermaplaning_hero);
+  const secondaryImg = useSiteImage("dermaplaning_secondary", STOCK.dermaplaning_secondary);
 
   return (
     <Layout>

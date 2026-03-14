@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery5 from "@/assets/gallery-5.jpg";
-import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
   { name: "Face Texture Repair", desc: "Microneedling combined with a chemical peel to treat scars, enlarged pores, and uneven texture.", price: "£130" },
@@ -25,8 +24,8 @@ const Microneedling = () => {
     "Microneedling Manchester City Centre | Hive Clinic",
     "Advanced microneedling with chemical peel from £130 at Hive Clinic, Manchester City Centre. Repair scars, texture, pores and stretch marks. Book now."
   );
-  const heroImg = useSiteImage("microneedling_hero", gallery5);
-  const secondaryImg = useSiteImage("microneedling_secondary", gallery3);
+  const heroImg = useSiteImage("microneedling_hero", STOCK.microneedling_hero);
+  const secondaryImg = useSiteImage("microneedling_secondary", STOCK.microneedling_secondary);
 
   return (
   <Layout>

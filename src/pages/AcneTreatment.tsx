@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, Award, Clock, CheckCircle, Star } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "What treatments help with acne?", a: "We offer chemical peels, HydraFacial, microneedling and LED light therapy — all proven to target active acne, reduce breakouts and improve skin texture over time." },
@@ -27,8 +26,8 @@ const AcneTreatment = () => {
     "Acne Treatment Manchester City Centre | Hive Clinic",
     "Effective acne treatments in Manchester City Centre including chemical peels, HydraFacial, microneedling and LED therapy. Clear skin starts with a free consultation at Hive Clinic."
   );
-  const heroImg = useSiteImage("acnetreatment_hero", gallery3);
-  const secondaryImg = useSiteImage("acnetreatment_secondary", gallery1);
+  const heroImg = useSiteImage("acnetreatment_hero", STOCK.acnetreatment_hero);
+  const secondaryImg = useSiteImage("acnetreatment_secondary", STOCK.acnetreatment_secondary);
 
   return (
     <Layout>

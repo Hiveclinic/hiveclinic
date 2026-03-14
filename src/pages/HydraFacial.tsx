@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery3 from "@/assets/gallery-3.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
   { name: "Glass Skin Boost", desc: "Deep cleansing and intense hydration for a luminous, glass-like finish.", price: "£140" },
@@ -26,8 +25,8 @@ const HydraFacial = () => {
     "Hydrafacial Manchester City Centre | Hive Clinic",
     "Deep cleansing Hydrafacial treatments from £120 at Hive Clinic, Manchester City Centre. Achieve glass-like radiant skin with zero downtime. Book today."
   );
-  const heroImg = useSiteImage("hydrafacial_hero", gallery3);
-  const secondaryImg = useSiteImage("hydrafacial_secondary", gallery5);
+  const heroImg = useSiteImage("hydrafacial_hero", STOCK.hydrafacial_hero);
+  const secondaryImg = useSiteImage("hydrafacial_secondary", STOCK.hydrafacial_secondary);
 
   return (
   <Layout>

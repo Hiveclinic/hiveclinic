@@ -1,80 +1,133 @@
 
 
-# Plan: Add Appropriate Stock Images Across the Website
+# Phase 3: Admin Enhancements, Multi-Treatment Booking, and Fixes
 
-## Overview
-Currently, all 60+ image slots across the website reuse the same 6 generic gallery photos as fallbacks. This plan replaces those with high-quality, relevant Unsplash stock images that match each treatment/page context.
+## 1. Fix 404 on Admin Login (Published Site)
 
-## Approach
-Replace the fallback URLs in each page component's `useSiteImage` calls and in the `IMAGE_SLOTS` config with curated Unsplash stock image URLs. Unsplash provides free, high-quality images accessible via direct URLs (e.g., `https://images.unsplash.com/photo-XXXXX?w=800&q=80`).
+The route `/hive-admin-login` exists in the code and works in preview. The 404 on the published site (`hiveclinicuk.com//hive-admin-login`) is caused by the double slash `//` in the URL. This is a hosting/domain redirect issue -- the custom domain is likely appending a trailing slash to the base URL before the path.
 
-## Image Assignments
+**Fix:** The app needs to be re-published so the latest routes are deployed. No code change needed -- the route is correctly defined at line 82 of `App.tsx`. The double slash in the URL you shared is the problem -- use `hiveclinicuk.com/hive-admin-login` (single slash).
 
-| Page / Slot | Image Theme |
-|---|---|
-| **Homepage hero** | Luxury aesthetic clinic interior / beauty treatment |
-| **Homepage gallery (6)** | Mix of: glowing skin close-up, lip treatment, facial treatment, skincare products, clinic interior, woman with clear skin |
-| **About (2)** | Professional female practitioner portrait, clinic workspace |
-| **Lip Fillers (3)** | Close-up lips/face, lip treatment scene, happy client |
-| **Dermal Filler (3)** | Facial contouring, injection close-up, elegant woman |
-| **Anti-Wrinkle (3)** | Mature skin care, forehead treatment, natural beauty |
-| **Skin Boosters (2)** | Dewy/glowing skin, serum application |
-| **HydraFacial (2)** | Facial machine treatment, radiant skin |
-| **Chemical Peels (2)** | Skin texture, peel application |
-| **Microneedling (2)** | Derma pen device, smooth skin |
-| **Mesotherapy (2)** | Injection treatment, skin rejuvenation |
-| **PRP (2)** | Blood/plasma vial, facial treatment |
-| **LED Therapy (2)** | LED mask/panel, glowing skin |
-| **Dermaplaning (2)** | Blade treatment, smooth complexion |
-| **Facial Balancing (2)** | Symmetrical face, profile beauty |
-| **Fat Dissolve (2)** | Body contouring, jawline |
-| **Acne Treatment (2)** | Clear skin transformation, skincare routine |
-| **Hyperpigmentation (2)** | Even skin tone, dark spot treatment |
-| **Consultations (1)** | Consultation/discussion scene |
-| **Intimate Peels (1)** | Abstract beauty/wellness |
-| **Micro Sclerotherapy (2)** | Leg treatment, smooth legs |
-| **Muse Landing (1)** | Content creator/model aesthetic |
-| **Results (6)** | Before/after style treatment results |
-| **Blog (6)** | Skincare editorial, beauty tips, clinic life |
+---
 
-## Technical Changes
+## 2. Website Image Management via Admin
 
-1. **Each treatment page file** (20+ files): Update the fallback parameter in `useSiteImage()` calls from local gallery imports to Unsplash URLs. Remove unused gallery imports.
+Currently there's no way to update hero images, gallery images, or page images from the admin dashboard. These are hardcoded in component files.
 
-2. **`AdminSiteTab.tsx`**: Update the `fallback` property in every `IMAGE_SLOTS` entry to use the matching Unsplash URL.
+**Changes:**
+- Add a new "Images" section to `AdminSiteTab.tsx` that stores editable image URLs in the `site_settings` table (or a new `site_images` table)
+- Create a `site_images` table with fields: `key` (text, e.g. "hero_home", "gallery_1"), `image_url` (text), `alt_text` (text), `updated_at`
+- Admin can upload images to the `client-images` bucket (or a new public `site-images` bucket) and the URL is saved
+- Frontend pages read from this table and fall back to the hardcoded defaults if no override exists
+- Create a public storage bucket `site-images` for website content images
 
-3. **`Index.tsx`**: Update gallery fallbacks to relevant Unsplash URLs.
+---
 
-4. **`Results.tsx`**: Update result image fallbacks.
+## 3. Treatment Menu Reordering
 
-5. **`Blog.tsx`**: Update blog thumbnail fallbacks.
+Drag-and-drop reordering already exists in `AdminTreatmentsTab.tsx` (lines 144-155). The `sort_order` is saved on drag end. This already works. If it feels unresponsive, I will add visual feedback (highlight, ghost element).
 
-The local `gallery-*.jpg` assets remain in the repo as a safety net but will no longer be the default display. Admins can still override any image via the dashboard.
+**Enhancement:** Add category-level reordering so you can control the order categories appear on the booking page (not just treatments within a category).
 
-## Files Modified
-- `src/components/admin/AdminSiteTab.tsx`
-- `src/pages/Index.tsx`
-- `src/pages/About.tsx`
-- `src/pages/LipFillers.tsx`
-- `src/pages/LipFillerLanding.tsx`
-- `src/pages/DermalFiller.tsx`
-- `src/pages/AntiWrinkle.tsx`
-- `src/pages/SkinBoosters.tsx`
-- `src/pages/HydraFacial.tsx`
-- `src/pages/ChemicalPeels.tsx`
-- `src/pages/Microneedling.tsx`
-- `src/pages/Mesotherapy.tsx`
-- `src/pages/PRP.tsx`
-- `src/pages/LEDTherapy.tsx`
-- `src/pages/Dermaplaning.tsx`
-- `src/pages/FacialBalancing.tsx`
-- `src/pages/FatDissolve.tsx`
-- `src/pages/AcneTreatment.tsx`
-- `src/pages/HyperpigmentationTreatment.tsx`
-- `src/pages/Consultations.tsx`
-- `src/pages/IntimatePeels.tsx`
-- `src/pages/MicroSclerotherapy.tsx`
-- `src/pages/MuseLanding.tsx`
-- `src/pages/Results.tsx`
-- `src/pages/Blog.tsx`
+---
+
+## 4. Take Payment from Calendar (Admin)
+
+Add a "Take Payment" button in the calendar edit modal that creates a Stripe Payment Link for the outstanding balance and copies it to clipboard (so admin can send it to the client).
+
+**Changes to `AdminCalendarView.tsx`:**
+- Add a "Send Payment Link" button in the edit modal for bookings with `payment_status` of "pending" or "deposit_paid"
+- This calls an edge function that creates a Stripe Payment Link for the remaining balance
+- Link is copied to clipboard so admin can share via WhatsApp/SMS
+- Add a "Mark as Paid" button for in-person/cash payments that updates `payment_status` to "fully_paid"
+
+**New edge function:** `create-payment-link` -- creates a Stripe Payment Link for a given amount and booking reference.
+
+---
+
+## 5. Payment Plan Customisation
+
+Currently `AdminPaymentPlansTab.tsx` allows creating plans and recording payments, but you cannot edit the instalment amount after creation.
+
+**Changes:**
+- Add an "Edit" button on each active plan
+- Allow editing: `instalment_amount`, `total_instalments`, `total_amount`, `next_payment_date`
+- Add a "Record Custom Amount" option when recording a payment (instead of always recording the fixed instalment amount)
+- Show remaining balance clearly
+
+---
+
+## 6. Cancellation Sync Between Admin and Client
+
+Currently:
+- Admin cancels via calendar -> updates DB status to "cancelled" and sends cancellation email to client. Client sees it in their portal (already works via DB read).
+- Client cancels via portal -> updates DB status to "cancelled". Admin sees it in bookings/calendar (already works via DB read).
+
+**Missing:** When a client cancels, the admin doesn't get notified.
+
+**Fix:** In `CustomerPortal.tsx` `cancelBooking` function, after updating the booking status, trigger `send-booking-email` with a new `emailType: "client_cancelled"` that sends a notification to the admin email.
+
+---
+
+## 7. Mailchimp Email Automations
+
+The `mailchimp-subscribe` edge function already exists and works. It's already wired into the booking checkout flow. To set up automations:
+
+**What I will do:**
+- Update `mailchimp-subscribe` to accept and pass `firstName`, `lastName`, and `tags` (e.g. "Booked Client", treatment category)
+- Add tags based on treatment category so you can create targeted automations in Mailchimp
+- Ensure the VIP popup signup also triggers the function (it already does via `email_subscribers` table insert, but needs to call the edge function too)
+
+**What you need to do in Mailchimp:**
+- Log into your Mailchimp account
+- Go to Automations and create journeys based on tags (e.g. "Welcome" email for new subscribers, "Post-Treatment" for booked clients)
+- The integration will automatically tag contacts when they book
+
+---
+
+## 8. Multiple Treatment Selection + Course Suggestions
+
+This is the biggest feature. Currently only one treatment can be selected per booking.
+
+**Changes to `BookingSystem.tsx`:**
+- Allow selecting multiple treatments (change `selectedTreatment` from single to array `selectedTreatments`)
+- Show a running total of all selected treatments
+- After selection, check if any selected treatment has packages in `treatment_packages` and show a "Save with a Course" prompt
+- Display savings: "Book 3 sessions of Level 1 Face Peel and save £25 (£230 vs £255)"
+- Duration and time slot calculation accounts for combined treatment time
+- Checkout sends all treatment IDs
+
+**Changes to `create-booking-checkout`:**
+- Accept an array of treatment IDs
+- Create line items for each treatment in the Stripe checkout session
+- Store multiple treatment references in the booking (use the existing `addon_ids` pattern or add a `treatment_ids` array column)
+
+**Database change:**
+- Add `treatment_ids` (uuid array) column to `bookings` table to support multi-treatment bookings
+- Keep `treatment_id` for backwards compatibility (primary treatment)
+
+---
+
+## Technical Summary
+
+### Database Changes:
+- New table: `site_images` (key, image_url, alt_text, updated_at) with RLS for admin write, public read
+- New storage bucket: `site-images` (public)
+- Add column `treatment_ids` (uuid[]) to `bookings` table
+
+### Edge Functions:
+- New: `create-payment-link` -- generates Stripe Payment Link
+- Update: `mailchimp-subscribe` -- accept firstName, lastName, tags
+- Update: `send-booking-email` -- add "client_cancelled" email type for admin notification
+
+### Frontend Files to Edit:
+- `AdminCalendarView.tsx` -- add payment link + mark as paid buttons
+- `AdminPaymentPlansTab.tsx` -- add edit and custom payment recording
+- `AdminSiteTab.tsx` -- add image management section
+- `BookingSystem.tsx` -- multi-treatment selection + course suggestions
+- `CustomerPortal.tsx` -- trigger admin notification on client cancellation
+- `create-booking-checkout` -- support multiple treatments
+
+### Frontend Files to Create:
+- None (all changes are to existing files)
 

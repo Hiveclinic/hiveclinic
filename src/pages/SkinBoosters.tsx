@@ -3,10 +3,9 @@ import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import ModelCTA from "@/components/ModelCTA";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery2 from "@/assets/gallery-2.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
   { name: "Lumi Eyes", desc: "Brighten and rejuvenate the under-eye area with this specialist polynucleotide treatment.", price: "£140" },
@@ -28,8 +27,8 @@ const SkinBoosters = () => {
     "Skin Boosters Manchester City Centre | Hive Clinic",
     "Advanced skin boosters and injectable remodelling from £140 at Hive Clinic, Manchester City Centre. Deep hydration and collagen stimulation. Book today."
   );
-  const heroImg = useSiteImage("skinboosters_hero", gallery1);
-  const secondaryImg = useSiteImage("skinboosters_secondary", gallery2);
+  const heroImg = useSiteImage("skinboosters_hero", STOCK.skinboosters_hero);
+  const secondaryImg = useSiteImage("skinboosters_secondary", STOCK.skinboosters_secondary);
 
   return (
   <Layout>

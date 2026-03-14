@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "What areas can be treated?", a: "Bikini line, inner thighs, and underarms. We also treat other body areas on consultation." },
@@ -18,7 +18,7 @@ const IntimatePeels = () => {
     "Intimate & Body Peels Manchester City Centre | Hive Clinic",
     "Intimate and body brightening peels at Hive Clinic, Manchester City Centre. Gentle professional peels for bikini line, underarms and body areas. Book your appointment."
   );
-  const heroImg = useSiteImage("intimatepeels_hero", gallery3);
+  const heroImg = useSiteImage("intimatepeels_hero", STOCK.intimatepeels_hero);
 
   return (
     <Layout>

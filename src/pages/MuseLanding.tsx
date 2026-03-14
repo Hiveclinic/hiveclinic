@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, MapPin, Camera, Check } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery4 from "@/assets/gallery-4.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const pricingData = [
   {
@@ -71,7 +71,7 @@ const MuseLanding = () => {
     "Become a Hive Clinic Model | Content Sessions Manchester",
     "Exclusive content pricing on aesthetic treatments at Hive Clinic, Deansgate Manchester. Book your model session for reduced rates on lip filler, dermal filler, anti-wrinkle and more."
   );
-  const heroImg = useSiteImage("muselanding_hero", gallery4);
+  const heroImg = useSiteImage("muselanding_hero", STOCK.muselanding_hero);
 
   return (
     <Layout>

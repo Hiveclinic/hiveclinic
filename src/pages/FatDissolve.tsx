@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery6 from "@/assets/gallery-6.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
   { name: "Small Area", desc: "Chin, bra fat, jawline, upper arms, or lower abdomen.", price: "£120" },
@@ -26,8 +25,8 @@ const FatDissolve = () => {
     "Fat Dissolving Manchester City Centre | Hive Clinic",
     "Non-surgical fat dissolving injections from £120 at Hive Clinic, Manchester City Centre. Target stubborn fat on chin, abdomen, flanks and more. Book today."
   );
-  const heroImg = useSiteImage("fatdissolve_hero", gallery6);
-  const secondaryImg = useSiteImage("fatdissolve_secondary", gallery5);
+  const heroImg = useSiteImage("fatdissolve_hero", STOCK.fatdissolve_hero);
+  const secondaryImg = useSiteImage("fatdissolve_secondary", STOCK.fatdissolve_secondary);
 
   return (
   <Layout>

@@ -1,13 +1,8 @@
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery2 from "@/assets/gallery-2.jpg";
-import gallery3 from "@/assets/gallery-3.jpg";
-import gallery4 from "@/assets/gallery-4.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const resultLabels = [
   "Skin Glow Treatment",
@@ -21,12 +16,12 @@ const resultLabels = [
 const Results = () => {
   usePageMeta("Results Gallery | Hive Clinic Manchester City Centre", "See real treatment results from Hive Clinic, Manchester City Centre. Before and after photos from lip fillers, skin treatments and more.");
 
-  const r1 = useSiteImage("results_1", gallery1);
-  const r2 = useSiteImage("results_2", gallery3);
-  const r3 = useSiteImage("results_3", gallery4);
-  const r4 = useSiteImage("results_4", gallery5);
-  const r5 = useSiteImage("results_5", gallery2);
-  const r6 = useSiteImage("results_6", gallery6);
+  const r1 = useSiteImage("results_1", STOCK.results_1);
+  const r2 = useSiteImage("results_2", STOCK.results_2);
+  const r3 = useSiteImage("results_3", STOCK.results_3);
+  const r4 = useSiteImage("results_4", STOCK.results_4);
+  const r5 = useSiteImage("results_5", STOCK.results_5);
+  const r6 = useSiteImage("results_6", STOCK.results_6);
   const results = [
     { img: r1, label: resultLabels[0] },
     { img: r2, label: resultLabels[1] },

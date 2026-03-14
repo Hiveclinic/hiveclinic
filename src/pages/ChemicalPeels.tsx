@@ -36,7 +36,7 @@ const ChemicalPeels = () => {
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
-        <img src={gallery4} alt="Chemical peel treatment Manchester - Hive Clinic Deansgate" className="w-full h-full object-cover" />
+        <img src={heroImg} alt="Chemical peel treatment Manchester - Hive Clinic Deansgate" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">

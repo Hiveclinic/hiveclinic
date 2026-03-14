@@ -77,7 +77,7 @@ const AdminDiscountCodesTab = () => {
       excluded_treatments: mode === "exclude" ? selectedTreatmentIds : [],
     };
 
-    const { error } = await supabase.from("discount_codes").insert(insertData);
+    const { error } = await supabase.from("discount_codes").insert(insertData as any);
     if (error) { toast.error("Failed to create discount code"); return; }
     toast.success("Discount code created");
     setShowForm(false);

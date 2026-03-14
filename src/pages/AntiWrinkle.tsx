@@ -95,7 +95,7 @@ const AntiWrinkle = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="aspect-[4/5] overflow-hidden">
-              <img src={gallery3} alt="Wrinkle relaxing treatment results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
+              <img src={secondaryImg} alt="Wrinkle relaxing treatment results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div>
               <h2 className="font-display text-4xl md:text-5xl mb-6">Why Clients Choose Hive</h2>

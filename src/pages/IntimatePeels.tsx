@@ -18,6 +18,7 @@ const IntimatePeels = () => {
     "Intimate & Body Peels Manchester City Centre | Hive Clinic",
     "Intimate and body brightening peels at Hive Clinic, Manchester City Centre. Gentle professional peels for bikini line, underarms and body areas. Book your appointment."
   );
+  const heroImg = useSiteImage("intimatepeels_hero", gallery3);
 
   return (
     <Layout>

@@ -8,54 +8,27 @@ import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
-
-const posts = [
-  {
-    slug: "what-to-expect-first-filler",
-    title: "What to Expect at Your First Filler Appointment",
-    excerpt: "Nervous about your first injectable treatment? Here's everything you need to know before, during, and after.",
-    date: "February 2026",
-    img: gallery1,
-  },
-  {
-    slug: "lip-filler-aftercare-guide",
-    title: "Lip Filler Aftercare: Your Complete Guide",
-    excerpt: "Everything you need to know about caring for your lips after filler treatment for the best possible results.",
-    date: "January 2026",
-    img: gallery4,
-  },
-  {
-    slug: "hydrafacial-benefits-skin",
-    title: "5 Benefits of HydraFacial for Every Skin Type",
-    excerpt: "Discover why HydraFacial has become the most popular facial treatment in Manchester and what it can do for your skin.",
-    date: "January 2026",
-    img: gallery3,
-  },
-  {
-    slug: "skincare-routine-glow",
-    title: "The Ultimate Skincare Routine for Glass Skin",
-    excerpt: "Our top tips for building a routine that complements your in-clinic treatments for maximum glow.",
-    date: "December 2025",
-    img: gallery2,
-  },
-  {
-    slug: "skin-boosters-vs-fillers",
-    title: "Skin Boosters vs Fillers: What's the Difference?",
-    excerpt: "Two of the most popular injectable treatments - but they do very different things. Let us explain.",
-    date: "November 2025",
-    img: gallery6,
-  },
-  {
-    slug: "chemical-peel-guide-manchester",
-    title: "Chemical Peels: Everything You Need to Know",
-    excerpt: "From mild brightening peels to intensive treatments - a complete guide to chemical peels and what to expect.",
-    date: "November 2025",
-    img: gallery5,
-  },
-];
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const Blog = () => {
   usePageMeta("Blog | Hive Clinic Manchester City Centre", "Skincare tips, treatment guides and clinic news from Hive Clinic, Manchester City Centre.");
+
+  const b1 = useSiteImage("blog_1", gallery1);
+  const b2 = useSiteImage("blog_2", gallery4);
+  const b3 = useSiteImage("blog_3", gallery3);
+  const b4 = useSiteImage("blog_4", gallery2);
+  const b5 = useSiteImage("blog_5", gallery6);
+  const b6 = useSiteImage("blog_6", gallery5);
+
+  const posts = [
+    { slug: "what-to-expect-first-filler", title: "What to Expect at Your First Filler Appointment", excerpt: "Nervous about your first injectable treatment? Here's everything you need to know before, during, and after.", date: "February 2026", img: b1 },
+    { slug: "lip-filler-aftercare-guide", title: "Lip Filler Aftercare: Your Complete Guide", excerpt: "Everything you need to know about caring for your lips after filler treatment for the best possible results.", date: "January 2026", img: b2 },
+    { slug: "hydrafacial-benefits-skin", title: "5 Benefits of HydraFacial for Every Skin Type", excerpt: "Discover why HydraFacial has become the most popular facial treatment in Manchester and what it can do for your skin.", date: "January 2026", img: b3 },
+    { slug: "skincare-routine-glow", title: "The Ultimate Skincare Routine for Glass Skin", excerpt: "Our top tips for building a routine that complements your in-clinic treatments for maximum glow.", date: "December 2025", img: b4 },
+    { slug: "skin-boosters-vs-fillers", title: "Skin Boosters vs Fillers: What's the Difference?", excerpt: "Two of the most popular injectable treatments - but they do very different things. Let us explain.", date: "November 2025", img: b5 },
+    { slug: "chemical-peel-guide-manchester", title: "Chemical Peels: Everything You Need to Know", excerpt: "From mild brightening peels to intensive treatments - a complete guide to chemical peels and what to expect.", date: "November 2025", img: b6 },
+  ];
+
   return (
   <Layout>
     <section className="py-24">

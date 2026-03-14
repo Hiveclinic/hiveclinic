@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What is mesotherapy?", a: "Mesotherapy involves micro-injections of vitamins, hyaluronic acid, and peptides directly into the skin to nourish, hydrate, and rejuvenate from within." },

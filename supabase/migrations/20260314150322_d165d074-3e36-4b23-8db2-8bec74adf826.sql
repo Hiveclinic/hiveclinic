@@ -1,0 +1,1 @@
+ALTER TABLE public.discount_codes ADD COLUMN excluded_treatments uuid[] DEFAULT '{}'::uuid[];

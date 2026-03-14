@@ -461,6 +461,7 @@ export type Database = {
           created_at: string
           discount_type: string
           discount_value: number
+          excluded_treatments: string[] | null
           id: string
           max_uses: number | null
           min_spend: number | null
@@ -475,6 +476,7 @@ export type Database = {
           created_at?: string
           discount_type: string
           discount_value: number
+          excluded_treatments?: string[] | null
           id?: string
           max_uses?: number | null
           min_spend?: number | null
@@ -489,6 +491,7 @@ export type Database = {
           created_at?: string
           discount_type?: string
           discount_value?: number
+          excluded_treatments?: string[] | null
           id?: string
           max_uses?: number | null
           min_spend?: number | null

@@ -26,8 +26,8 @@ const LipFillerLanding = () => {
     "Lip Filler Manchester | From £80 | Hive Clinic",
     "Natural-looking lip filler from £80 in Manchester City Centre. Expert lip enhancement by a qualified prescriber at Hive Clinic, Deansgate. Book your free consultation today."
   );
-  const heroImg = useSiteImage("lipfillerlanding_hero", gallery4);
-  const secondaryImg = useSiteImage("lipfillerlanding_secondary", gallery1);
+  const heroImg = useSiteImage("lipfillerlanding_hero", STOCK.lipfillerlanding_hero);
+  const secondaryImg = useSiteImage("lipfillerlanding_secondary", STOCK.lipfillerlanding_secondary);
 
   return (
     <Layout>

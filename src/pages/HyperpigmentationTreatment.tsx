@@ -26,8 +26,8 @@ const HyperpigmentationTreatment = () => {
     "Hyperpigmentation Treatment Manchester | Hive Clinic",
     "Advanced hyperpigmentation treatments in Manchester City Centre. Chemical peels, microneedling and skin brightening at Hive Clinic. Book a free skin consultation today."
   );
-  const heroImg = useSiteImage("hyperpigmentation_hero", gallery5);
-  const secondaryImg = useSiteImage("hyperpigmentation_secondary", gallery2);
+  const heroImg = useSiteImage("hyperpigmentation_hero", STOCK.hyperpigmentation_hero);
+  const secondaryImg = useSiteImage("hyperpigmentation_secondary", STOCK.hyperpigmentation_secondary);
 
   return (
     <Layout>

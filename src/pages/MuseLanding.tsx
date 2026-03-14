@@ -71,7 +71,7 @@ const MuseLanding = () => {
     "Become a Hive Clinic Model | Content Sessions Manchester",
     "Exclusive content pricing on aesthetic treatments at Hive Clinic, Deansgate Manchester. Book your model session for reduced rates on lip filler, dermal filler, anti-wrinkle and more."
   );
-  const heroImg = useSiteImage("muselanding_hero", gallery4);
+  const heroImg = useSiteImage("muselanding_hero", STOCK.muselanding_hero);
 
   return (
     <Layout>

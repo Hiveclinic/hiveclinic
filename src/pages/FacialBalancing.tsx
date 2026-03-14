@@ -18,8 +18,8 @@ const FacialBalancing = () => {
     "Facial Balancing Manchester City Centre | Hive Clinic",
     "Facial balancing packages from £380 at Hive Clinic, Manchester City Centre. Multi-area dermal filler for complete facial harmony. Book your consultation."
   );
-  const heroImg = useSiteImage("facialbalancing_hero", gallery4);
-  const secondaryImg = useSiteImage("facialbalancing_secondary", gallery1);
+  const heroImg = useSiteImage("facialbalancing_hero", STOCK.facialbalancing_hero);
+  const secondaryImg = useSiteImage("facialbalancing_secondary", STOCK.facialbalancing_secondary);
 
   return (
     <Layout>

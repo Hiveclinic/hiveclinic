@@ -26,8 +26,8 @@ const AcneTreatment = () => {
     "Acne Treatment Manchester City Centre | Hive Clinic",
     "Effective acne treatments in Manchester City Centre including chemical peels, HydraFacial, microneedling and LED therapy. Clear skin starts with a free consultation at Hive Clinic."
   );
-  const heroImg = useSiteImage("acnetreatment_hero", gallery3);
-  const secondaryImg = useSiteImage("acnetreatment_secondary", gallery1);
+  const heroImg = useSiteImage("acnetreatment_hero", STOCK.acnetreatment_hero);
+  const secondaryImg = useSiteImage("acnetreatment_secondary", STOCK.acnetreatment_secondary);
 
   return (
     <Layout>

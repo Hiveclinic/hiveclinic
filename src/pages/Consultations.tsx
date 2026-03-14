@@ -8,7 +8,7 @@ import { STOCK } from "@/lib/stock-images";
 
 const Consultations = () => {
   usePageMeta("Free Consultation Manchester City Centre | Hive Clinic", "Book a free consultation at Hive Clinic, Manchester City Centre. Online or in-person consultations available for all treatments.");
-  const heroImg = useSiteImage("consultations_hero", gallery3);
+  const heroImg = useSiteImage("consultations_hero", STOCK.consultations_hero);
   return (
   <Layout>
     <section className="py-24">

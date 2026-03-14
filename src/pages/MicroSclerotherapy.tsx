@@ -19,8 +19,8 @@ const MicroSclerotherapy = () => {
     "Micro Sclerotherapy Manchester City Centre | Hive Clinic",
     "Micro sclerotherapy for thread vein removal at Hive Clinic, Manchester City Centre. Effective treatment for spider veins on legs. Book your consultation."
   );
-  const heroImg = useSiteImage("microsclerotherapy_hero", gallery5);
-  const secondaryImg = useSiteImage("microsclerotherapy_secondary", gallery6);
+  const heroImg = useSiteImage("microsclerotherapy_hero", STOCK.microsclerotherapy_hero);
+  const secondaryImg = useSiteImage("microsclerotherapy_secondary", STOCK.microsclerotherapy_secondary);
 
   return (
     <Layout>

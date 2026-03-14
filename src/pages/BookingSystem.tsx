@@ -277,7 +277,7 @@ const BookingSystem = () => {
     setDiscountError("");
     setDiscountResult(null);
     const { data, error } = await supabase.functions.invoke("validate-discount", {
-      body: { code: discountCode.trim(), treatmentId: primaryTreatment!.id, treatmentPrice: treatmentsTotal + addonsTotal },
+      body: { code: discountCode.trim(), treatmentId: primaryTreatment!.id, treatmentIds: selectedTreatments.map(t => t.id), treatmentPrice: treatmentsTotal + addonsTotal },
     });
     if (error) { setDiscountError("Failed to validate code"); return; }
     if (data.valid) { setDiscountResult(data); } else { setDiscountError(data.error || "Invalid code"); }

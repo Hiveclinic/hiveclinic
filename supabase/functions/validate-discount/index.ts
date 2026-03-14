@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
@@ -18,7 +18,7 @@ serve(async (req) => {
   );
 
   try {
-    const { code, treatmentId, treatmentPrice } = await req.json();
+    const { code, treatmentId, treatmentIds, treatmentPrice } = await req.json();
     if (!code) throw new Error("Discount code required");
 
     const { data: discount, error } = await supabaseClient
@@ -56,9 +56,23 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200,
       });
     }
-    if (discount.applicable_treatments?.length > 0 && treatmentId) {
-      if (!discount.applicable_treatments.includes(treatmentId)) {
-        return new Response(JSON.stringify({ valid: false, error: "Code not valid for this treatment" }), {
+
+    // Check applicable_treatments (whitelist) — if set, treatment must be in the list
+    const allTreatmentIds = treatmentIds?.length ? treatmentIds : (treatmentId ? [treatmentId] : []);
+    if (discount.applicable_treatments?.length > 0 && allTreatmentIds.length > 0) {
+      const allAllowed = allTreatmentIds.every((id: string) => discount.applicable_treatments.includes(id));
+      if (!allAllowed) {
+        return new Response(JSON.stringify({ valid: false, error: "Code not valid for one or more selected treatments" }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200,
+        });
+      }
+    }
+
+    // Check excluded_treatments (blacklist) — if any selected treatment is excluded, reject
+    if (discount.excluded_treatments?.length > 0 && allTreatmentIds.length > 0) {
+      const hasExcluded = allTreatmentIds.some((id: string) => discount.excluded_treatments.includes(id));
+      if (hasExcluded) {
+        return new Response(JSON.stringify({ valid: false, error: "Code not valid for one or more selected treatments" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200,
         });
       }

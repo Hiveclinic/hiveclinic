@@ -1,133 +1,105 @@
 
 
-# Phase 3: Admin Enhancements, Multi-Treatment Booking, and Fixes
+## Plan: Launch Preparation — Reset Data, Update Prices, Booking Fee, Consent Form
 
-## 1. Fix 404 on Admin Login (Published Site)
-
-The route `/hive-admin-login` exists in the code and works in preview. The 404 on the published site (`hiveclinicuk.com//hive-admin-login`) is caused by the double slash `//` in the URL. This is a hosting/domain redirect issue -- the custom domain is likely appending a trailing slash to the base URL before the path.
-
-**Fix:** The app needs to be re-published so the latest routes are deployed. No code change needed -- the route is correctly defined at line 82 of `App.tsx`. The double slash in the URL you shared is the problem -- use `hiveclinicuk.com/hive-admin-login` (single slash).
+This is a large multi-part task to prepare the site for public launch.
 
 ---
 
-## 2. Website Image Management via Admin
+### 1. Clear Test Data from Database
 
-Currently there's no way to update hero images, gallery images, or page images from the admin dashboard. These are hardcoded in component files.
+Run SQL migrations to delete all test data:
+- Delete all rows from `reviews` (5 test reviews)
+- Delete all rows from `bookings` (13 test bookings)
+- Delete all rows from `payments` (associated test payments)
+- Delete all rows from `consent_submissions` 
+- Delete all rows from `admin_client_notes`
+- Delete all rows from `client_packages`
+- Delete all rows from `contact_submissions`
+- Delete all rows from `consent_form_templates` (remove the test "m,m" template)
 
-**Changes:**
-- Add a new "Images" section to `AdminSiteTab.tsx` that stores editable image URLs in the `site_settings` table (or a new `site_images` table)
-- Create a `site_images` table with fields: `key` (text, e.g. "hero_home", "gallery_1"), `image_url` (text), `alt_text` (text), `updated_at`
-- Admin can upload images to the `client-images` bucket (or a new public `site-images` bucket) and the URL is saved
-- Frontend pages read from this table and fall back to the hardcoded defaults if no override exists
-- Create a public storage bucket `site-images` for website content images
-
----
-
-## 3. Treatment Menu Reordering
-
-Drag-and-drop reordering already exists in `AdminTreatmentsTab.tsx` (lines 144-155). The `sort_order` is saved on drag end. This already works. If it feels unresponsive, I will add visual feedback (highlight, ghost element).
-
-**Enhancement:** Add category-level reordering so you can control the order categories appear on the booking page (not just treatments within a category).
+Customer profiles table is already empty. Email subscribers will be preserved (those are real signups).
 
 ---
 
-## 4. Take Payment from Calendar (Admin)
+### 2. Update All Treatment Prices to Match Price Lists
 
-Add a "Take Payment" button in the calendar edit modal that creates a Stripe Payment Link for the outstanding balance and copies it to clipboard (so admin can send it to the client).
+Based on the uploaded images, update prices in the `treatments` table via SQL migration. Key changes:
 
-**Changes to `AdminCalendarView.tsx`:**
-- Add a "Send Payment Link" button in the edit modal for bookings with `payment_status` of "pending" or "deposit_paid"
-- This calls an edge function that creates a Stripe Payment Link for the remaining balance
-- Link is copied to clipboard so admin can share via WhatsApp/SMS
-- Add a "Mark as Paid" button for in-person/cash payments that updates `payment_status` to "fully_paid"
+**Regular prices (from images 6 & 7):**
+- Anti-Wrinkle 2 Areas: £185 → £179
+- Anti-Wrinkle 3 Areas: £225 → £220
+- Anti-Wrinkle 1 Area: remove (not on regular price list — only show 2, 3, 6 Areas)
+- Masseter: £250 → £240
+- Skin Boosters: Lumi Eyes £140, Seventy Hyal £160, Polynucleotides £180, Profhilo £250
+- Dermal Filler: Lip 0.5ml £80, 0.8ml £120, 1ml £150, Smile Lines £150, Marionette Lines £150, Chin £160, Cheek per ml £160, Jawline per ml £170, Nose £200, Tear Trough £200
+- Facial Balancing: 3ml £350, 5ml £500, 7ml £650
+- Chemical Peels: Level 1 Face £85, Back £95, Level 2 Face £110, Back £125
+- Intimate Peels: Small £75, Medium £95, Large £120
+- Melanostop Body: Hands £120, Underarms £150, Elbows/Knees £130
+- Microneedling: Face Texture Repair £130, Stretch Mark Repair £150
+- HydraFacial: Glass Skin Boost £140, Acne Refresh £130, Glow Reset £120
+- Fat Dissolve: Small £120, Medium £180, Large £250
 
-**New edge function:** `create-payment-link` -- creates a Stripe Payment Link for a given amount and booking reference.
+**Model prices (from image 1) — update Content Model category:**
+- Lip Filler: 0.5ml £65, 0.8ml £95, 1ml £110 (already correct)
+- Chin Filler £120, Cheek £120, Jawline £130, Tear Trough £150 (already correct)
+- Facial Balancing: 3ml £270, 5ml £395, 7ml £520 (already correct)
+- Anti-Wrinkle model: 1 Area £99, 2 Areas £145, 3 Areas £175 (check/update)
+- Masseter model: £195
+- Skin Boosters model: Lumi Eyes £110, Seventy Hyal £125, Polynucleotides £140, Profhilo £195
+- Skin Treatments model: Hydrafacial £95, Chemical Peel £65
 
----
-
-## 5. Payment Plan Customisation
-
-Currently `AdminPaymentPlansTab.tsx` allows creating plans and recording payments, but you cannot edit the instalment amount after creation.
-
-**Changes:**
-- Add an "Edit" button on each active plan
-- Allow editing: `instalment_amount`, `total_instalments`, `total_amount`, `next_payment_date`
-- Add a "Record Custom Amount" option when recording a payment (instead of always recording the fixed instalment amount)
-- Show remaining balance clearly
-
----
-
-## 6. Cancellation Sync Between Admin and Client
-
-Currently:
-- Admin cancels via calendar -> updates DB status to "cancelled" and sends cancellation email to client. Client sees it in their portal (already works via DB read).
-- Client cancels via portal -> updates DB status to "cancelled". Admin sees it in bookings/calendar (already works via DB read).
-
-**Missing:** When a client cancels, the admin doesn't get notified.
-
-**Fix:** In `CustomerPortal.tsx` `cancelBooking` function, after updating the booking status, trigger `send-booking-email` with a new `emailType: "client_cancelled"` that sends a notification to the admin email.
+Also update the hardcoded `pricingData` in `src/pages/MuseLanding.tsx` to match.
 
 ---
 
-## 7. Mailchimp Email Automations
+### 3. Set 20% Booking Fee on All Treatments
 
-The `mailchimp-subscribe` edge function already exists and works. It's already wired into the booking checkout flow. To set up automations:
+- Update **every** treatment in the database: `deposit_required = true`, `deposit_amount = ROUND(price * 0.20)`, `payment_type = 'deposit'`
+- Exception: Free consultations (price = 0) keep deposit_required = false
 
-**What I will do:**
-- Update `mailchimp-subscribe` to accept and pass `firstName`, `lastName`, and `tags` (e.g. "Booked Client", treatment category)
-- Add tags based on treatment category so you can create targeted automations in Mailchimp
-- Ensure the VIP popup signup also triggers the function (it already does via `email_subscribers` table insert, but needs to call the edge function too)
+**Rename "deposit" to "booking fee" across the codebase:**
+- `src/pages/BookingSystem.tsx` — Change all UI labels: "Pay Deposit" → "Pay Booking Fee", "deposit" references in text
+- `src/pages/Terms.tsx` — Update terminology throughout
+- `src/components/admin/AdminBookingsTab.tsx` — Admin labels
+- `supabase/functions/create-booking-checkout/index.ts` — Stripe metadata descriptions
+- `supabase/functions/send-booking-email/index.ts` — Email text
 
-**What you need to do in Mailchimp:**
-- Log into your Mailchimp account
-- Go to Automations and create journeys based on tags (e.g. "Welcome" email for new subscribers, "Post-Treatment" for booked clients)
-- The integration will automatically tag contacts when they book
-
----
-
-## 8. Multiple Treatment Selection + Course Suggestions
-
-This is the biggest feature. Currently only one treatment can be selected per booking.
-
-**Changes to `BookingSystem.tsx`:**
-- Allow selecting multiple treatments (change `selectedTreatment` from single to array `selectedTreatments`)
-- Show a running total of all selected treatments
-- After selection, check if any selected treatment has packages in `treatment_packages` and show a "Save with a Course" prompt
-- Display savings: "Book 3 sessions of Level 1 Face Peel and save £25 (£230 vs £255)"
-- Duration and time slot calculation accounts for combined treatment time
-- Checkout sends all treatment IDs
-
-**Changes to `create-booking-checkout`:**
-- Accept an array of treatment IDs
-- Create line items for each treatment in the Stripe checkout session
-- Store multiple treatment references in the booking (use the existing `addon_ids` pattern or add a `treatment_ids` array column)
-
-**Database change:**
-- Add `treatment_ids` (uuid array) column to `bookings` table to support multi-treatment bookings
-- Keep `treatment_id` for backwards compatibility (primary treatment)
+Note: Database column names (`deposit_amount`, `deposit_required`) stay the same — only UI-facing text changes.
 
 ---
 
-## Technical Summary
+### 4. Add Arrival Time Policy
 
-### Database Changes:
-- New table: `site_images` (key, image_url, alt_text, updated_at) with RLS for admin write, public read
-- New storage bucket: `site-images` (public)
-- Add column `treatment_ids` (uuid[]) to `bookings` table
+Add a notice in the booking confirmation step (Step 3 in BookingSystem.tsx) and in Terms.tsx:
+- "Please arrive at your exact appointment time. Do not arrive early or late as a member of the team will need to let you into the clinic."
 
-### Edge Functions:
-- New: `create-payment-link` -- generates Stripe Payment Link
-- Update: `mailchimp-subscribe` -- accept firstName, lastName, tags
-- Update: `send-booking-email` -- add "client_cancelled" email type for admin notification
+---
 
-### Frontend Files to Edit:
-- `AdminCalendarView.tsx` -- add payment link + mark as paid buttons
-- `AdminPaymentPlansTab.tsx` -- add edit and custom payment recording
-- `AdminSiteTab.tsx` -- add image management section
-- `BookingSystem.tsx` -- multi-treatment selection + course suggestions
-- `CustomerPortal.tsx` -- trigger admin notification on client cancellation
-- `create-booking-checkout` -- support multiple treatments
+### 5. Create Master Consent Form
 
-### Frontend Files to Create:
-- None (all changes are to existing files)
+**A. Create the consent form template in the database** via SQL migration — insert a comprehensive `consent_form_templates` record with all 10 sections as structured JSON fields.
+
+**B. Create a new public-facing page `src/pages/ConsentForm.tsx`** with:
+- Hive Clinic branding (black, white, gold)
+- All 10 sections from the specification (Client Info, Medical Questionnaire, Treatment Understanding, Risks, Aftercare, No Guarantee, Treatment Refusal, Photography/Marketing, Payment Policy, Declaration)
+- Digital signature pad (canvas-based)
+- Tick boxes for consent sections
+- Form submission stores to `consent_submissions` table
+- PDF download button (using browser print/PDF or jsPDF)
+
+**C. Add route** `/consent-form` in App.tsx
+
+**D. Link consent form** in the booking confirmation email and booking success page so clients can complete it before their appointment.
+
+---
+
+### Technical Summary
+
+- **Database migrations**: Clear test data, update prices, set 20% booking fees, insert master consent template
+- **Files to edit**: `BookingSystem.tsx`, `MuseLanding.tsx`, `Terms.tsx`, admin booking/finance tabs, edge functions for email text
+- **New file**: `src/pages/ConsentForm.tsx`
+- **Route addition**: `App.tsx`
+- Approximately 8-10 files modified, 1 new file created
 

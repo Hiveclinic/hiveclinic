@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery6 from "@/assets/gallery-6.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Small Area", desc: "Chin, bra fat, jawline, upper arms, or lower abdomen.", price: "£120" },

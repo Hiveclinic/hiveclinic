@@ -3,11 +3,9 @@ import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import ModelCTA from "@/components/ModelCTA";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery2 from "@/assets/gallery-2.jpg";
-import gallery4 from "@/assets/gallery-4.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "Does lip filler hurt?", a: "We use a topical numbing cream and the filler itself contains anaesthetic, so most clients describe it as a mild pressure. Comfort is our priority." },
@@ -22,9 +20,9 @@ const LipFillers = () => {
     "Lip Filler Manchester City Centre | Hive Clinic",
     "Natural-looking lip filler from £80 at Hive Clinic, Manchester City Centre. Expert lip enhancement by a qualified prescriber in Deansgate. Book your free consultation."
   );
-  const heroImg = useSiteImage("lipfillers_hero", gallery4);
-  const secondaryImg = useSiteImage("lipfillers_secondary", gallery1);
-  const testimonialImg = useSiteImage("lipfillers_testimonial", gallery2);
+  const heroImg = useSiteImage("lipfillers_hero", STOCK.lipfillers_hero);
+  const secondaryImg = useSiteImage("lipfillers_secondary", STOCK.lipfillers_secondary);
+  const testimonialImg = useSiteImage("lipfillers_testimonial", STOCK.lipfillers_testimonial);
 
   return (
   <Layout>

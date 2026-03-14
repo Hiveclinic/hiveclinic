@@ -1,24 +1,19 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery2 from "@/assets/gallery-2.jpg";
-import gallery3 from "@/assets/gallery-3.jpg";
-import gallery4 from "@/assets/gallery-4.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const Blog = () => {
   usePageMeta("Blog | Hive Clinic Manchester City Centre", "Skincare tips, treatment guides and clinic news from Hive Clinic, Manchester City Centre.");
 
-  const b1 = useSiteImage("blog_1", gallery1);
-  const b2 = useSiteImage("blog_2", gallery4);
-  const b3 = useSiteImage("blog_3", gallery3);
-  const b4 = useSiteImage("blog_4", gallery2);
-  const b5 = useSiteImage("blog_5", gallery6);
-  const b6 = useSiteImage("blog_6", gallery5);
+  const b1 = useSiteImage("blog_1", STOCK.blog_1);
+  const b2 = useSiteImage("blog_2", STOCK.blog_2);
+  const b3 = useSiteImage("blog_3", STOCK.blog_3);
+  const b4 = useSiteImage("blog_4", STOCK.blog_4);
+  const b5 = useSiteImage("blog_5", STOCK.blog_5);
+  const b6 = useSiteImage("blog_6", STOCK.blog_6);
 
   const posts = [
     { slug: "what-to-expect-first-filler", title: "What to Expect at Your First Filler Appointment", excerpt: "Nervous about your first injectable treatment? Here's everything you need to know before, during, and after.", date: "February 2026", img: b1 },

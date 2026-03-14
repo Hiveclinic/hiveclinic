@@ -123,7 +123,7 @@ Deno.serve(async (req) => {
           <p style="margin:0 0 8px;font-size:14px;"><strong>Time:</strong> ${timeFormatted}</p>
           <p style="margin:0 0 8px;font-size:14px;"><strong>Duration:</strong> ${booking.duration_mins} minutes</p>
           <p style="margin:0 0 8px;font-size:14px;"><strong>Total:</strong> £${Number(booking.total_price).toFixed(2)}</p>
-          ${Number(booking.deposit_amount) > 0 ? `<p style="margin:0 0 8px;font-size:14px;"><strong>Deposit Paid:</strong> £${Number(booking.deposit_amount).toFixed(2)}</p>` : ""}
+          ${Number(booking.deposit_amount) > 0 ? `<p style="margin:0 0 8px;font-size:14px;"><strong>Booking Fee Paid:</strong> £${Number(booking.deposit_amount).toFixed(2)}</p>` : ""}
           <p style="margin:0;font-size:14px;"><strong>Payment Status:</strong> ${booking.payment_status}</p>
         </div>
         ${booking.notes ? `<p style="${pStyle}"><strong>Client Notes:</strong> ${booking.notes}</p>` : ""}

@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery4 from "@/assets/gallery-4.jpg";
-import gallery1 from "@/assets/gallery-1.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "What is facial balancing?", a: "Facial balancing uses strategic placement of dermal filler across multiple areas of the face to create harmonious proportions and symmetry — rather than treating one area in isolation." },

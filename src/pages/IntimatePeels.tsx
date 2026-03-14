@@ -4,6 +4,7 @@ import { ArrowRight, Shield, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What areas can be treated?", a: "Bikini line, inner thighs, and underarms. We also treat other body areas on consultation." },

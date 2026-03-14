@@ -29,6 +29,8 @@ const ChemicalPeels = () => {
     "Chemical Peels Manchester City Centre | Hive Clinic",
     "Professional chemical peels from £85 at Hive Clinic, Manchester City Centre. Treat acne, scarring, pigmentation and uneven texture. Book a consultation."
   );
+  const heroImg = useSiteImage("chemicalpeels_hero", gallery4);
+  const secondaryImg = useSiteImage("chemicalpeels_secondary", gallery5);
 
   return (
   <Layout>

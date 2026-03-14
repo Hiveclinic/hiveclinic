@@ -84,7 +84,7 @@ const LipFillers = () => {
             </div>
           </div>
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery1} alt="Lip filler before and after results Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={secondaryImg} alt="Lip filler before and after results Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
         </div>
       </div>

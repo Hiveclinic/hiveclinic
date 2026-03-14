@@ -157,7 +157,7 @@ const Terms = () => {
               <ul className="space-y-3 list-disc pl-5">
                 <li>Hive Clinic offers 0% interest payment plans on selected treatments, allowing you to spread the cost of your treatment into manageable monthly instalments with no additional charges or hidden fees.</li>
                 <li>Payment plans are available at the discretion of Hive Clinic and are subject to eligibility. Not all treatments qualify for payment plan options.</li>
-                <li>A minimum initial payment (deposit) is required at the time of booking. The remaining balance will be divided into equal monthly instalments as agreed between you and Hive Clinic.</li>
+                <li>A minimum initial payment (booking fee) is required at the time of booking. The remaining balance will be divided into equal monthly instalments as agreed between you and Hive Clinic.</li>
                 <li>For example, a £300 treatment may be split as £150 on the day, followed by 3 monthly payments of £50. The exact payment schedule will be confirmed prior to treatment.</li>
                 <li>All instalment payments must be made on the agreed dates. Failure to make a payment on time may result in the suspension of future appointments and the outstanding balance becoming immediately due in full.</li>
                 <li>Payment plans are separate from Klarna and Clearpay "buy now, pay later" options, which are also available on eligible treatments and are subject to their own terms and conditions.</li>

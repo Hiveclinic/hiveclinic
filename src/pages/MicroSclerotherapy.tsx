@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What is micro sclerotherapy?", a: "Micro sclerotherapy is a minimally invasive treatment for thread veins (spider veins) on the legs. A sclerosing solution is injected into the affected veins, causing them to collapse and fade." },

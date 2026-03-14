@@ -726,8 +726,8 @@ const BookingSystem = () => {
                     <div className="mb-6">
                       <label className="font-body text-sm block mb-3">Payment Option</label>
                       <div className="grid grid-cols-2 gap-3">
-                        <button onClick={() => setPaymentMode("deposit")} className={`p-4 border text-left transition-all ${paymentMode === "deposit" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
-                          <p className="font-display text-sm">Pay Deposit</p>
+                         <button onClick={() => setPaymentMode("deposit")} className={`p-4 border text-left transition-all ${paymentMode === "deposit" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
+                          <p className="font-display text-sm">Pay Booking Fee</p>
                           <p className="font-body text-xs text-muted-foreground mt-1">£{totalDeposit.toFixed(0)} now</p>
                         </button>
                         <button onClick={() => setPaymentMode("full")} className={`p-4 border text-left transition-all ${paymentMode === "full" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>

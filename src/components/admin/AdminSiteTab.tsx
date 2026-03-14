@@ -273,10 +273,13 @@ const AdminSiteTab = () => {
   // Merge predefined slots with existing DB images
   const allSlotKeys = Object.keys(IMAGE_SLOTS);
   const existingKeys = new Set(siteImages.map(img => img.key));
-  const displayImages: (SiteImage | { id: null; key: string; image_url: string; alt_text: string })[] = [
+  const displayImages: (SiteImage & { fallbackUrl?: string })[] = [
     ...allSlotKeys.map(key => {
       const existing = siteImages.find(img => img.key === key);
-      return existing || { id: null, key, image_url: "", alt_text: "" };
+      const fallbackUrl = IMAGE_SLOTS[key]?.fallback || "";
+      return existing
+        ? { ...existing, fallbackUrl }
+        : { id: null as any, key, image_url: "", alt_text: "", fallbackUrl };
     }),
     ...siteImages.filter(img => !allSlotKeys.includes(img.key)),
   ];

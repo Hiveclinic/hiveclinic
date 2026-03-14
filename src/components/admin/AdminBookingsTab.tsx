@@ -229,9 +229,9 @@ const AdminBookingsTab = () => {
                   <span className="font-body text-xs bg-secondary px-2 py-1">{(b.treatments as any)?.name || "Treatment"}</span>
                   <span className="font-body text-xs text-muted-foreground">{b.duration_mins} mins</span>
                   <span className="font-body text-xs font-medium">£{Number(b.total_price).toFixed(2)}</span>
-                  {Number(b.deposit_amount) > 0 && (
-                    <span className="font-body text-xs text-gold">Deposit: £{Number(b.deposit_amount).toFixed(2)}</span>
-                  )}
+                   {Number(b.deposit_amount) > 0 && (
+                    <span className="font-body text-xs text-gold">Booking Fee: £{Number(b.deposit_amount).toFixed(2)}</span>
+                   )}
                 </div>
 
                 <div className="sm:ml-auto grid grid-cols-3 sm:flex gap-1.5 sm:gap-2">

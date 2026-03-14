@@ -147,7 +147,8 @@ Deno.serve(async (req) => {
           <p style="margin:0;font-size:14px;"><strong>Duration:</strong> ${booking.duration_mins} minutes</p>
           ${Number(booking.total_price) > 0 ? `<p style="margin:8px 0 0;font-size:14px;"><strong>Total:</strong> £${Number(booking.total_price).toFixed(2)}</p>` : ""}
         </div>
-        <p style="${pStyle}">Please arrive 5 minutes early. If you need to reschedule, contact us at least 48 hours in advance.</p>
+        <p style="${pStyle}"><strong>⏰ Important:</strong> Please arrive at your exact appointment time. Do not arrive early or late as a member of the team will need to let you into the clinic.</p>
+        <p style="${pStyle}">If you need to reschedule, contact us at least 48 hours in advance.</p>
         <p style="${pStyle}">See you soon! 💛</p>
       `);
     } else if (emailType === "reminder") {

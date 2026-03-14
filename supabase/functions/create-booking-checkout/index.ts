@@ -239,7 +239,7 @@ serve(async (req) => {
             price_data: {
               currency: "gbp",
               product_data: {
-                name: `${treatmentNames}${isDeposit ? " (Deposit)" : ""}`,
+              name: `${treatmentNames}${isDeposit ? " (Booking Fee)" : ""}`,
                 description: `${bookingDate} at ${bookingTime}${isDeposit ? ` — Remaining £${(totalPrice - chargeAmount).toFixed(2)} due at appointment` : ""}`,
               },
               unit_amount: Math.round(chargeAmount * 100),

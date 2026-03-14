@@ -74,11 +74,14 @@ const BookingSuccess = () => {
                       <span className="text-muted-foreground">Payment</span>
                       <span className="text-gold capitalize">{booking.paymentStatus?.replace("_", " ")}</span>
                     </div>
-                    {booking.paymentStatus === "deposit_paid" && (
+                     {booking.paymentStatus === "deposit_paid" && (
                       <p className="text-xs text-muted-foreground">
                         Remaining £{(Number(booking.totalPrice) - Number(booking.depositAmount)).toFixed(2)} due at your appointment.
                       </p>
-                    )}
+                     )}
+                     <p className="text-xs text-muted-foreground mt-3 border-t border-border pt-3">
+                       ⏰ Please arrive at your exact appointment time. Do not arrive early or late as a member of the team will need to let you into the clinic.
+                     </p>
                   </div>
                 </div>
               )}

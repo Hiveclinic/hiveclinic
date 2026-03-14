@@ -20,12 +20,12 @@ const Terms = () => {
             </div>
 
             <div>
-              <h2 className="font-display text-3xl mb-4">2. Booking & Deposits</h2>
+              <h2 className="font-display text-3xl mb-4">2. Booking & Booking Fees</h2>
               <ul className="space-y-3 list-disc pl-5">
-                <li>A non-refundable deposit of 20% of the total treatment cost is required at the time of booking to secure your appointment.</li>
+                <li>A non-refundable booking fee of 20% of the total treatment cost is required at the time of booking to secure your appointment.</li>
                 <li>The remaining balance is payable on the day of your appointment, prior to treatment commencing.</li>
-                <li>Deposits are non-refundable and non-transferable under any circumstances.</li>
-                <li>Bookings are not confirmed until the deposit has been received and a confirmation has been issued by Hive Clinic.</li>
+                <li>Booking fees are non-refundable and non-transferable under any circumstances.</li>
+                <li>Bookings are not confirmed until the booking fee has been received and a confirmation has been issued by Hive Clinic.</li>
                 <li>We accept payment by cash, debit card, and credit card. Pay-later options are available through Klarna and Clearpay for eligible treatments, subject to their own terms and conditions.</li>
                 <li>All prices listed on our website and marketing materials are subject to change without prior notice. The price confirmed at the time of booking will be honoured for that appointment.</li>
               </ul>
@@ -35,10 +35,10 @@ const Terms = () => {
               <h2 className="font-display text-3xl mb-4">3. Cancellations & Rescheduling</h2>
               <ul className="space-y-3 list-disc pl-5">
                 <li>A minimum of 48 hours' notice is required to reschedule or cancel your appointment without penalty.</li>
-                <li>Cancellations or rescheduling requests made with less than 48 hours' notice will result in the full forfeiture of your deposit.</li>
-                <li>No-shows (failure to attend without any prior notice) will result in the complete loss of the deposit paid. No further communication regarding refunds will be entered into.</li>
+                <li>Cancellations or rescheduling requests made with less than 48 hours' notice will result in the full forfeiture of your booking fee.</li>
+                <li>No-shows (failure to attend without any prior notice) will result in the complete loss of the booking fee paid. No further communication regarding refunds will be entered into.</li>
                 <li>Repeated no-shows (two or more) or persistent late cancellations may result in being required to pay the full treatment cost in advance to book future appointments, or being refused service at the discretion of Hive Clinic.</li>
-                <li>Hive Clinic reserves the right to cancel or reschedule appointments due to unforeseen circumstances, illness, or emergencies. In such cases, your deposit will be transferred to a rescheduled date or refunded in full at your choice.</li>
+                <li>Hive Clinic reserves the right to cancel or reschedule appointments due to unforeseen circumstances, illness, or emergencies. In such cases, your booking fee will be transferred to a rescheduled date or refunded in full at your choice.</li>
               </ul>
             </div>
 
@@ -46,7 +46,7 @@ const Terms = () => {
               <h2 className="font-display text-3xl mb-4">4. Refund Policy</h2>
               <ul className="space-y-3 list-disc pl-5">
                 <li>All treatments are non-refundable once administered. By consenting to treatment, you acknowledge that results cannot be guaranteed and individual outcomes may vary.</li>
-                <li>Deposits are non-refundable regardless of the reason for cancellation, except where Hive Clinic cancels the appointment (see Section 3).</li>
+                <li>Booking fees are non-refundable regardless of the reason for cancellation, except where Hive Clinic cancels the appointment (see Section 3).</li>
                 <li>If you are dissatisfied with your results, we encourage you to contact us to discuss your concerns. A complimentary review appointment may be offered where clinically appropriate, but this does not constitute entitlement to a refund.</li>
                 <li>Prepaid treatment courses or packages are non-refundable and non-transferable once purchased. Unused sessions will expire 12 months from the date of purchase unless otherwise agreed in writing.</li>
                 <li>Gift vouchers are non-refundable and must be used within 6 months of the date of issue. No change will be given for unused portions of a voucher.</li>
@@ -99,7 +99,7 @@ const Terms = () => {
             <div>
               <h2 className="font-display text-3xl mb-4">9. Conduct & Clinic Etiquette</h2>
               <ul className="space-y-3 list-disc pl-5">
-                <li>We kindly ask that clients arrive on time. Late arrivals of more than 15 minutes may result in a shortened treatment or rescheduling at the practitioner's discretion, with no refund of the deposit.</li>
+                <li>Please arrive at your exact appointment time. Do not arrive early or late as a member of the team will need to let you into the clinic. Late arrivals of more than 15 minutes may result in a shortened treatment or rescheduling at the practitioner's discretion, with no refund of the booking fee.</li>
                 <li>Hive Clinic operates a zero-tolerance policy towards abusive, threatening, or disrespectful behaviour towards any member of our team. Clients who breach this policy will be refused service and may be banned from future appointments.</li>
                 <li>Children are not permitted in the treatment room during procedures for health and safety reasons.</li>
                 <li>We ask that mobile phones are switched to silent during your appointment.</li>
@@ -157,7 +157,7 @@ const Terms = () => {
               <ul className="space-y-3 list-disc pl-5">
                 <li>Hive Clinic offers 0% interest payment plans on selected treatments, allowing you to spread the cost of your treatment into manageable monthly instalments with no additional charges or hidden fees.</li>
                 <li>Payment plans are available at the discretion of Hive Clinic and are subject to eligibility. Not all treatments qualify for payment plan options.</li>
-                <li>A minimum initial payment (deposit) is required at the time of booking. The remaining balance will be divided into equal monthly instalments as agreed between you and Hive Clinic.</li>
+                <li>A minimum initial payment (booking fee) is required at the time of booking. The remaining balance will be divided into equal monthly instalments as agreed between you and Hive Clinic.</li>
                 <li>For example, a £300 treatment may be split as £150 on the day, followed by 3 monthly payments of £50. The exact payment schedule will be confirmed prior to treatment.</li>
                 <li>All instalment payments must be made on the agreed dates. Failure to make a payment on time may result in the suspension of future appointments and the outstanding balance becoming immediately due in full.</li>
                 <li>Payment plans are separate from Klarna and Clearpay "buy now, pay later" options, which are also available on eligible treatments and are subject to their own terms and conditions.</li>

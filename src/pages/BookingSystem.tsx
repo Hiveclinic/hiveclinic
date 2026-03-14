@@ -409,7 +409,7 @@ const BookingSystem = () => {
         <div className="max-w-3xl mx-auto px-6">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-12">
             <h1 className="font-display text-4xl md:text-5xl mb-3">Book Your Treatment</h1>
-            <p className="font-body text-sm text-muted-foreground mb-4">Select one or more treatments. Secure your appointment with instant confirmation.</p>
+            <p className="font-body text-sm text-muted-foreground mb-4">Select one or more treatments. Secure your appointment with a booking fee.</p>
             
             {/* Model Content Banner */}
             <Link to="/muse" className="inline-flex items-center gap-3 border border-gold/40 bg-gold/5 px-5 py-3 hover:bg-gold/10 transition-colors group">
@@ -726,8 +726,8 @@ const BookingSystem = () => {
                     <div className="mb-6">
                       <label className="font-body text-sm block mb-3">Payment Option</label>
                       <div className="grid grid-cols-2 gap-3">
-                        <button onClick={() => setPaymentMode("deposit")} className={`p-4 border text-left transition-all ${paymentMode === "deposit" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
-                          <p className="font-display text-sm">Pay Deposit</p>
+                         <button onClick={() => setPaymentMode("deposit")} className={`p-4 border text-left transition-all ${paymentMode === "deposit" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
+                          <p className="font-display text-sm">Pay Booking Fee</p>
                           <p className="font-body text-xs text-muted-foreground mt-1">£{totalDeposit.toFixed(0)} now</p>
                         </button>
                         <button onClick={() => setPaymentMode("full")} className={`p-4 border text-left transition-all ${paymentMode === "full" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
@@ -751,7 +751,12 @@ const BookingSystem = () => {
                   <button onClick={handleBooking} disabled={submitting} className="w-full py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                     {submitting ? <span className="animate-pulse">Processing...</span> : totalPrice === 0 ? <>Confirm Booking <ArrowRight size={14} /></> : <>Proceed to Payment <ArrowRight size={14} /></>}
                   </button>
-                  <p className="font-body text-xs text-muted-foreground text-center mt-4">Payments processed securely via Stripe.</p>
+                   <div className="border border-amber-600/30 bg-amber-50/50 dark:bg-amber-900/10 p-4 mt-4">
+                     <p className="font-body text-xs text-foreground/80 text-center">
+                       ⏰ Please arrive at your exact appointment time. Do not arrive early or late as a member of the team will need to let you into the clinic.
+                     </p>
+                   </div>
+                   <p className="font-body text-xs text-muted-foreground text-center mt-4">Payments processed securely via Stripe.</p>
                 </div>
               </motion.div>
             )}

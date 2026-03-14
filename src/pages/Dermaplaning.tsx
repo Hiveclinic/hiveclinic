@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What is dermaplaning?", a: "Dermaplaning is a gentle exfoliation treatment that uses a sterile surgical blade to remove dead skin cells and vellus hair (peach fuzz) from the face, leaving skin instantly smoother and brighter." },

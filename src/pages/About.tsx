@@ -3,10 +3,11 @@ import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
+import biancaImg from "@/assets/bianca.jpg";
 
 const About = () => {
   usePageMeta("About Hive Clinic | Aesthetic Clinic Manchester City Centre", "Meet Bianca, the practitioner behind Hive Clinic in Manchester City Centre. Specialising in advanced skin treatments and aesthetic procedures.");
-  const heroImg = useSiteImage("about_hero", STOCK.about_hero);
+  const heroImg = useSiteImage("about_hero", biancaImg);
   const secondaryImg = useSiteImage("about_secondary", STOCK.about_secondary);
   return (
   <Layout>

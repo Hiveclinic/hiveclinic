@@ -35,8 +35,8 @@ const Terms = () => {
               <h2 className="font-display text-3xl mb-4">3. Cancellations & Rescheduling</h2>
               <ul className="space-y-3 list-disc pl-5">
                 <li>A minimum of 48 hours' notice is required to reschedule or cancel your appointment without penalty.</li>
-                <li>Cancellations or rescheduling requests made with less than 48 hours' notice will result in the full forfeiture of your deposit.</li>
-                <li>No-shows (failure to attend without any prior notice) will result in the complete loss of the deposit paid. No further communication regarding refunds will be entered into.</li>
+                <li>Cancellations or rescheduling requests made with less than 48 hours' notice will result in the full forfeiture of your booking fee.</li>
+                <li>No-shows (failure to attend without any prior notice) will result in the complete loss of the booking fee paid. No further communication regarding refunds will be entered into.</li>
                 <li>Repeated no-shows (two or more) or persistent late cancellations may result in being required to pay the full treatment cost in advance to book future appointments, or being refused service at the discretion of Hive Clinic.</li>
                 <li>Hive Clinic reserves the right to cancel or reschedule appointments due to unforeseen circumstances, illness, or emergencies. In such cases, your deposit will be transferred to a rescheduled date or refunded in full at your choice.</li>
               </ul>

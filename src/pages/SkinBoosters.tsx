@@ -28,6 +28,8 @@ const SkinBoosters = () => {
     "Skin Boosters Manchester City Centre | Hive Clinic",
     "Advanced skin boosters and injectable remodelling from £140 at Hive Clinic, Manchester City Centre. Deep hydration and collagen stimulation. Book today."
   );
+  const heroImg = useSiteImage("skinboosters_hero", gallery1);
+  const secondaryImg = useSiteImage("skinboosters_secondary", gallery2);
 
   return (
   <Layout>

@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery3 from "@/assets/gallery-3.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Glass Skin Boost", desc: "Deep cleansing and intense hydration for a luminous, glass-like finish.", price: "£140" },
@@ -25,12 +26,14 @@ const HydraFacial = () => {
     "Hydrafacial Manchester City Centre | Hive Clinic",
     "Deep cleansing Hydrafacial treatments from £120 at Hive Clinic, Manchester City Centre. Achieve glass-like radiant skin with zero downtime. Book today."
   );
+  const heroImg = useSiteImage("hydrafacial_hero", gallery3);
+  const secondaryImg = useSiteImage("hydrafacial_secondary", gallery5);
 
   return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
-        <img src={gallery3} alt="HydraFacial treatment Manchester - glass skin at Hive Clinic" className="w-full h-full object-cover" />
+        <img src={heroImg} alt="HydraFacial treatment Manchester - glass skin at Hive Clinic" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -77,7 +80,7 @@ const HydraFacial = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery5} alt="HydraFacial results at Hive Clinic Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={secondaryImg} alt="HydraFacial results at Hive Clinic Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
           <div>
             <h2 className="font-display text-4xl md:text-5xl mb-6">Why HydraFacial at Hive</h2>

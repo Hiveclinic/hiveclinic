@@ -7,6 +7,7 @@ import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Lip Filler", desc: "Natural-looking volume and shape enhancement.", from: "£80" },
@@ -32,12 +33,15 @@ const DermalFiller = () => {
     "Dermal Filler Manchester City Centre | Hive Clinic",
     "Expert dermal filler treatments from £80 at Hive Clinic, Manchester City Centre. Lip, cheek, jawline and facial balancing by a qualified prescriber. Book today."
   );
+  const heroImg = useSiteImage("dermalfiller_hero", gallery4);
+  const secondaryImg = useSiteImage("dermalfiller_secondary", gallery1);
+  const testimonialImg = useSiteImage("dermalfiller_testimonial", gallery2);
 
   return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
-        <img src={gallery4} alt="Dermal filler treatment Manchester - lip, cheek, jawline filler at Hive Clinic" className="w-full h-full object-cover" />
+        <img src={heroImg} alt="Dermal filler treatment Manchester - lip, cheek, jawline filler at Hive Clinic" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -84,7 +88,7 @@ const DermalFiller = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery1} alt="Dermal filler before and after Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={secondaryImg} alt="Dermal filler before and after Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
           <div>
             <h2 className="font-display text-4xl md:text-5xl mb-6">Why Clients Choose Hive</h2>
@@ -129,7 +133,7 @@ const DermalFiller = () => {
         <h2 className="font-display text-4xl md:text-5xl mb-4">Real Results</h2>
         <p className="font-body text-muted-foreground mb-12">Natural enhancements, visible transformations.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[gallery1, gallery2, gallery4].map((img, i) => (
+          {[secondaryImg, testimonialImg, heroImg].map((img, i) => (
             <div key={i} className="aspect-square overflow-hidden">
               <img src={img} alt={`Dermal filler result ${i + 1} at Hive Clinic Manchester`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
             </div>

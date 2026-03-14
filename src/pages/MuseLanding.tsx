@@ -4,6 +4,7 @@ import { ArrowRight, MapPin, Camera, Check } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery4 from "@/assets/gallery-4.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const pricingData = [
   {
@@ -70,6 +71,7 @@ const MuseLanding = () => {
     "Become a Hive Clinic Model | Content Sessions Manchester",
     "Exclusive content pricing on aesthetic treatments at Hive Clinic, Deansgate Manchester. Book your model session for reduced rates on lip filler, dermal filler, anti-wrinkle and more."
   );
+  const heroImg = useSiteImage("muselanding_hero", gallery4);
 
   return (
     <Layout>
@@ -77,7 +79,7 @@ const MuseLanding = () => {
       <section className="relative min-h-[85vh] flex items-center">
         <div className="absolute inset-0">
           <img
-            src={gallery4}
+            src={heroImg}
             alt="Hive Clinic Muse content session"
             className="w-full h-full object-cover"
           />

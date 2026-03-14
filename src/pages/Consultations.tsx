@@ -4,9 +4,11 @@ import { ArrowRight, CheckCircle, Video, MapPin, Stethoscope } from "lucide-reac
 import Layout from "@/components/Layout";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const Consultations = () => {
   usePageMeta("Free Consultation Manchester City Centre | Hive Clinic", "Book a free consultation at Hive Clinic, Manchester City Centre. Online or in-person consultations available for all treatments.");
+  const heroImg = useSiteImage("consultations_hero", gallery3);
   return (
   <Layout>
     <section className="py-24">
@@ -45,7 +47,7 @@ const Consultations = () => {
 
         <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery3} alt="Hive Clinic consultation room Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={heroImg} alt="Hive Clinic consultation room Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
           <div>
             <h2 className="font-display text-4xl mb-6">Why a Consultation Matters</h2>

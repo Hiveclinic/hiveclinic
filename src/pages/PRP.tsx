@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What is PRP?", a: "PRP (Platelet Rich Plasma) therapy uses your own blood to create a concentrated serum rich in growth factors that stimulates skin repair and regeneration." },
@@ -18,12 +19,14 @@ const PRP = () => {
     "PRP Therapy Manchester City Centre | Hive Clinic",
     "PRP platelet rich plasma therapy at Hive Clinic, Manchester City Centre. Natural skin rejuvenation and hair restoration using your own plasma. Book today."
   );
+  const heroImg = useSiteImage("prp_hero", gallery6);
+  const secondaryImg = useSiteImage("prp_secondary", gallery4);
 
   return (
     <Layout>
       <section className="relative min-h-[70vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={gallery6} alt="PRP therapy treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="PRP therapy treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -60,7 +63,7 @@ const PRP = () => {
               Book Consultation <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="aspect-[4/5] overflow-hidden"><img src={gallery4} alt="PRP therapy results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
+          <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="PRP therapy results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
         </div>
       </section>
 

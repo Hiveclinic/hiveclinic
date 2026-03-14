@@ -4,6 +4,7 @@ import { ArrowRight, Shield, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What areas can be treated?", a: "Bikini line, inner thighs, and underarms. We also treat other body areas on consultation." },
@@ -17,6 +18,7 @@ const IntimatePeels = () => {
     "Intimate & Body Peels Manchester City Centre | Hive Clinic",
     "Intimate and body brightening peels at Hive Clinic, Manchester City Centre. Gentle professional peels for bikini line, underarms and body areas. Book your appointment."
   );
+  const heroImg = useSiteImage("intimatepeels_hero", gallery3);
 
   return (
     <Layout>
@@ -51,7 +53,7 @@ const IntimatePeels = () => {
               </Link>
             </div>
             <div className="aspect-[4/5] overflow-hidden">
-              <img src={gallery3} alt="Body peel treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
+              <img src={heroImg} alt="Body peel treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </div>
 

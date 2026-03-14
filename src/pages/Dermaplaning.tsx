@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What is dermaplaning?", a: "Dermaplaning is a gentle exfoliation treatment that uses a sterile surgical blade to remove dead skin cells and vellus hair (peach fuzz) from the face, leaving skin instantly smoother and brighter." },
@@ -19,12 +20,14 @@ const Dermaplaning = () => {
     "Dermaplaning Manchester City Centre | Hive Clinic",
     "Dermaplaning skin polish from £75 at Hive Clinic, Manchester City Centre. Instant smoothness and glow with zero downtime. Book your appointment."
   );
+  const heroImg = useSiteImage("dermaplaning_hero", gallery3);
+  const secondaryImg = useSiteImage("dermaplaning_secondary", gallery1);
 
   return (
     <Layout>
       <section className="relative min-h-[70vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={gallery3} alt="Dermaplaning treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="Dermaplaning treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -64,7 +67,7 @@ const Dermaplaning = () => {
                 Book Appointment <ArrowRight size={14} />
               </Link>
             </div>
-            <div className="aspect-[4/5] overflow-hidden"><img src={gallery1} alt="Dermaplaning results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
+            <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="Dermaplaning results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
           </div>
         </div>
       </section>

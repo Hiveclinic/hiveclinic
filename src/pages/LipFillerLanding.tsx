@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery1 from "@/assets/gallery-1.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "How much does lip filler cost in Manchester?", a: "Lip filler at Hive Clinic starts from just £80 for 0.5ml. We offer a range of premium hyaluronic acid fillers to suit different goals and budgets." },
@@ -26,13 +27,15 @@ const LipFillerLanding = () => {
     "Lip Filler Manchester | From £80 | Hive Clinic",
     "Natural-looking lip filler from £80 in Manchester City Centre. Expert lip enhancement by a qualified prescriber at Hive Clinic, Deansgate. Book your free consultation today."
   );
+  const heroImg = useSiteImage("lipfillerlanding_hero", gallery4);
+  const secondaryImg = useSiteImage("lipfillerlanding_secondary", gallery1);
 
   return (
     <Layout>
       {/* Hero */}
       <section className="relative min-h-[80vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={gallery4} alt="Lip filler treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="Lip filler treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -110,7 +113,7 @@ const LipFillerLanding = () => {
               </Link>
             </div>
             <div>
-              <img src={gallery1} alt="Natural lip filler results at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
+              <img src={secondaryImg} alt="Natural lip filler results at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
             </div>
           </div>
         </div>

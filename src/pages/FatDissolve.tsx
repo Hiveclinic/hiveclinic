@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery6 from "@/assets/gallery-6.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Small Area", desc: "Chin, bra fat, jawline, upper arms, or lower abdomen.", price: "£120" },
@@ -25,12 +26,14 @@ const FatDissolve = () => {
     "Fat Dissolving Manchester City Centre | Hive Clinic",
     "Non-surgical fat dissolving injections from £120 at Hive Clinic, Manchester City Centre. Target stubborn fat on chin, abdomen, flanks and more. Book today."
   );
+  const heroImg = useSiteImage("fatdissolve_hero", gallery6);
+  const secondaryImg = useSiteImage("fatdissolve_secondary", gallery5);
 
   return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
-        <img src={gallery6} alt="Fat dissolving injections Manchester - non-surgical body contouring at Hive Clinic" className="w-full h-full object-cover" />
+        <img src={heroImg} alt="Fat dissolving injections Manchester - non-surgical body contouring at Hive Clinic" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -91,7 +94,7 @@ const FatDissolve = () => {
             </div>
           </div>
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery5} alt="Fat dissolving body contouring results" className="w-full h-full object-cover" loading="lazy" />
+            <img src={secondaryImg} alt="Fat dissolving body contouring results" className="w-full h-full object-cover" loading="lazy" />
           </div>
         </div>
       </div>

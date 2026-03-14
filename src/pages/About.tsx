@@ -3,9 +3,12 @@ import Layout from "@/components/Layout";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const About = () => {
   usePageMeta("About Hive Clinic | Aesthetic Clinic Manchester City Centre", "Meet Bianca, the practitioner behind Hive Clinic in Manchester City Centre. Specialising in advanced skin treatments and aesthetic procedures.");
+  const heroImg = useSiteImage("about_hero", gallery2);
+  const secondaryImg = useSiteImage("about_secondary", gallery5);
   return (
   <Layout>
     <section className="py-24">
@@ -31,7 +34,7 @@ const About = () => {
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={gallery2} alt="Bianca - Hive Clinic founder" className="w-full h-full object-cover" />
+              <img src={heroImg} alt="Bianca - Hive Clinic founder" className="w-full h-full object-cover" />
             </div>
           </motion.div>
         </div>
@@ -64,7 +67,7 @@ const About = () => {
           </div>
           <div className="lg:order-1">
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={gallery5} alt="Hive Clinic treatment" className="w-full h-full object-cover" />
+              <img src={secondaryImg} alt="Hive Clinic treatment" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>

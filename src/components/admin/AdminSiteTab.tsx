@@ -28,6 +28,7 @@ type SiteImage = {
 };
 
 const IMAGE_SLOTS: Record<string, { label: string; location: string }> = {
+  // Homepage
   hero_home: { label: "Homepage Hero", location: "Large banner at top of homepage" },
   gallery_1: { label: "Gallery Image 1", location: "Homepage gallery section" },
   gallery_2: { label: "Gallery Image 2", location: "Homepage gallery section" },
@@ -35,11 +36,85 @@ const IMAGE_SLOTS: Record<string, { label: string; location: string }> = {
   gallery_4: { label: "Gallery Image 4", location: "Homepage gallery section" },
   gallery_5: { label: "Gallery Image 5", location: "Homepage gallery section" },
   gallery_6: { label: "Gallery Image 6", location: "Homepage gallery section" },
-  about_hero: { label: "About Page Hero", location: "Banner on the About page" },
-  treatments_hero: { label: "Treatments Hero", location: "Banner on the Treatments page" },
-  booking_hero: { label: "Booking Hero", location: "Banner on the Booking page" },
-  results_hero: { label: "Results Hero", location: "Banner on the Results page" },
-  contact_hero: { label: "Contact Hero", location: "Banner on the Contact page" },
+  // About
+  about_hero: { label: "About Page — Portrait", location: "Main portrait on About page" },
+  about_secondary: { label: "About Page — Secondary", location: "Second image on About page" },
+  // Treatments listing
+  treatments_hero: { label: "Treatments Page Hero", location: "Banner on Treatments listing page" },
+  // Results
+  results_1: { label: "Results Image 1", location: "Results gallery page" },
+  results_2: { label: "Results Image 2", location: "Results gallery page" },
+  results_3: { label: "Results Image 3", location: "Results gallery page" },
+  results_4: { label: "Results Image 4", location: "Results gallery page" },
+  results_5: { label: "Results Image 5", location: "Results gallery page" },
+  results_6: { label: "Results Image 6", location: "Results gallery page" },
+  // Blog
+  blog_1: { label: "Blog Post 1 Image", location: "Blog listing — first article thumbnail" },
+  blog_2: { label: "Blog Post 2 Image", location: "Blog listing — second article thumbnail" },
+  blog_3: { label: "Blog Post 3 Image", location: "Blog listing — third article thumbnail" },
+  blog_4: { label: "Blog Post 4 Image", location: "Blog listing — fourth article thumbnail" },
+  blog_5: { label: "Blog Post 5 Image", location: "Blog listing — fifth article thumbnail" },
+  blog_6: { label: "Blog Post 6 Image", location: "Blog listing — sixth article thumbnail" },
+  // Lip Fillers
+  lipfillers_hero: { label: "Lip Fillers — Hero", location: "Hero banner on Lip Fillers page" },
+  lipfillers_secondary: { label: "Lip Fillers — Secondary", location: "Mid-section image on Lip Fillers page" },
+  lipfillers_testimonial: { label: "Lip Fillers — Testimonial", location: "Testimonial section image on Lip Fillers page" },
+  // Lip Filler Landing
+  lipfillerlanding_hero: { label: "Lip Filler Landing — Hero", location: "Hero banner on Lip Filler landing page" },
+  lipfillerlanding_secondary: { label: "Lip Filler Landing — Secondary", location: "Secondary image on Lip Filler landing page" },
+  // Dermal Filler
+  dermalfiller_hero: { label: "Dermal Filler — Hero", location: "Hero banner on Dermal Filler page" },
+  dermalfiller_secondary: { label: "Dermal Filler — Secondary", location: "Mid-section image on Dermal Filler page" },
+  dermalfiller_testimonial: { label: "Dermal Filler — Testimonial", location: "Testimonial section image on Dermal Filler page" },
+  // Anti-Wrinkle
+  antiwrinkle_hero: { label: "Anti-Wrinkle — Hero", location: "Hero banner on Anti-Wrinkle page" },
+  antiwrinkle_secondary: { label: "Anti-Wrinkle — Secondary", location: "Mid-section image on Anti-Wrinkle page" },
+  antiwrinkle_tertiary: { label: "Anti-Wrinkle — Third", location: "Third image on Anti-Wrinkle page" },
+  // Skin Boosters
+  skinboosters_hero: { label: "Skin Boosters — Hero", location: "Hero banner on Skin Boosters page" },
+  skinboosters_secondary: { label: "Skin Boosters — Secondary", location: "Secondary image on Skin Boosters page" },
+  // HydraFacial
+  hydrafacial_hero: { label: "HydraFacial — Hero", location: "Hero banner on HydraFacial page" },
+  hydrafacial_secondary: { label: "HydraFacial — Secondary", location: "Secondary image on HydraFacial page" },
+  // Chemical Peels
+  chemicalpeels_hero: { label: "Chemical Peels — Hero", location: "Hero banner on Chemical Peels page" },
+  chemicalpeels_secondary: { label: "Chemical Peels — Secondary", location: "Secondary image on Chemical Peels page" },
+  // Microneedling
+  microneedling_hero: { label: "Microneedling — Hero", location: "Hero banner on Microneedling page" },
+  microneedling_secondary: { label: "Microneedling — Secondary", location: "Secondary image on Microneedling page" },
+  // Mesotherapy
+  mesotherapy_hero: { label: "Mesotherapy — Hero", location: "Hero banner on Mesotherapy page" },
+  mesotherapy_secondary: { label: "Mesotherapy — Secondary", location: "Secondary image on Mesotherapy page" },
+  // PRP
+  prp_hero: { label: "PRP — Hero", location: "Hero banner on PRP page" },
+  prp_secondary: { label: "PRP — Secondary", location: "Secondary image on PRP page" },
+  // LED Therapy
+  ledtherapy_hero: { label: "LED Therapy — Hero", location: "Hero banner on LED Therapy page" },
+  ledtherapy_secondary: { label: "LED Therapy — Secondary", location: "Secondary image on LED Therapy page" },
+  // Dermaplaning
+  dermaplaning_hero: { label: "Dermaplaning — Hero", location: "Hero banner on Dermaplaning page" },
+  dermaplaning_secondary: { label: "Dermaplaning — Secondary", location: "Secondary image on Dermaplaning page" },
+  // Facial Balancing
+  facialbalancing_hero: { label: "Facial Balancing — Hero", location: "Hero banner on Facial Balancing page" },
+  facialbalancing_secondary: { label: "Facial Balancing — Secondary", location: "Secondary image on Facial Balancing page" },
+  // Fat Dissolve
+  fatdissolve_hero: { label: "Fat Dissolve — Hero", location: "Hero banner on Fat Dissolve page" },
+  fatdissolve_secondary: { label: "Fat Dissolve — Secondary", location: "Secondary image on Fat Dissolve page" },
+  // Acne Treatment
+  acnetreatment_hero: { label: "Acne Treatment — Hero", location: "Hero banner on Acne Treatment page" },
+  acnetreatment_secondary: { label: "Acne Treatment — Secondary", location: "Secondary image on Acne Treatment page" },
+  // Hyperpigmentation
+  hyperpigmentation_hero: { label: "Hyperpigmentation — Hero", location: "Hero banner on Hyperpigmentation page" },
+  hyperpigmentation_secondary: { label: "Hyperpigmentation — Secondary", location: "Secondary image on Hyperpigmentation page" },
+  // Consultations
+  consultations_hero: { label: "Consultations — Hero", location: "Hero banner on Consultations page" },
+  // Intimate Peels
+  intimatepeels_hero: { label: "Intimate Peels — Hero", location: "Hero banner on Intimate Peels page" },
+  // Micro Sclerotherapy
+  microsclerotherapy_hero: { label: "Micro Sclerotherapy — Hero", location: "Hero banner on Micro Sclerotherapy page" },
+  microsclerotherapy_secondary: { label: "Micro Sclerotherapy — Secondary", location: "Secondary image on Micro Sclerotherapy page" },
+  // Muse Landing
+  muselanding_hero: { label: "Content Model — Hero", location: "Hero banner on Content Model landing page" },
 };
 
 const getSlotInfo = (key: string) => {

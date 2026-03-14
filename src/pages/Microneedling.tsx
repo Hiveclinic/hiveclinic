@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Face Texture Repair", desc: "Microneedling combined with a chemical peel to treat scars, enlarged pores, and uneven texture.", price: "£130" },
@@ -24,12 +25,14 @@ const Microneedling = () => {
     "Microneedling Manchester City Centre | Hive Clinic",
     "Advanced microneedling with chemical peel from £130 at Hive Clinic, Manchester City Centre. Repair scars, texture, pores and stretch marks. Book now."
   );
+  const heroImg = useSiteImage("microneedling_hero", gallery5);
+  const secondaryImg = useSiteImage("microneedling_secondary", gallery3);
 
   return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
-        <img src={gallery5} alt="Microneedling treatment Manchester - skin texture repair at Hive Clinic" className="w-full h-full object-cover" />
+        <img src={heroImg} alt="Microneedling treatment Manchester - skin texture repair at Hive Clinic" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -75,7 +78,7 @@ const Microneedling = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery3} alt="Microneedling results at Hive Clinic Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={secondaryImg} alt="Microneedling results at Hive Clinic Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
           <div>
             <h2 className="font-display text-4xl md:text-5xl mb-6">Why Microneedling at Hive</h2>

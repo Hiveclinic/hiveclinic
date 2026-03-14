@@ -7,6 +7,7 @@ import gallery3 from "@/assets/gallery-3.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Anti-Wrinkle Consultation", desc: "Smooth forehead lines, frown lines, and crow's feet for a naturally refreshed look. Consultation required.", from: "£179" },
@@ -29,13 +30,16 @@ const AntiWrinkle = () => {
     "Anti-Wrinkle Consultation Manchester City Centre | Hive Clinic",
     "Book a wrinkle relaxing treatment consultation at Hive Clinic, Manchester City Centre. Soften forehead lines, frown lines and crow's feet with a qualified prescriber. Consultation required."
   );
+  const heroImg = useSiteImage("antiwrinkle_hero", gallery6);
+  const secondaryImg = useSiteImage("antiwrinkle_secondary", gallery3);
+  const tertiaryImg = useSiteImage("antiwrinkle_tertiary", gallery5);
 
   return (
     <Layout>
       {/* Hero */}
       <section className="relative min-h-[80vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={gallery6} alt="Anti-wrinkle consultation at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="Anti-wrinkle consultation at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -91,7 +95,7 @@ const AntiWrinkle = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="aspect-[4/5] overflow-hidden">
-              <img src={gallery3} alt="Wrinkle relaxing treatment results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
+              <img src={secondaryImg} alt="Wrinkle relaxing treatment results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" />
             </div>
             <div>
               <h2 className="font-display text-4xl md:text-5xl mb-6">Why Clients Choose Hive</h2>
@@ -148,7 +152,7 @@ const AntiWrinkle = () => {
           <h2 className="font-display text-4xl md:text-5xl mb-4">Real Results</h2>
           <p className="font-body text-muted-foreground mb-12">Subtle, natural, and refreshed.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[gallery3, gallery5, gallery6].map((img, i) => (
+            {[secondaryImg, tertiaryImg, heroImg].map((img, i) => (
               <div key={i} className="aspect-square overflow-hidden">
                 <img src={img} alt={`Wrinkle relaxing treatment result ${i + 1} at Hive Clinic Manchester City Centre`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
               </div>

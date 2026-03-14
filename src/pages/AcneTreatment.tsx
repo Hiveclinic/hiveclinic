@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What treatments help with acne?", a: "We offer chemical peels, HydraFacial, microneedling and LED light therapy — all proven to target active acne, reduce breakouts and improve skin texture over time." },
@@ -26,13 +27,15 @@ const AcneTreatment = () => {
     "Acne Treatment Manchester City Centre | Hive Clinic",
     "Effective acne treatments in Manchester City Centre including chemical peels, HydraFacial, microneedling and LED therapy. Clear skin starts with a free consultation at Hive Clinic."
   );
+  const heroImg = useSiteImage("acnetreatment_hero", gallery3);
+  const secondaryImg = useSiteImage("acnetreatment_secondary", gallery1);
 
   return (
     <Layout>
       {/* Hero */}
       <section className="relative min-h-[80vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={gallery3} alt="Acne treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="Acne treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -86,7 +89,7 @@ const AcneTreatment = () => {
               </Link>
             </div>
             <div>
-              <img src={gallery1} alt="Clear skin results after acne treatment at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
+              <img src={secondaryImg} alt="Clear skin results after acne treatment at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
             </div>
           </div>
         </div>

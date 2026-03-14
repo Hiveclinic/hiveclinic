@@ -6,6 +6,7 @@ import ModelCTA from "@/components/ModelCTA";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Lumi Eyes", desc: "Brighten and rejuvenate the under-eye area with this specialist polynucleotide treatment.", price: "£140" },
@@ -27,12 +28,14 @@ const SkinBoosters = () => {
     "Skin Boosters Manchester City Centre | Hive Clinic",
     "Advanced skin boosters and injectable remodelling from £140 at Hive Clinic, Manchester City Centre. Deep hydration and collagen stimulation. Book today."
   );
+  const heroImg = useSiteImage("skinboosters_hero", gallery1);
+  const secondaryImg = useSiteImage("skinboosters_secondary", gallery2);
 
   return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
-        <img src={gallery1} alt="Skin booster treatment Manchester - injectable remodelling at Hive Clinic" className="w-full h-full object-cover" />
+        <img src={heroImg} alt="Skin booster treatment Manchester - injectable remodelling at Hive Clinic" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -78,7 +81,7 @@ const SkinBoosters = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery2} alt="Skin booster results Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={secondaryImg} alt="Skin booster results Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
           <div>
             <h2 className="font-display text-4xl md:text-5xl mb-6">Why Skin Boosters at Hive</h2>

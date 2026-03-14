@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What does LED light therapy do?", a: "LED therapy uses different wavelengths of light to target specific skin concerns. Red light stimulates collagen, blue light targets acne-causing bacteria, green reduces pigmentation, and yellow soothes inflammation." },
@@ -18,12 +19,14 @@ const LEDTherapy = () => {
     "LED Light Therapy Manchester City Centre | Hive Clinic",
     "LED light therapy sessions from £45 at Hive Clinic, Manchester City Centre. Non-invasive skin healing for acne, pigmentation and ageing. Book today."
   );
+  const heroImg = useSiteImage("ledtherapy_hero", gallery5);
+  const secondaryImg = useSiteImage("ledtherapy_secondary", gallery3);
 
   return (
     <Layout>
       <section className="relative min-h-[70vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={gallery5} alt="LED light therapy treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="LED light therapy treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -63,7 +66,7 @@ const LEDTherapy = () => {
                 Book Appointment <ArrowRight size={14} />
               </Link>
             </div>
-            <div className="aspect-[4/5] overflow-hidden"><img src={gallery3} alt="LED light therapy results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
+            <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="LED light therapy results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
           </div>
         </div>
       </section>

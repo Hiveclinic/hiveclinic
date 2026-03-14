@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery1 from "@/assets/gallery-1.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What is facial balancing?", a: "Facial balancing uses strategic placement of dermal filler across multiple areas of the face to create harmonious proportions and symmetry — rather than treating one area in isolation." },
@@ -18,12 +19,14 @@ const FacialBalancing = () => {
     "Facial Balancing Manchester City Centre | Hive Clinic",
     "Facial balancing packages from £380 at Hive Clinic, Manchester City Centre. Multi-area dermal filler for complete facial harmony. Book your consultation."
   );
+  const heroImg = useSiteImage("facialbalancing_hero", gallery4);
+  const secondaryImg = useSiteImage("facialbalancing_secondary", gallery1);
 
   return (
     <Layout>
       <section className="relative min-h-[70vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={gallery4} alt="Facial balancing treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="Facial balancing treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -63,7 +66,7 @@ const FacialBalancing = () => {
               Book Consultation <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="aspect-[4/5] overflow-hidden"><img src={gallery1} alt="Facial balancing results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
+          <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="Facial balancing results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
         </div>
       </section>
 

@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What causes hyperpigmentation?", a: "Hyperpigmentation can be caused by sun exposure, hormonal changes (melasma), acne scarring, skin injuries or inflammation. A consultation helps identify the root cause." },
@@ -26,13 +27,15 @@ const HyperpigmentationTreatment = () => {
     "Hyperpigmentation Treatment Manchester | Hive Clinic",
     "Advanced hyperpigmentation treatments in Manchester City Centre. Chemical peels, microneedling and skin brightening at Hive Clinic. Book a free skin consultation today."
   );
+  const heroImg = useSiteImage("hyperpigmentation_hero", gallery5);
+  const secondaryImg = useSiteImage("hyperpigmentation_secondary", gallery2);
 
   return (
     <Layout>
       {/* Hero */}
       <section className="relative min-h-[80vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={gallery5} alt="Hyperpigmentation treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="Hyperpigmentation treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -86,7 +89,7 @@ const HyperpigmentationTreatment = () => {
               </Link>
             </div>
             <div>
-              <img src={gallery2} alt="Skin brightening results after hyperpigmentation treatment at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
+              <img src={secondaryImg} alt="Skin brightening results after hyperpigmentation treatment at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
             </div>
           </div>
         </div>

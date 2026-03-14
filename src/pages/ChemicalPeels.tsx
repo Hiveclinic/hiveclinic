@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Level 1 Chemical Peel - Face", desc: "For hormonal breakouts, scarring, and rough texture. Includes antibacterial cleanse and clarifying mask.", price: "£85" },
@@ -28,12 +29,14 @@ const ChemicalPeels = () => {
     "Chemical Peels Manchester City Centre | Hive Clinic",
     "Professional chemical peels from £85 at Hive Clinic, Manchester City Centre. Treat acne, scarring, pigmentation and uneven texture. Book a consultation."
   );
+  const heroImg = useSiteImage("chemicalpeels_hero", gallery4);
+  const secondaryImg = useSiteImage("chemicalpeels_secondary", gallery5);
 
   return (
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
-        <img src={gallery4} alt="Chemical peel treatment Manchester - Hive Clinic Deansgate" className="w-full h-full object-cover" />
+        <img src={heroImg} alt="Chemical peel treatment Manchester - Hive Clinic Deansgate" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -96,7 +99,7 @@ const ChemicalPeels = () => {
             </div>
           </div>
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery5} alt="Chemical peel results Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={secondaryImg} alt="Chemical peel results Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
         </div>
       </div>

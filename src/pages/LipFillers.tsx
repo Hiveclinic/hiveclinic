@@ -7,6 +7,7 @@ import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "Does lip filler hurt?", a: "We use a topical numbing cream and the filler itself contains anaesthetic, so most clients describe it as a mild pressure. Comfort is our priority." },
@@ -21,13 +22,16 @@ const LipFillers = () => {
     "Lip Filler Manchester City Centre | Hive Clinic",
     "Natural-looking lip filler from £80 at Hive Clinic, Manchester City Centre. Expert lip enhancement by a qualified prescriber in Deansgate. Book your free consultation."
   );
+  const heroImg = useSiteImage("lipfillers_hero", gallery4);
+  const secondaryImg = useSiteImage("lipfillers_secondary", gallery1);
+  const testimonialImg = useSiteImage("lipfillers_testimonial", gallery2);
 
   return (
   <Layout>
     {/* Hero */}
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
-        <img src={gallery4} alt="Lip filler treatment Manchester - natural results at Hive Clinic" className="w-full h-full object-cover" />
+        <img src={heroImg} alt="Lip filler treatment Manchester - natural results at Hive Clinic" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -80,7 +84,7 @@ const LipFillers = () => {
             </div>
           </div>
           <div className="aspect-[4/5] overflow-hidden">
-            <img src={gallery1} alt="Lip filler before and after results Manchester" className="w-full h-full object-cover" loading="lazy" />
+            <img src={secondaryImg} alt="Lip filler before and after results Manchester" className="w-full h-full object-cover" loading="lazy" />
           </div>
         </div>
       </div>
@@ -113,7 +117,7 @@ const LipFillers = () => {
         <h2 className="font-display text-4xl md:text-5xl mb-4">Real Results</h2>
         <p className="font-body text-muted-foreground mb-12">See the difference for yourself.</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[gallery1, gallery2, gallery4].map((img, i) => (
+          {[heroImg, secondaryImg, testimonialImg].map((img, i) => (
             <div key={i} className="aspect-square overflow-hidden">
               <img src={img} alt={`Lip filler result ${i + 1} at Hive Clinic Manchester`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
             </div>

@@ -7,18 +7,35 @@ import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
-const results = [
-  { img: gallery1, label: "Skin Glow Treatment" },
-  { img: gallery3, label: "Lip Enhancement" },
-  { img: gallery4, label: "Facial Treatment" },
-  { img: gallery5, label: "Skin Rejuvenation" },
-  { img: gallery2, label: "Post-Treatment Glow" },
-  { img: gallery6, label: "Skincare Ritual" },
+const resultLabels = [
+  "Skin Glow Treatment",
+  "Lip Enhancement",
+  "Facial Treatment",
+  "Skin Rejuvenation",
+  "Post-Treatment Glow",
+  "Skincare Ritual",
 ];
 
 const Results = () => {
   usePageMeta("Results Gallery | Hive Clinic Manchester City Centre", "See real treatment results from Hive Clinic, Manchester City Centre. Before and after photos from lip fillers, skin treatments and more.");
+
+  const r1 = useSiteImage("results_1", gallery1);
+  const r2 = useSiteImage("results_2", gallery3);
+  const r3 = useSiteImage("results_3", gallery4);
+  const r4 = useSiteImage("results_4", gallery5);
+  const r5 = useSiteImage("results_5", gallery2);
+  const r6 = useSiteImage("results_6", gallery6);
+  const results = [
+    { img: r1, label: resultLabels[0] },
+    { img: r2, label: resultLabels[1] },
+    { img: r3, label: resultLabels[2] },
+    { img: r4, label: resultLabels[3] },
+    { img: r5, label: resultLabels[4] },
+    { img: r6, label: resultLabels[5] },
+  ];
+
   return (
   <Layout>
     <section className="py-24">

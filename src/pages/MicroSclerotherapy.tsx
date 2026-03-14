@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What is micro sclerotherapy?", a: "Micro sclerotherapy is a minimally invasive treatment for thread veins (spider veins) on the legs. A sclerosing solution is injected into the affected veins, causing them to collapse and fade." },
@@ -19,12 +20,14 @@ const MicroSclerotherapy = () => {
     "Micro Sclerotherapy Manchester City Centre | Hive Clinic",
     "Micro sclerotherapy for thread vein removal at Hive Clinic, Manchester City Centre. Effective treatment for spider veins on legs. Book your consultation."
   );
+  const heroImg = useSiteImage("microsclerotherapy_hero", gallery5);
+  const secondaryImg = useSiteImage("microsclerotherapy_secondary", gallery6);
 
   return (
     <Layout>
       <section className="relative min-h-[70vh] flex items-center">
         <div className="absolute inset-0">
-          <img src={gallery5} alt="Micro sclerotherapy treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="Micro sclerotherapy treatment at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
@@ -64,7 +67,7 @@ const MicroSclerotherapy = () => {
               Book Consultation <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="aspect-[4/5] overflow-hidden"><img src={gallery6} alt="Thread vein treatment results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
+          <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="Thread vein treatment results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
         </div>
       </section>
 

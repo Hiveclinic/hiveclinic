@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery1 from "@/assets/gallery-1.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What is facial balancing?", a: "Facial balancing uses strategic placement of dermal filler across multiple areas of the face to create harmonious proportions and symmetry — rather than treating one area in isolation." },

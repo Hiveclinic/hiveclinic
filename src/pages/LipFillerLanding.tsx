@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, Award, Clock, CheckCircle, Star } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery4 from "@/assets/gallery-4.jpg";
-import gallery1 from "@/assets/gallery-1.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
+import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "How much does lip filler cost in Manchester?", a: "Lip filler at Hive Clinic starts from just £80 for 0.5ml. We offer a range of premium hyaluronic acid fillers to suit different goals and budgets." },

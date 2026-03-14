@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const faqs = [
   { q: "What treatments help with acne?", a: "We offer chemical peels, HydraFacial, microneedling and LED light therapy — all proven to target active acne, reduce breakouts and improve skin texture over time." },

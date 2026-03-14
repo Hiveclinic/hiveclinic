@@ -32,7 +32,7 @@ const Microneedling = () => {
   <Layout>
     <section className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0">
-        <img src={gallery5} alt="Microneedling treatment Manchester - skin texture repair at Hive Clinic" className="w-full h-full object-cover" />
+        <img src={heroImg} alt="Microneedling treatment Manchester - skin texture repair at Hive Clinic" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">

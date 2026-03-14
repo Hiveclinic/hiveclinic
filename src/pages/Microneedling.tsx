@@ -24,8 +24,8 @@ const Microneedling = () => {
     "Microneedling Manchester City Centre | Hive Clinic",
     "Advanced microneedling with chemical peel from £130 at Hive Clinic, Manchester City Centre. Repair scars, texture, pores and stretch marks. Book now."
   );
-  const heroImg = useSiteImage("microneedling_hero", gallery5);
-  const secondaryImg = useSiteImage("microneedling_secondary", gallery3);
+  const heroImg = useSiteImage("microneedling_hero", STOCK.microneedling_hero);
+  const secondaryImg = useSiteImage("microneedling_secondary", STOCK.microneedling_secondary);
 
   return (
   <Layout>

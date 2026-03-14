@@ -25,8 +25,8 @@ const HydraFacial = () => {
     "Hydrafacial Manchester City Centre | Hive Clinic",
     "Deep cleansing Hydrafacial treatments from £120 at Hive Clinic, Manchester City Centre. Achieve glass-like radiant skin with zero downtime. Book today."
   );
-  const heroImg = useSiteImage("hydrafacial_hero", gallery3);
-  const secondaryImg = useSiteImage("hydrafacial_secondary", gallery5);
+  const heroImg = useSiteImage("hydrafacial_hero", STOCK.hydrafacial_hero);
+  const secondaryImg = useSiteImage("hydrafacial_secondary", STOCK.hydrafacial_secondary);
 
   return (
   <Layout>

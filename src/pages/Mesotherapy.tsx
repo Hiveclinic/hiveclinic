@@ -18,8 +18,8 @@ const Mesotherapy = () => {
     "Mesotherapy Manchester City Centre | Hive Clinic",
     "Mesotherapy skin rejuvenation at Hive Clinic, Manchester City Centre. Vitamin-infused micro-injections for face, under eye and scalp. Book your consultation."
   );
-  const heroImg = useSiteImage("mesotherapy_hero", gallery4);
-  const secondaryImg = useSiteImage("mesotherapy_secondary", gallery1);
+  const heroImg = useSiteImage("mesotherapy_hero", STOCK.mesotherapy_hero);
+  const secondaryImg = useSiteImage("mesotherapy_secondary", STOCK.mesotherapy_secondary);
 
   return (
     <Layout>

@@ -19,8 +19,8 @@ const Dermaplaning = () => {
     "Dermaplaning Manchester City Centre | Hive Clinic",
     "Dermaplaning skin polish from £75 at Hive Clinic, Manchester City Centre. Instant smoothness and glow with zero downtime. Book your appointment."
   );
-  const heroImg = useSiteImage("dermaplaning_hero", gallery3);
-  const secondaryImg = useSiteImage("dermaplaning_secondary", gallery1);
+  const heroImg = useSiteImage("dermaplaning_hero", STOCK.dermaplaning_hero);
+  const secondaryImg = useSiteImage("dermaplaning_secondary", STOCK.dermaplaning_secondary);
 
   return (
     <Layout>

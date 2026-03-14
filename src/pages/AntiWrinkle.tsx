@@ -28,9 +28,9 @@ const AntiWrinkle = () => {
     "Anti-Wrinkle Consultation Manchester City Centre | Hive Clinic",
     "Book a wrinkle relaxing treatment consultation at Hive Clinic, Manchester City Centre. Soften forehead lines, frown lines and crow's feet with a qualified prescriber. Consultation required."
   );
-  const heroImg = useSiteImage("antiwrinkle_hero", gallery6);
-  const secondaryImg = useSiteImage("antiwrinkle_secondary", gallery3);
-  const tertiaryImg = useSiteImage("antiwrinkle_tertiary", gallery5);
+  const heroImg = useSiteImage("antiwrinkle_hero", STOCK.antiwrinkle_hero);
+  const secondaryImg = useSiteImage("antiwrinkle_secondary", STOCK.antiwrinkle_secondary);
+  const tertiaryImg = useSiteImage("antiwrinkle_tertiary", STOCK.antiwrinkle_tertiary);
 
   return (
     <Layout>

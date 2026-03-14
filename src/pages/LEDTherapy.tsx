@@ -18,8 +18,8 @@ const LEDTherapy = () => {
     "LED Light Therapy Manchester City Centre | Hive Clinic",
     "LED light therapy sessions from £45 at Hive Clinic, Manchester City Centre. Non-invasive skin healing for acne, pigmentation and ageing. Book today."
   );
-  const heroImg = useSiteImage("ledtherapy_hero", gallery5);
-  const secondaryImg = useSiteImage("ledtherapy_secondary", gallery3);
+  const heroImg = useSiteImage("ledtherapy_hero", STOCK.ledtherapy_hero);
+  const secondaryImg = useSiteImage("ledtherapy_secondary", STOCK.ledtherapy_secondary);
 
   return (
     <Layout>

@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Face Texture Repair", desc: "Microneedling combined with a chemical peel to treat scars, enlarged pores, and uneven texture.", price: "£130" },

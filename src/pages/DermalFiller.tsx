@@ -7,6 +7,7 @@ import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 const treatments = [
   { name: "Lip Filler", desc: "Natural-looking volume and shape enhancement.", from: "£80" },

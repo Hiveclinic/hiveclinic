@@ -20,12 +20,12 @@ const Terms = () => {
             </div>
 
             <div>
-              <h2 className="font-display text-3xl mb-4">2. Booking & Deposits</h2>
+              <h2 className="font-display text-3xl mb-4">2. Booking & Booking Fees</h2>
               <ul className="space-y-3 list-disc pl-5">
-                <li>A non-refundable deposit of 20% of the total treatment cost is required at the time of booking to secure your appointment.</li>
+                <li>A non-refundable booking fee of 20% of the total treatment cost is required at the time of booking to secure your appointment.</li>
                 <li>The remaining balance is payable on the day of your appointment, prior to treatment commencing.</li>
-                <li>Deposits are non-refundable and non-transferable under any circumstances.</li>
-                <li>Bookings are not confirmed until the deposit has been received and a confirmation has been issued by Hive Clinic.</li>
+                <li>Booking fees are non-refundable and non-transferable under any circumstances.</li>
+                <li>Bookings are not confirmed until the booking fee has been received and a confirmation has been issued by Hive Clinic.</li>
                 <li>We accept payment by cash, debit card, and credit card. Pay-later options are available through Klarna and Clearpay for eligible treatments, subject to their own terms and conditions.</li>
                 <li>All prices listed on our website and marketing materials are subject to change without prior notice. The price confirmed at the time of booking will be honoured for that appointment.</li>
               </ul>

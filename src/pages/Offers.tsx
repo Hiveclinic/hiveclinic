@@ -16,6 +16,7 @@ type Offer = {
   description: string | null;
   duration_mins: number;
   category: string;
+  image_url: string | null;
 };
 
 type SortOption = "default" | "price-low" | "price-high" | "savings";
@@ -41,7 +42,7 @@ const Offers = () => {
   useEffect(() => {
     supabase
       .from("treatments")
-      .select("id, name, slug, price, offer_price, offer_label, description, duration_mins, category")
+      .select("id, name, slug, price, offer_price, offer_label, description, duration_mins, category, image_url")
       .eq("active", true)
       .eq("on_offer", true)
       .order("sort_order")
@@ -154,48 +155,70 @@ const Offers = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <div className="border border-gold/30 bg-background p-6 h-full flex flex-col group hover:border-gold transition-colors">
-                    <div className="flex items-start justify-between gap-3 mb-4">
-                      {offer.offer_label && (
-                        <span className="px-3 py-1 bg-gold/10 text-gold font-body text-xs tracking-wider uppercase">
-                          {offer.offer_label}
-                        </span>
-                      )}
-                      <span className="px-3 py-1 bg-secondary font-body text-xs tracking-wider uppercase text-muted-foreground ml-auto">
-                        {offer.category}
-                      </span>
-                    </div>
-                    <h2 className="font-display text-xl mb-2 group-hover:text-gold transition-colors">{offer.name}</h2>
-                    {offer.description && (
-                      <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-3">
-                        {offer.description}
-                      </p>
-                    )}
-                    <div className="mt-auto">
-                      <div className="flex items-baseline gap-3 mb-4">
-                        {offer.offer_price != null && offer.offer_price > 0 ? (
-                          <>
-                            <span className="font-body text-sm line-through text-muted-foreground">
-                              £{Number(offer.price).toFixed(0)}
+                  <div className="border border-gold/30 bg-background h-full flex flex-col group hover:border-gold transition-colors overflow-hidden">
+                    {offer.image_url && (
+                      <div className="relative aspect-[3/4] overflow-hidden">
+                        <img
+                          src={offer.image_url}
+                          alt={offer.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+                        <div className="absolute bottom-4 left-4 right-4">
+                          {offer.offer_label && (
+                            <span className="px-3 py-1 bg-gold/90 text-background font-body text-xs tracking-wider uppercase">
+                              {offer.offer_label}
                             </span>
-                            <span className="font-display text-2xl text-gold">
-                              £{Number(offer.offer_price).toFixed(0)}
-                            </span>
-                            <span className="font-body text-xs text-green-600 font-medium">
-                              Save £{(Number(offer.price) - Number(offer.offer_price)).toFixed(0)}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="font-display text-2xl text-gold">£{Number(offer.price).toFixed(0)}</span>
-                        )}
-                        <span className="font-body text-xs text-muted-foreground">· {offer.duration_mins} mins</span>
+                          )}
+                        </div>
                       </div>
-                      <Link
-                        to={`/bookings?treatment=${offer.slug}`}
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors w-full justify-center"
-                      >
-                        Book Now <ArrowRight size={12} />
-                      </Link>
+                    )}
+                    <div className="p-6 flex flex-col flex-1">
+                      {!offer.image_url && (
+                        <div className="flex items-start justify-between gap-3 mb-4">
+                          {offer.offer_label && (
+                            <span className="px-3 py-1 bg-gold/10 text-gold font-body text-xs tracking-wider uppercase">
+                              {offer.offer_label}
+                            </span>
+                          )}
+                          <span className="px-3 py-1 bg-secondary font-body text-xs tracking-wider uppercase text-muted-foreground ml-auto">
+                            {offer.category}
+                          </span>
+                        </div>
+                      )}
+                      <h2 className="font-display text-xl mb-2 group-hover:text-gold transition-colors">{offer.name}</h2>
+                      {offer.description && (
+                        <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-3">
+                          {offer.description}
+                        </p>
+                      )}
+                      <div className="mt-auto">
+                        <div className="flex items-baseline gap-3 mb-4">
+                          {offer.offer_price != null && offer.offer_price > 0 ? (
+                            <>
+                              <span className="font-body text-sm line-through text-muted-foreground">
+                                £{Number(offer.price).toFixed(0)}
+                              </span>
+                              <span className="font-display text-2xl text-gold">
+                                £{Number(offer.offer_price).toFixed(0)}
+                              </span>
+                              <span className="font-body text-xs text-green-600 font-medium">
+                                Save £{(Number(offer.price) - Number(offer.offer_price)).toFixed(0)}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="font-display text-2xl text-gold">£{Number(offer.price).toFixed(0)}</span>
+                          )}
+                          <span className="font-body text-xs text-muted-foreground">· {offer.duration_mins} mins</span>
+                        </div>
+                        <Link
+                          to={`/bookings?treatment=${offer.slug}`}
+                          className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors w-full justify-center"
+                        >
+                          Book Now <ArrowRight size={12} />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </motion.div>

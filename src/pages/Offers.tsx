@@ -16,6 +16,7 @@ type Offer = {
   description: string | null;
   duration_mins: number;
   category: string;
+  image_url: string | null;
 };
 
 type SortOption = "default" | "price-low" | "price-high" | "savings";

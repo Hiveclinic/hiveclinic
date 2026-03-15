@@ -42,7 +42,7 @@ const Offers = () => {
   useEffect(() => {
     supabase
       .from("treatments")
-      .select("id, name, slug, price, offer_price, offer_label, description, duration_mins, category")
+      .select("id, name, slug, price, offer_price, offer_label, description, duration_mins, category, image_url")
       .eq("active", true)
       .eq("on_offer", true)
       .order("sort_order")

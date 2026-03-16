@@ -77,6 +77,12 @@ const BookingSystem = () => {
   const [packages, setPackages] = useState<TreatmentPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [bookingSettings, setBookingSettings] = useState({ min_advance_hours: 48, max_advance_days: 60, calendar_view: 'monthly' as string });
+  const [calendarMonth, setCalendarMonth] = useState(() => {
+    const now = new Date();
+    // If we're past mid-month or all remaining days are < 48hrs, start on next month
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
 
   // Multi-treatment selection
   const [selectedTreatments, setSelectedTreatments] = useState<Treatment[]>([]);

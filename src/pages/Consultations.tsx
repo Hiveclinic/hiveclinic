@@ -22,9 +22,9 @@ const Consultations = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="border border-border p-8 text-center">
             <Video size={24} strokeWidth={1.5} className="text-gold mx-auto mb-4" />
-            <h3 className="font-display text-2xl mb-2">Free Online Consultation</h3>
-            <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">30 minutes · Free</p>
-            <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Suitability check, treatment planning, and pre-book guidance — all from the comfort of your home.</p>
+            <h3 className="font-display text-2xl mb-2">Free Phone Consultation</h3>
+            <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">30 minutes · Free · Over the Phone</p>
+            <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Suitability check, treatment planning, and pre-book guidance — all over the phone from the comfort of your home.</p>
             <Link to="/bookings?category=Consultations" className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">Book Free Consultation <ArrowRight size={12} /></Link>
           </div>
 

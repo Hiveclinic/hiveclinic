@@ -25,3 +25,7 @@ project_id = "kyjzjgdcfisuxogledux"
     verify_jwt = false
   [functions.validate-discount]
     verify_jwt = false
+  [functions.calendar-feed]
+    verify_jwt = false
+  [functions.send-email]
+    verify_jwt = false

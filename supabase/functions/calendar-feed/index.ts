@@ -5,9 +5,10 @@ serve(async (req) => {
   const url = new URL(req.url);
   const token = url.searchParams.get("token");
 
-  // Simple token auth - must match the service role key's first 20 chars
+  // Token auth - match against first 20 chars of anon key (used in admin UI)
+  const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-  const expectedToken = serviceKey.substring(0, 20);
+  const expectedToken = anonKey.substring(0, 20);
 
   if (!token || token !== expectedToken) {
     return new Response("Unauthorized", { status: 401 });

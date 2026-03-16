@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Settings, Save, Globe, Clock, Shield, Mail, MessageSquare, CreditCard, Palette } from "lucide-react";
+import { Settings, Save, Globe, Clock, Shield, Mail, MessageSquare, CreditCard, Palette, Calendar, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 
 const AdminSettingsTab = () => {
+  const [copied, setCopied] = useState(false);
   const [settings, setSettings] = useState({
     clinic_name: "Hive Clinic",
     clinic_email: "hello@hiveclinic.co.uk",
@@ -59,10 +60,23 @@ const AdminSettingsTab = () => {
     { name: "Stripe", desc: "Payment processing", status: "Configured" },
     { name: "Resend", desc: "Email delivery", status: "Configured" },
     { name: "WhatsApp", desc: "Client messaging", status: "Configured" },
-    { name: "Google Calendar", desc: "Calendar sync", status: "Not configured" },
+    { name: "Calendar Feed", desc: "Outlook / iPhone sync", status: "Configured" },
     { name: "Meta Pixel", desc: "Ad tracking", status: "Configured" },
     { name: "Mailchimp", desc: "Email marketing", status: "Configured" },
   ];
+
+  // Build the calendar feed URL using the service role key token
+  const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+  const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const feedToken = anonKey?.substring(0, 20) || "";
+  const calendarFeedUrl = `https://${projectId}.supabase.co/functions/v1/calendar-feed?token=${feedToken}`;
+
+  const copyFeedUrl = () => {
+    navigator.clipboard.writeText(calendarFeedUrl);
+    setCopied(true);
+    toast.success("Calendar feed URL copied!");
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="space-y-6">
@@ -108,6 +122,31 @@ const AdminSettingsTab = () => {
           rows={4}
           className="w-full px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background focus:border-accent outline-none resize-none"
         />
+      </div>
+
+      {/* Calendar Feed */}
+      <div className="bg-card border border-border rounded-xl p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <Calendar size={16} className="text-accent" />
+          <h3 className="font-display text-lg">Calendar Sync</h3>
+        </div>
+        <p className="font-body text-sm text-muted-foreground mb-3">
+          Subscribe to this URL in Outlook, iPhone Calendar, or Google Calendar to automatically see all bookings.
+        </p>
+        <div className="flex items-center gap-2">
+          <input
+            readOnly
+            value={calendarFeedUrl}
+            className="flex-1 px-4 py-2.5 border border-border rounded-lg font-body text-xs bg-background text-muted-foreground truncate"
+          />
+          <button onClick={copyFeedUrl} className="flex items-center gap-1.5 px-4 py-2.5 bg-foreground text-background rounded-lg font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors shrink-0">
+            {copied ? <Check size={14} /> : <Copy size={14} />}
+            {copied ? "Copied" : "Copy"}
+          </button>
+        </div>
+        <p className="font-body text-[10px] text-muted-foreground mt-2">
+          In Outlook: File → Account Settings → Internet Calendars → New → paste URL. On iPhone: Settings → Calendar → Accounts → Add Account → Other → Add Subscribed Calendar.
+        </p>
       </div>
 
       {/* Integrations */}

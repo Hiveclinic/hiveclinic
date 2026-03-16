@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Settings, Save, Globe, Clock, Shield, Mail, MessageSquare, CreditCard, Palette } from "lucide-react";
+import { Settings, Save, Globe, Clock, Shield, Mail, MessageSquare, CreditCard, Palette, Calendar, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 
 const AdminSettingsTab = () => {

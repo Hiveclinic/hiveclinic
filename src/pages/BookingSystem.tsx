@@ -125,13 +125,14 @@ const BookingSystem = () => {
 
   const loadData = async () => {
     setLoading(true);
-    const [treatRes, availRes, blockedRes, bookingsRes, addonsRes, packagesRes] = await Promise.all([
+    const [treatRes, availRes, blockedRes, bookingsRes, addonsRes, packagesRes, settingsRes] = await Promise.all([
       supabase.from("treatments").select("*").eq("active", true).order("sort_order"),
       supabase.from("availability").select("*"),
       supabase.from("blocked_dates").select("blocked_date"),
       supabase.from("bookings").select("booking_date, booking_time").in("status", ["pending", "confirmed"]),
       supabase.from("treatment_addons").select("*").eq("active", true).order("sort_order"),
       supabase.from("treatment_packages").select("*").eq("active", true).order("sort_order"),
+      supabase.from("site_settings").select("min_advance_hours, max_advance_days, calendar_view").eq("id", "global").single(),
     ]);
     if (treatRes.data) setTreatments(treatRes.data as Treatment[]);
     if (availRes.data) setAvailability(availRes.data as Availability[]);
@@ -139,6 +140,14 @@ const BookingSystem = () => {
     if (bookingsRes.data) setExistingBookings(bookingsRes.data);
     if (addonsRes.data) setAddons(addonsRes.data as Addon[]);
     if (packagesRes.data) setPackages(packagesRes.data as TreatmentPackage[]);
+    if (settingsRes.data) {
+      const s = settingsRes.data as any;
+      setBookingSettings({
+        min_advance_hours: s.min_advance_hours ?? 48,
+        max_advance_days: s.max_advance_days ?? 60,
+        calendar_view: s.calendar_view ?? 'monthly',
+      });
+    }
     setLoading(false);
   };
 

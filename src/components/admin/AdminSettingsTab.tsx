@@ -60,10 +60,23 @@ const AdminSettingsTab = () => {
     { name: "Stripe", desc: "Payment processing", status: "Configured" },
     { name: "Resend", desc: "Email delivery", status: "Configured" },
     { name: "WhatsApp", desc: "Client messaging", status: "Configured" },
-    { name: "Google Calendar", desc: "Calendar sync", status: "Not configured" },
+    { name: "Calendar Feed", desc: "Outlook / iPhone sync", status: "Configured" },
     { name: "Meta Pixel", desc: "Ad tracking", status: "Configured" },
     { name: "Mailchimp", desc: "Email marketing", status: "Configured" },
   ];
+
+  // Build the calendar feed URL using the service role key token
+  const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+  const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const feedToken = anonKey?.substring(0, 20) || "";
+  const calendarFeedUrl = `https://${projectId}.supabase.co/functions/v1/calendar-feed?token=${feedToken}`;
+
+  const copyFeedUrl = () => {
+    navigator.clipboard.writeText(calendarFeedUrl);
+    setCopied(true);
+    toast.success("Calendar feed URL copied!");
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="space-y-6">

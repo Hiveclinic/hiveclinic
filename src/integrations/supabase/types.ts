@@ -792,21 +792,30 @@ export type Database = {
           announcement_active: boolean | null
           announcement_link: string | null
           announcement_text: string | null
+          calendar_view: string | null
           id: string
+          max_advance_days: number | null
+          min_advance_hours: number | null
           updated_at: string | null
         }
         Insert: {
           announcement_active?: boolean | null
           announcement_link?: string | null
           announcement_text?: string | null
+          calendar_view?: string | null
           id?: string
+          max_advance_days?: number | null
+          min_advance_hours?: number | null
           updated_at?: string | null
         }
         Update: {
           announcement_active?: boolean | null
           announcement_link?: string | null
           announcement_text?: string | null
+          calendar_view?: string | null
           id?: string
+          max_advance_days?: number | null
+          min_advance_hours?: number | null
           updated_at?: string | null
         }
         Relationships: []

@@ -77,6 +77,12 @@ const BookingSystem = () => {
   const [packages, setPackages] = useState<TreatmentPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [bookingSettings, setBookingSettings] = useState({ min_advance_hours: 48, max_advance_days: 60, calendar_view: 'monthly' as string });
+  const [calendarMonth, setCalendarMonth] = useState(() => {
+    const now = new Date();
+    // If we're past mid-month or all remaining days are < 48hrs, start on next month
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
 
   // Multi-treatment selection
   const [selectedTreatments, setSelectedTreatments] = useState<Treatment[]>([]);
@@ -119,13 +125,14 @@ const BookingSystem = () => {
 
   const loadData = async () => {
     setLoading(true);
-    const [treatRes, availRes, blockedRes, bookingsRes, addonsRes, packagesRes] = await Promise.all([
+    const [treatRes, availRes, blockedRes, bookingsRes, addonsRes, packagesRes, settingsRes] = await Promise.all([
       supabase.from("treatments").select("*").eq("active", true).order("sort_order"),
       supabase.from("availability").select("*"),
       supabase.from("blocked_dates").select("blocked_date"),
       supabase.from("bookings").select("booking_date, booking_time").in("status", ["pending", "confirmed"]),
       supabase.from("treatment_addons").select("*").eq("active", true).order("sort_order"),
       supabase.from("treatment_packages").select("*").eq("active", true).order("sort_order"),
+      supabase.from("site_settings").select("min_advance_hours, max_advance_days, calendar_view").eq("id", "global").single(),
     ]);
     if (treatRes.data) setTreatments(treatRes.data as Treatment[]);
     if (availRes.data) setAvailability(availRes.data as Availability[]);
@@ -133,6 +140,14 @@ const BookingSystem = () => {
     if (bookingsRes.data) setExistingBookings(bookingsRes.data);
     if (addonsRes.data) setAddons(addonsRes.data as Addon[]);
     if (packagesRes.data) setPackages(packagesRes.data as TreatmentPackage[]);
+    if (settingsRes.data) {
+      const s = settingsRes.data as any;
+      setBookingSettings({
+        min_advance_hours: s.min_advance_hours ?? 48,
+        max_advance_days: s.max_advance_days ?? 60,
+        calendar_view: s.calendar_view ?? 'monthly',
+      });
+    }
     setLoading(false);
   };
 
@@ -218,20 +233,49 @@ const BookingSystem = () => {
   const depositRequired = selectedTreatments.some(t => t.deposit_required);
   const totalDeposit = selectedTreatments.reduce((sum, t) => t.deposit_required ? sum + Number(t.deposit_amount) : sum, 0);
 
-  const availableDates = useMemo(() => {
-    const dates: Date[] = [];
-    const today = startOfDay(new Date());
-    for (let i = 1; i <= 30; i++) {
-      const date = addDays(today, i);
-      const dayOfWeek = date.getDay();
-      const avail = availability.find((a) => a.day_of_week === dayOfWeek);
-      const dateStr = format(date, "yyyy-MM-dd");
-      if (avail?.is_available && !blockedDates.includes(dateStr)) {
-        dates.push(date);
-      }
+  const minBookingDate = useMemo(() => {
+    const now = new Date();
+    return addDays(now, bookingSettings.min_advance_hours / 24);
+  }, [bookingSettings.min_advance_hours]);
+
+  const maxBookingDate = useMemo(() => {
+    return addDays(new Date(), bookingSettings.max_advance_days);
+  }, [bookingSettings.max_advance_days]);
+
+  const isDateAvailable = (date: Date) => {
+    if (date < startOfDay(minBookingDate)) return false;
+    if (date > maxBookingDate) return false;
+    const dayOfWeek = date.getDay();
+    const avail = availability.find((a) => a.day_of_week === dayOfWeek);
+    const dateStr = format(date, "yyyy-MM-dd");
+    return !!(avail?.is_available && !blockedDates.includes(dateStr));
+  };
+
+  // Generate calendar days for current month view
+  const calendarDays = useMemo(() => {
+    const year = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startPad = firstDay.getDay(); // 0=Sun
+    const days: (Date | null)[] = [];
+    for (let i = 0; i < startPad; i++) days.push(null);
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      days.push(new Date(year, month, d));
     }
-    return dates;
-  }, [availability, blockedDates]);
+    return days;
+  }, [calendarMonth]);
+
+  const canGoPrevMonth = useMemo(() => {
+    const prev = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1);
+    const now = new Date();
+    return prev.getFullYear() > now.getFullYear() || (prev.getFullYear() === now.getFullYear() && prev.getMonth() >= now.getMonth());
+  }, [calendarMonth]);
+
+  const canGoNextMonth = useMemo(() => {
+    const next = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1);
+    return next <= maxBookingDate;
+  }, [calendarMonth, maxBookingDate]);
 
   const timeSlots = useMemo(() => {
     if (!selectedDate || selectedTreatments.length === 0) return [];
@@ -631,14 +675,55 @@ const BookingSystem = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <h3 className="font-display text-lg mb-4 flex items-center gap-2"><Calendar size={16} strokeWidth={1.5} /> Choose a Date</h3>
-                    <div className="grid grid-cols-3 gap-2">
-                      {availableDates.map((date) => (
-                        <button key={date.toISOString()} onClick={() => { setSelectedDate(date); setSelectedTime(null); }} className={`p-3 border text-center transition-all ${selectedDate?.toDateString() === date.toDateString() ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
-                          <p className="font-body text-xs text-muted-foreground">{format(date, "EEE")}</p>
-                          <p className="font-display text-lg">{format(date, "d")}</p>
-                          <p className="font-body text-xs text-muted-foreground">{format(date, "MMM")}</p>
-                        </button>
+                    <p className="font-body text-xs text-muted-foreground mb-3">Bookings must be made at least {bookingSettings.min_advance_hours} hours in advance.</p>
+                    {/* Monthly Calendar Navigation */}
+                    <div className="flex items-center justify-between mb-3">
+                      <button
+                        onClick={() => setCalendarMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
+                        disabled={!canGoPrevMonth}
+                        className="p-2 border border-border hover:border-gold/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <ChevronLeft size={14} />
+                      </button>
+                      <span className="font-display text-base">{format(calendarMonth, "MMMM yyyy")}</span>
+                      <button
+                        onClick={() => setCalendarMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
+                        disabled={!canGoNextMonth}
+                        className="p-2 border border-border hover:border-gold/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <ChevronRight size={14} />
+                      </button>
+                    </div>
+                    {/* Day Headers */}
+                    <div className="grid grid-cols-7 gap-1 mb-1">
+                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
+                        <div key={d} className="text-center font-body text-[10px] text-muted-foreground uppercase tracking-wider py-1">{d}</div>
                       ))}
+                    </div>
+                    {/* Calendar Grid */}
+                    <div className="grid grid-cols-7 gap-1">
+                      {calendarDays.map((date, i) => {
+                        if (!date) return <div key={`pad-${i}`} />;
+                        const available = isDateAvailable(date);
+                        const isSelected = selectedDate?.toDateString() === date.toDateString();
+                        const isToday = date.toDateString() === new Date().toDateString();
+                        return (
+                          <button
+                            key={date.toISOString()}
+                            onClick={() => { if (available) { setSelectedDate(date); setSelectedTime(null); } }}
+                            disabled={!available}
+                            className={`aspect-square flex items-center justify-center font-body text-sm transition-all border ${
+                              isSelected
+                                ? "border-gold bg-gold/10 text-foreground font-medium"
+                                : available
+                                  ? "border-border hover:border-gold/40 cursor-pointer"
+                                  : "border-transparent text-muted-foreground/30 cursor-not-allowed"
+                            } ${isToday && !isSelected ? "ring-1 ring-gold/30" : ""}`}
+                          >
+                            {date.getDate()}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                   <div>

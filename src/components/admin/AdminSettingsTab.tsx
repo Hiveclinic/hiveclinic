@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Settings, Save, Globe, Clock, Shield, Mail, MessageSquare, CreditCard, Palette, Calendar, Copy, Check } from "lucide-react";
+import { Settings, Save, Globe, Clock, Shield, Calendar, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 
 const AdminSettingsTab = () => {
@@ -15,16 +15,31 @@ const AdminSettingsTab = () => {
     max_reschedules: "2",
     deposit_default: "30",
   });
+  const [bookingSettings, setBookingSettings] = useState({
+    min_advance_hours: 48,
+    max_advance_days: 60,
+  });
   const [saving, setSaving] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setSaving(true);
-    // Save to localStorage for now (could be moved to site_settings table)
+    // Save clinic settings to localStorage
     localStorage.setItem("hive_clinic_settings", JSON.stringify(settings));
-    setTimeout(() => {
-      setSaving(false);
+    // Save booking settings to site_settings table
+    const { error } = await supabase
+      .from("site_settings")
+      .update({
+        min_advance_hours: bookingSettings.min_advance_hours,
+        max_advance_days: bookingSettings.max_advance_days,
+        calendar_view: 'monthly',
+      })
+      .eq("id", "global");
+    setSaving(false);
+    if (error) {
+      toast.error("Failed to save booking settings");
+    } else {
       toast.success("Settings saved");
-    }, 500);
+    }
   };
 
   useEffect(() => {
@@ -32,6 +47,16 @@ const AdminSettingsTab = () => {
     if (saved) {
       try { setSettings(JSON.parse(saved)); } catch {}
     }
+    // Load booking settings from DB
+    supabase.from("site_settings").select("min_advance_hours, max_advance_days").eq("id", "global").single().then(({ data }) => {
+      if (data) {
+        const d = data as any;
+        setBookingSettings({
+          min_advance_hours: d.min_advance_hours ?? 48,
+          max_advance_days: d.max_advance_days ?? 60,
+        });
+      }
+    });
   }, []);
 
   const sections = [
@@ -65,7 +90,6 @@ const AdminSettingsTab = () => {
     { name: "Mailchimp", desc: "Email marketing", status: "Configured" },
   ];
 
-  // Build the calendar feed URL using the service role key token
   const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
   const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   const feedToken = anonKey?.substring(0, 20) || "";
@@ -109,6 +133,38 @@ const AdminSettingsTab = () => {
           </div>
         </div>
       ))}
+
+      {/* Booking Advance Settings */}
+      <div className="bg-card border border-border rounded-xl p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <Calendar size={16} className="text-accent" />
+          <h3 className="font-display text-lg">Booking Availability</h3>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1 block">Minimum Advance Booking (hours)</label>
+            <input
+              type="number"
+              min={0}
+              value={bookingSettings.min_advance_hours}
+              onChange={e => setBookingSettings(prev => ({ ...prev, min_advance_hours: Number(e.target.value) }))}
+              className="w-full px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background focus:border-accent outline-none"
+            />
+            <p className="font-body text-[10px] text-muted-foreground mt-1">Clients must book at least this many hours ahead (e.g. 48 = 2 days).</p>
+          </div>
+          <div>
+            <label className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1 block">Max Advance Booking (days)</label>
+            <input
+              type="number"
+              min={1}
+              value={bookingSettings.max_advance_days}
+              onChange={e => setBookingSettings(prev => ({ ...prev, max_advance_days: Number(e.target.value) }))}
+              className="w-full px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background focus:border-accent outline-none"
+            />
+            <p className="font-body text-[10px] text-muted-foreground mt-1">How far ahead clients can book (e.g. 60 = ~2 months).</p>
+          </div>
+        </div>
+      </div>
 
       {/* Booking Terms */}
       <div className="bg-card border border-border rounded-xl p-5">

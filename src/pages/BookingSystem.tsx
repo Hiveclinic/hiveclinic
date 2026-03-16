@@ -675,14 +675,55 @@ const BookingSystem = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <h3 className="font-display text-lg mb-4 flex items-center gap-2"><Calendar size={16} strokeWidth={1.5} /> Choose a Date</h3>
-                    <div className="grid grid-cols-3 gap-2">
-                      {availableDates.map((date) => (
-                        <button key={date.toISOString()} onClick={() => { setSelectedDate(date); setSelectedTime(null); }} className={`p-3 border text-center transition-all ${selectedDate?.toDateString() === date.toDateString() ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
-                          <p className="font-body text-xs text-muted-foreground">{format(date, "EEE")}</p>
-                          <p className="font-display text-lg">{format(date, "d")}</p>
-                          <p className="font-body text-xs text-muted-foreground">{format(date, "MMM")}</p>
-                        </button>
+                    <p className="font-body text-xs text-muted-foreground mb-3">Bookings must be made at least {bookingSettings.min_advance_hours} hours in advance.</p>
+                    {/* Monthly Calendar Navigation */}
+                    <div className="flex items-center justify-between mb-3">
+                      <button
+                        onClick={() => setCalendarMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
+                        disabled={!canGoPrevMonth}
+                        className="p-2 border border-border hover:border-gold/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <ChevronLeft size={14} />
+                      </button>
+                      <span className="font-display text-base">{format(calendarMonth, "MMMM yyyy")}</span>
+                      <button
+                        onClick={() => setCalendarMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
+                        disabled={!canGoNextMonth}
+                        className="p-2 border border-border hover:border-gold/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <ChevronRight size={14} />
+                      </button>
+                    </div>
+                    {/* Day Headers */}
+                    <div className="grid grid-cols-7 gap-1 mb-1">
+                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
+                        <div key={d} className="text-center font-body text-[10px] text-muted-foreground uppercase tracking-wider py-1">{d}</div>
                       ))}
+                    </div>
+                    {/* Calendar Grid */}
+                    <div className="grid grid-cols-7 gap-1">
+                      {calendarDays.map((date, i) => {
+                        if (!date) return <div key={`pad-${i}`} />;
+                        const available = isDateAvailable(date);
+                        const isSelected = selectedDate?.toDateString() === date.toDateString();
+                        const isToday = date.toDateString() === new Date().toDateString();
+                        return (
+                          <button
+                            key={date.toISOString()}
+                            onClick={() => { if (available) { setSelectedDate(date); setSelectedTime(null); } }}
+                            disabled={!available}
+                            className={`aspect-square flex items-center justify-center font-body text-sm transition-all border ${
+                              isSelected
+                                ? "border-gold bg-gold/10 text-foreground font-medium"
+                                : available
+                                  ? "border-border hover:border-gold/40 cursor-pointer"
+                                  : "border-transparent text-muted-foreground/30 cursor-not-allowed"
+                            } ${isToday && !isSelected ? "ring-1 ring-gold/30" : ""}`}
+                          >
+                            {date.getDate()}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                   <div>

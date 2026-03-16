@@ -124,6 +124,31 @@ const AdminSettingsTab = () => {
         />
       </div>
 
+      {/* Calendar Feed */}
+      <div className="bg-card border border-border rounded-xl p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <Calendar size={16} className="text-accent" />
+          <h3 className="font-display text-lg">Calendar Sync</h3>
+        </div>
+        <p className="font-body text-sm text-muted-foreground mb-3">
+          Subscribe to this URL in Outlook, iPhone Calendar, or Google Calendar to automatically see all bookings.
+        </p>
+        <div className="flex items-center gap-2">
+          <input
+            readOnly
+            value={calendarFeedUrl}
+            className="flex-1 px-4 py-2.5 border border-border rounded-lg font-body text-xs bg-background text-muted-foreground truncate"
+          />
+          <button onClick={copyFeedUrl} className="flex items-center gap-1.5 px-4 py-2.5 bg-foreground text-background rounded-lg font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors shrink-0">
+            {copied ? <Check size={14} /> : <Copy size={14} />}
+            {copied ? "Copied" : "Copy"}
+          </button>
+        </div>
+        <p className="font-body text-[10px] text-muted-foreground mt-2">
+          In Outlook: File → Account Settings → Internet Calendars → New → paste URL. On iPhone: Settings → Calendar → Accounts → Add Account → Other → Add Subscribed Calendar.
+        </p>
+      </div>
+
       {/* Integrations */}
       <div className="bg-card border border-border rounded-xl p-5">
         <div className="flex items-center gap-2 mb-4">

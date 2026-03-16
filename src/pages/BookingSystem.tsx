@@ -233,20 +233,49 @@ const BookingSystem = () => {
   const depositRequired = selectedTreatments.some(t => t.deposit_required);
   const totalDeposit = selectedTreatments.reduce((sum, t) => t.deposit_required ? sum + Number(t.deposit_amount) : sum, 0);
 
-  const availableDates = useMemo(() => {
-    const dates: Date[] = [];
-    const today = startOfDay(new Date());
-    for (let i = 1; i <= 30; i++) {
-      const date = addDays(today, i);
-      const dayOfWeek = date.getDay();
-      const avail = availability.find((a) => a.day_of_week === dayOfWeek);
-      const dateStr = format(date, "yyyy-MM-dd");
-      if (avail?.is_available && !blockedDates.includes(dateStr)) {
-        dates.push(date);
-      }
+  const minBookingDate = useMemo(() => {
+    const now = new Date();
+    return addDays(now, bookingSettings.min_advance_hours / 24);
+  }, [bookingSettings.min_advance_hours]);
+
+  const maxBookingDate = useMemo(() => {
+    return addDays(new Date(), bookingSettings.max_advance_days);
+  }, [bookingSettings.max_advance_days]);
+
+  const isDateAvailable = (date: Date) => {
+    if (date < startOfDay(minBookingDate)) return false;
+    if (date > maxBookingDate) return false;
+    const dayOfWeek = date.getDay();
+    const avail = availability.find((a) => a.day_of_week === dayOfWeek);
+    const dateStr = format(date, "yyyy-MM-dd");
+    return !!(avail?.is_available && !blockedDates.includes(dateStr));
+  };
+
+  // Generate calendar days for current month view
+  const calendarDays = useMemo(() => {
+    const year = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startPad = firstDay.getDay(); // 0=Sun
+    const days: (Date | null)[] = [];
+    for (let i = 0; i < startPad; i++) days.push(null);
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      days.push(new Date(year, month, d));
     }
-    return dates;
-  }, [availability, blockedDates]);
+    return days;
+  }, [calendarMonth]);
+
+  const canGoPrevMonth = useMemo(() => {
+    const prev = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1);
+    const now = new Date();
+    return prev.getFullYear() > now.getFullYear() || (prev.getFullYear() === now.getFullYear() && prev.getMonth() >= now.getMonth());
+  }, [calendarMonth]);
+
+  const canGoNextMonth = useMemo(() => {
+    const next = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1);
+    return next <= maxBookingDate;
+  }, [calendarMonth, maxBookingDate]);
 
   const timeSlots = useMemo(() => {
     if (!selectedDate || selectedTreatments.length === 0) return [];

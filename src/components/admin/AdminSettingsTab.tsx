@@ -91,9 +91,7 @@ const AdminSettingsTab = () => {
   ];
 
   const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-  const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  const feedToken = anonKey?.substring(0, 20) || "";
-  const calendarFeedUrl = `https://${projectId}.supabase.co/functions/v1/calendar-feed?token=${feedToken}`;
+  const calendarFeedUrl = `https://${projectId}.supabase.co/functions/v1/calendar-feed`;
 
   const copyFeedUrl = () => {
     navigator.clipboard.writeText(calendarFeedUrl);

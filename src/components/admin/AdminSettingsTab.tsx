@@ -4,6 +4,7 @@ import { Settings, Save, Globe, Clock, Shield, Mail, MessageSquare, CreditCard, 
 import { toast } from "sonner";
 
 const AdminSettingsTab = () => {
+  const [copied, setCopied] = useState(false);
   const [settings, setSettings] = useState({
     clinic_name: "Hive Clinic",
     clinic_email: "hello@hiveclinic.co.uk",

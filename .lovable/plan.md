@@ -1,133 +1,105 @@
 
 
-# Phase 3: Admin Enhancements, Multi-Treatment Booking, and Fixes
+# Meta Tracking Setup — Pixel + Conversions API + CRM Leads
 
-## 1. Fix 404 on Admin Login (Published Site)
+## Summary
 
-The route `/hive-admin-login` exists in the code and works in preview. The 404 on the published site (`hiveclinicuk.com//hive-admin-login`) is caused by the double slash `//` in the URL. This is a hosting/domain redirect issue -- the custom domain is likely appending a trailing slash to the base URL before the path.
-
-**Fix:** The app needs to be re-published so the latest routes are deployed. No code change needed -- the route is correctly defined at line 82 of `App.tsx`. The double slash in the URL you shared is the problem -- use `hiveclinicuk.com/hive-admin-login` (single slash).
+Complete Meta tracking integration: update the Pixel ID globally, add browser events across the site, build a secure Conversions API edge function, create a leads table with CRM stages, and add an admin test utility tab.
 
 ---
 
-## 2. Website Image Management via Admin
+## Part 1 — Update Meta Pixel (index.html)
 
-Currently there's no way to update hero images, gallery images, or page images from the admin dashboard. These are hardcoded in component files.
+The site already has a Meta Pixel installed (ID `1385983552443887`). Replace it with the new Pixel ID `3990951841193317` in `index.html`. Update both the script init and the noscript fallback img tag.
 
-**Changes:**
-- Add a new "Images" section to `AdminSiteTab.tsx` that stores editable image URLs in the `site_settings` table (or a new `site_images` table)
-- Create a `site_images` table with fields: `key` (text, e.g. "hero_home", "gallery_1"), `image_url` (text), `alt_text` (text), `updated_at`
-- Admin can upload images to the `client-images` bucket (or a new public `site-images` bucket) and the URL is saved
-- Frontend pages read from this table and fall back to the hardcoded defaults if no override exists
-- Create a public storage bucket `site-images` for website content images
+## Part 2 — Browser Events (use-tracking.ts + various pages)
 
----
+The `trackEvent` helper already fires `fbq('track', ...)`. Add specific event calls:
 
-## 3. Treatment Menu Reordering
+- **ViewContent** — fire on treatment detail pages (DermalFiller, LipFillers, AntiWrinkle, etc.) and Offers page via a `useEffect` in each page or a shared hook
+- **Lead** — already fires on contact form submit (`trackContactSubmit`). Ensure it also fires on consultation form submit
+- **Contact** — fire on WhatsApp button click, contact form submit, and any DM intent links
+- **Schedule** — fire on booking intent clicks (BookingSystem page load or "Book Now" button clicks)
+- **CompleteRegistration** — fire on VIP popup email signup success
 
-Drag-and-drop reordering already exists in `AdminTreatmentsTab.tsx` (lines 144-155). The `sort_order` is saved on drag end. This already works. If it feels unresponsive, I will add visual feedback (highlight, ghost element).
+Update `use-tracking.ts` with new helper functions: `trackViewContent`, `trackSchedule`, `trackCompleteRegistration`, `trackContact`. Wire these into the relevant components.
 
-**Enhancement:** Add category-level reordering so you can control the order categories appear on the booking page (not just treatments within a category).
+## Part 3 — Conversions API Edge Function
 
----
+Create `supabase/functions/meta-capi/index.ts`:
 
-## 4. Take Payment from Calendar (Admin)
+- Accepts POST with: `event_name`, `email`, `phone`, `lead_id`, `click_id`, `test_event_code`
+- Reads `META_CAPI_ACCESS_TOKEN` from env
+- Normalizes email/phone, hashes with SHA-256 server-side
+- Builds Meta CAPI payload with `action_source: "system_generated"`, `custom_data.event_source: "crm"`, `custom_data.lead_event_source: "Hive Clinic CRM"`
+- POSTs to `https://graph.facebook.com/v25.0/3990951841193317/events`
+- Returns Meta's response or a clean error
+- CORS headers for admin frontend calls
+- Auth: requires authenticated admin user (checks JWT + admin role)
 
-Add a "Take Payment" button in the calendar edit modal that creates a Stripe Payment Link for the outstanding balance and copies it to clipboard (so admin can send it to the client).
+Add to `supabase/config.toml` with `verify_jwt = false` (validate in code).
 
-**Changes to `AdminCalendarView.tsx`:**
-- Add a "Send Payment Link" button in the edit modal for bookings with `payment_status` of "pending" or "deposit_paid"
-- This calls an edge function that creates a Stripe Payment Link for the remaining balance
-- Link is copied to clipboard so admin can share via WhatsApp/SMS
-- Add a "Mark as Paid" button for in-person/cash payments that updates `payment_status` to "fully_paid"
+**Secret needed**: `META_CAPI_ACCESS_TOKEN` — will request via add_secret tool.
 
-**New edge function:** `create-payment-link` -- creates a Stripe Payment Link for a given amount and booking reference.
+## Part 4 — CRM Leads Table
 
----
+Create a `leads` table via migration:
 
-## 5. Payment Plan Customisation
+| Column | Type | Default |
+|---|---|---|
+| id | uuid | gen_random_uuid() |
+| customer_email | text | required |
+| customer_name | text | nullable |
+| customer_phone | text | nullable |
+| lead_source | text | 'website' |
+| status | text | 'Lead' |
+| meta_click_id | text | nullable |
+| meta_sent_at | timestamptz | nullable |
+| notes | text | nullable |
+| created_at | timestamptz | now() |
+| updated_at | timestamptz | now() |
 
-Currently `AdminPaymentPlansTab.tsx` allows creating plans and recording payments, but you cannot edit the instalment amount after creation.
+RLS: admin-only for all operations. Status values: Lead, QualifiedLead, ConsultationBooked, ConsultationCompleted, Purchase.
 
-**Changes:**
-- Add an "Edit" button on each active plan
-- Allow editing: `instalment_amount`, `total_instalments`, `total_amount`, `next_payment_date`
-- Add a "Record Custom Amount" option when recording a payment (instead of always recording the fixed instalment amount)
-- Show remaining balance clearly
+## Part 5 — Admin Meta Test Tab
 
----
+Create `src/components/admin/AdminMetaTestTab.tsx`:
 
-## 6. Cancellation Sync Between Admin and Client
+- Form fields: event name (dropdown of CRM stages), email, phone, lead ID, click ID, test event code (optional)
+- Validates inputs with zod
+- Calls the `meta-capi` edge function
+- Displays Meta's response in a success/error panel
+- Admin-only (already protected by admin auth)
 
-Currently:
-- Admin cancels via calendar -> updates DB status to "cancelled" and sends cancellation email to client. Client sees it in their portal (already works via DB read).
-- Client cancels via portal -> updates DB status to "cancelled". Admin sees it in bookings/calendar (already works via DB read).
+Add a "Meta CAPI" tab to the Admin page under the "Business" or "Admin" nav group.
 
-**Missing:** When a client cancels, the admin doesn't get notified.
+## Part 6 — Admin Leads Management
 
-**Fix:** In `CustomerPortal.tsx` `cancelBooking` function, after updating the booking status, trigger `send-booking-email` with a new `emailType: "client_cancelled"` that sends a notification to the admin email.
+Create `src/components/admin/AdminLeadsTab.tsx`:
 
----
-
-## 7. Mailchimp Email Automations
-
-The `mailchimp-subscribe` edge function already exists and works. It's already wired into the booking checkout flow. To set up automations:
-
-**What I will do:**
-- Update `mailchimp-subscribe` to accept and pass `firstName`, `lastName`, and `tags` (e.g. "Booked Client", treatment category)
-- Add tags based on treatment category so you can create targeted automations in Mailchimp
-- Ensure the VIP popup signup also triggers the function (it already does via `email_subscribers` table insert, but needs to call the edge function too)
-
-**What you need to do in Mailchimp:**
-- Log into your Mailchimp account
-- Go to Automations and create journeys based on tags (e.g. "Welcome" email for new subscribers, "Post-Treatment" for booked clients)
-- The integration will automatically tag contacts when they book
-
----
-
-## 8. Multiple Treatment Selection + Course Suggestions
-
-This is the biggest feature. Currently only one treatment can be selected per booking.
-
-**Changes to `BookingSystem.tsx`:**
-- Allow selecting multiple treatments (change `selectedTreatment` from single to array `selectedTreatments`)
-- Show a running total of all selected treatments
-- After selection, check if any selected treatment has packages in `treatment_packages` and show a "Save with a Course" prompt
-- Display savings: "Book 3 sessions of Level 1 Face Peel and save £25 (£230 vs £255)"
-- Duration and time slot calculation accounts for combined treatment time
-- Checkout sends all treatment IDs
-
-**Changes to `create-booking-checkout`:**
-- Accept an array of treatment IDs
-- Create line items for each treatment in the Stripe checkout session
-- Store multiple treatment references in the booking (use the existing `addon_ids` pattern or add a `treatment_ids` array column)
-
-**Database change:**
-- Add `treatment_ids` (uuid array) column to `bookings` table to support multi-treatment bookings
-- Keep `treatment_id` for backwards compatibility (primary treatment)
+- List leads with status badges
+- Change lead status via dropdown — on status change, auto-fire the CAPI event to Meta
+- Add to admin nav under "Clients" group
 
 ---
 
-## Technical Summary
+## Files to Create
+- `supabase/functions/meta-capi/index.ts`
+- `src/components/admin/AdminMetaTestTab.tsx`
+- `src/components/admin/AdminLeadsTab.tsx`
+- Migration SQL for `leads` table
 
-### Database Changes:
-- New table: `site_images` (key, image_url, alt_text, updated_at) with RLS for admin write, public read
-- New storage bucket: `site-images` (public)
-- Add column `treatment_ids` (uuid[]) to `bookings` table
+## Files to Modify
+- `index.html` — swap Pixel ID
+- `src/hooks/use-tracking.ts` — add ViewContent, Schedule, CompleteRegistration, Contact helpers
+- `src/components/WhatsAppButton.tsx` — fire Contact event on click
+- `src/components/VIPPopup.tsx` — fire CompleteRegistration on signup
+- `src/pages/BookingSystem.tsx` — fire Schedule event
+- Treatment pages — fire ViewContent event (via shared hook or individual useEffect)
+- `src/pages/Contact.tsx` — fire Contact event on submit
+- `src/pages/Admin.tsx` — add leads + meta-test tabs to nav and rendering
+- `supabase/config.toml` — add meta-capi function config
 
-### Edge Functions:
-- New: `create-payment-link` -- generates Stripe Payment Link
-- Update: `mailchimp-subscribe` -- accept firstName, lastName, tags
-- Update: `send-booking-email` -- add "client_cancelled" email type for admin notification
-
-### Frontend Files to Edit:
-- `AdminCalendarView.tsx` -- add payment link + mark as paid buttons
-- `AdminPaymentPlansTab.tsx` -- add edit and custom payment recording
-- `AdminSiteTab.tsx` -- add image management section
-- `BookingSystem.tsx` -- multi-treatment selection + course suggestions
-- `CustomerPortal.tsx` -- trigger admin notification on client cancellation
-- `create-booking-checkout` -- support multiple treatments
-
-### Frontend Files to Create:
-- None (all changes are to existing files)
+## Secret Required
+- `META_CAPI_ACCESS_TOKEN` — will prompt you to paste your Meta access token
 

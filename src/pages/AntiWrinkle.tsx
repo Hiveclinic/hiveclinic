@@ -56,7 +56,7 @@ const AntiWrinkle = () => {
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=a5750435-49e2-4958-b48c-b87b91a55b5e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                href="https://hiveclinicuk.setmore.com/book?products=a5750435-49e2-4958-b48c-b87b91a55b5e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
@@ -86,7 +86,7 @@ const AntiWrinkle = () => {
           </div>
           <div className="text-center mt-12">
             <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=a5750435-49e2-4958-b48c-b87b91a55b5e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                href="https://hiveclinicuk.setmore.com/book?products=a5750435-49e2-4958-b48c-b87b91a55b5e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
@@ -206,7 +206,7 @@ const AntiWrinkle = () => {
           <p className="font-body text-muted-foreground mb-8">Book a free, no-obligation consultation to discuss your goals with our expert prescriber.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=a5750435-49e2-4958-b48c-b87b91a55b5e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                href="https://hiveclinicuk.setmore.com/book?products=a5750435-49e2-4958-b48c-b87b91a55b5e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">

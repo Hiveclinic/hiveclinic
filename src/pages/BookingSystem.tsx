@@ -1,255 +1,862 @@
-import { motion } from "framer-motion";
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, ChevronDown, X, Package, Camera } from "lucide-react";
+import { format, addDays, startOfDay } from "date-fns";
 import Layout from "@/components/Layout";
-import { ChevronDown, Calendar, Clock, Shield, CheckCircle } from "lucide-react";
-import { useState } from "react";
-import { usePageMeta } from "@/hooks/use-page-meta";
+import { supabase } from "@/integrations/supabase/client";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
-const SETMORE_URL = "https://hiveclinicuk.setmore.com";
-const POLICY_URL = "https://hiveclinicuk.com/policies";
+type Treatment = {
+  id: string;
+  name: string;
+  slug: string;
+  category: string;
+  duration_mins: number;
+  price: number;
+  deposit_amount: number;
+  deposit_required: boolean;
+  payment_type: string;
+  description: string | null;
+  on_offer: boolean;
+  offer_price: number | null;
+  offer_label: string | null;
+};
 
-const faqs = [
-  { q: "Do I need a consultation first?", a: "Yes - for all injectable treatments, an initial consultation is required. This ensures your safety and allows us to create a personalised treatment plan." },
-  { q: "Is there any downtime?", a: "It depends on the treatment. Most facial treatments have minimal downtime. Injectables may involve slight swelling for 24-48 hours. We will discuss this during your consultation." },
-  { q: "How do I prepare for my appointment?", a: "Avoid alcohol 24 hours before, arrive with a clean face if possible, and let us know about any medications or allergies." },
-  { q: "Can I pay in instalments?", a: "Yes! We offer Klarna and Clearpay for eligible treatments, so you can spread the cost." },
-  { q: "What if I need to reschedule?", a: "We ask for at least 24 hours notice for cancellations or rescheduling. Late cancellations may incur a fee." },
-];
+type Addon = {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  duration_mins: number;
+  applicable_categories: string[] | null;
+};
 
-const categories = [
-  {
-    title: "Skin Treatments",
-    services: [
-      { name: "BioRePeel Face", price: "£95", benefit: "Clear, smooth, refined skin" },
-      { name: "BioRePeel Body", price: "£120", benefit: "Full body skin renewal" },
-      { name: "Glass Skin Treatment", price: "£140", benefit: "Hydrated, radiant finish" },
-      { name: "Chemical Peel", price: "£80", benefit: "Deep exfoliation and renewal" },
-      { name: "Dermaplaning", price: "£55", benefit: "Smooth, peach-fuzz free skin" },
-      { name: "LED Light Therapy", price: "£40", benefit: "Calm, heal and rejuvenate" },
-    ],
-  },
-  {
-    title: "Skin Boosters",
-    services: [
-      { name: "Profhilo", price: "£280", benefit: "Deep hydration and skin remodelling" },
-      { name: "Seventy Hyal", price: "£200", benefit: "Lightweight skin boost" },
-      { name: "Polynucleotides", price: "£250", benefit: "Bio-regenerative skin repair" },
-    ],
-  },
-  {
-    title: "Microneedling",
-    services: [
-      { name: "Microneedling Face", price: "£150", benefit: "Collagen stimulation and renewal" },
-      { name: "Microneedling with PRP", price: "£250", benefit: "Enhanced healing with platelet-rich plasma" },
-    ],
-  },
-  {
-    title: "Hydrafacial",
-    services: [
-      { name: "Hydrafacial Signature", price: "£99", benefit: "Deep cleanse, extract and hydrate" },
-      { name: "Hydrafacial Deluxe", price: "£140", benefit: "Signature plus LED and boosters" },
-    ],
-  },
-  {
-    title: "Injectables",
-    services: [
-      { name: "Lip Filler 0.5ml", price: "£100", benefit: "Subtle natural enhancement" },
-      { name: "Lip Filler 1ml", price: "£160", benefit: "Natural volume and shape" },
-      { name: "Dermal Filler 1ml", price: "£180", benefit: "Restore volume and contour" },
-      { name: "Jaw and Chin Filler", price: "£250", benefit: "Define and sculpt the jawline" },
-      { name: "Cheek Filler", price: "£250", benefit: "Lift and restore cheek volume" },
-      { name: "Non-Surgical Rhinoplasty", price: "£280", benefit: "Reshape without surgery" },
-    ],
-  },
-  {
-    title: "Anti-Wrinkle",
-    services: [
-      { name: "Anti-Wrinkle 1 Area", price: "£120", benefit: "Smooth fine lines" },
-      { name: "Anti-Wrinkle 2 Areas", price: "£180", benefit: "Forehead and frown lines" },
-      { name: "Anti-Wrinkle 3 Areas", price: "£220", benefit: "Full upper face treatment" },
-    ],
-  },
-  {
-    title: "Intimate Pigment Treatments",
-    services: [
-      { name: "Intimate Peel", price: "£80", benefit: "Even tone and brighten" },
-      { name: "Intimate Peel Course (3)", price: "£200", benefit: "Progressive results" },
-    ],
-  },
-  {
-    title: "Body",
-    services: [
-      { name: "Fat Dissolving", price: "£180", benefit: "Reduce stubborn fat pockets" },
-      { name: "Micro-Sclerotherapy", price: "£200", benefit: "Treat thread veins" },
-    ],
-  },
-  {
-    title: "Wellness",
-    services: [
-      { name: "PRP Hair Restoration", price: "£250", benefit: "Stimulate natural hair growth" },
-      { name: "PRP Facial", price: "£200", benefit: "Natural skin rejuvenation" },
-    ],
-  },
-  {
-    title: "IV Drip Therapy",
-    services: [
-      { name: "Immunity Boost IV", price: "£150", benefit: "Strengthen your immune system" },
-      { name: "Glow IV", price: "£150", benefit: "Radiance from within" },
-      { name: "Energy IV", price: "£150", benefit: "Revitalise and recharge" },
-    ],
-  },
-];
+type Availability = {
+  day_of_week: number;
+  start_time: string;
+  end_time: string;
+  slot_duration_mins: number;
+  is_available: boolean;
+};
 
-const BookNowButton = ({ className = "" }: { className?: string }) => (
-  <div className={className}>
-    <a
-      href={SETMORE_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center justify-center h-12 px-8 bg-primary text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors text-sm"
-    >
-      Book Now
-    </a>
-    <p className="text-xs text-muted-foreground mt-2">
-      By booking, you agree to our{" "}
-      <a href={POLICY_URL} target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-        booking policies
-      </a>
-    </p>
-  </div>
-);
+type TreatmentPackage = {
+  id: string;
+  name: string;
+  treatment_id: string;
+  sessions_count: number;
+  total_price: number;
+  price_per_session: number;
+  valid_days: number;
+};
 
-const ServiceCard = ({ name, price, benefit }: { name: string; price: string; benefit: string }) => (
-  <div className="border border-border rounded-lg p-5 flex flex-col justify-between gap-4 bg-card">
-    <div>
-      <div className="flex items-baseline justify-between gap-2 mb-1">
-        <h4 className="font-medium text-sm">{name}</h4>
-        <span className="text-sm font-medium text-primary whitespace-nowrap">{price}</span>
-      </div>
-      <p className="text-xs text-muted-foreground">{benefit}</p>
-    </div>
-    <BookNowButton />
-  </div>
-);
+const STEPS = ["Treatments", "Date & Time", "Your Details", "Payment"];
+
+const CATEGORY_ROUTES: Record<string, string> = {
+  "Fillers": "/treatments/lip-fillers-manchester",
+  "Anti-Wrinkle": "/treatments/anti-wrinkle-injections-manchester",
+  "Facials": "/treatments/hydrafacial-manchester",
+  "Peels": "/treatments/chemical-peels-manchester",
+  "Skin Rejuvenation": "/treatments/skin-boosters-manchester",
+  "Fat Dissolve": "/treatments/fat-dissolving-manchester",
+  "Micro Sclerotherapy": "/treatments/micro-sclerotherapy-manchester",
+  "Consultations": "/treatments/consultations",
+  "Content Model": "/muse",
+};
+
+const POPULAR_SLUGS: string[] = [];
 
 const BookingSystem = () => {
-  usePageMeta(
-    "Book Appointment | Hive Clinic Manchester",
-    "Book your aesthetic treatment at Hive Clinic, Manchester. Lip fillers, skin treatments, consultations and more."
-  );
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [searchParams] = useSearchParams();
+  const [step, setStep] = useState(0);
+  const [treatments, setTreatments] = useState<Treatment[]>([]);
+  const [addons, setAddons] = useState<Addon[]>([]);
+  const [availability, setAvailability] = useState<Availability[]>([]);
+  const [blockedDates, setBlockedDates] = useState<string[]>([]);
+  const [existingBookings, setExistingBookings] = useState<{ booking_date: string; booking_time: string }[]>([]);
+  const [packages, setPackages] = useState<TreatmentPackage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [bookingSettings, setBookingSettings] = useState({ min_advance_hours: 48, max_advance_days: 60, calendar_view: 'monthly' as string });
+  const [calendarMonth, setCalendarMonth] = useState(() => {
+    const now = new Date();
+    // If we're past mid-month or all remaining days are < 48hrs, start on next month
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
 
-  const scrollToTreatments = () => {
-    document.getElementById("treatments")?.scrollIntoView({ behavior: "smooth" });
+  // Multi-treatment selection
+  const [selectedTreatments, setSelectedTreatments] = useState<Treatment[]>([]);
+  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [customerName, setCustomerName] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [notes, setNotes] = useState("");
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountResult, setDiscountResult] = useState<{ valid: boolean; discountAmount: number; discountValue: number; discountType: string } | null>(null);
+  const [discountError, setDiscountError] = useState("");
+  const [paymentMode, setPaymentMode] = useState<"deposit" | "full">("full");
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [addonsOpen, setAddonsOpen] = useState(false);
+  const [showCoursePrompt, setShowCoursePrompt] = useState(false);
+
+  useEffect(() => { loadData(); }, []);
+
+  // Auto-select treatment or category from URL params + pre-fill customer details
+  useEffect(() => {
+    if (treatments.length === 0) return;
+    const treatmentSlug = searchParams.get("treatment");
+    const categoryParam = searchParams.get("category");
+    const emailParam = searchParams.get("email");
+    const nameParam = searchParams.get("name");
+    if (emailParam) setCustomerEmail(emailParam);
+    if (nameParam) setCustomerName(nameParam);
+    if (treatmentSlug) {
+      const found = treatments.find(t => t.slug === treatmentSlug);
+      if (found && !selectedTreatments.some(s => s.id === found.id)) {
+        setSelectedTreatments([found]);
+        setStep(1);
+      }
+    } else if (categoryParam) {
+      setExpandedCategory(categoryParam);
+    }
+  }, [treatments, searchParams]);
+
+  const loadData = async () => {
+    setLoading(true);
+    const [treatRes, availRes, blockedRes, bookingsRes, addonsRes, packagesRes, settingsRes] = await Promise.all([
+      supabase.from("treatments").select("*").eq("active", true).order("sort_order"),
+      supabase.from("availability").select("*"),
+      supabase.from("blocked_dates").select("blocked_date"),
+      supabase.from("bookings").select("booking_date, booking_time").in("status", ["pending", "confirmed"]),
+      supabase.from("treatment_addons").select("*").eq("active", true).order("sort_order"),
+      supabase.from("treatment_packages").select("*").eq("active", true).order("sort_order"),
+      supabase.from("site_settings").select("min_advance_hours, max_advance_days, calendar_view").eq("id", "global").single(),
+    ]);
+    if (treatRes.data) setTreatments(treatRes.data as Treatment[]);
+    if (availRes.data) setAvailability(availRes.data as Availability[]);
+    if (blockedRes.data) setBlockedDates(blockedRes.data.map((d: { blocked_date: string }) => d.blocked_date));
+    if (bookingsRes.data) setExistingBookings(bookingsRes.data);
+    if (addonsRes.data) setAddons(addonsRes.data as Addon[]);
+    if (packagesRes.data) setPackages(packagesRes.data as TreatmentPackage[]);
+    if (settingsRes.data) {
+      const s = settingsRes.data as any;
+      setBookingSettings({
+        min_advance_hours: s.min_advance_hours ?? 48,
+        max_advance_days: s.max_advance_days ?? 60,
+        calendar_view: s.calendar_view ?? 'monthly',
+      });
+    }
+    setLoading(false);
   };
+
+  const categories = useMemo(() => {
+    const cats = [...new Set(treatments.map((t) => t.category))];
+    return cats.sort();
+  }, [treatments]);
+
+  const popularTreatments = useMemo(() => {
+    return treatments.filter(t => POPULAR_SLUGS.includes(t.slug)).slice(0, 5);
+  }, [treatments]);
+
+  const offerTreatments = useMemo(() => {
+    return treatments.filter(t => t.on_offer && t.offer_label);
+  }, [treatments]);
+
+  const categoryTreatments = useMemo(() => {
+    if (!expandedCategory) return [];
+    return treatments.filter(t => t.category === expandedCategory);
+  }, [treatments, expandedCategory]);
+
+  // Primary treatment for addon filtering
+  const primaryTreatment = selectedTreatments[0] || null;
+
+  const applicableAddons = useMemo(() => {
+    if (!primaryTreatment) return [];
+    const selectedCategories = [...new Set(selectedTreatments.map(t => t.category))];
+    return addons.filter(a => {
+      if (!a.applicable_categories || a.applicable_categories.length === 0) return true;
+      return selectedCategories.some(c => a.applicable_categories!.includes(c));
+    });
+  }, [selectedTreatments, addons, primaryTreatment]);
+
+  // Course suggestions for selected treatments
+  const courseSuggestions = useMemo(() => {
+    if (selectedTreatments.length === 0) return [];
+    const suggestions: { treatment: Treatment; pkg: TreatmentPackage; savings: number; singleTotal: number }[] = [];
+    for (const t of selectedTreatments) {
+      const treatmentPackages = packages.filter(p => p.treatment_id === t.id);
+      for (const pkg of treatmentPackages) {
+        const singleTotal = Number(t.price) * pkg.sessions_count;
+        const savings = singleTotal - Number(pkg.total_price);
+        if (savings > 0) {
+          suggestions.push({ treatment: t, pkg, savings, singleTotal });
+        }
+      }
+    }
+    return suggestions;
+  }, [selectedTreatments, packages]);
+
+  const toggleAddon = (id: string) => {
+    setSelectedAddons(prev => prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]);
+  };
+
+  const addonsTotal = useMemo(() => {
+    return selectedAddons.reduce((sum, id) => {
+      const addon = addons.find(a => a.id === id);
+      return sum + (addon ? addon.price : 0);
+    }, 0);
+  }, [selectedAddons, addons]);
+
+  const addonsDuration = useMemo(() => {
+    return selectedAddons.reduce((sum, id) => {
+      const addon = addons.find(a => a.id === id);
+      return sum + (addon ? addon.duration_mins : 0);
+    }, 0);
+  }, [selectedAddons, addons]);
+
+  const treatmentsTotal = useMemo(() => {
+    return selectedTreatments.reduce((sum, t) => {
+      const price = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
+      return sum + price;
+    }, 0);
+  }, [selectedTreatments]);
+
+  const treatmentsDuration = useMemo(() => {
+    return selectedTreatments.reduce((sum, t) => sum + t.duration_mins, 0);
+  }, [selectedTreatments]);
+
+  const totalDuration = treatmentsDuration + addonsDuration;
+
+  // Check if any selected treatment requires deposit
+  const depositRequired = selectedTreatments.some(t => t.deposit_required);
+  const totalDeposit = selectedTreatments.reduce((sum, t) => t.deposit_required ? sum + Number(t.deposit_amount) : sum, 0);
+
+  const minBookingDate = useMemo(() => {
+    const now = new Date();
+    return addDays(now, bookingSettings.min_advance_hours / 24);
+  }, [bookingSettings.min_advance_hours]);
+
+  const maxBookingDate = useMemo(() => {
+    return addDays(new Date(), bookingSettings.max_advance_days);
+  }, [bookingSettings.max_advance_days]);
+
+  const isDateAvailable = (date: Date) => {
+    if (date < startOfDay(minBookingDate)) return false;
+    if (date > maxBookingDate) return false;
+    const dayOfWeek = date.getDay();
+    const avail = availability.find((a) => a.day_of_week === dayOfWeek);
+    const dateStr = format(date, "yyyy-MM-dd");
+    return !!(avail?.is_available && !blockedDates.includes(dateStr));
+  };
+
+  // Generate calendar days for current month view
+  const calendarDays = useMemo(() => {
+    const year = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startPad = firstDay.getDay(); // 0=Sun
+    const days: (Date | null)[] = [];
+    for (let i = 0; i < startPad; i++) days.push(null);
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      days.push(new Date(year, month, d));
+    }
+    return days;
+  }, [calendarMonth]);
+
+  const canGoPrevMonth = useMemo(() => {
+    const prev = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1);
+    const now = new Date();
+    return prev.getFullYear() > now.getFullYear() || (prev.getFullYear() === now.getFullYear() && prev.getMonth() >= now.getMonth());
+  }, [calendarMonth]);
+
+  const canGoNextMonth = useMemo(() => {
+    const next = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1);
+    return next <= maxBookingDate;
+  }, [calendarMonth, maxBookingDate]);
+
+  const timeSlots = useMemo(() => {
+    if (!selectedDate || selectedTreatments.length === 0) return [];
+    const dayOfWeek = selectedDate.getDay();
+    const avail = availability.find((a) => a.day_of_week === dayOfWeek);
+    if (!avail || !avail.is_available) return [];
+
+    const slots: string[] = [];
+    const [startH, startM] = avail.start_time.split(":").map(Number);
+    const [endH, endM] = avail.end_time.split(":").map(Number);
+    const startMins = startH * 60 + startM;
+    const endMins = endH * 60 + endM;
+    const dateStr = format(selectedDate, "yyyy-MM-dd");
+
+    for (let m = startMins; m + totalDuration <= endMins; m += 30) {
+      const h = Math.floor(m / 60);
+      const min = m % 60;
+      const timeStr = `${String(h).padStart(2, "0")}:${String(min).padStart(2, "0")}`;
+      const taken = existingBookings.some(
+        (b) => b.booking_date === dateStr && b.booking_time === `${timeStr}:00`
+      );
+      if (!taken) slots.push(timeStr);
+    }
+    return slots;
+  }, [selectedDate, selectedTreatments, availability, existingBookings, totalDuration]);
+
+  const totalPrice = useMemo(() => {
+    const base = treatmentsTotal + addonsTotal;
+    const discount = discountResult?.valid ? discountResult.discountAmount : 0;
+    return Math.max(0, base - discount);
+  }, [treatmentsTotal, addonsTotal, discountResult]);
+
+  const chargeAmount = useMemo(() => {
+    if (selectedTreatments.length === 0) return 0;
+    if (paymentMode === "deposit" && depositRequired) {
+      return totalDeposit;
+    }
+    return totalPrice;
+  }, [selectedTreatments, paymentMode, totalPrice, depositRequired, totalDeposit]);
+
+  const applyDiscount = async () => {
+    if (!discountCode.trim() || selectedTreatments.length === 0) return;
+    setDiscountError("");
+    setDiscountResult(null);
+    const { data, error } = await supabase.functions.invoke("validate-discount", {
+      body: { code: discountCode.trim(), treatmentId: primaryTreatment!.id, treatmentIds: selectedTreatments.map(t => t.id), treatmentPrice: treatmentsTotal + addonsTotal },
+    });
+    if (error) { setDiscountError("Failed to validate code"); return; }
+    if (data.valid) { setDiscountResult(data); } else { setDiscountError(data.error || "Invalid code"); }
+  };
+
+  const handleBooking = async () => {
+    if (selectedTreatments.length === 0 || !selectedDate || !selectedTime || !customerName || !customerEmail) return;
+    setSubmitting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-booking-checkout", {
+        body: {
+          treatmentId: primaryTreatment!.id,
+          treatmentIds: selectedTreatments.map(t => t.id),
+          bookingDate: format(selectedDate, "yyyy-MM-dd"),
+          bookingTime: selectedTime,
+          customerName, customerEmail, customerPhone, paymentMode,
+          discountCode: discountResult?.valid ? discountCode : undefined,
+          notes, addonIds: selectedAddons, addonTotal: addonsTotal,
+        },
+      });
+      if (error) throw new Error("Failed to create booking");
+      if (data.error) throw new Error(data.error);
+      if (data.free) { window.location.href = `/booking-success?booking_id=${data.bookingId}&free=true`; }
+      else if (data.url) { window.location.href = data.url; }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally { setSubmitting(false); }
+  };
+
+  const canProceed = () => {
+    switch (step) {
+      case 0: return selectedTreatments.length > 0;
+      case 1: return !!selectedDate && !!selectedTime;
+      case 2: return customerName.trim().length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail) && customerPhone.trim().length >= 10;
+      case 3: return true;
+      default: return false;
+    }
+  };
+
+  const toggleTreatment = (t: Treatment) => {
+    const isSelected = selectedTreatments.some(s => s.id === t.id);
+    if (isSelected) {
+      setSelectedTreatments(prev => prev.filter(s => s.id !== t.id));
+    } else {
+      setSelectedTreatments(prev => [...prev, t]);
+    }
+    setSelectedAddons([]);
+    setAddonsOpen(false);
+  };
+
+  const removeTreatment = (id: string) => {
+    setSelectedTreatments(prev => prev.filter(t => t.id !== id));
+  };
+
+  // When selected treatments change, check for course suggestions
+  useEffect(() => {
+    if (courseSuggestions.length > 0 && selectedTreatments.length > 0) {
+      setShowCoursePrompt(true);
+    } else {
+      setShowCoursePrompt(false);
+    }
+  }, [courseSuggestions, selectedTreatments.length]);
+
+  // When first treatment is added, set payment mode
+  useEffect(() => {
+    if (selectedTreatments.length > 0 && depositRequired) {
+      setPaymentMode("deposit");
+    } else {
+      setPaymentMode("full");
+    }
+  }, [selectedTreatments, depositRequired]);
+
+  const TreatmentCard = ({ t }: { t: Treatment }) => {
+    const isSelected = selectedTreatments.some(s => s.id === t.id);
+    const price = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
+    return (
+      <button
+        onClick={() => toggleTreatment(t)}
+        className={`w-full text-left p-4 border transition-all ${isSelected ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}
+      >
+        <div className="flex justify-between items-start gap-3">
+          <div className="min-w-0 flex-1">
+            <h4 className="font-display text-base leading-tight">{t.name}</h4>
+            {t.on_offer && t.offer_label && (
+              <span className="inline-block font-body text-[10px] text-gold uppercase tracking-wider mt-1 border border-gold/30 px-2 py-0.5">{t.offer_label}</span>
+            )}
+            <p className="font-body text-xs text-muted-foreground mt-1">{t.duration_mins} mins</p>
+            {t.description && <p className="font-body text-xs text-muted-foreground mt-1 line-clamp-1">{t.description}</p>}
+          </div>
+          <div className="text-right flex-shrink-0">
+            {t.on_offer && t.offer_price ? (
+              <div>
+                <p className="font-body text-xs line-through text-muted-foreground">£{Number(t.price).toFixed(0)}</p>
+                <p className="font-display text-base text-gold">£{Number(t.offer_price).toFixed(0)}</p>
+              </div>
+            ) : (
+              <p className="font-display text-base">{price === 0 ? "Free" : `£${price}`}</p>
+            )}
+          </div>
+        </div>
+        {isSelected && (
+          <div className="flex items-center gap-1 text-gold mt-2">
+            <Check size={12} strokeWidth={1.5} />
+            <span className="font-body text-xs">Selected</span>
+          </div>
+        )}
+      </button>
+    );
+  };
+
+  if (loading) {
+    return (
+      <Layout>
+        <section className="py-24">
+          <div className="max-w-3xl mx-auto px-6 text-center">
+            <div className="animate-pulse">
+              <div className="h-8 bg-secondary rounded w-48 mx-auto mb-4" />
+              <div className="h-4 bg-secondary rounded w-64 mx-auto" />
+            </div>
+          </div>
+        </section>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
-      {/* Hero */}
-      <section className="py-24 md:py-32">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className="font-display text-5xl md:text-6xl mb-4">Book Your Treatment</h1>
-            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-              Refined, natural results. Select your treatment below.
-            </p>
-            <button
-              onClick={scrollToTreatments}
-              className="inline-flex items-center justify-center h-12 px-8 bg-primary text-primary-foreground font-medium rounded-md hover:bg-primary/90 transition-colors text-sm"
-            >
-              Book Now
-            </button>
+      <section className="py-24">
+        <div className="max-w-3xl mx-auto px-6">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-12">
+            <h1 className="font-display text-4xl md:text-5xl mb-3">Book Your Treatment</h1>
+            <p className="font-body text-sm text-muted-foreground mb-4">Select one or more treatments. Secure your appointment with a booking fee.</p>
+            
+            {/* Model Content Banner */}
+            <Link to="/muse" className="inline-flex items-center gap-3 border border-gold/40 bg-gold/5 px-5 py-3 hover:bg-gold/10 transition-colors group">
+              <Camera size={14} className="text-gold" strokeWidth={1.5} />
+              <span className="font-body text-xs text-foreground">
+                Want reduced pricing? <span className="text-gold font-medium">Become a content model</span>
+              </span>
+              <ArrowRight size={12} className="text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
+            </Link>
           </motion.div>
-        </div>
-      </section>
 
-      {/* Quick Start */}
-      <section className="pb-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="font-display text-3xl text-center mb-8">Not sure where to start?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              { title: "Skin Consultation", text: "Personalised treatment plan" },
-              { title: "Returning Client", text: "Continue your treatment journey" },
-            ].map((card) => (
-              <div key={card.title} className="border border-border rounded-lg p-6 text-center bg-card">
-                <h3 className="font-display text-xl mb-2">{card.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{card.text}</p>
-                <BookNowButton />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Treatment Categories */}
-      <section id="treatments" className="pb-20">
-        <div className="max-w-5xl mx-auto px-6">
-          {categories.map((cat, idx) => (
-            <motion.div
-              key={cat.title}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.05 }}
-              className="mb-16"
-            >
-              <h3 className="font-display text-2xl mb-6 border-b border-border pb-3">{cat.title}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {cat.services.map((s) => (
-                  <ServiceCard key={s.name} {...s} />
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* How Booking Works */}
-      <section className="pb-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="font-display text-3xl text-center mb-10">How booking works</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { icon: Calendar, label: "Choose your treatment" },
-              { icon: Clock, label: "Select your time" },
-              { icon: Shield, label: "Secure your appointment" },
-              { icon: CheckCircle, label: "Receive confirmation" },
-            ].map((step, i) => (
-              <div key={i} className="text-center">
-                <div className="w-10 h-10 rounded-full border border-primary flex items-center justify-center mx-auto mb-3">
-                  <span className="text-sm font-medium text-primary">{i + 1}</span>
+          {/* Progress Steps */}
+          <div className="flex items-center justify-center gap-2 mb-12">
+            {STEPS.map((s, i) => (
+              <div key={s} className="flex items-center gap-2">
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center font-body text-xs transition-colors ${
+                  i < step ? "bg-gold text-white" : i === step ? "bg-foreground text-background" : "bg-secondary text-muted-foreground"
+                }`}>
+                  {i < step ? <Check size={12} strokeWidth={1.5} /> : i + 1}
                 </div>
-                <p className="text-sm text-muted-foreground">{step.label}</p>
+                <span className={`font-body text-xs hidden sm:block ${i === step ? "text-foreground" : "text-muted-foreground"}`}>{s}</span>
+                {i < STEPS.length - 1 && <ChevronRight size={12} className="text-muted-foreground" />}
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* FAQ */}
-      <section className="pb-24">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="font-display text-3xl text-center mb-10">Frequently Asked Questions</h2>
-          <div className="space-y-0">
-            {faqs.map((faq, i) => (
-              <div key={i} className="border-b border-border">
-                <button
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between py-5 text-left"
-                >
-                  <span className="font-medium text-sm">{faq.q}</span>
-                  <ChevronDown
-                    size={18}
-                    className={`flex-shrink-0 ml-4 transition-transform ${openFaq === i ? "rotate-180" : ""}`}
-                  />
-                </button>
-                {openFaq === i && (
-                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="pb-5">
-                    <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
-                  </motion.div>
+          <AnimatePresence mode="wait">
+            {/* Step 0: Treatment Selection */}
+            {step === 0 && (
+              <motion.div key="step0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
+                
+                {/* Selected treatments summary chips */}
+                {selectedTreatments.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {selectedTreatments.map(t => {
+                      const price = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
+                      return (
+                        <div key={t.id} className="flex items-center gap-2 border border-gold bg-gold/5 px-3 py-2">
+                          <span className="font-body text-xs">{t.name} · £{price}</span>
+                          <button onClick={(e) => { e.stopPropagation(); removeTreatment(t.id); }} className="text-muted-foreground hover:text-foreground">
+                            <X size={12} />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
                 )}
-              </div>
-            ))}
+
+                {/* Course / Package Suggestions */}
+                {showCoursePrompt && courseSuggestions.length > 0 && (
+                  <div className="border border-gold/40 bg-gold/5 p-5 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Package size={16} strokeWidth={1.5} className="text-gold" />
+                      <h3 className="font-display text-base">Save with a Course</h3>
+                    </div>
+                    {courseSuggestions.map(({ treatment, pkg, savings, singleTotal }) => (
+                      <div key={pkg.id} className="flex items-start justify-between gap-3 border border-border p-3 bg-background">
+                        <div>
+                          <p className="font-body text-sm font-medium">{pkg.name}</p>
+                          <p className="font-body text-xs text-muted-foreground">
+                            {pkg.sessions_count} sessions of {treatment.name}
+                          </p>
+                          <p className="font-body text-xs text-muted-foreground mt-1">
+                            <span className="line-through">£{singleTotal.toFixed(0)}</span>
+                            {" → "}
+                            <span className="text-gold font-semibold">£{Number(pkg.total_price).toFixed(0)}</span>
+                            {" · "}
+                            <span className="text-gold">Save £{savings.toFixed(0)}</span>
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            // Replace selection with course: use treatment as base but override price
+                            setSelectedTreatments([treatment]);
+                            setSelectedAddons([]);
+                            // Store package info in notes for checkout
+                            setNotes(prev => {
+                              const cleaned = prev.replace(/\[COURSE:.*?\]/g, "").trim();
+                              return `[COURSE:${pkg.id}:${pkg.name}:${pkg.total_price}:${pkg.sessions_count}] ${cleaned}`.trim();
+                            });
+                            setShowCoursePrompt(false);
+                            setStep(1);
+                          }}
+                          className="px-4 py-2 bg-foreground text-background font-body text-xs tracking-wider uppercase hover:bg-accent transition-colors flex-shrink-0"
+                        >
+                          Book Course
+                        </button>
+                      </div>
+                    ))}
+                    <button onClick={() => setShowCoursePrompt(false)} className="font-body text-xs text-muted-foreground hover:text-foreground">
+                      No thanks, continue with single session
+                    </button>
+                  </div>
+                )}
+
+                {/* Current Offers */}
+                {offerTreatments.length > 0 && !expandedCategory && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Tag size={14} strokeWidth={1.5} className="text-gold" />
+                      <h3 className="font-display text-lg">Current Offers</h3>
+                    </div>
+                    <div className="space-y-2">
+                      {offerTreatments.slice(0, 6).map(t => <TreatmentCard key={t.id} t={t} />)}
+                    </div>
+                    {offerTreatments.length > 6 && (
+                      <button
+                        onClick={() => setExpandedCategory("Content Model")}
+                        className="font-body text-xs text-gold hover:underline mt-3 inline-flex items-center gap-1"
+                      >
+                        View all {offerTreatments.length} offers <ChevronRight size={10} />
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* Category Browser */}
+                <div>
+                  <h3 className="font-display text-lg mb-3">{expandedCategory ? expandedCategory : "All Categories"}</h3>
+                  
+                  {expandedCategory ? (
+                    <div>
+                      <button onClick={() => setExpandedCategory(null)} className="font-body text-xs text-gold mb-4 flex items-center gap-1 hover:underline">
+                        <ChevronLeft size={12} /> Back
+                      </button>
+                      <div className="space-y-2">
+                        {categoryTreatments.map(t => <TreatmentCard key={t.id} t={t} />)}
+                      </div>
+                      {CATEGORY_ROUTES[expandedCategory] && (
+                        <a href={CATEGORY_ROUTES[expandedCategory]} className="font-body text-xs text-gold hover:underline mt-3 inline-block" target="_blank" rel="noopener noreferrer">
+                          Learn more about {expandedCategory} →
+                        </a>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      {categories.map(cat => {
+                        const count = treatments.filter(t => t.category === cat).length;
+                        const minPrice = Math.min(...treatments.filter(t => t.category === cat).map(t => Number(t.price)));
+                        return (
+                          <button
+                            key={cat}
+                            onClick={() => setExpandedCategory(cat)}
+                            className="w-full flex items-center justify-between py-3 px-4 border-b border-border/50 hover:bg-secondary/50 transition-colors group"
+                          >
+                            <div className="flex items-center gap-3">
+                              <span className="font-body text-sm">{cat}</span>
+                              <span className="font-body text-xs text-muted-foreground">{count}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-body text-xs text-muted-foreground">from {minPrice === 0 ? "Free" : `£${minPrice}`}</span>
+                              <ChevronRight size={14} className="text-muted-foreground group-hover:text-gold transition-colors" />
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Collapsible Add-ons */}
+                {selectedTreatments.length > 0 && applicableAddons.length > 0 && (
+                  <Collapsible open={addonsOpen} onOpenChange={setAddonsOpen}>
+                    <CollapsibleTrigger className="w-full flex items-center justify-between p-3 border border-border hover:border-gold/40 transition-colors">
+                      <span className="font-body text-sm flex items-center gap-2">
+                        <Plus size={12} strokeWidth={1.5} /> Add extras
+                        {selectedAddons.length > 0 && (
+                          <span className="text-gold text-xs">({selectedAddons.length} selected · +£{addonsTotal})</span>
+                        )}
+                      </span>
+                      <ChevronDown size={14} className={`text-muted-foreground transition-transform ${addonsOpen ? "rotate-180" : ""}`} />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="mt-2 space-y-2">
+                      {applicableAddons.map(addon => {
+                        const isAdded = selectedAddons.includes(addon.id);
+                        return (
+                          <button key={addon.id} onClick={() => toggleAddon(addon.id)}
+                            className={`w-full p-3 border text-left transition-all ${isAdded ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="font-body text-sm">{addon.name}</p>
+                                {addon.description && <p className="font-body text-xs text-muted-foreground">{addon.description}</p>}
+                              </div>
+                              <span className="font-body text-sm flex items-center gap-2">
+                                +£{Number(addon.price).toFixed(0)}
+                                {isAdded ? <Check size={12} className="text-gold" /> : <Plus size={12} className="text-muted-foreground" />}
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </CollapsibleContent>
+                  </Collapsible>
+                )}
+
+                {/* Selection summary */}
+                {selectedTreatments.length > 0 && (
+                  <div className="border border-gold/30 bg-gold/5 p-4">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">
+                          {selectedTreatments.length} treatment{selectedTreatments.length > 1 ? "s" : ""} selected
+                        </p>
+                        <p className="font-display text-sm">
+                          {selectedTreatments.map(t => t.name).join(" + ")}
+                        </p>
+                        <p className="font-body text-xs text-muted-foreground mt-1">{totalDuration} mins total</p>
+                      </div>
+                      <p className="font-display text-lg text-gold">£{(treatmentsTotal + addonsTotal).toFixed(0)}</p>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Step 1: Date & Time */}
+            {step === 1 && (
+              <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <h3 className="font-display text-lg mb-4 flex items-center gap-2"><Calendar size={16} strokeWidth={1.5} /> Choose a Date</h3>
+                    <p className="font-body text-xs text-muted-foreground mb-3">Bookings must be made at least {bookingSettings.min_advance_hours} hours in advance.</p>
+                    {/* Monthly Calendar Navigation */}
+                    <div className="flex items-center justify-between mb-3">
+                      <button
+                        onClick={() => setCalendarMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
+                        disabled={!canGoPrevMonth}
+                        className="p-2 border border-border hover:border-gold/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <ChevronLeft size={14} />
+                      </button>
+                      <span className="font-display text-base">{format(calendarMonth, "MMMM yyyy")}</span>
+                      <button
+                        onClick={() => setCalendarMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
+                        disabled={!canGoNextMonth}
+                        className="p-2 border border-border hover:border-gold/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <ChevronRight size={14} />
+                      </button>
+                    </div>
+                    {/* Day Headers */}
+                    <div className="grid grid-cols-7 gap-1 mb-1">
+                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
+                        <div key={d} className="text-center font-body text-[10px] text-muted-foreground uppercase tracking-wider py-1">{d}</div>
+                      ))}
+                    </div>
+                    {/* Calendar Grid */}
+                    <div className="grid grid-cols-7 gap-1">
+                      {calendarDays.map((date, i) => {
+                        if (!date) return <div key={`pad-${i}`} />;
+                        const available = isDateAvailable(date);
+                        const isSelected = selectedDate?.toDateString() === date.toDateString();
+                        const isToday = date.toDateString() === new Date().toDateString();
+                        return (
+                          <button
+                            key={date.toISOString()}
+                            onClick={() => { if (available) { setSelectedDate(date); setSelectedTime(null); } }}
+                            disabled={!available}
+                            className={`aspect-square flex items-center justify-center font-body text-sm transition-all border ${
+                              isSelected
+                                ? "border-gold bg-gold/10 text-foreground font-medium"
+                                : available
+                                  ? "border-border hover:border-gold/40 cursor-pointer"
+                                  : "border-transparent text-muted-foreground/30 cursor-not-allowed"
+                            } ${isToday && !isSelected ? "ring-1 ring-gold/30" : ""}`}
+                          >
+                            {date.getDate()}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-display text-lg mb-4 flex items-center gap-2"><Clock size={16} strokeWidth={1.5} /> Choose a Time</h3>
+                    {selectedDate ? (
+                      timeSlots.length > 0 ? (
+                        <div className="grid grid-cols-3 gap-2">
+                          {timeSlots.map((time) => (
+                            <button key={time} onClick={() => setSelectedTime(time)} className={`py-3 px-4 border font-body text-sm transition-all ${selectedTime === time ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>{time}</button>
+                          ))}
+                        </div>
+                      ) : <p className="font-body text-sm text-muted-foreground">No available slots on this date.</p>
+                    ) : <p className="font-body text-sm text-muted-foreground">Select a date first.</p>}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Step 2: Customer Details */}
+            {step === 2 && (
+              <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                <div className="max-w-lg mx-auto space-y-6">
+                  <div>
+                    <label className="font-body text-sm block mb-2">Full Name *</label>
+                    <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors" placeholder="Your full name" />
+                  </div>
+                  <div>
+                    <label className="font-body text-sm block mb-2">Email Address *</label>
+                    <input type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors" placeholder="your@email.com" />
+                  </div>
+                  <div>
+                    <label className="font-body text-sm block mb-2">Phone Number *</label>
+                    <input type="tel" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors" placeholder="07XXX XXXXXX" />
+                    {customerPhone.length > 0 && customerPhone.trim().length < 10 && (
+                      <p className="font-body text-xs text-destructive mt-1">Please enter a valid UK phone number</p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="font-body text-sm block mb-2">Notes (optional)</label>
+                    <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors resize-none" placeholder="Any allergies, preferences, or things we should know..." />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Step 3: Payment Summary */}
+            {step === 3 && selectedTreatments.length > 0 && selectedDate && selectedTime && (
+              <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                <div className="max-w-lg mx-auto">
+                  <div className="border border-border p-6 mb-6">
+                    <h3 className="font-display text-lg mb-4">Booking Summary</h3>
+                    <div className="space-y-3 font-body text-sm">
+                      <div className="flex justify-between"><span className="text-muted-foreground">Treatment{selectedTreatments.length > 1 ? "s" : ""}</span><span>{selectedTreatments.map(t => t.name).join(", ")}</span></div>
+                      <div className="flex justify-between"><span className="text-muted-foreground">Date</span><span>{format(selectedDate, "EEEE, d MMMM yyyy")}</span></div>
+                      <div className="flex justify-between"><span className="text-muted-foreground">Time</span><span>{selectedTime}</span></div>
+                      <div className="flex justify-between"><span className="text-muted-foreground">Duration</span><span>{totalDuration} mins</span></div>
+                      <div className="border-t border-border pt-3">
+                        {selectedTreatments.map(t => {
+                          const p = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
+                          return <div key={t.id} className="flex justify-between"><span className="text-muted-foreground">{t.name}</span><span>£{p.toFixed(2)}</span></div>;
+                        })}
+                        {selectedAddons.length > 0 && selectedAddons.map(id => {
+                          const addon = addons.find(a => a.id === id);
+                          return addon ? <div key={id} className="flex justify-between text-xs text-muted-foreground"><span>+ {addon.name}</span><span>£{Number(addon.price).toFixed(2)}</span></div> : null;
+                        })}
+                        {discountResult?.valid && <div className="flex justify-between text-gold mt-1"><span>Discount</span><span>-£{discountResult.discountAmount.toFixed(2)}</span></div>}
+                        <div className="flex justify-between font-semibold mt-2 text-lg"><span>Total</span><span>£{totalPrice.toFixed(2)}</span></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {totalPrice > 0 && (
+                    <div className="mb-6">
+                      <label className="font-body text-sm block mb-2 flex items-center gap-2"><Tag size={14} strokeWidth={1.5} /> Discount Code</label>
+                      <div className="flex gap-2">
+                        <input type="text" value={discountCode} onChange={(e) => { setDiscountCode(e.target.value); setDiscountError(""); setDiscountResult(null); }} className="flex-1 border border-border bg-transparent px-4 py-3 font-body text-sm uppercase focus:border-gold focus:outline-none" placeholder="Enter code" />
+                        <button onClick={applyDiscount} className="px-6 py-3 bg-foreground text-background font-body text-sm tracking-wider uppercase hover:bg-accent transition-colors">Apply</button>
+                      </div>
+                      {discountError && <p className="font-body text-xs text-destructive mt-2">{discountError}</p>}
+                      {discountResult?.valid && <p className="font-body text-xs text-gold mt-2">Discount applied — saving £{discountResult.discountAmount.toFixed(2)}</p>}
+                    </div>
+                  )}
+
+                  {depositRequired && totalPrice > 0 && (
+                    <div className="mb-6">
+                      <label className="font-body text-sm block mb-3">Payment Option</label>
+                      <div className="grid grid-cols-2 gap-3">
+                         <button onClick={() => setPaymentMode("deposit")} className={`p-4 border text-left transition-all ${paymentMode === "deposit" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
+                          <p className="font-display text-sm">Pay Booking Fee</p>
+                          <p className="font-body text-xs text-muted-foreground mt-1">£{totalDeposit.toFixed(0)} now</p>
+                        </button>
+                        <button onClick={() => setPaymentMode("full")} className={`p-4 border text-left transition-all ${paymentMode === "full" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
+                          <p className="font-display text-sm">Pay in Full</p>
+                          <p className="font-body text-xs text-muted-foreground mt-1">£{totalPrice.toFixed(0)} total</p>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {totalPrice > 0 && (
+                    <div className="border border-gold bg-gold/5 p-4 mb-6 text-center">
+                      <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">Amount to pay now</p>
+                      <p className="font-display text-3xl text-gold">£{chargeAmount.toFixed(2)}</p>
+                      {paymentMode === "deposit" && depositRequired && (
+                        <p className="font-body text-xs text-muted-foreground mt-1">Remaining £{(totalPrice - chargeAmount).toFixed(2)} due at appointment</p>
+                      )}
+                    </div>
+                  )}
+
+                  <button onClick={handleBooking} disabled={submitting} className="w-full py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                    {submitting ? <span className="animate-pulse">Processing...</span> : totalPrice === 0 ? <>Confirm Booking <ArrowRight size={14} /></> : <>Proceed to Payment <ArrowRight size={14} /></>}
+                  </button>
+                   <div className="border border-amber-600/30 bg-amber-50/50 dark:bg-amber-900/10 p-4 mt-4">
+                     <p className="font-body text-xs text-foreground/80 text-center">
+                       ⏰ Please arrive at your exact appointment time. Do not arrive early or late as a member of the team will need to let you into the clinic.
+                     </p>
+                   </div>
+                   <p className="font-body text-xs text-muted-foreground text-center mt-4">Payments processed securely via Stripe.</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Navigation */}
+          <div className="flex justify-between mt-10">
+            <button onClick={() => setStep(Math.max(0, step - 1))} className={`flex items-center gap-2 font-body text-sm tracking-wider uppercase hover:text-gold transition-colors ${step === 0 ? "invisible" : ""}`}>
+              <ChevronLeft size={14} strokeWidth={1.5} /> Back
+            </button>
+            {step < 3 && (
+              <button onClick={() => setStep(step + 1)} disabled={!canProceed()} className="flex items-center gap-2 px-8 py-3 bg-foreground text-background font-body text-sm tracking-wider uppercase hover:bg-accent transition-colors disabled:opacity-30">
+                Continue <ChevronRight size={14} strokeWidth={1.5} />
+              </button>
+            )}
           </div>
         </div>
       </section>

@@ -114,7 +114,8 @@ Deno.serve(async (req) => {
       html = wrap(`
         <h2 style="${h2Style}">🎉 New Booking Received!</h2>
         <p style="${pStyle}"><strong>${booking.customer_name}</strong> has booked <strong>${treatmentName}</strong>.</p>
-        <div style="${cardStyle}">
+        <div style="background:#fffbf0;border:2px solid #c9a96e;padding:20px;margin:24px 0;border-radius:4px;">
+          <p style="margin:0 0 12px;font-size:15px;font-weight:bold;color:#c9a96e;">📋 ADD TO SETMORE</p>
           <p style="margin:0 0 8px;font-size:14px;"><strong>Client:</strong> ${booking.customer_name}</p>
           <p style="margin:0 0 8px;font-size:14px;"><strong>Email:</strong> ${booking.customer_email}</p>
           ${booking.customer_phone ? `<p style="margin:0 0 8px;font-size:14px;"><strong>Phone:</strong> ${booking.customer_phone}</p>` : ""}
@@ -123,10 +124,12 @@ Deno.serve(async (req) => {
           <p style="margin:0 0 8px;font-size:14px;"><strong>Time:</strong> ${timeFormatted}</p>
           <p style="margin:0 0 8px;font-size:14px;"><strong>Duration:</strong> ${booking.duration_mins} minutes</p>
           <p style="margin:0 0 8px;font-size:14px;"><strong>Total:</strong> £${Number(booking.total_price).toFixed(2)}</p>
-          ${Number(booking.deposit_amount) > 0 ? `<p style="margin:0 0 8px;font-size:14px;"><strong>Booking Fee Paid:</strong> £${Number(booking.deposit_amount).toFixed(2)}</p>` : ""}
+          ${Number(booking.deposit_amount) > 0 ? `<p style="margin:0 0 8px;font-size:14px;"><strong>Deposit Paid:</strong> £${Number(booking.deposit_amount).toFixed(2)}</p>` : ""}
+          <p style="margin:0 0 8px;font-size:14px;"><strong>Balance Due:</strong> £${(Number(booking.total_price) - Number(booking.deposit_amount || 0)).toFixed(2)}</p>
           <p style="margin:0;font-size:14px;"><strong>Payment Status:</strong> ${booking.payment_status}</p>
         </div>
         ${booking.notes ? `<p style="${pStyle}"><strong>Client Notes:</strong> ${booking.notes}</p>` : ""}
+        <p style="${pStyle};font-size:12px;color:#999;margin-top:16px;">⚠️ This booking was made via the website. Please add it to Setmore manually.</p>
       `);
 
       logStep("Sending admin notification", { to: ADMIN_EMAIL });

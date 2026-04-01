@@ -1,863 +1,391 @@
-import { useState, useEffect, useMemo } from "react";
-import { useSearchParams, Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Clock, ChevronRight, ChevronLeft, Tag, Plus, Check, ArrowRight, ChevronDown, X, Package, Camera } from "lucide-react";
-import { format, addDays, startOfDay } from "date-fns";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { ChevronDown, ExternalLink, Clock, ArrowDown } from "lucide-react";
+import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
-import { supabase } from "@/integrations/supabase/client";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
-type Treatment = {
-  id: string;
-  name: string;
-  slug: string;
+type Service = {
+  title: string;
+  price: string;
+  description: string;
   category: string;
-  duration_mins: number;
-  price: number;
-  deposit_amount: number;
-  deposit_required: boolean;
-  payment_type: string;
-  description: string | null;
-  on_offer: boolean;
-  offer_price: number | null;
-  offer_label: string | null;
+  setmoreUrl: string;
 };
 
-type Addon = {
-  id: string;
-  name: string;
-  description: string | null;
-  price: number;
-  duration_mins: number;
-  applicable_categories: string[] | null;
+const SERVICES: Service[] = [
+  // Consultations
+  { title: "Skin Consultation", price: "£25", description: "Full skin assessment and personalised treatment plan. Suitable if you are unsure what to book.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Prescriber Consultation (Anti-Wrinkle)", price: "£25", description: "Required before anti-wrinkle treatments. Includes medical assessment.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=dd88f406-0705-4cf0-a38a-39163a47d63b&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Anti-Wrinkle Consultation", price: "£30", description: "Face-to-face consultation with our prescriber. Redeemable if you proceed within 14 days.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a5750435-49e2-4958-b48c-b87b91a55b5e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Repeat Session Booking", price: "Free", description: "For returning clients scheduling a repeat session within their treatment plan.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=38c99c41-0af9-4b81-b67d-aae0369d51a4&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Review Appointment (2-3 Weeks)", price: "Free", description: "Complimentary follow-up to ensure results have settled. Minor adjustments included if required.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=5650870b-f532-42d1-b12b-640f7d4cb8ae&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Dermal Filler
+  { title: "Lip Filler - 1ml", price: "£150", description: "Enhances shape, symmetry, and definition while maintaining a natural balance.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=8316cf5c-ce1f-4868-83be-6e95c9390c75&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Lip Filler - 0.5ml", price: "£120", description: "Subtle volume, hydration and natural shape enhancement. Ideal for first-time clients.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=ac84c482-efa0-4be7-a28a-4e25bf08afaf&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Facial Balancing - 2ml", price: "£200", description: "Combination of lips, chin, cheeks and jawline to improve overall facial balance.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=cb094103-11f5-475c-8c06-d30ea7f30dfe&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Facial Balancing - 3ml", price: "£350", description: "Bespoke treatment to harmonise the entire face. Saves compared to booking individually.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a90f7b38-7cbd-4761-8810-ced8f6aa817c&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Facial Balancing - 4ml", price: "£550", description: "A combination treatment to improve overall facial balance and structure.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=c3c559ab-5406-4fdd-b453-7eb15b7856e9&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Facial Balancing - 5ml", price: "£500", description: "Complete transformation enhancing facial structure and definition.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=e8b58213-6566-4cb6-a7fc-f654bb3eaede&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Facial Balancing - 7ml", price: "£650", description: "Signature sculpting experience. Includes complimentary skin booster top-up.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=b4bc4ffc-ce67-4c01-9484-8a7a3256b36e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Nose Filler (Non-surgical Rhinoplasty)", price: "£200", description: "Balances and refines the nose shape for a more symmetrical profile.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=61946dbc-165f-4da0-a937-42fffdb940ca&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Tear Trough Filler", price: "£200", description: "Brightens under-eye hollows, reducing tired appearance and restoring volume.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=3925ea1d-538d-4586-a273-ae7f3d12935b&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Jawline Filler (Per ML)", price: "£170", description: "Creates definition and structure through precise contouring.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=543f6a92-b63b-426d-8f1e-386e0f6f16ec&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Cheek Filler (Per ML)", price: "£160", description: "Restores volume and lift to the mid-face, enhancing contour and structure.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=474efd20-68cf-4214-a750-6b44c51759b4&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Chin Filler", price: "£160", description: "Refines the facial profile, balances proportions, and defines the jawline.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=11778a78-5033-4823-a394-924b62d5d859&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Marionette Lines", price: "£150", description: "Targets lines from mouth corners to chin, lifting the lower face.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=63dbac2f-2b18-463b-90bd-7bcce84e10ea&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Smile Lines (Nasolabial Folds)", price: "£150", description: "Softens deep creases around the mouth, restoring smoothness.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=6e0a1319-e929-43bf-a70f-ab404877f86c&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Filler Dissolve", price: "£100", description: "Removes unwanted or migrated filler safely. Patch test required 24hr prior.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=182a2a64-610e-4762-82d5-e1dd88d16e47&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Touch Up / Refresh (Existing Clients)", price: "£95", description: "Small refinements or maintenance of existing filler within 6 months.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=39c8518c-bf5f-41a4-8bd3-a8a2a66b0def&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Anti-Wrinkle
+  { title: "Anti-Wrinkle - 1 Area", price: "£140", description: "Targets forehead lines, frown lines, or crow's feet to soften fine lines.", category: "Anti-Wrinkle", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=6a7d267b-5d4a-4845-a095-0b5a70f28c8b&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Anti-Wrinkle - 2 Areas", price: "£179", description: "Includes prescriber consultation and free top-up if required.", category: "Anti-Wrinkle", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=5fff4c03-6f97-4eb4-8c56-fd97af50a8a2&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Anti-Wrinkle - 3 Areas", price: "£220", description: "Full upper-face treatment covering forehead, frown, and eyes. Free top-up included.", category: "Anti-Wrinkle", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=5db265df-79a5-4d69-bf35-9e5dea52b94b&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Anti-Wrinkle - 6 Areas", price: "£360", description: "Full facial rejuvenation including forehead, lower face and neck.", category: "Anti-Wrinkle", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=b12a0bbf-58d7-4a87-a6aa-0d9847fa7887&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Masseter (Jaw Slimming)", price: "£240", description: "Relaxes the jaw muscle for a slimmer, more contoured lower face.", category: "Anti-Wrinkle", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=9fb8c05a-02d8-42e3-8655-d5cef41642cc&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Lip Flip", price: "£85", description: "Enhances the upper lip without adding volume for a soft, lifted look.", category: "Anti-Wrinkle", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a726318a-1942-45b7-a888-38c38ffb72cb&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Bunny Lines", price: "£140", description: "Softens fine lines on the nose.", category: "Anti-Wrinkle", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=34455ba8-5667-48e9-bd97-2e4b3839675a&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Gummy Smile", price: "£140", description: "Reduces gum visibility when smiling.", category: "Anti-Wrinkle", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=56c75086-15ad-43a5-a79f-096c15231f81&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Brow Lift", price: "£170", description: "Creates a subtle lift to the brow area.", category: "Anti-Wrinkle", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=efd05bed-8c75-40b4-a081-efc69d87d263&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Excessive Sweating (Underarms)", price: "£350", description: "Targets excessive sweating in the underarm area.", category: "Anti-Wrinkle", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=f270ee63-8fe4-4688-a951-ebe96369801f&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Chemical Peels
+  { title: "BioRePeel Face", price: "£95", description: "Medical-grade peel to improve acne, texture, and pigmentation with minimal downtime.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=e065bcdb-44e5-4f70-bb9c-6c62fdcc5490%7Cd453b54f-1bf8-4c49-9403-eaa77cf778a8&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "BioRePeel Body", price: "£110", description: "Targets back, chest, or shoulders for acne and pigmentation.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=b87df557-d48b-404c-bd76-c148fa8cc78f%7Cd453b54f-1bf8-4c49-9403-eaa77cf778a8&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Level 1 Chemical Peel (Face)", price: "£85", description: "Treats hormonal breakouts, scarring and rough texture. Includes cleanse and mask.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=f8a3e462-233e-45cf-833d-ecf8c1eb870d&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Level 1 Chemical Peel (Back)", price: "£95", description: "Treats hormonal breakouts, scarring and rough texture on the back.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=88651283-8e16-464b-ab93-47bdbaa2dc69&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Level 2 Chemical Peel (Face)", price: "£110", description: "Strong depigmenting peel for dark spots, melasma and uneven tone.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=5345012f-74ea-4ac4-b607-23fa74fe5752&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Level 2 Chemical Peel (Back)", price: "£125", description: "Intensive peel to treat hyperpigmentation and textural buildup on the back.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=0c80f5fc-b09c-41bf-8ff6-e0ef83495683&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "BioRePeel Face Course (3 Sessions)", price: "£270", description: "Course of 3 treatments. Recommended for ongoing skin concerns.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=90aa375d-c263-4b5b-a0c8-91de5ee0b069%7Cd453b54f-1bf8-4c49-9403-eaa77cf778a8&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "BioRePeel Body Course (3 Sessions)", price: "£300", description: "Course of 3 treatments for one body area.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=2de6d961-d715-452d-9b75-81889ce871e0%7Cd453b54f-1bf8-4c49-9403-eaa77cf778a8&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Level 1 Peel Course of 3 (Face)", price: "£230", description: "Course of 3 for hormonal breakouts, scarring and texture.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=59cadb1d-77f7-4c22-accf-15df8a830dcf&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Level 1 Peel Course of 3 (Back)", price: "£260", description: "Course of 3 for back breakouts, scarring and texture.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=08ae34ae-c60b-4025-b842-009e175deb71&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Level 2 Peel Course of 3 (Face)", price: "£300", description: "Course of 3 for dark spots, melasma and uneven tone.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=718b17e6-3064-4a2f-8a75-22c5dad2fb0e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Level 2 Peel Course of 3 (Back)", price: "£330", description: "Course of 3 for back hyperpigmentation and scarring.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=d25a3b1e-1cdc-476a-9751-a9316a9b258a&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Skin Treatments
+  { title: "Glass Skin Treatment", price: "£140", description: "BioRePeel combined with hyaluronic acid infusion to smooth, refine, and hydrate.", category: "Skin Treatments", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a8e75820-b5b7-422b-9af0-d821ef086115&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Skin Boosters
+  { title: "Seventy Hyal Skin Booster", price: "£160", description: "Deep hydration to improve glow, elasticity, and skin firmness.", category: "Skin Boosters", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=e73733a7-2ab0-42be-996a-3e616266aea4&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Polynucleotides Skin Booster", price: "£180", description: "Regenerates skin at a cellular level for long-term rejuvenation and repair.", category: "Skin Boosters", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=f4ee526e-ca38-4a06-ab87-c7b08fc8cb83&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Profhilo Skin Booster", price: "£250", description: "Advanced injectable for skin laxity and hydration. Course of 2 recommended.", category: "Skin Boosters", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=0a80a52a-8c1f-412a-ab23-5e5ffb82ee00&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Under Eye Skin Booster", price: "£130", description: "Injectable treatment for dark circles and fine lines.", category: "Skin Boosters", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=709029cc-37c0-47cd-b569-0e4d834be3b2&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Lumi Eyes", price: "£140", description: "Brightens, hydrates, and reduces dark circles and fine lines under the eyes.", category: "Skin Boosters", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=83d549d7-424b-49ef-b2b3-64e77065748f&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Seventy Hyal Course (3 Sessions)", price: "£380", description: "3 sessions, 4 weeks apart for best results.", category: "Skin Boosters", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=757adde3-e573-4304-acaf-6cb21bb3bc16&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Under Eye Booster Course (3 Sessions)", price: "£360", description: "3 sessions targeting dark circles and fine lines.", category: "Skin Boosters", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=6a9f3d91-c97a-4051-a8be-6b5642049183&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Microneedling
+  { title: "Microneedling with Hydrating Serum", price: "£160", description: "Dr Pen microneedling with hyaluronic acid serum.", category: "Microneedling", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=63c50b04-45cf-4989-a970-7c9462548d27&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Microneedling with Skin Booster", price: "£200", description: "Microneedling combined with mesotherapy or booster infusion.", category: "Microneedling", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=45f07d61-f94a-4934-b79c-9a6b7f9b4000&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Microneedling + Skin Booster", price: "£85", description: "Precision microneedling with infused skin booster serum for deep rejuvenation.", category: "Microneedling", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=d22757cb-ae98-4cf8-b412-0810c0b380c6&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Face Texture Repair (Scars + Pores + Glow)", price: "£130", description: "Microneedling and chemical peel combination to improve texture and scarring.", category: "Microneedling", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=0ceb2b04-a476-47af-85ea-8ca892a2f9c0&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Stretch Mark Microneedling", price: "£180", description: "Stimulates collagen to improve stretch mark texture. 3-6 sessions recommended.", category: "Microneedling", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=c488f018-6641-441b-87e4-31cd909d2289&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Stretch Mark Repair (Salmon DNA)", price: "£150", description: "Microneedling with Salmon DNA and hyaluronic acid to fade and repair stretch marks.", category: "Microneedling", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=ef804aa8-97f7-488e-a2e0-0818c4ced8b0&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Microneedling Course (3 Sessions)", price: "£420", description: "3 sessions to improve texture, tone, and mild scarring.", category: "Microneedling", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=3ce99ae1-9115-406b-9adf-04b589cb24b7&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Microneedling + Booster Course (3 Sessions)", price: "£540", description: "3 sessions for deeper skin rejuvenation.", category: "Microneedling", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=6f934644-312c-4a60-a34e-5d1f73c61404&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Stretch Mark Course (3 Sessions)", price: "£480", description: "Course of 3 treatments for improved results.", category: "Microneedling", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=eea78d4a-22f3-4495-a1bb-29d1511c1379&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // HydroFacial
+  { title: "Hydrafacial", price: "£150", description: "Deep cleansing facial to exfoliate, extract, and hydrate. All skin types.", category: "HydroFacial", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=1b7e4418-5f0a-452a-96b2-11fe4e558825&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Glass Skin Hydrafacial", price: "£190", description: "Hydrafacial cleanse, gentle exfoliation, and targeted skin booster injection.", category: "HydroFacial", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=960394ee-c6d8-4f5f-8831-fd0fa67319de&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Intimate Pigment Treatment
+  { title: "Bikini Line Pigment Treatment", price: "£110", description: "Chemical exfoliation and pigment control for bikini line discolouration.", category: "Intimate Pigment Treatment", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a0cb1ac1-c09b-4216-9aaa-95cd11165fba&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Underarm Pigment Treatment", price: "£110", description: "Improves underarm pigmentation using controlled exfoliation.", category: "Intimate Pigment Treatment", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=7c6b3268-02d3-40e9-bf3f-d89bb16cd463&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Inner Thigh Pigment Treatment", price: "£120", description: "Targets pigmentation caused by friction between the thighs.", category: "Intimate Pigment Treatment", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=f9096089-1667-4630-b51d-457fd894278b&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Bikini Line Course (3 Sessions)", price: "£300", description: "Course of 3 to improve pigmentation over time.", category: "Intimate Pigment Treatment", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=5dabccef-7bf7-45ee-a467-77eb05bf6e27&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Underarm Course (3 Sessions)", price: "£300", description: "Course of 3 to improve pigmentation over time.", category: "Intimate Pigment Treatment", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=685903fd-8552-4de3-a743-b50cf5f05ca9&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Inner Thigh Course (3 Sessions)", price: "£330", description: "Course of 3 to improve pigmentation over time.", category: "Intimate Pigment Treatment", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=af12aff6-88a0-4fe4-90a9-d98b58dfe0f7&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Intimate Peels
+  { title: "Intimate Peel - Small Areas", price: "£75", description: "Underarms, knees, elbows. 3-6 sessions recommended.", category: "Intimate Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=03d204e6-3e03-4171-a325-8a904a1ad586&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Intimate Peel - Medium Areas", price: "£95", description: "Bikini line, inner thighs, chest. 3-6 sessions recommended.", category: "Intimate Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=7d648b0f-31e5-4b47-a878-ac50723b64fc&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Intimate Peel - Large Areas", price: "£120", description: "Full intimate area, stomach. 3-6 sessions recommended.", category: "Intimate Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=4be48be9-6bd7-4ad5-bb79-7f6b109d7cdc&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Intimate Peel - Small (Course of 3)", price: "£210", description: "Underarms, knees, elbows. Course of 3 sessions.", category: "Intimate Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=226e134d-8341-46ea-9822-0b87a9d7610a&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Intimate Peel - Medium (Course of 3)", price: "£265", description: "Bikini line, inner thighs, chest. Course of 3 sessions.", category: "Intimate Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=595463fc-3581-4f56-926a-2cce30920e92&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Intimate Peel - Large (Course of 3)", price: "£330", description: "Full intimate area, stomach. Course of 3 sessions.", category: "Intimate Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=f72dbb04-f6b4-4106-b973-af2c1df9e749&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Melanostop
+  { title: "Melanostop - Hands", price: "£120", description: "Depigmenting peel for sun damage, dark spots and uneven tone on hands.", category: "Melanostop Body Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=ee852217-6fae-464d-9baa-5535886f5b32&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Melanostop - Underarms", price: "£150", description: "Peel for underarm pigmentation and uneven tone.", category: "Melanostop Body Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=804528a4-4ac9-47b7-9300-1ce35dbbc931&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Melanostop - Elbows and Knees", price: "£130", description: "Depigmenting peel for dark elbows and knees.", category: "Melanostop Body Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=51751850-aa49-49d8-9305-aefc7b77a1de&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Fat Dissolve
+  { title: "Fat Dissolving - Small Area", price: "£150", description: "Suitable for chin or bra bulge. No surgery, minimal downtime.", category: "Fat Dissolve", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a30c5362-956b-4139-b14d-9daaf9a5569a&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Fat Dissolving - Medium Area", price: "£200", description: "Suitable for lower abdomen or flanks.", category: "Fat Dissolve", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a837e5e4-835a-4afc-8fb1-aebcadb3528b&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Fat Dissolving - Large Area", price: "£250", description: "Target stubborn pockets of fat, safely and effectively.", category: "Fat Dissolve", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=b29b95c5-530c-4434-8928-3df67e208095&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Fat Dissolving Course - Small (3 Sessions)", price: "£400", description: "Course of 3 for chin or bra bulge area.", category: "Fat Dissolve", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a7ef0048-4066-4026-8233-e32390994478&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Fat Dissolving Course - Medium (3 Sessions)", price: "£540", description: "Course of 3 for lower abdomen or flanks.", category: "Fat Dissolve", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=b8538016-6d33-4c98-bd7b-e30b3b96d6b9&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Fat Dissolving Course - Large (3 Sessions)", price: "£700", description: "Course of 3 for larger stubborn areas.", category: "Fat Dissolve", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=44b0a6b9-2281-4638-b4f4-ffb136f7e6d5&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Body Contouring
+  { title: "Body Sculpting - Single Area", price: "£75", description: "Non-invasive sculpting for stomach, waist, thighs or arms. No downtime.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=3944f21d-0b8f-4b4b-a443-a10d99824810&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Body Sculpting - Two Areas", price: "£110", description: "Two areas in one session, ideal for stomach and waist or hips and thighs.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=760d7916-217b-46ce-8b44-adcdcdb0c48d&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Lymphatic Drainage - Stomach and Waist", price: "£95", description: "Reduces bloating, flushes toxins, and enhances body contours.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=5cbf58a0-7bec-4b10-8ea7-436cd4eddf5e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Lymphatic Drainage - Full Body", price: "£135", description: "Full body lymphatic drainage excluding face.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=14e21cfe-2d39-489e-8c8f-74641c0787c7&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Body Sculpting + Lymphatic Drainage", price: "£120", description: "Sculpting followed by lymphatic drainage for enhanced results.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=04c3e044-763b-4a0d-8e61-e360db1a46ea&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Fat Dissolve + Body Sculpting", price: "£220", description: "Fat dissolving injections followed by body sculpting for enhanced results.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=2d23bfcd-995f-4b3c-8946-c9085f8a3182&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Fat Dissolve + Sculpting + Lymphatic Drainage", price: "£260", description: "Full body contouring session combining all three treatments.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=36a7f662-d39f-44a2-9caa-880129299f86&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Body Sculpting Course of 3 (Single Area)", price: "£260", description: "3 sessions for one area. Gradual fat reduction and skin firmness.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=b501e818-aae8-4cc8-87ac-63eab36bcc24&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Body Sculpting Course of 6 (Single Area)", price: "£380", description: "6 sessions for one area. Best value for visible results.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=20d7af19-9c30-4b07-847d-9e959a399e53&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Body Sculpting Course of 3 (Two Areas)", price: "£300", description: "3 sessions treating two areas per session.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=48a27801-f025-400c-92b4-ee112e4639f5&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Body Sculpting Course of 6 (Two Areas)", price: "£540", description: "6 sessions treating two areas. Maximum contouring results.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=eee38f01-442f-4325-b017-30ad74817bd3&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Lymphatic Drainage - 3 Session Package", price: "£255", description: "3 targeted sessions to reduce bloating and define shape.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=892a3242-9637-4dd7-9643-7170551cbf5b&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Lymphatic Drainage - 5 Session Package", price: "£400", description: "5 sessions for visible results in bloating and shape definition.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=6b5576ad-d5d7-4014-a243-76e319229b53&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Fat Dissolve + Body Sculpting Course", price: "£420", description: "1 fat dissolve session + 3 body sculpting sessions for one area.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=c4510428-19e9-477f-b248-ad1b428bc536&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Ultimate Body Reset Programme", price: "£600", description: "1 fat dissolve + 6 body sculpting + 1 lymphatic drainage session.", category: "Body Contouring", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=fd4bd0da-4a9a-44bd-8b4d-15009718728a&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Wellness
+  { title: "B12 Injection", price: "£35", description: "Supports energy levels and general wellbeing.", category: "Wellness", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=180d9d60-d61b-4f6c-bef1-935b5b4e45c6&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Biotin Injection", price: "£35", description: "Supports hair, skin, and nail health.", category: "Wellness", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=ee9b76d4-aaf0-470f-b877-6339d92a6426&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // IV Drip Therapy
+  { title: "IV Vitamin Drip", price: "£180", description: "Vitamin infusion delivered directly into the bloodstream.", category: "IV Drip Therapy", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=b8d150c4-4a99-4ac3-8e78-a82fbe3b6245&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "IV Booster Add-On", price: "£40", description: "Add Vitamin C, Biotin, or Glutathione to your treatment.", category: "IV Drip Therapy", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=98f98970-3e24-4d61-87ee-ad7ae464d5c5&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+];
+
+const CATEGORIES = [
+  "Consultations",
+  "Dermal Filler",
+  "Anti-Wrinkle",
+  "Chemical Peels",
+  "Skin Treatments",
+  "Skin Boosters",
+  "Microneedling",
+  "HydroFacial",
+  "Intimate Pigment Treatment",
+  "Intimate Peels",
+  "Melanostop Body Peels",
+  "Fat Dissolve",
+  "Body Contouring",
+  "Wellness",
+  "IV Drip Therapy",
+];
+
+const faqs = [
+  { q: "Do I need a consultation first?", a: "Yes - for all injectable treatments, an initial consultation is required. This ensures your safety and allows us to create a personalised treatment plan." },
+  { q: "Is there any downtime?", a: "It depends on the treatment. Most facial treatments have minimal downtime. Injectables may involve slight swelling for 24-48 hours. We will discuss this during your consultation." },
+  { q: "How do I prepare for my appointment?", a: "Avoid alcohol 24 hours before, arrive with a clean face if possible, and let us know about any medications or allergies." },
+  { q: "Can I pay in instalments?", a: "Yes. We offer flexible payment plans for eligible treatments, so you can spread the cost." },
+  { q: "What if I need to reschedule?", a: "We ask for at least 48 hours notice for cancellations or rescheduling. Late cancellations may incur a fee." },
+  { q: "What is the deposit policy?", a: "A 20% deposit is required to secure your appointment. Deposits are non-refundable. The remaining balance is paid on the day of your treatment." },
+];
+
+const steps = [
+  { number: "01", title: "Choose your treatment", description: "Browse our full menu and select the service that suits you." },
+  { number: "02", title: "Select your time", description: "Pick an available date and time that works for your schedule." },
+  { number: "03", title: "Secure your appointment", description: "Pay your 20% deposit to confirm your booking." },
+  { number: "04", title: "Receive confirmation", description: "You will receive a confirmation email with all the details." },
+];
+
+const ServiceCard = ({ service }: { service: Service }) => (
+  <div className="group border border-border p-6 flex flex-col justify-between h-full hover:border-accent/40 transition-colors">
+    <div>
+      <div className="flex items-start justify-between gap-4 mb-3">
+        <h3 className="font-display text-lg leading-tight">{service.title}</h3>
+        <span className="font-body text-sm text-accent whitespace-nowrap font-medium">{service.price}</span>
+      </div>
+      <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">{service.description}</p>
+    </div>
+    <div>
+      <a
+        href={service.setmoreUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 text-sm font-body tracking-wide hover:bg-primary/90 transition-colors w-full justify-center"
+      >
+        Book Now
+        <ExternalLink size={14} />
+      </a>
+      <p className="text-xs text-muted-foreground mt-3 text-center font-body">
+        By booking, you agree to our{" "}
+        <Link to="/terms" className="underline hover:text-foreground transition-colors">booking policies</Link>
+      </p>
+    </div>
+  </div>
+);
+
+const CategorySection = ({ category, services }: { category: string; services: Service[] }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="border-b border-border">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between py-6 px-2 text-left group"
+      >
+        <div className="flex items-center gap-4">
+          <h2 className="font-display text-xl md:text-2xl">{category}</h2>
+          <span className="font-body text-xs text-muted-foreground tracking-wide">
+            {services.length} {services.length === 1 ? "service" : "services"}
+          </span>
+        </div>
+        <ChevronDown
+          size={20}
+          className={`text-muted-foreground transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+        />
+      </button>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.3 }}
+          className="pb-8 px-2"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {services.map((service, i) => (
+              <ServiceCard key={i} service={service} />
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
 };
-
-type Availability = {
-  day_of_week: number;
-  start_time: string;
-  end_time: string;
-  slot_duration_mins: number;
-  is_available: boolean;
-};
-
-type TreatmentPackage = {
-  id: string;
-  name: string;
-  treatment_id: string;
-  sessions_count: number;
-  total_price: number;
-  price_per_session: number;
-  valid_days: number;
-};
-
-const STEPS = ["Treatments", "Date & Time", "Your Details", "Payment"];
-
-const CATEGORY_ROUTES: Record<string, string> = {
-  "Fillers": "/treatments/lip-fillers-manchester",
-  "Anti-Wrinkle": "/treatments/anti-wrinkle-injections-manchester",
-  "Facials": "/treatments/hydrafacial-manchester",
-  "Peels": "/treatments/chemical-peels-manchester",
-  "Skin Rejuvenation": "/treatments/skin-boosters-manchester",
-  "Fat Dissolve": "/treatments/fat-dissolving-manchester",
-  "Micro Sclerotherapy": "/treatments/micro-sclerotherapy-manchester",
-  "Consultations": "/treatments/consultations",
-  "Content Model": "/muse",
-};
-
-const POPULAR_SLUGS: string[] = [];
 
 const BookingSystem = () => {
-  const [searchParams] = useSearchParams();
-  const [step, setStep] = useState(0);
-  const [treatments, setTreatments] = useState<Treatment[]>([]);
-  const [addons, setAddons] = useState<Addon[]>([]);
-  const [availability, setAvailability] = useState<Availability[]>([]);
-  const [blockedDates, setBlockedDates] = useState<string[]>([]);
-  const [existingBookings, setExistingBookings] = useState<{ booking_date: string; booking_time: string }[]>([]);
-  const [packages, setPackages] = useState<TreatmentPackage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [bookingSettings, setBookingSettings] = useState({ min_advance_hours: 48, max_advance_days: 60, calendar_view: 'monthly' as string });
-  const [calendarMonth, setCalendarMonth] = useState(() => {
-    const now = new Date();
-    // If we're past mid-month or all remaining days are < 48hrs, start on next month
-    return new Date(now.getFullYear(), now.getMonth(), 1);
-  });
+  usePageMeta(
+    "Book Your Treatment | Hive Clinic Manchester",
+    "Book your aesthetic treatment at Hive Clinic, Manchester City Centre. Lip fillers, skin treatments, anti-wrinkle, body contouring and more."
+  );
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Multi-treatment selection
-  const [selectedTreatments, setSelectedTreatments] = useState<Treatment[]>([]);
-  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [customerName, setCustomerName] = useState("");
-  const [customerEmail, setCustomerEmail] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [notes, setNotes] = useState("");
-  const [discountCode, setDiscountCode] = useState("");
-  const [discountResult, setDiscountResult] = useState<{ valid: boolean; discountAmount: number; discountValue: number; discountType: string } | null>(null);
-  const [discountError, setDiscountError] = useState("");
-  const [paymentMode, setPaymentMode] = useState<"deposit" | "full">("full");
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const [addonsOpen, setAddonsOpen] = useState(false);
-  const [showCoursePrompt, setShowCoursePrompt] = useState(false);
-
-  useEffect(() => { loadData(); }, []);
-
-  // Auto-select treatment or category from URL params + pre-fill customer details
-  useEffect(() => {
-    if (treatments.length === 0) return;
-    const treatmentSlug = searchParams.get("treatment");
-    const categoryParam = searchParams.get("category");
-    const emailParam = searchParams.get("email");
-    const nameParam = searchParams.get("name");
-    if (emailParam) setCustomerEmail(emailParam);
-    if (nameParam) setCustomerName(nameParam);
-    if (treatmentSlug) {
-      const found = treatments.find(t => t.slug === treatmentSlug);
-      if (found && !selectedTreatments.some(s => s.id === found.id)) {
-        setSelectedTreatments([found]);
-        setStep(1);
-      }
-    } else if (categoryParam) {
-      setExpandedCategory(categoryParam);
-    }
-  }, [treatments, searchParams]);
-
-  const loadData = async () => {
-    setLoading(true);
-    const [treatRes, availRes, blockedRes, bookingsRes, addonsRes, packagesRes, settingsRes] = await Promise.all([
-      supabase.from("treatments").select("*").eq("active", true).order("sort_order"),
-      supabase.from("availability").select("*"),
-      supabase.from("blocked_dates").select("blocked_date"),
-      supabase.from("bookings").select("booking_date, booking_time").in("status", ["pending", "confirmed"]),
-      supabase.from("treatment_addons").select("*").eq("active", true).order("sort_order"),
-      supabase.from("treatment_packages").select("*").eq("active", true).order("sort_order"),
-      supabase.from("site_settings").select("min_advance_hours, max_advance_days, calendar_view").eq("id", "global").single(),
-    ]);
-    if (treatRes.data) setTreatments(treatRes.data as Treatment[]);
-    if (availRes.data) setAvailability(availRes.data as Availability[]);
-    if (blockedRes.data) setBlockedDates(blockedRes.data.map((d: { blocked_date: string }) => d.blocked_date));
-    if (bookingsRes.data) setExistingBookings(bookingsRes.data);
-    if (addonsRes.data) setAddons(addonsRes.data as Addon[]);
-    if (packagesRes.data) setPackages(packagesRes.data as TreatmentPackage[]);
-    if (settingsRes.data) {
-      const s = settingsRes.data as any;
-      setBookingSettings({
-        min_advance_hours: s.min_advance_hours ?? 48,
-        max_advance_days: s.max_advance_days ?? 60,
-        calendar_view: s.calendar_view ?? 'monthly',
-      });
-    }
-    setLoading(false);
+  const scrollToServices = () => {
+    document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
   };
-
-  const categories = useMemo(() => {
-    const cats = [...new Set(treatments.map((t) => t.category))];
-    return cats.sort();
-  }, [treatments]);
-
-  const popularTreatments = useMemo(() => {
-    return treatments.filter(t => POPULAR_SLUGS.includes(t.slug)).slice(0, 5);
-  }, [treatments]);
-
-  const offerTreatments = useMemo(() => {
-    return treatments.filter(t => t.on_offer && t.offer_label);
-  }, [treatments]);
-
-  const categoryTreatments = useMemo(() => {
-    if (!expandedCategory) return [];
-    return treatments.filter(t => t.category === expandedCategory);
-  }, [treatments, expandedCategory]);
-
-  // Primary treatment for addon filtering
-  const primaryTreatment = selectedTreatments[0] || null;
-
-  const applicableAddons = useMemo(() => {
-    if (!primaryTreatment) return [];
-    const selectedCategories = [...new Set(selectedTreatments.map(t => t.category))];
-    return addons.filter(a => {
-      if (!a.applicable_categories || a.applicable_categories.length === 0) return true;
-      return selectedCategories.some(c => a.applicable_categories!.includes(c));
-    });
-  }, [selectedTreatments, addons, primaryTreatment]);
-
-  // Course suggestions for selected treatments
-  const courseSuggestions = useMemo(() => {
-    if (selectedTreatments.length === 0) return [];
-    const suggestions: { treatment: Treatment; pkg: TreatmentPackage; savings: number; singleTotal: number }[] = [];
-    for (const t of selectedTreatments) {
-      const treatmentPackages = packages.filter(p => p.treatment_id === t.id);
-      for (const pkg of treatmentPackages) {
-        const singleTotal = Number(t.price) * pkg.sessions_count;
-        const savings = singleTotal - Number(pkg.total_price);
-        if (savings > 0) {
-          suggestions.push({ treatment: t, pkg, savings, singleTotal });
-        }
-      }
-    }
-    return suggestions;
-  }, [selectedTreatments, packages]);
-
-  const toggleAddon = (id: string) => {
-    setSelectedAddons(prev => prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]);
-  };
-
-  const addonsTotal = useMemo(() => {
-    return selectedAddons.reduce((sum, id) => {
-      const addon = addons.find(a => a.id === id);
-      return sum + (addon ? addon.price : 0);
-    }, 0);
-  }, [selectedAddons, addons]);
-
-  const addonsDuration = useMemo(() => {
-    return selectedAddons.reduce((sum, id) => {
-      const addon = addons.find(a => a.id === id);
-      return sum + (addon ? addon.duration_mins : 0);
-    }, 0);
-  }, [selectedAddons, addons]);
-
-  const treatmentsTotal = useMemo(() => {
-    return selectedTreatments.reduce((sum, t) => {
-      const price = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
-      return sum + price;
-    }, 0);
-  }, [selectedTreatments]);
-
-  const treatmentsDuration = useMemo(() => {
-    return selectedTreatments.reduce((sum, t) => sum + t.duration_mins, 0);
-  }, [selectedTreatments]);
-
-  const totalDuration = treatmentsDuration + addonsDuration;
-
-  // Check if any selected treatment requires deposit
-  const depositRequired = selectedTreatments.some(t => t.deposit_required);
-  const totalDeposit = selectedTreatments.reduce((sum, t) => t.deposit_required ? sum + Number(t.deposit_amount) : sum, 0);
-
-  const minBookingDate = useMemo(() => {
-    const now = new Date();
-    return addDays(now, bookingSettings.min_advance_hours / 24);
-  }, [bookingSettings.min_advance_hours]);
-
-  const maxBookingDate = useMemo(() => {
-    return addDays(new Date(), bookingSettings.max_advance_days);
-  }, [bookingSettings.max_advance_days]);
-
-  const isDateAvailable = (date: Date) => {
-    if (date < startOfDay(minBookingDate)) return false;
-    if (date > maxBookingDate) return false;
-    const dayOfWeek = date.getDay();
-    const avail = availability.find((a) => a.day_of_week === dayOfWeek);
-    const dateStr = format(date, "yyyy-MM-dd");
-    return !!(avail?.is_available && !blockedDates.includes(dateStr));
-  };
-
-  // Generate calendar days for current month view
-  const calendarDays = useMemo(() => {
-    const year = calendarMonth.getFullYear();
-    const month = calendarMonth.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const startPad = firstDay.getDay(); // 0=Sun
-    const days: (Date | null)[] = [];
-    for (let i = 0; i < startPad; i++) days.push(null);
-    for (let d = 1; d <= lastDay.getDate(); d++) {
-      days.push(new Date(year, month, d));
-    }
-    return days;
-  }, [calendarMonth]);
-
-  const canGoPrevMonth = useMemo(() => {
-    const prev = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1);
-    const now = new Date();
-    return prev.getFullYear() > now.getFullYear() || (prev.getFullYear() === now.getFullYear() && prev.getMonth() >= now.getMonth());
-  }, [calendarMonth]);
-
-  const canGoNextMonth = useMemo(() => {
-    const next = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1);
-    return next <= maxBookingDate;
-  }, [calendarMonth, maxBookingDate]);
-
-  const timeSlots = useMemo(() => {
-    if (!selectedDate || selectedTreatments.length === 0) return [];
-    const dayOfWeek = selectedDate.getDay();
-    const avail = availability.find((a) => a.day_of_week === dayOfWeek);
-    if (!avail || !avail.is_available) return [];
-
-    const slots: string[] = [];
-    const [startH, startM] = avail.start_time.split(":").map(Number);
-    const [endH, endM] = avail.end_time.split(":").map(Number);
-    const startMins = startH * 60 + startM;
-    const endMins = endH * 60 + endM;
-    const dateStr = format(selectedDate, "yyyy-MM-dd");
-
-    for (let m = startMins; m + totalDuration <= endMins; m += 30) {
-      const h = Math.floor(m / 60);
-      const min = m % 60;
-      const timeStr = `${String(h).padStart(2, "0")}:${String(min).padStart(2, "0")}`;
-      const taken = existingBookings.some(
-        (b) => b.booking_date === dateStr && b.booking_time === `${timeStr}:00`
-      );
-      if (!taken) slots.push(timeStr);
-    }
-    return slots;
-  }, [selectedDate, selectedTreatments, availability, existingBookings, totalDuration]);
-
-  const totalPrice = useMemo(() => {
-    const base = treatmentsTotal + addonsTotal;
-    const discount = discountResult?.valid ? discountResult.discountAmount : 0;
-    return Math.max(0, base - discount);
-  }, [treatmentsTotal, addonsTotal, discountResult]);
-
-  const chargeAmount = useMemo(() => {
-    if (selectedTreatments.length === 0) return 0;
-    if (paymentMode === "deposit" && depositRequired) {
-      return totalDeposit;
-    }
-    return totalPrice;
-  }, [selectedTreatments, paymentMode, totalPrice, depositRequired, totalDeposit]);
-
-  const applyDiscount = async () => {
-    if (!discountCode.trim() || selectedTreatments.length === 0) return;
-    setDiscountError("");
-    setDiscountResult(null);
-    const { data, error } = await supabase.functions.invoke("validate-discount", {
-      body: { code: discountCode.trim(), treatmentId: primaryTreatment!.id, treatmentIds: selectedTreatments.map(t => t.id), treatmentPrice: treatmentsTotal + addonsTotal },
-    });
-    if (error) { setDiscountError("Failed to validate code"); return; }
-    if (data.valid) { setDiscountResult(data); } else { setDiscountError(data.error || "Invalid code"); }
-  };
-
-  const handleBooking = async () => {
-    if (selectedTreatments.length === 0 || !selectedDate || !selectedTime || !customerName || !customerEmail) return;
-    setSubmitting(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("create-booking-checkout", {
-        body: {
-          treatmentId: primaryTreatment!.id,
-          treatmentIds: selectedTreatments.map(t => t.id),
-          bookingDate: format(selectedDate, "yyyy-MM-dd"),
-          bookingTime: selectedTime,
-          customerName, customerEmail, customerPhone, paymentMode,
-          discountCode: discountResult?.valid ? discountCode : undefined,
-          notes, addonIds: selectedAddons, addonTotal: addonsTotal,
-        },
-      });
-      if (error) throw new Error("Failed to create booking");
-      if (data.error) throw new Error(data.error);
-      if (data.free) { window.location.href = `/booking-success?booking_id=${data.bookingId}&free=true`; }
-      else if (data.url) { window.location.href = data.url; }
-    } catch (err) {
-      alert(err instanceof Error ? err.message : "Something went wrong. Please try again.");
-    } finally { setSubmitting(false); }
-  };
-
-  const canProceed = () => {
-    switch (step) {
-      case 0: return selectedTreatments.length > 0;
-      case 1: return !!selectedDate && !!selectedTime;
-      case 2: return customerName.trim().length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail) && customerPhone.trim().length >= 10;
-      case 3: return true;
-      default: return false;
-    }
-  };
-
-  const toggleTreatment = (t: Treatment) => {
-    const isSelected = selectedTreatments.some(s => s.id === t.id);
-    if (isSelected) {
-      setSelectedTreatments(prev => prev.filter(s => s.id !== t.id));
-    } else {
-      setSelectedTreatments(prev => [...prev, t]);
-    }
-    setSelectedAddons([]);
-    setAddonsOpen(false);
-  };
-
-  const removeTreatment = (id: string) => {
-    setSelectedTreatments(prev => prev.filter(t => t.id !== id));
-  };
-
-  // When selected treatments change, check for course suggestions
-  useEffect(() => {
-    if (courseSuggestions.length > 0 && selectedTreatments.length > 0) {
-      setShowCoursePrompt(true);
-    } else {
-      setShowCoursePrompt(false);
-    }
-  }, [courseSuggestions, selectedTreatments.length]);
-
-  // When first treatment is added, set payment mode
-  useEffect(() => {
-    if (selectedTreatments.length > 0 && depositRequired) {
-      setPaymentMode("deposit");
-    } else {
-      setPaymentMode("full");
-    }
-  }, [selectedTreatments, depositRequired]);
-
-  const TreatmentCard = ({ t }: { t: Treatment }) => {
-    const isSelected = selectedTreatments.some(s => s.id === t.id);
-    const price = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
-    return (
-      <button
-        onClick={() => toggleTreatment(t)}
-        className={`w-full text-left p-4 border transition-all ${isSelected ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}
-      >
-        <div className="flex justify-between items-start gap-3">
-          <div className="min-w-0 flex-1">
-            <h4 className="font-display text-base leading-tight">{t.name}</h4>
-            {t.on_offer && t.offer_label && (
-              <span className="inline-block font-body text-[10px] text-gold uppercase tracking-wider mt-1 border border-gold/30 px-2 py-0.5">{t.offer_label}</span>
-            )}
-            <p className="font-body text-xs text-muted-foreground mt-1">{t.duration_mins} mins</p>
-            {t.description && <p className="font-body text-xs text-muted-foreground mt-1 line-clamp-1">{t.description}</p>}
-          </div>
-          <div className="text-right flex-shrink-0">
-            {t.on_offer && t.offer_price ? (
-              <div>
-                <p className="font-body text-xs line-through text-muted-foreground">£{Number(t.price).toFixed(0)}</p>
-                <p className="font-display text-base text-gold">£{Number(t.offer_price).toFixed(0)}</p>
-              </div>
-            ) : (
-              <p className="font-display text-base">{price === 0 ? "Free" : `£${price}`}</p>
-            )}
-          </div>
-        </div>
-        {isSelected && (
-          <div className="flex items-center gap-1 text-gold mt-2">
-            <Check size={12} strokeWidth={1.5} />
-            <span className="font-body text-xs">Selected</span>
-          </div>
-        )}
-      </button>
-    );
-  };
-
-  if (loading) {
-    return (
-      <Layout>
-        <section className="py-24">
-          <div className="max-w-3xl mx-auto px-6 text-center">
-            <div className="animate-pulse">
-              <div className="h-8 bg-secondary rounded w-48 mx-auto mb-4" />
-              <div className="h-4 bg-secondary rounded w-64 mx-auto" />
-            </div>
-          </div>
-        </section>
-      </Layout>
-    );
-  }
 
   return (
     <Layout>
-      <section className="py-24">
-        <div className="max-w-3xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-12">
-            <h1 className="font-display text-4xl md:text-5xl mb-3">Book Your Treatment</h1>
-            <p className="font-body text-sm text-muted-foreground mb-4">Select one or more treatments. Secure your appointment with a booking fee.</p>
-            
-            {/* Model Content Banner */}
-            <Link to="/muse" className="inline-flex items-center gap-3 border border-gold/40 bg-gold/5 px-5 py-3 hover:bg-gold/10 transition-colors group">
-              <Camera size={14} className="text-gold" strokeWidth={1.5} />
-              <span className="font-body text-xs text-foreground">
-                Want reduced pricing? <span className="text-gold font-medium">Become a content model</span>
-              </span>
-              <ArrowRight size={12} className="text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
+      {/* Hero */}
+      <section className="pt-32 pb-20 bg-secondary/30">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <h1 className="font-display text-5xl md:text-7xl mb-6">Book Your Treatment</h1>
+            <p className="font-body text-muted-foreground text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+              Refined, natural results. Select your treatment below to book directly.
+            </p>
+            <button
+              onClick={scrollToServices}
+              className="inline-flex items-center gap-2 border border-foreground px-8 py-3 font-body text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors"
+            >
+              View Treatments
+              <ArrowDown size={16} />
+            </button>
           </motion.div>
+        </div>
+      </section>
 
-          {/* Progress Steps */}
-          <div className="flex items-center justify-center gap-2 mb-12">
-            {STEPS.map((s, i) => (
-              <div key={s} className="flex items-center gap-2">
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center font-body text-xs transition-colors ${
-                  i < step ? "bg-gold text-white" : i === step ? "bg-foreground text-background" : "bg-secondary text-muted-foreground"
-                }`}>
-                  {i < step ? <Check size={12} strokeWidth={1.5} /> : i + 1}
-                </div>
-                <span className={`font-body text-xs hidden sm:block ${i === step ? "text-foreground" : "text-muted-foreground"}`}>{s}</span>
-                {i < STEPS.length - 1 && <ChevronRight size={12} className="text-muted-foreground" />}
+      {/* Quick Start */}
+      <section className="py-16 border-b border-border">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="font-display text-2xl text-center mb-8">Quick Start</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a
+              href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group border border-border p-8 hover:border-accent/40 transition-colors text-center"
+            >
+              <div className="w-10 h-10 border border-accent/30 flex items-center justify-center mx-auto mb-4">
+                <Clock size={18} className="text-accent" />
+              </div>
+              <h3 className="font-display text-xl mb-2">Skin Consultation</h3>
+              <p className="font-body text-sm text-muted-foreground mb-1">20 mins - £25</p>
+              <p className="font-body text-xs text-muted-foreground">Not sure what treatment you need? Start here.</p>
+            </a>
+            <a
+              href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=38c99c41-0af9-4b81-b67d-aae0369d51a4&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group border border-border p-8 hover:border-accent/40 transition-colors text-center"
+            >
+              <div className="w-10 h-10 border border-accent/30 flex items-center justify-center mx-auto mb-4">
+                <Clock size={18} className="text-accent" />
+              </div>
+              <h3 className="font-display text-xl mb-2">Returning Client</h3>
+              <p className="font-body text-sm text-muted-foreground mb-1">30 mins - Free</p>
+              <p className="font-body text-xs text-muted-foreground">Book your next session within a treatment course.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Treatment Categories */}
+      <section id="services" className="py-16">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="font-display text-3xl text-center mb-12">All Treatments</h2>
+          <div>
+            {CATEGORIES.map((category) => {
+              const services = SERVICES.filter((s) => s.category === category);
+              if (services.length === 0) return null;
+              return <CategorySection key={category} category={category} services={services} />;
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* How Booking Works */}
+      <section className="py-20 bg-secondary/30">
+        <div className="max-w-5xl mx-auto px-6">
+          <h2 className="font-display text-3xl text-center mb-14">How Booking Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {steps.map((step) => (
+              <div key={step.number} className="text-center">
+                <span className="font-display text-3xl text-accent/60 block mb-3">{step.number}</span>
+                <h3 className="font-display text-lg mb-2">{step.title}</h3>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed">{step.description}</p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <AnimatePresence mode="wait">
-            {/* Step 0: Treatment Selection */}
-            {step === 0 && (
-              <motion.div key="step0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
-                
-                {/* Selected treatments summary chips */}
-                {selectedTreatments.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {selectedTreatments.map(t => {
-                      const price = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
-                      return (
-                        <div key={t.id} className="flex items-center gap-2 border border-gold bg-gold/5 px-3 py-2">
-                          <span className="font-body text-xs">{t.name} · £{price}</span>
-                          <button onClick={(e) => { e.stopPropagation(); removeTreatment(t.id); }} className="text-muted-foreground hover:text-foreground">
-                            <X size={12} />
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
+      {/* FAQ */}
+      <section className="py-20">
+        <div className="max-w-3xl mx-auto px-6">
+          <h2 className="font-display text-3xl text-center mb-12">Frequently Asked Questions</h2>
+          <div>
+            {faqs.map((faq, i) => (
+              <div key={i} className="border-b border-border">
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between py-5 text-left"
+                >
+                  <span className="font-body font-medium">{faq.q}</span>
+                  <ChevronDown
+                    size={18}
+                    className={`flex-shrink-0 ml-4 transition-transform duration-300 ${openFaq === i ? "rotate-180" : ""}`}
+                  />
+                </button>
+                {openFaq === i && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="pb-5"
+                  >
+                    <p className="font-body text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
+                  </motion.div>
                 )}
-
-                {/* Course / Package Suggestions */}
-                {showCoursePrompt && courseSuggestions.length > 0 && (
-                  <div className="border border-gold/40 bg-gold/5 p-5 space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Package size={16} strokeWidth={1.5} className="text-gold" />
-                      <h3 className="font-display text-base">Save with a Course</h3>
-                    </div>
-                    {courseSuggestions.map(({ treatment, pkg, savings, singleTotal }) => (
-                      <div key={pkg.id} className="flex items-start justify-between gap-3 border border-border p-3 bg-background">
-                        <div>
-                          <p className="font-body text-sm font-medium">{pkg.name}</p>
-                          <p className="font-body text-xs text-muted-foreground">
-                            {pkg.sessions_count} sessions of {treatment.name}
-                          </p>
-                          <p className="font-body text-xs text-muted-foreground mt-1">
-                            <span className="line-through">£{singleTotal.toFixed(0)}</span>
-                            {" → "}
-                            <span className="text-gold font-semibold">£{Number(pkg.total_price).toFixed(0)}</span>
-                            {" · "}
-                            <span className="text-gold">Save £{savings.toFixed(0)}</span>
-                          </p>
-                        </div>
-                        <button
-                          onClick={() => {
-                            // Replace selection with course: use treatment as base but override price
-                            setSelectedTreatments([treatment]);
-                            setSelectedAddons([]);
-                            // Store package info in notes for checkout
-                            setNotes(prev => {
-                              const cleaned = prev.replace(/\[COURSE:.*?\]/g, "").trim();
-                              return `[COURSE:${pkg.id}:${pkg.name}:${pkg.total_price}:${pkg.sessions_count}] ${cleaned}`.trim();
-                            });
-                            setShowCoursePrompt(false);
-                            setStep(1);
-                          }}
-                          className="px-4 py-2 bg-foreground text-background font-body text-xs tracking-wider uppercase hover:bg-accent transition-colors flex-shrink-0"
-                        >
-                          Book Course
-                        </button>
-                      </div>
-                    ))}
-                    <button onClick={() => setShowCoursePrompt(false)} className="font-body text-xs text-muted-foreground hover:text-foreground">
-                      No thanks, continue with single session
-                    </button>
-                  </div>
-                )}
-
-                {/* Current Offers */}
-                {offerTreatments.length > 0 && !expandedCategory && (
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <Tag size={14} strokeWidth={1.5} className="text-gold" />
-                      <h3 className="font-display text-lg">Current Offers</h3>
-                    </div>
-                    <div className="space-y-2">
-                      {offerTreatments.slice(0, 6).map(t => <TreatmentCard key={t.id} t={t} />)}
-                    </div>
-                    {offerTreatments.length > 6 && (
-                      <button
-                        onClick={() => setExpandedCategory("Content Model")}
-                        className="font-body text-xs text-gold hover:underline mt-3 inline-flex items-center gap-1"
-                      >
-                        View all {offerTreatments.length} offers <ChevronRight size={10} />
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {/* Category Browser */}
-                <div>
-                  <h3 className="font-display text-lg mb-3">{expandedCategory ? expandedCategory : "All Categories"}</h3>
-                  
-                  {expandedCategory ? (
-                    <div>
-                      <button onClick={() => setExpandedCategory(null)} className="font-body text-xs text-gold mb-4 flex items-center gap-1 hover:underline">
-                        <ChevronLeft size={12} /> Back
-                      </button>
-                      <div className="space-y-2">
-                        {categoryTreatments.map(t => <TreatmentCard key={t.id} t={t} />)}
-                      </div>
-                      {CATEGORY_ROUTES[expandedCategory] && (
-                        <a href={CATEGORY_ROUTES[expandedCategory]} className="font-body text-xs text-gold hover:underline mt-3 inline-block" target="_blank" rel="noopener noreferrer">
-                          Learn more about {expandedCategory} →
-                        </a>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="space-y-1">
-                      {categories.map(cat => {
-                        const count = treatments.filter(t => t.category === cat).length;
-                        const minPrice = Math.min(...treatments.filter(t => t.category === cat).map(t => Number(t.price)));
-                        return (
-                          <button
-                            key={cat}
-                            onClick={() => setExpandedCategory(cat)}
-                            className="w-full flex items-center justify-between py-3 px-4 border-b border-border/50 hover:bg-secondary/50 transition-colors group"
-                          >
-                            <div className="flex items-center gap-3">
-                              <span className="font-body text-sm">{cat}</span>
-                              <span className="font-body text-xs text-muted-foreground">{count}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-body text-xs text-muted-foreground">from {minPrice === 0 ? "Free" : `£${minPrice}`}</span>
-                              <ChevronRight size={14} className="text-muted-foreground group-hover:text-gold transition-colors" />
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-
-                {/* Collapsible Add-ons */}
-                {selectedTreatments.length > 0 && applicableAddons.length > 0 && (
-                  <Collapsible open={addonsOpen} onOpenChange={setAddonsOpen}>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between p-3 border border-border hover:border-gold/40 transition-colors">
-                      <span className="font-body text-sm flex items-center gap-2">
-                        <Plus size={12} strokeWidth={1.5} /> Add extras
-                        {selectedAddons.length > 0 && (
-                          <span className="text-gold text-xs">({selectedAddons.length} selected · +£{addonsTotal})</span>
-                        )}
-                      </span>
-                      <ChevronDown size={14} className={`text-muted-foreground transition-transform ${addonsOpen ? "rotate-180" : ""}`} />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="mt-2 space-y-2">
-                      {applicableAddons.map(addon => {
-                        const isAdded = selectedAddons.includes(addon.id);
-                        return (
-                          <button key={addon.id} onClick={() => toggleAddon(addon.id)}
-                            className={`w-full p-3 border text-left transition-all ${isAdded ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <p className="font-body text-sm">{addon.name}</p>
-                                {addon.description && <p className="font-body text-xs text-muted-foreground">{addon.description}</p>}
-                              </div>
-                              <span className="font-body text-sm flex items-center gap-2">
-                                +£{Number(addon.price).toFixed(0)}
-                                {isAdded ? <Check size={12} className="text-gold" /> : <Plus size={12} className="text-muted-foreground" />}
-                              </span>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </CollapsibleContent>
-                  </Collapsible>
-                )}
-
-                {/* Selection summary */}
-                {selectedTreatments.length > 0 && (
-                  <div className="border border-gold/30 bg-gold/5 p-4">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">
-                          {selectedTreatments.length} treatment{selectedTreatments.length > 1 ? "s" : ""} selected
-                        </p>
-                        <p className="font-display text-sm">
-                          {selectedTreatments.map(t => t.name).join(" + ")}
-                        </p>
-                        <p className="font-body text-xs text-muted-foreground mt-1">{totalDuration} mins total</p>
-                      </div>
-                      <p className="font-display text-lg text-gold">£{(treatmentsTotal + addonsTotal).toFixed(0)}</p>
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            )}
-
-            {/* Step 1: Date & Time */}
-            {step === 1 && (
-              <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div>
-                    <h3 className="font-display text-lg mb-4 flex items-center gap-2"><Calendar size={16} strokeWidth={1.5} /> Choose a Date</h3>
-                    <p className="font-body text-xs text-muted-foreground mb-3">Bookings must be made at least {bookingSettings.min_advance_hours} hours in advance.</p>
-                    {/* Monthly Calendar Navigation */}
-                    <div className="flex items-center justify-between mb-3">
-                      <button
-                        onClick={() => setCalendarMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
-                        disabled={!canGoPrevMonth}
-                        className="p-2 border border-border hover:border-gold/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                      >
-                        <ChevronLeft size={14} />
-                      </button>
-                      <span className="font-display text-base">{format(calendarMonth, "MMMM yyyy")}</span>
-                      <button
-                        onClick={() => setCalendarMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
-                        disabled={!canGoNextMonth}
-                        className="p-2 border border-border hover:border-gold/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                      >
-                        <ChevronRight size={14} />
-                      </button>
-                    </div>
-                    {/* Day Headers */}
-                    <div className="grid grid-cols-7 gap-1 mb-1">
-                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
-                        <div key={d} className="text-center font-body text-[10px] text-muted-foreground uppercase tracking-wider py-1">{d}</div>
-                      ))}
-                    </div>
-                    {/* Calendar Grid */}
-                    <div className="grid grid-cols-7 gap-1">
-                      {calendarDays.map((date, i) => {
-                        if (!date) return <div key={`pad-${i}`} />;
-                        const available = isDateAvailable(date);
-                        const isSelected = selectedDate?.toDateString() === date.toDateString();
-                        const isToday = date.toDateString() === new Date().toDateString();
-                        return (
-                          <button
-                            key={date.toISOString()}
-                            onClick={() => { if (available) { setSelectedDate(date); setSelectedTime(null); } }}
-                            disabled={!available}
-                            className={`aspect-square flex items-center justify-center font-body text-sm transition-all border ${
-                              isSelected
-                                ? "border-gold bg-gold/10 text-foreground font-medium"
-                                : available
-                                  ? "border-border hover:border-gold/40 cursor-pointer"
-                                  : "border-transparent text-muted-foreground/30 cursor-not-allowed"
-                            } ${isToday && !isSelected ? "ring-1 ring-gold/30" : ""}`}
-                          >
-                            {date.getDate()}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="font-display text-lg mb-4 flex items-center gap-2"><Clock size={16} strokeWidth={1.5} /> Choose a Time</h3>
-                    {selectedDate ? (
-                      timeSlots.length > 0 ? (
-                        <div className="grid grid-cols-3 gap-2">
-                          {timeSlots.map((time) => (
-                            <button key={time} onClick={() => setSelectedTime(time)} className={`py-3 px-4 border font-body text-sm transition-all ${selectedTime === time ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>{time}</button>
-                          ))}
-                        </div>
-                      ) : <p className="font-body text-sm text-muted-foreground">No available slots on this date.</p>
-                    ) : <p className="font-body text-sm text-muted-foreground">Select a date first.</p>}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Step 2: Customer Details */}
-            {step === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <div className="max-w-lg mx-auto space-y-6">
-                  <div>
-                    <label className="font-body text-sm block mb-2">Full Name *</label>
-                    <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors" placeholder="Your full name" />
-                  </div>
-                  <div>
-                    <label className="font-body text-sm block mb-2">Email Address *</label>
-                    <input type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors" placeholder="your@email.com" />
-                  </div>
-                  <div>
-                    <label className="font-body text-sm block mb-2">Phone Number *</label>
-                    <input type="tel" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors" placeholder="07XXX XXXXXX" />
-                    {customerPhone.length > 0 && customerPhone.trim().length < 10 && (
-                      <p className="font-body text-xs text-destructive mt-1">Please enter a valid UK phone number</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="font-body text-sm block mb-2">Notes (optional)</label>
-                    <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className="w-full border border-border bg-transparent px-4 py-3 font-body text-sm focus:border-gold focus:outline-none transition-colors resize-none" placeholder="Any allergies, preferences, or things we should know..." />
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Step 3: Payment Summary */}
-            {step === 3 && selectedTreatments.length > 0 && selectedDate && selectedTime && (
-              <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <div className="max-w-lg mx-auto">
-                  <div className="border border-border p-6 mb-6">
-                    <h3 className="font-display text-lg mb-4">Booking Summary</h3>
-                    <div className="space-y-3 font-body text-sm">
-                      <div className="flex justify-between"><span className="text-muted-foreground">Treatment{selectedTreatments.length > 1 ? "s" : ""}</span><span>{selectedTreatments.map(t => t.name).join(", ")}</span></div>
-                      <div className="flex justify-between"><span className="text-muted-foreground">Date</span><span>{format(selectedDate, "EEEE, d MMMM yyyy")}</span></div>
-                      <div className="flex justify-between"><span className="text-muted-foreground">Time</span><span>{selectedTime}</span></div>
-                      <div className="flex justify-between"><span className="text-muted-foreground">Duration</span><span>{totalDuration} mins</span></div>
-                      <div className="border-t border-border pt-3">
-                        {selectedTreatments.map(t => {
-                          const p = t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price);
-                          return <div key={t.id} className="flex justify-between"><span className="text-muted-foreground">{t.name}</span><span>£{p.toFixed(2)}</span></div>;
-                        })}
-                        {selectedAddons.length > 0 && selectedAddons.map(id => {
-                          const addon = addons.find(a => a.id === id);
-                          return addon ? <div key={id} className="flex justify-between text-xs text-muted-foreground"><span>+ {addon.name}</span><span>£{Number(addon.price).toFixed(2)}</span></div> : null;
-                        })}
-                        {discountResult?.valid && <div className="flex justify-between text-gold mt-1"><span>Discount</span><span>-£{discountResult.discountAmount.toFixed(2)}</span></div>}
-                        <div className="flex justify-between font-semibold mt-2 text-lg"><span>Total</span><span>£{totalPrice.toFixed(2)}</span></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {totalPrice > 0 && (
-                    <div className="mb-6">
-                      <label className="font-body text-sm block mb-2 flex items-center gap-2"><Tag size={14} strokeWidth={1.5} /> Discount Code</label>
-                      <div className="flex gap-2">
-                        <input type="text" value={discountCode} onChange={(e) => { setDiscountCode(e.target.value); setDiscountError(""); setDiscountResult(null); }} className="flex-1 border border-border bg-transparent px-4 py-3 font-body text-sm uppercase focus:border-gold focus:outline-none" placeholder="Enter code" />
-                        <button onClick={applyDiscount} className="px-6 py-3 bg-foreground text-background font-body text-sm tracking-wider uppercase hover:bg-accent transition-colors">Apply</button>
-                      </div>
-                      {discountError && <p className="font-body text-xs text-destructive mt-2">{discountError}</p>}
-                      {discountResult?.valid && <p className="font-body text-xs text-gold mt-2">Discount applied — saving £{discountResult.discountAmount.toFixed(2)}</p>}
-                    </div>
-                  )}
-
-                  {depositRequired && totalPrice > 0 && (
-                    <div className="mb-6">
-                      <label className="font-body text-sm block mb-3">Payment Option</label>
-                      <div className="grid grid-cols-2 gap-3">
-                         <button onClick={() => setPaymentMode("deposit")} className={`p-4 border text-left transition-all ${paymentMode === "deposit" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
-                          <p className="font-display text-sm">Pay Booking Fee</p>
-                          <p className="font-body text-xs text-muted-foreground mt-1">£{totalDeposit.toFixed(0)} now</p>
-                        </button>
-                        <button onClick={() => setPaymentMode("full")} className={`p-4 border text-left transition-all ${paymentMode === "full" ? "border-gold bg-gold/5" : "border-border hover:border-gold/40"}`}>
-                          <p className="font-display text-sm">Pay in Full</p>
-                          <p className="font-body text-xs text-muted-foreground mt-1">£{totalPrice.toFixed(0)} total</p>
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {totalPrice > 0 && (
-                    <div className="border border-gold bg-gold/5 p-4 mb-6 text-center">
-                      <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">Amount to pay now</p>
-                      <p className="font-display text-3xl text-gold">£{chargeAmount.toFixed(2)}</p>
-                      {paymentMode === "deposit" && depositRequired && (
-                        <p className="font-body text-xs text-muted-foreground mt-1">Remaining £{(totalPrice - chargeAmount).toFixed(2)} due at appointment</p>
-                      )}
-                    </div>
-                  )}
-
-                  <button onClick={handleBooking} disabled={submitting} className="w-full py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
-                    {submitting ? <span className="animate-pulse">Processing...</span> : totalPrice === 0 ? <>Confirm Booking <ArrowRight size={14} /></> : <>Proceed to Payment <ArrowRight size={14} /></>}
-                  </button>
-                   <div className="border border-amber-600/30 bg-amber-50/50 dark:bg-amber-900/10 p-4 mt-4">
-                     <p className="font-body text-xs text-foreground/80 text-center">
-                       ⏰ Please arrive at your exact appointment time. Do not arrive early or late as a member of the team will need to let you into the clinic.
-                     </p>
-                   </div>
-                   <p className="font-body text-xs text-muted-foreground text-center mt-4">Payments processed securely via Stripe.</p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Navigation */}
-          <div className="flex justify-between mt-10">
-            <button onClick={() => setStep(Math.max(0, step - 1))} className={`flex items-center gap-2 font-body text-sm tracking-wider uppercase hover:text-gold transition-colors ${step === 0 ? "invisible" : ""}`}>
-              <ChevronLeft size={14} strokeWidth={1.5} /> Back
-            </button>
-            {step < 3 && (
-              <button onClick={() => setStep(step + 1)} disabled={!canProceed()} className="flex items-center gap-2 px-8 py-3 bg-foreground text-background font-body text-sm tracking-wider uppercase hover:bg-accent transition-colors disabled:opacity-30">
-                Continue <ChevronRight size={14} strokeWidth={1.5} />
-              </button>
-            )}
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* Booking Policy */}
+      <section className="py-12 border-t border-border">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <p className="font-body text-sm text-muted-foreground leading-relaxed">
+            20% deposit required to secure your appointment. Deposits are non-refundable. 48 hours notice required to reschedule.
+            No-shows lose their deposit. Treatments are non-refundable; results vary. Cash or card accepted.
+          </p>
+          <Link to="/terms" className="font-body text-xs text-accent underline mt-3 inline-block">
+            View full booking policies
+          </Link>
         </div>
       </section>
     </Layout>

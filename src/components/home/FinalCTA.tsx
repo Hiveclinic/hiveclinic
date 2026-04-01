@@ -3,7 +3,7 @@ import { ArrowRight, MapPin } from "lucide-react";
 import klarnaLogo from "@/assets/klarna-logo.png";
 import clearpayLogo from "@/assets/clearpay-logo.png";
 
-const SETMORE_CONSULTATION = "https://hiveclinicuk.setmore.com/book?step=date-time&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=true";
+const SETMORE_CONSULTATION = "https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false";
 
 const FinalCTA = () => {
   return (

@@ -48,7 +48,7 @@ const FatDissolve = () => {
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
             <a
-                href="https://hiveclinicuk.setmore.com/book?step=date-time&products=a30c5362-956b-4139-b14d-9daaf9a5569a&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=true"
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=a30c5362-956b-4139-b14d-9daaf9a5569a&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
@@ -154,7 +154,7 @@ const FatDissolve = () => {
         <p className="font-body text-muted-foreground mb-8">Book a consultation to discuss your body goals and create a personalised plan.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-                href="https://hiveclinicuk.setmore.com/book?step=date-time&products=a30c5362-956b-4139-b14d-9daaf9a5569a&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=true"
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=a30c5362-956b-4139-b14d-9daaf9a5569a&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">

@@ -20,6 +20,9 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
           src={heroImg}
           alt="Hive Clinic - Premium Aesthetics Manchester"
           className="w-full h-full object-cover"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent md:bg-gradient-to-t md:from-black/70 md:via-black/30 md:to-black/5" />
       </motion.div>

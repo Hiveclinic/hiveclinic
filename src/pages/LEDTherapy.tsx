@@ -38,9 +38,13 @@ const LEDTherapy = () => {
               <div className="flex items-center gap-2"><Award size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">All Skin Types</span></div>
               <div className="flex items-center gap-2"><Clock size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">30 Min Sessions</span></div>
             </div>
-            <Link to="/bookings?category=LED Light Therapy" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
-              Book Now <ArrowRight size={14} />
-            </Link>
+            <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
           </motion.div>
         </div>
       </section>
@@ -61,9 +65,13 @@ const LEDTherapy = () => {
                 <p className="font-display text-3xl">£45 <span className="text-lg text-muted-foreground">per session</span></p>
                 <p className="font-display text-xl mt-2">£250 <span className="text-lg text-muted-foreground">course of 6</span></p>
               </div>
-              <Link to="/bookings?category=LED Light Therapy" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
+              <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
                 Book Appointment <ArrowRight size={14} />
-              </Link>
+              </a>
             </div>
             <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="LED light therapy results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
           </div>
@@ -113,7 +121,13 @@ const LEDTherapy = () => {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="font-display text-4xl md:text-5xl mb-4">Start Your Skin Transformation</h2>
           <p className="font-body text-muted-foreground mb-8">Book an LED session or course today.</p>
-          <Link to="/bookings?category=LED Light Therapy" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">Book Now <ArrowRight size={14} /></Link>
+          <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
         </div>
       </section>
     </Layout>

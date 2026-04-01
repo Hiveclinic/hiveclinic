@@ -208,8 +208,13 @@ const ServiceCard = ({ service }: { service: Service }) => (
   </div>
 );
 
+const isCourse = (title: string) =>
+  /course|sessions\)/i.test(title) || /\d\s*sessions/i.test(title);
+
 const CategorySection = ({ category, services }: { category: string; services: Service[] }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const singles = services.filter((s) => !isCourse(s.title));
+  const courses = services.filter((s) => isCourse(s.title));
 
   return (
     <div className="border-b border-border">
@@ -236,11 +241,28 @@ const CategorySection = ({ category, services }: { category: string; services: S
           transition={{ duration: 0.3 }}
           className="pb-8 px-2"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {services.map((service, i) => (
-              <ServiceCard key={i} service={service} />
-            ))}
-          </div>
+          {singles.length > 0 && (
+            <>
+              {courses.length > 0 && (
+                <p className="font-body text-xs uppercase tracking-widest text-muted-foreground mb-4">Single Sessions</p>
+              )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {singles.map((service, i) => (
+                  <ServiceCard key={i} service={service} />
+                ))}
+              </div>
+            </>
+          )}
+          {courses.length > 0 && (
+            <>
+              <p className="font-body text-xs uppercase tracking-widest text-muted-foreground mb-4 mt-8">Courses</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {courses.map((service, i) => (
+                  <ServiceCard key={i} service={service} />
+                ))}
+              </div>
+            </>
+          )}
         </motion.div>
       )}
     </div>

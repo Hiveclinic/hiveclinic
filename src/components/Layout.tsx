@@ -7,7 +7,7 @@ import logo from "@/assets/logo.png";
 import WhatsAppButton from "./WhatsAppButton";
 import VIPPopup from "./VIPPopup";
 import TreatmentChatbot from "./TreatmentChatbot";
-import AnnouncementBanner from "./AnnouncementBanner";
+
 import instagramLogo from "@/assets/instagram-logo.png";
 import tiktokLogo from "@/assets/tiktok-logo.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,11 +19,8 @@ const navLinks = [{
   to: "/treatments",
   label: "Treatments"
 }, {
-  to: "/offers",
-  label: "Offers"
-}, {
-  to: "/pricing",
-  label: "Pricing"
+  to: "/content-models",
+  label: "Content Models"
 }, {
   to: "/about",
   label: "About"
@@ -50,7 +47,7 @@ type SearchResult = {
 const STATIC_PAGES: SearchResult[] = [
   { type: "page", name: "Home", link: "/" },
   { type: "page", name: "Treatments", link: "/treatments" },
-  { type: "page", name: "Pricing", link: "/pricing" },
+  { type: "page", name: "Content Models", link: "/content-models" },
   { type: "page", name: "About Us", link: "/about" },
   { type: "page", name: "Results & Gallery", link: "/results" },
   { type: "page", name: "Aftercare", link: "/aftercare" },
@@ -109,7 +106,7 @@ const Layout = ({
   };
 
   return <div className="min-h-screen flex flex-col bg-background text-foreground">
-      <AnnouncementBanner />
+      {/* Banner removed */}
       {/* Nav */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">

@@ -159,7 +159,13 @@ const Treatments = () => {
             <h3 className="font-display text-3xl mb-3">Not Sure Which Treatment Is Right for You?</h3>
             <p className="font-body text-sm text-muted-foreground mb-6 max-w-md mx-auto">Book a free consultation and we'll create a personalised treatment plan.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/bookings?category=Consultations" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">Book Free Consultation <ArrowRight size={14} /></Link>
+              <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
+                Book Free Consultation <ArrowRight size={14} />
+              </a>
               <a href="https://wa.me/447795008114" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-10 py-4 border border-border font-body text-sm tracking-widest uppercase hover:border-gold transition-colors">Message on WhatsApp</a>
             </div>
           </motion.div>

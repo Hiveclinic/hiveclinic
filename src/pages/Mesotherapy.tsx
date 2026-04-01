@@ -38,7 +38,13 @@ const Mesotherapy = () => {
               <div className="flex items-center gap-2"><Award size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">Face, Eye & Scalp</span></div>
               <div className="flex items-center gap-2"><Clock size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">45 Min Treatment</span></div>
             </div>
-            <Link to="/bookings?category=Mesotherapy" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">Book Now <ArrowRight size={14} /></Link>
+            <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
           </motion.div>
         </div>
       </section>
@@ -59,9 +65,13 @@ const Mesotherapy = () => {
               <p className="font-display text-2xl mt-1">Scalp — £210</p>
               <p className="font-body text-xs text-muted-foreground mt-2">Course of 3: 10% saving · Course of 6: 15% saving</p>
             </div>
-            <Link to="/bookings?category=Mesotherapy" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
-              Book Consultation <ArrowRight size={14} />
-            </Link>
+            <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
+                Book Consultation <ArrowRight size={14} />
+              </a>
           </div>
           <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="Mesotherapy results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
         </div>
@@ -110,7 +120,13 @@ const Mesotherapy = () => {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="font-display text-4xl md:text-5xl mb-4">Nourish Your Skin Today</h2>
           <p className="font-body text-muted-foreground mb-8">Book a mesotherapy consultation or treatment.</p>
-          <Link to="/bookings?category=Mesotherapy" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">Book Now <ArrowRight size={14} /></Link>
+          <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
         </div>
       </section>
     </Layout>

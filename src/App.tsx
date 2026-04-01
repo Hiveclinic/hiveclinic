@@ -22,7 +22,7 @@ import FacialBalancing from "./pages/FacialBalancing";
 import MicroSclerotherapy from "./pages/MicroSclerotherapy";
 import Consultations from "./pages/Consultations";
 import IntimatePeels from "./pages/IntimatePeels";
-import Pricing from "./pages/Pricing";
+
 import About from "./pages/About";
 import BookingSystem from "./pages/BookingSystem";
 import BookingSuccess from "./pages/BookingSuccess";
@@ -41,7 +41,7 @@ import AcneTreatment from "./pages/AcneTreatment";
 import HyperpigmentationTreatment from "./pages/HyperpigmentationTreatment";
 import LipFillerLanding from "./pages/LipFillerLanding";
 import MuseLanding from "./pages/MuseLanding";
-import Offers from "./pages/Offers";
+
 import ConsentForm from "./pages/ConsentForm";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";
@@ -75,7 +75,7 @@ const AnimatedRoutes = () => {
           <Route path="/treatments/micro-sclerotherapy-manchester" element={<PageTransition><MicroSclerotherapy /></PageTransition>} />
           <Route path="/treatments/consultations" element={<PageTransition><Consultations /></PageTransition>} />
           <Route path="/treatments/intimate-peels-manchester" element={<PageTransition><IntimatePeels /></PageTransition>} />
-          <Route path="/pricing" element={<PageTransition><Pricing /></PageTransition>} />
+          
           <Route path="/about" element={<PageTransition><About /></PageTransition>} />
           <Route path="/bookings" element={<PageTransition><BookingSystem /></PageTransition>} />
           <Route path="/booking-success" element={<PageTransition><BookingSuccess /></PageTransition>} />
@@ -94,7 +94,8 @@ const AnimatedRoutes = () => {
           <Route path="/hyperpigmentation-treatment-manchester" element={<PageTransition><HyperpigmentationTreatment /></PageTransition>} />
           <Route path="/lip-filler-manchester" element={<PageTransition><LipFillerLanding /></PageTransition>} />
           <Route path="/muse" element={<PageTransition><MuseLanding /></PageTransition>} />
-          <Route path="/offers" element={<PageTransition><Offers /></PageTransition>} />
+          <Route path="/content-models" element={<PageTransition><MuseLanding /></PageTransition>} />
+          
           <Route path="/consent-form" element={<PageTransition><ConsentForm /></PageTransition>} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>

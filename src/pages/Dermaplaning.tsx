@@ -39,9 +39,13 @@ const Dermaplaning = () => {
               <div className="flex items-center gap-2"><Award size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">5-Star Rated</span></div>
               <div className="flex items-center gap-2"><Clock size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">30 Min Treatment</span></div>
             </div>
-            <Link to="/bookings?category=Dermaplaning" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
-              Book Now <ArrowRight size={14} />
-            </Link>
+            <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
           </motion.div>
         </div>
       </section>
@@ -62,9 +66,13 @@ const Dermaplaning = () => {
                 <p className="font-display text-3xl">£75 <span className="text-lg text-muted-foreground">Skin Polish</span></p>
                 <p className="font-display text-xl mt-2">£115 <span className="text-lg text-muted-foreground">+ Hydration Facial</span></p>
               </div>
-              <Link to="/bookings?category=Dermaplaning" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
+              <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
                 Book Appointment <ArrowRight size={14} />
-              </Link>
+              </a>
             </div>
             <div className="aspect-[4/5] overflow-hidden"><img src={secondaryImg} alt="Dermaplaning results at Hive Clinic Manchester City Centre" className="w-full h-full object-cover" loading="lazy" /></div>
           </div>
@@ -121,9 +129,13 @@ const Dermaplaning = () => {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="font-display text-4xl md:text-5xl mb-4">Ready for Radiant Skin?</h2>
           <p className="font-body text-muted-foreground mb-8">Book your dermaplaning treatment today.</p>
-          <Link to="/bookings?category=Dermaplaning" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
-            Book Now <ArrowRight size={14} />
-          </Link>
+          <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
         </div>
       </section>
     </Layout>

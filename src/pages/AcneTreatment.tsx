@@ -52,9 +52,13 @@ const AcneTreatment = () => {
               <div className="flex items-center gap-2"><Clock size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Free Consultation</span></div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/bookings" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
+              <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
                 Book Consultation <ArrowRight size={14} />
-              </Link>
+              </a>
               <a href="https://wa.me/447795008114" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/40 text-white font-body text-sm tracking-widest uppercase hover:border-white transition-colors">
                 Message Us
               </a>
@@ -83,9 +87,13 @@ const AcneTreatment = () => {
                   </div>
                 ))}
               </div>
-              <Link to="/bookings" className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors">
+              <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors">
                 Book Consultation <ArrowRight size={14} />
-              </Link>
+              </a>
             </div>
             <div>
               <img src={secondaryImg} alt="Clear skin results after acne treatment at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
@@ -155,9 +163,13 @@ const AcneTreatment = () => {
           <p className="font-body text-muted-foreground mb-8 max-w-xl mx-auto">
             Book a free skin consultation at Hive Clinic, Manchester City Centre. We'll assess your skin, recommend the right treatments, and create a plan that works for you.
           </p>
-          <Link to="/bookings" className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors">
-            Book Consultation <ArrowRight size={14} />
-          </Link>
+          <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors">
+                Book Consultation <ArrowRight size={14} />
+              </a>
         </div>
       </section>
     </Layout>

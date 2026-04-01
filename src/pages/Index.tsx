@@ -114,7 +114,7 @@ const Index = () => {
             </div>
              <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                href="https://hiveclinicuk.setmore.com/book?step=date-time&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=true"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
@@ -372,7 +372,7 @@ const Index = () => {
             Book a free consultation — no obligation, just a friendly chat about your goals.
           </p>
           <a
-            href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+            href="https://hiveclinicuk.setmore.com/book?step=date-time&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=true"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-10 py-4 bg-background text-foreground font-body text-sm tracking-widest uppercase hover:bg-background/90 transition-colors">

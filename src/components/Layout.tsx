@@ -47,7 +47,7 @@ type SearchResult = {
 const STATIC_PAGES: SearchResult[] = [
   { type: "page", name: "Home", link: "/" },
   { type: "page", name: "Treatments", link: "/treatments" },
-  { type: "page", name: "Pricing", link: "/pricing" },
+  { type: "page", name: "Content Models", link: "/content-models" },
   { type: "page", name: "About Us", link: "/about" },
   { type: "page", name: "Results & Gallery", link: "/results" },
   { type: "page", name: "Aftercare", link: "/aftercare" },

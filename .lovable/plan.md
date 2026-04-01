@@ -1,84 +1,95 @@
-## Plan: Redesign Booking Page with Setmore Direct Links
+
+
+## Plan: Site Restructure - Remove Pages, Sync with Setmore, Add Content Models
 
 ### Overview
 
-Replace the current custom booking system (`BookingSystem.tsx`) with a premium, static front-end page where every treatment links directly to its specific Setmore booking page. No iframe, no custom booking flow.
+Major restructure: remove 3 features (announcement banner, pricing page, offers page), update the treatment menu to match Setmore data, make all booking CTAs across ~20+ treatment pages link directly to Setmore, and create a new Content Models page.
 
-### Page Structure
+---
 
-1. **Hero** - "Book Your Treatment" title, subtext, scroll-to-services CTA
-2. **Quick Start** - Two cards: Skin Consultation + Returning Client (repeat session)
-3. **Treatment Categories** - Collapsible sections, each containing service cards
-4. **How Booking Works** - 4-step visual guide
-5. **FAQ** - Existing FAQ content retained
+### 1. Remove Announcement Banner
 
-### Categories and Services
+- Remove `<AnnouncementBanner />` from `src/components/Layout.tsx`
+- Delete `src/components/AnnouncementBanner.tsx`
 
-All services extracted from your live Setmore page, organized into these categories (skipping "DO NOT BOOK" placeholder items):
+### 2. Remove Pricing Page
 
-- **Consultations** (3): Skin Consultation, Prescriber Consultation, Repeat Session Bookings
-- **Dermal Filler** (14): Lip Filler 1ml/0.5ml, Facial Balancing 2-7ml, Nose Filler, Tear Trough, Jawline, Cheek, Chin, Marionette Lines, Smile Lines, Filler Dissolve, Touch Up/Refresh
-- **Anti-Wrinkle** (10): 1/2/3/6 Areas, Masseter, Lip Flip, Bunny Lines, Gummy Smile, Brow Lift, Excessive Sweating, Anti-Wrinkle Consultation
-- **Chemical Peels** (10): BioRePeel Face/Body, Level 1/2 Face/Back, courses
-- **Intimate Pigment Treatment** (6+courses): Bikini Line, Underarm, Inner Thigh, single + courses
-- **Skin Treatments** (5): BioRePeel Face/Body, Glass Skin Treatment, courses
-- **Skin Boosters** (8): Seventy Hyal, Polynucleotides, Profhilo, Under Eye, Lumi Eyes, courses
-- **Microneedling** (7): Hydrating Serum, Skin Booster, Stretch Mark, Face Texture Repair, Stretch Mark Repair, courses
-- **HydroFacial** (2): Hydrafacial, Glass Skin Hydrafacial
-- **Fat Dissolve** (6+courses): Small/Medium/Large, courses
-- **Body Contouring** (10+): Body Sculpting single/two area, Lymphatic Drainage, combinations, Ultimate Body Reset, courses
-- **Wellness** (2): B12 Injection, Biotin Injection
-- **IV Drip Therapy** (2): IV Vitamin Drip, IV Booster Add-On
-- **Other** (various): Intimate Peels, Melanostop treatments, Review Appointment
+- Remove `/pricing` route from `App.tsx`
+- Delete `src/pages/Pricing.tsx`
+- Remove "Pricing" from `navLinks` in `Layout.tsx`
+- Update any internal links to `/pricing` across pages (e.g. Index.tsx links to pricing → redirect to `/bookings`)
 
-### Service Card Design
+### 3. Remove Offers Page
 
-Each card shows:
+- Remove `/offers` route from `App.tsx`
+- Delete `src/pages/Offers.tsx`
+- Remove "Offers" from `navLinks` in `Layout.tsx`
+- Update any internal links to `/offers` across pages (e.g. Index.tsx)
 
-- Service name
-- Price (e.g. "From £150")
-- One-line description
-- "Book Now" button linking to exact Setmore URL (`target="_blank" rel="noopener noreferrer"`)
-- Small policy text: "By booking, you agree to our [booking policies](/terms)"
+### 4. Update Treatment Menu Page
 
-### Data Architecture
+Replace the current `Pricing.tsx` (being removed) purpose with the booking page itself serving as the menu. The `/bookings` page already has all Setmore-synced categories and prices with courses and single sessions clearly separated via collapsible sections.
 
-A single `SERVICES` constant array at the top of the file with typed objects:
+Enhance the existing `BookingSystem.tsx` to better partition courses vs single sessions within each category:
+- Within each collapsible category, show two sub-sections: "Single Sessions" and "Courses" (when courses exist)
+- This makes it easy to distinguish between one-off treatments and multi-session packages
 
-```typescript
-type Service = {
-  title: string;
-  price: string;
-  description: string;
-  category: string;
-  setmoreUrl: string;
-};
-```
+### 5. Update All Treatment Landing Pages to Link to Setmore
 
-This makes future edits simple - just update the URL or price in one place.
+Across ~20+ treatment pages, replace every `<Link to="/bookings?category=...">` with a direct `<a href="SETMORE_URL" target="_blank" rel="noopener noreferrer">` link.
 
-### Design Details
+Each treatment page will link to the most relevant Setmore consultation/booking URL. Files affected:
+- `LipFillers.tsx` → Lip Filler 1ml Setmore URL
+- `AntiWrinkle.tsx` → Anti-Wrinkle Consultation Setmore URL
+- `DermalFiller.tsx` → Skin Consultation Setmore URL
+- `HydraFacial.tsx` → Hydrafacial Setmore URL
+- `ChemicalPeels.tsx` → BioRePeel Face Setmore URL
+- `SkinBoosters.tsx` → Seventy Hyal Setmore URL
+- `FatDissolve.tsx` → Fat Dissolving Small Setmore URL
+- `Microneedling.tsx` → Microneedling Setmore URL
+- `Dermaplaning.tsx` → Skin Consultation Setmore URL
+- `LEDTherapy.tsx` → Skin Consultation Setmore URL
+- `Mesotherapy.tsx` → Skin Consultation Setmore URL
+- `PRP.tsx` → Skin Consultation Setmore URL
+- `FacialBalancing.tsx` → Facial Balancing 2ml Setmore URL
+- `MicroSclerotherapy.tsx` → Skin Consultation Setmore URL
+- `Consultations.tsx` → Skin Consultation Setmore URL
+- `IntimatePeels.tsx` → Intimate Peel Setmore URL
+- `AcneTreatment.tsx` → Skin Consultation Setmore URL
+- `HyperpigmentationTreatment.tsx` → Skin Consultation Setmore URL
+- `LipFillerLanding.tsx` → Lip Filler 1ml Setmore URL
+- `Index.tsx` → Skin Consultation Setmore URL (hero CTA)
+- `Contact.tsx`, `About.tsx`, `Aftercare.tsx` etc. if they have booking links
+- `MuseLanding.tsx` → will be handled separately (Content Models page)
 
-- Black, cream, gold palette matching Hive Clinic branding
-- Cormorant Garamond headings, Satoshi body text
-- Clean card grid (2 columns desktop, 1 mobile)
-- Collapsible category sections with smooth animation
-- Standard hyphens only, no em dashes, no emojis
-- No clutter, no bright colours, no oversized promo blocks
+Also update `ModelCTA.tsx` component if it links to `/bookings`.
 
-### Technical Changes
+### 6. Create Content Models Page
 
-- **File modified**: `src/pages/BookingSystem.tsx` - complete rewrite (much simpler, ~400 lines)
-- **Route stays the same**: `/bookings`
-- **No database dependency** - all service data is hardcoded for reliability and speed
-- **No iframe** - pure React components with external Setmore links
+Replace `MuseLanding.tsx` with a new "Content Models" page that:
+- Shows model-priced treatments organized by category (same structure as booking page)
+- Each treatment links to its specific Setmore booking URL
+- If no treatments are available, displays:
+  > "Sorry, we have no more slots available. Sign up to our WhatsApp group chat to be notified when new dates are added."
+  > With link to: `https://chat.whatsapp.com/EghTmYahXgY6P2f1J1BD6I?mode=gi_t`
 
-### What Gets Removed
+The page will use a hardcoded `MODEL_SERVICES` array (same structure as `SERVICES` in BookingSystem). When you add "Content Model" category treatments in Setmore, you update this array. The empty-state fallback with WhatsApp link shows when the array is empty.
 
-- Custom date/time picker, calendar logic
-- Payment/Stripe checkout flow
-- Addon selection, discount code validation
-- All database queries (treatments, availability, bookings, etc.)
-- Multi-step wizard UI
+### 7. Update Navigation
 
-The existing booking backend tables remain untouched for admin use.
+Update `navLinks` in `Layout.tsx`:
+- Remove "Offers"
+- Remove "Pricing"
+- Add "Content Models" linking to `/muse` (or rename route to `/content-models`)
+
+---
+
+### Technical Summary
+
+- **Files deleted**: `AnnouncementBanner.tsx`, `Pricing.tsx`, `Offers.tsx`
+- **Files heavily edited**: `Layout.tsx` (nav + banner), `App.tsx` (routes), `BookingSystem.tsx` (course partitioning), `MuseLanding.tsx` (rewrite to Content Models)
+- **Files with link updates**: ~20+ treatment pages, `Index.tsx`, `ModelCTA.tsx`, `Contact.tsx`
+- **No database changes needed** - all hardcoded service data
+- Approximately 25 files modified, 3 files deleted
+

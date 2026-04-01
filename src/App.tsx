@@ -22,7 +22,7 @@ import FacialBalancing from "./pages/FacialBalancing";
 import MicroSclerotherapy from "./pages/MicroSclerotherapy";
 import Consultations from "./pages/Consultations";
 import IntimatePeels from "./pages/IntimatePeels";
-import Pricing from "./pages/Pricing";
+
 import About from "./pages/About";
 import BookingSystem from "./pages/BookingSystem";
 import BookingSuccess from "./pages/BookingSuccess";

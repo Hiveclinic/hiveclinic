@@ -7,7 +7,7 @@ import logo from "@/assets/logo.png";
 import WhatsAppButton from "./WhatsAppButton";
 import VIPPopup from "./VIPPopup";
 import TreatmentChatbot from "./TreatmentChatbot";
-import AnnouncementBanner from "./AnnouncementBanner";
+
 import instagramLogo from "@/assets/instagram-logo.png";
 import tiktokLogo from "@/assets/tiktok-logo.png";
 import { supabase } from "@/integrations/supabase/client";

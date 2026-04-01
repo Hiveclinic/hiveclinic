@@ -2,38 +2,18 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 serve(async (req) => {
-  // Support HTTP Basic Auth (for Outlook/iPhone calendar subscriptions)
-  const feedPassword = Deno.env.get("CALENDAR_FEED_PASSWORD") ?? "";
-  const expectedUser = "hive";
-
-  const authHeader = req.headers.get("Authorization") ?? "";
-  let authenticated = false;
-
-  if (authHeader.startsWith("Basic ")) {
-    const decoded = atob(authHeader.substring(6));
-    const [user, pass] = decoded.split(":");
-    if (user === expectedUser && pass === feedPassword) {
-      authenticated = true;
-    }
-  }
-
-  // Also support ?token= query param as fallback
   const url = new URL(req.url);
   const token = url.searchParams.get("token");
-  if (token && token === feedPassword) {
-    authenticated = true;
-  }
 
-  if (!authenticated) {
-    return new Response("Unauthorized", {
-      status: 401,
-      headers: {
-        "WWW-Authenticate": 'Basic realm="Hive Clinic Calendar"',
-      },
-    });
-  }
-
+  // Token auth - match against first 20 chars of anon key (used in admin UI)
+  const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const expectedToken = anonKey.substring(0, 20);
+
+  if (!token || token !== expectedToken) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   const supabaseClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
     serviceKey,
@@ -67,6 +47,7 @@ serve(async (req) => {
       const [hours, minutes] = b.booking_time.split(":");
       const startTime = `${dateStr}T${hours}${minutes}00`;
 
+      // Calculate end time
       const startDate = new Date(`${b.booking_date}T${b.booking_time}`);
       const endDate = new Date(startDate.getTime() + b.duration_mins * 60000);
       const endTime = endDate.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "").substring(0, 15);

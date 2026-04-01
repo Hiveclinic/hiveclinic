@@ -91,7 +91,9 @@ const AdminSettingsTab = () => {
   ];
 
   const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-  const calendarFeedUrl = `https://${projectId}.supabase.co/functions/v1/calendar-feed`;
+  const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const feedToken = anonKey?.substring(0, 20) || "";
+  const calendarFeedUrl = `https://${projectId}.supabase.co/functions/v1/calendar-feed?token=${feedToken}`;
 
   const copyFeedUrl = () => {
     navigator.clipboard.writeText(calendarFeedUrl);
@@ -185,36 +187,21 @@ const AdminSettingsTab = () => {
           <h3 className="font-display text-lg">Calendar Sync</h3>
         </div>
         <p className="font-body text-sm text-muted-foreground mb-3">
-          Subscribe to this URL in Outlook, iPhone Calendar, or Google Calendar. When prompted for credentials, use the login details below.
+          Subscribe to this URL in Outlook, iPhone Calendar, or Google Calendar to automatically see all bookings.
         </p>
-        <div className="space-y-3">
-          <div>
-            <label className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1 block">Calendar URL</label>
-            <div className="flex items-center gap-2">
-              <input
-                readOnly
-                value={calendarFeedUrl}
-                className="flex-1 px-4 py-2.5 border border-border rounded-lg font-body text-xs bg-background text-muted-foreground truncate"
-              />
-              <button onClick={copyFeedUrl} className="flex items-center gap-1.5 px-4 py-2.5 bg-foreground text-background rounded-lg font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors shrink-0">
-                {copied ? <Check size={14} /> : <Copy size={14} />}
-                {copied ? "Copied" : "Copy"}
-              </button>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1 block">Login / Username</label>
-              <div className="px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background font-mono">hive</div>
-            </div>
-            <div>
-              <label className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-1 block">Password</label>
-              <div className="px-4 py-2.5 border border-border rounded-lg font-body text-sm bg-background font-mono">Use the password you set in CALENDAR_FEED_PASSWORD</div>
-            </div>
-          </div>
+        <div className="flex items-center gap-2">
+          <input
+            readOnly
+            value={calendarFeedUrl}
+            className="flex-1 px-4 py-2.5 border border-border rounded-lg font-body text-xs bg-background text-muted-foreground truncate"
+          />
+          <button onClick={copyFeedUrl} className="flex items-center gap-1.5 px-4 py-2.5 bg-foreground text-background rounded-lg font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors shrink-0">
+            {copied ? <Check size={14} /> : <Copy size={14} />}
+            {copied ? "Copied" : "Copy"}
+          </button>
         </div>
-        <p className="font-body text-[10px] text-muted-foreground mt-3">
-          In Outlook: File → Account Settings → Internet Calendars → New → paste URL → enter credentials. On iPhone: Settings → Calendar → Accounts → Add Account → Other → Add Subscribed Calendar → paste URL → enter credentials.
+        <p className="font-body text-[10px] text-muted-foreground mt-2">
+          In Outlook: File → Account Settings → Internet Calendars → New → paste URL. On iPhone: Settings → Calendar → Accounts → Add Account → Other → Add Subscribed Calendar.
         </p>
       </div>
 

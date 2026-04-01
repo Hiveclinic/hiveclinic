@@ -17,9 +17,15 @@ export const useSiteImage = (key: string, fallback: string): string => {
       .eq("key", key)
       .maybeSingle()
       .then(({ data }) => {
-        if (data?.image_url) {
+        if (data?.image_url && data.image_url !== fallback) {
+          const img = new Image();
+          img.onload = () => {
+            imageCache[key] = data.image_url;
+            setUrl(data.image_url);
+          };
+          img.src = data.image_url;
+        } else if (data?.image_url) {
           imageCache[key] = data.image_url;
-          setUrl(data.image_url);
         }
       });
   }, [key]);

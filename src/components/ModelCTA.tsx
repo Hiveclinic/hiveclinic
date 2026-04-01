@@ -19,7 +19,7 @@ const ModelCTA = () => (
             </div>
           </div>
           <Link
-            to="/muse"
+            to="/content-models"
             className="inline-flex items-center gap-2 px-8 py-3 border border-gold text-gold font-body text-xs tracking-widest uppercase hover:bg-gold hover:text-foreground transition-colors flex-shrink-0"
           >
             View Model Pricing <ArrowRight size={12} />

@@ -371,12 +371,13 @@ const Index = () => {
           <p className="font-body text-background/70 mb-8">
             Book a free consultation — no obligation, just a friendly chat about your goals.
           </p>
-          <Link
-            to="/bookings?category=Consultations"
+          <a
+            href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-10 py-4 bg-background text-foreground font-body text-sm tracking-widest uppercase hover:bg-background/90 transition-colors">
-            
             Book Free Consultation <ArrowRight size={14} />
-          </Link>
+          </a>
           <p className="font-body text-xs text-background/40 mt-6">25 Saint John Street, Manchester M3 4DT</p>
         </div>
       </section>

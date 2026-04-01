@@ -75,7 +75,7 @@ const AnimatedRoutes = () => {
           <Route path="/treatments/micro-sclerotherapy-manchester" element={<PageTransition><MicroSclerotherapy /></PageTransition>} />
           <Route path="/treatments/consultations" element={<PageTransition><Consultations /></PageTransition>} />
           <Route path="/treatments/intimate-peels-manchester" element={<PageTransition><IntimatePeels /></PageTransition>} />
-          <Route path="/pricing" element={<PageTransition><Pricing /></PageTransition>} />
+          
           <Route path="/about" element={<PageTransition><About /></PageTransition>} />
           <Route path="/bookings" element={<PageTransition><BookingSystem /></PageTransition>} />
           <Route path="/booking-success" element={<PageTransition><BookingSuccess /></PageTransition>} />

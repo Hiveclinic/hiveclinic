@@ -244,10 +244,10 @@ const Index = () => {
             {offers.length > 4 &&
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-10">
                 <Link
-              to="/offers"
+              to="/bookings"
               className="inline-flex items-center gap-2 px-10 py-4 border border-gold/40 font-body text-sm tracking-widest uppercase hover:bg-gold/10 hover:border-gold transition-colors">
               
-                  View All Offers <ArrowRight size={14} />
+                  View All Treatments <ArrowRight size={14} />
                 </Link>
               </motion.div>
           }

@@ -41,7 +41,7 @@ import AcneTreatment from "./pages/AcneTreatment";
 import HyperpigmentationTreatment from "./pages/HyperpigmentationTreatment";
 import LipFillerLanding from "./pages/LipFillerLanding";
 import MuseLanding from "./pages/MuseLanding";
-import Offers from "./pages/Offers";
+
 import ConsentForm from "./pages/ConsentForm";
 import NotFound from "./pages/NotFound";
 import PageTransition from "./components/PageTransition";

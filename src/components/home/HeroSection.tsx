@@ -16,11 +16,17 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
   return (
     <section className="relative h-screen overflow-hidden">
       <motion.div className="absolute inset-0" style={{ scale: heroScale, opacity: heroOpacity }}>
-        <img
-          src={heroImg}
-          alt="Hive Clinic - Premium Aesthetics Manchester"
-          className="w-full h-full object-cover"
-        />
+        <div className="w-full h-full relative">
+          <img
+            key={heroImg}
+            src={heroImg}
+            alt="Hive Clinic - Premium Aesthetics Manchester"
+            className="w-full h-full object-cover absolute inset-0"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+          />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent md:bg-gradient-to-t md:from-black/70 md:via-black/30 md:to-black/5" />
       </motion.div>
 

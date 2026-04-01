@@ -94,7 +94,7 @@ const AnimatedRoutes = () => {
           <Route path="/hyperpigmentation-treatment-manchester" element={<PageTransition><HyperpigmentationTreatment /></PageTransition>} />
           <Route path="/lip-filler-manchester" element={<PageTransition><LipFillerLanding /></PageTransition>} />
           <Route path="/muse" element={<PageTransition><MuseLanding /></PageTransition>} />
-          <Route path="/offers" element={<PageTransition><Offers /></PageTransition>} />
+          
           <Route path="/consent-form" element={<PageTransition><ConsentForm /></PageTransition>} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>

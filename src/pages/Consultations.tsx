@@ -26,7 +26,7 @@ const Consultations = () => {
             <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">30 minutes · Free · Over the Phone</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Suitability check, treatment planning, and pre-book guidance — all over the phone from the comfort of your home.</p>
             <a
-                href="https://hiveclinicuk.setmore.com/book?products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">
@@ -40,7 +40,7 @@ const Consultations = () => {
             <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">30 minutes · £25</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Full skin analysis, personalised treatment plan, and aftercare advice. Redeemable against any course or treatment booked.</p>
             <a
-                href="https://hiveclinicuk.setmore.com/book?products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">
@@ -54,7 +54,7 @@ const Consultations = () => {
             <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">Anti-Wrinkle · £30</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Required prior to anti-wrinkle injections. This is a separate medical service provided by our prescriber.</p>
             <a
-                href="https://hiveclinicuk.setmore.com/book?products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">

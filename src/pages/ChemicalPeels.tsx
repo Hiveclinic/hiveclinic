@@ -50,9 +50,13 @@ const ChemicalPeels = () => {
             <div className="flex items-center gap-2"><Award size={14} className="text-gold" /><span className="font-body text-sm text-white/70">5-Star Rated</span></div>
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/bookings?category=Chemical Peels" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
-              Book Now <ArrowRight size={14} />
-            </Link>
+            <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=e065bcdb-44e5-4f70-bb9c-6c62fdcc5490%7Cd453b54f-1bf8-4c49-9403-eaa77cf778a8&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
             <a href="https://wa.me/447795008114" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/40 text-white font-body text-sm tracking-widest uppercase hover:border-white transition-colors">
               Message Us
             </a>
@@ -75,7 +79,7 @@ const ChemicalPeels = () => {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <p className="font-body text-sm text-muted-foreground">Course packages of 3 available from £210. <Link to="/pricing" className="text-gold hover:underline">View full pricing</Link></p>
+          <p className="font-body text-sm text-muted-foreground">Course packages of 3 available from £210. <Link to="/bookings" className="text-gold hover:underline">View full pricing</Link></p>
         </div>
       </div>
     </section>
@@ -155,9 +159,13 @@ const ChemicalPeels = () => {
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready to Transform Your Skin?</h2>
         <p className="font-body text-muted-foreground mb-8">Book a consultation to discuss the best peel for your skin type and concerns.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link to="/bookings?category=Chemical Peels" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
-            Book Now <ArrowRight size={14} />
-          </Link>
+          <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=e065bcdb-44e5-4f70-bb9c-6c62fdcc5490%7Cd453b54f-1bf8-4c49-9403-eaa77cf778a8&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
           <a href="https://wa.me/447795008114" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-10 py-4 border border-border font-body text-sm tracking-widest uppercase hover:border-gold transition-colors">
             Message Us on WhatsApp
           </a>

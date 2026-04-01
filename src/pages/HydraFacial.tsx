@@ -48,9 +48,13 @@ const HydraFacial = () => {
             <div className="flex items-center gap-2"><Clock size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Zero Downtime</span></div>
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/bookings?category=HydraFacial" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
-              Book Now <ArrowRight size={14} />
-            </Link>
+            <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=1b7e4418-5f0a-452a-96b2-11fe4e558825&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
             <a href="https://wa.me/447795008114" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/40 text-white font-body text-sm tracking-widest uppercase hover:border-white transition-colors">
               Message Us
             </a>
@@ -150,9 +154,13 @@ const HydraFacial = () => {
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready for Your Best Skin?</h2>
         <p className="font-body text-muted-foreground mb-8">Book your HydraFacial today - no downtime, just results.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link to="/bookings?category=HydraFacial" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
-            Book Now <ArrowRight size={14} />
-          </Link>
+          <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=1b7e4418-5f0a-452a-96b2-11fe4e558825&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
           <a href="https://wa.me/447795008114" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-10 py-4 border border-border font-body text-sm tracking-widest uppercase hover:border-gold transition-colors">
             Message Us on WhatsApp
           </a>

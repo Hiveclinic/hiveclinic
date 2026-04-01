@@ -56,9 +56,13 @@ const LipFillerLanding = () => {
               <div className="flex items-center gap-2"><Clock size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Same-Week Appointments</span></div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/bookings?category=Lip Fillers" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
+              <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=8316cf5c-ce1f-4868-83be-6e95c9390c75&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
                 Book Free Consultation <ArrowRight size={14} />
-              </Link>
+              </a>
               <a href="https://wa.me/447795008114" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/40 text-white font-body text-sm tracking-widest uppercase hover:border-white transition-colors">
                 Message Us
               </a>
@@ -107,9 +111,13 @@ const LipFillerLanding = () => {
                   </div>
                 ))}
               </div>
-              <Link to="/bookings?category=Lip Fillers" className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors">
+              <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=8316cf5c-ce1f-4868-83be-6e95c9390c75&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors">
                 Book Consultation <ArrowRight size={14} />
-              </Link>
+              </a>
             </div>
             <div>
               <img src={secondaryImg} alt="Natural lip filler results at Hive Clinic Manchester" className="w-full aspect-[4/5] object-cover" />
@@ -176,9 +184,13 @@ const LipFillerLanding = () => {
           <p className="font-body text-muted-foreground mb-8 max-w-xl mx-auto">
             Free consultations available this week. Hive Clinic, Manchester City Centre — Deansgate.
           </p>
-          <Link to="/bookings?category=Lip Fillers" className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors">
-            Book Now <ArrowRight size={14} />
-          </Link>
+          <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=8316cf5c-ce1f-4868-83be-6e95c9390c75&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors">
+                Book Now <ArrowRight size={14} />
+              </a>
         </div>
       </section>
     </Layout>

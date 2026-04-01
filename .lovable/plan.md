@@ -1,105 +1,35 @@
+# Rebuild Booking Page — Clean Premium Setmore Flow
 
+## What Changes
 
-# Meta Tracking Setup — Pixel + Conversions API + CRM Leads
+`**src/pages/BookingSystem.tsx**` — full rewrite (~250 lines replacing ~867 lines)
 
-## Summary
+Remove all database fetching, booking logic, Stripe integration, multi-step flow, and state management. Replace with a static, conversion-focused page.
 
-Complete Meta tracking integration: update the Pixel ID globally, add browser events across the site, build a secure Conversions API edge function, create a leads table with CRM stages, and add an admin test utility tab.
+## Page Structure
 
----
+1. **Hero** — "Book Your Treatment" heading, subtext, smooth-scroll CTA to Most Booked
+2. **Quick Start** — Two cards: Skin Consultation + Returning Client, each → Setmore new tab
+3. **Treatment Categories** — Clean sections (not accordions) for: Skin Treatments, Skin Boosters, Microneedling, Hydrafacial, Injectables, Anti-Wrinkle, Intimate Pigment Treatments, Body, Wellness, IV Drip Therapy. Each card: name, price, one-line benefit, Book Now button
+4. **How Booking Works** — 4 numbered steps, minimal layout
+5. **FAQ** — Reuse existing FAQ data/accordion
+6. **Policy link** — Small muted text under every Book Now button linking to `https://hiveclinicuk.com/policies`
 
-## Part 1 — Update Meta Pixel (index.html)
+## Design
 
-The site already has a Meta Pixel installed (ID `1385983552443887`). Replace it with the new Pixel ID `3990951841193317` in `index.html`. Update both the script init and the noscript fallback img tag.
+- Black/cream/gold palette, Cormorant Garamond headings, clean body text
+- Mobile-first, large buttons (min 48px), generous spacing
+- Light framer-motion fade-ins only
+- All CTAs → `https://hiveclinicuk.setmore.com` with `target="_blank" rel="noopener noreferrer"`
+- Use hyphens only (no em dashes)
 
-## Part 2 — Browser Events (use-tracking.ts + various pages)
+## What's Removed
 
-The `trackEvent` helper already fires `fbq('track', ...)`. Add specific event calls:
+- All Supabase queries (treatments, availability, bookings, addons, packages, settings)
+- Multi-step booking flow, date picker, time slots, customer form
+- Discount code logic, Stripe checkout, all related state (~600 lines of logic)
 
-- **ViewContent** — fire on treatment detail pages (DermalFiller, LipFillers, AntiWrinkle, etc.) and Offers page via a `useEffect` in each page or a shared hook
-- **Lead** — already fires on contact form submit (`trackContactSubmit`). Ensure it also fires on consultation form submit
-- **Contact** — fire on WhatsApp button click, contact form submit, and any DM intent links
-- **Schedule** — fire on booking intent clicks (BookingSystem page load or "Book Now" button clicks)
-- **CompleteRegistration** — fire on VIP popup email signup success
+## No Other Files Changed
 
-Update `use-tracking.ts` with new helper functions: `trackViewContent`, `trackSchedule`, `trackCompleteRegistration`, `trackContact`. Wire these into the relevant components.
-
-## Part 3 — Conversions API Edge Function
-
-Create `supabase/functions/meta-capi/index.ts`:
-
-- Accepts POST with: `event_name`, `email`, `phone`, `lead_id`, `click_id`, `test_event_code`
-- Reads `META_CAPI_ACCESS_TOKEN` from env
-- Normalizes email/phone, hashes with SHA-256 server-side
-- Builds Meta CAPI payload with `action_source: "system_generated"`, `custom_data.event_source: "crm"`, `custom_data.lead_event_source: "Hive Clinic CRM"`
-- POSTs to `https://graph.facebook.com/v25.0/3990951841193317/events`
-- Returns Meta's response or a clean error
-- CORS headers for admin frontend calls
-- Auth: requires authenticated admin user (checks JWT + admin role)
-
-Add to `supabase/config.toml` with `verify_jwt = false` (validate in code).
-
-**Secret needed**: `META_CAPI_ACCESS_TOKEN` — will request via add_secret tool.
-
-## Part 4 — CRM Leads Table
-
-Create a `leads` table via migration:
-
-| Column | Type | Default |
-|---|---|---|
-| id | uuid | gen_random_uuid() |
-| customer_email | text | required |
-| customer_name | text | nullable |
-| customer_phone | text | nullable |
-| lead_source | text | 'website' |
-| status | text | 'Lead' |
-| meta_click_id | text | nullable |
-| meta_sent_at | timestamptz | nullable |
-| notes | text | nullable |
-| created_at | timestamptz | now() |
-| updated_at | timestamptz | now() |
-
-RLS: admin-only for all operations. Status values: Lead, QualifiedLead, ConsultationBooked, ConsultationCompleted, Purchase.
-
-## Part 5 — Admin Meta Test Tab
-
-Create `src/components/admin/AdminMetaTestTab.tsx`:
-
-- Form fields: event name (dropdown of CRM stages), email, phone, lead ID, click ID, test event code (optional)
-- Validates inputs with zod
-- Calls the `meta-capi` edge function
-- Displays Meta's response in a success/error panel
-- Admin-only (already protected by admin auth)
-
-Add a "Meta CAPI" tab to the Admin page under the "Business" or "Admin" nav group.
-
-## Part 6 — Admin Leads Management
-
-Create `src/components/admin/AdminLeadsTab.tsx`:
-
-- List leads with status badges
-- Change lead status via dropdown — on status change, auto-fire the CAPI event to Meta
-- Add to admin nav under "Clients" group
-
----
-
-## Files to Create
-- `supabase/functions/meta-capi/index.ts`
-- `src/components/admin/AdminMetaTestTab.tsx`
-- `src/components/admin/AdminLeadsTab.tsx`
-- Migration SQL for `leads` table
-
-## Files to Modify
-- `index.html` — swap Pixel ID
-- `src/hooks/use-tracking.ts` — add ViewContent, Schedule, CompleteRegistration, Contact helpers
-- `src/components/WhatsAppButton.tsx` — fire Contact event on click
-- `src/components/VIPPopup.tsx` — fire CompleteRegistration on signup
-- `src/pages/BookingSystem.tsx` — fire Schedule event
-- Treatment pages — fire ViewContent event (via shared hook or individual useEffect)
-- `src/pages/Contact.tsx` — fire Contact event on submit
-- `src/pages/Admin.tsx` — add leads + meta-test tabs to nav and rendering
-- `supabase/config.toml` — add meta-capi function config
-
-## Secret Required
-- `META_CAPI_ACCESS_TOKEN` — will prompt you to paste your Meta access token
-
+- Route stays `/bookings` → `BookingSystem`
+- No database, backend, or dependency changes

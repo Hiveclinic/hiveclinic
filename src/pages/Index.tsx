@@ -112,18 +112,18 @@ const Index = () => {
                 </div>
               )}
             </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                to="/bookings?category=Consultations"
+             <div className="flex flex-col sm:flex-row gap-4">
+              <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
-                
-                Book Free Consultation <ArrowRight size={14} />
-              </Link>
+                Book Consultation <ArrowRight size={14} />
+              </a>
               <Link
-                to="/pricing"
+                to="/bookings"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/40 text-white font-body text-sm tracking-widest uppercase hover:border-white transition-colors">
-                
-                View Prices
+                View Treatments
               </Link>
             </div>
           </motion.div>

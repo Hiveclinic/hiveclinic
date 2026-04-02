@@ -154,9 +154,10 @@ const isCourse = (title: string) =>
 
 const ServiceCard = ({ service, index }: { service: Service; index: number }) => (
   <motion.div
-    initial={{ opacity: 0, y: 12 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3, delay: index * 0.03 }}
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-40px" }}
+    transition={{ duration: 0.5, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
     className="group relative bg-background border border-border hover:border-accent/40 transition-all duration-300"
   >
     <div className="p-5 pb-4">

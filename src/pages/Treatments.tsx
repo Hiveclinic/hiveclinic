@@ -19,9 +19,7 @@ import catFatDissolve from "@/assets/categories/cat-fat-dissolve.jpg";
 import catWellness from "@/assets/categories/cat-wellness.jpg";
 import catIvDrip from "@/assets/categories/cat-iv-drip.jpg";
 import catFacialBalancing from "@/assets/categories/cat-facial-balancing.jpg";
-import catSkinRejuvenation from "@/assets/categories/cat-skin-rejuvenation.jpg";
 import catContentModel from "@/assets/categories/cat-content-model.jpg";
-import catFacials from "@/assets/categories/cat-facials-new.jpg";
 
 // Category-specific images — synced with Setmore + DB categories
 const CATEGORY_IMAGES: Record<string, string> = {

@@ -11,30 +11,36 @@ import gallery6 from "@/assets/gallery-6.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { supabase } from "@/integrations/supabase/client";
 
-// Fallback images by category
+// Fallback images by category — synced with BookingSystem categories
 const CATEGORY_IMAGES: Record<string, string> = {
-  "Fillers": gallery1,
-  "Anti-Wrinkle": gallery3,
-  "Facials": gallery3,
-  "Peels": gallery4,
-  "Skin Rejuvenation": gallery1,
-  "Fat Dissolve": gallery6,
-  "Micro Sclerotherapy": gallery5,
   "Consultations": gallery3,
-  "Content Model": gallery5,
+  "Dermal Filler": gallery1,
+  "Anti-Wrinkle": gallery3,
+  "Chemical Peels": gallery4,
+  "Intimate Pigment Treatment": gallery5,
+  "Skin Treatments": gallery4,
+  "Skin Boosters": gallery1,
+  "Microneedling": gallery5,
+  "HydroFacial": gallery6,
+  "Fat Dissolve": gallery6,
+  "Wellness": gallery3,
+  "IV Drip Therapy": gallery1,
 };
 
-// Fallback links by category slug
+// Fallback links by category — point to treatment pages where they exist
 const CATEGORY_LINKS: Record<string, string> = {
-  "Fillers": "/treatments/lip-fillers-manchester",
-  "Anti-Wrinkle": "/treatments/anti-wrinkle-injections-manchester",
-  "Facials": "/treatments/hydrafacial-manchester",
-  "Peels": "/treatments/chemical-peels-manchester",
-  "Skin Rejuvenation": "/treatments/skin-boosters-manchester",
-  "Fat Dissolve": "/treatments/fat-dissolving-manchester",
-  "Micro Sclerotherapy": "/treatments/micro-sclerotherapy-manchester",
   "Consultations": "/treatments/consultations",
-  "Content Model": "/muse",
+  "Dermal Filler": "/treatments/lip-fillers-manchester",
+  "Anti-Wrinkle": "/treatments/anti-wrinkle-injections-manchester",
+  "Chemical Peels": "/treatments/chemical-peels-manchester",
+  "Intimate Pigment Treatment": "/treatments/intimate-peels-manchester",
+  "Skin Treatments": "/treatments/chemical-peels-manchester",
+  "Skin Boosters": "/treatments/skin-boosters-manchester",
+  "Microneedling": "/treatments/microneedling-manchester",
+  "HydroFacial": "/treatments/hydrafacial-manchester",
+  "Fat Dissolve": "/treatments/fat-dissolving-manchester",
+  "Wellness": "/bookings",
+  "IV Drip Therapy": "/bookings",
 };
 
 type CategoryCard = {
@@ -144,7 +150,7 @@ const Treatments = () => {
                       <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">{cat.desc}</p>
                       <div className="flex items-center justify-between">
                         <span className="inline-flex items-center gap-2 font-body text-xs text-gold uppercase tracking-widest group-hover:gap-3 transition-all">Learn More <ArrowRight size={12} /></span>
-                        <Link to={`/bookings?category=${encodeURIComponent(cat.title)}`} onClick={(e) => e.stopPropagation()} className="px-4 py-2 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">Book Now</Link>
+                        <Link to="/bookings" onClick={(e) => e.stopPropagation()} className="px-4 py-2 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors">Book Now</Link>
                       </div>
                     </div>
                   </Link>

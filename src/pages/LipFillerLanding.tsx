@@ -76,11 +76,11 @@ const LipFillerLanding = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
             <div>
-              <p className="font-display text-3xl">£80</p>
+              <p className="font-display text-3xl">£120</p>
               <p className="font-body text-sm text-background/60">0.5ml — Subtle Enhancement</p>
             </div>
             <div>
-              <p className="font-display text-3xl">£120</p>
+              <p className="font-display text-3xl">£150</p>
               <p className="font-body text-sm text-background/60">1ml — Full Volume</p>
             </div>
             <div>

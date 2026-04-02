@@ -62,9 +62,10 @@ const FacialBalancing = () => {
             <div className="border border-border p-6 mb-8">
               <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-2">Packages</p>
               <div className="space-y-2">
-                <p className="font-display text-2xl">3ml — £380</p>
-                <p className="font-display text-2xl">5ml — £540</p>
-                <p className="font-display text-2xl">7ml — £720</p>
+                <p className="font-display text-2xl">2ml — £200</p>
+                <p className="font-display text-2xl">3ml — £420</p>
+                <p className="font-display text-2xl">4ml — £550</p>
+                <p className="font-display text-2xl">5ml — £650</p>
               </div>
             </div>
             <a

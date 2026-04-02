@@ -49,7 +49,7 @@ const AntiWrinkle = () => {
               Anti-Wrinkle Consultation Manchester
             </h1>
             <p className="font-body text-lg text-white/80 mb-6">
-              Wrinkle relaxing treatment consultations from £120. Soften lines and restore a naturally youthful appearance with a qualified prescriber at Hive Clinic, Manchester City Centre.
+              Wrinkle relaxing treatments from £140. Soften lines and restore a naturally youthful appearance with a qualified prescriber at Hive Clinic, Manchester City Centre.
             </p>
             <div className="flex flex-wrap gap-4 mb-8">
               <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Qualified Prescriber</span></div>

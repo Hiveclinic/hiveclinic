@@ -8,14 +8,14 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Lip Filler", desc: "Natural-looking volume and shape enhancement.", from: "£80" },
+  { name: "Lip Filler", desc: "Natural-looking volume and shape enhancement.", from: "£120" },
   { name: "Cheek Filler", desc: "Restore volume and define cheekbone contours.", from: "£160" },
   { name: "Jawline Filler", desc: "Sculpt and define the jawline for a sharper profile.", from: "£170" },
   { name: "Chin Filler", desc: "Balance facial proportions with chin projection.", from: "£160" },
   { name: "Nose Filler", desc: "Non-surgical nose reshaping for a smoother profile.", from: "£200" },
   { name: "Tear Trough Filler", desc: "Reduce dark circles and hollows under the eyes.", from: "£200" },
   { name: "Smile Lines", desc: "Soften nasolabial folds for a more youthful appearance.", from: "£150" },
-  { name: "Facial Balancing", desc: "Multi-area packages for complete facial harmony.", from: "£350" },
+  { name: "Facial Balancing", desc: "Multi-area packages for complete facial harmony.", from: "£200" },
 ];
 
 const faqs = [

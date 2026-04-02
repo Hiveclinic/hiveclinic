@@ -19,9 +19,7 @@ import catFatDissolve from "@/assets/categories/cat-fat-dissolve.jpg";
 import catWellness from "@/assets/categories/cat-wellness.jpg";
 import catIvDrip from "@/assets/categories/cat-iv-drip.jpg";
 import catFacialBalancing from "@/assets/categories/cat-facial-balancing.jpg";
-import catSkinRejuvenation from "@/assets/categories/cat-skin-rejuvenation.jpg";
 import catContentModel from "@/assets/categories/cat-content-model.jpg";
-import catFacials from "@/assets/categories/cat-facials-new.jpg";
 
 // Category-specific images — synced with Setmore + DB categories
 const CATEGORY_IMAGES: Record<string, string> = {
@@ -37,13 +35,6 @@ const CATEGORY_IMAGES: Record<string, string> = {
   "Fat Dissolve": catFatDissolve,
   "Wellness": catWellness,
   "IV Drip Therapy": catIvDrip,
-  // Aliases for DB category names that differ from Setmore
-  "Fillers": catDermalFiller,
-  "Lip Fillers": catDermalFiller,
-  "Facial Balancing": catFacialBalancing,
-  "Peels": catChemicalPeels,
-  "Facials": catFacials,
-  "Skin Rejuvenation": catSkinRejuvenation,
   "Content Model": catContentModel,
 };
 
@@ -61,13 +52,6 @@ const CATEGORY_LINKS: Record<string, string> = {
   "Fat Dissolve": "/treatments/fat-dissolving-manchester",
   "Wellness": "/bookings",
   "IV Drip Therapy": "/bookings",
-  // Aliases
-  "Fillers": "/treatments/lip-fillers-manchester",
-  "Lip Fillers": "/treatments/lip-fillers-manchester",
-  "Facial Balancing": "/treatments/facial-balancing-manchester",
-  "Peels": "/treatments/chemical-peels-manchester",
-  "Facials": "/treatments/hydrafacial-manchester",
-  "Skin Rejuvenation": "/treatments/skin-boosters-manchester",
   "Content Model": "/bookings",
 };
 

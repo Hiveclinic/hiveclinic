@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { ChevronDown, ExternalLink, Clock, ArrowDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo } from "react";
+import { ChevronDown, ExternalLink, Clock, ArrowDown, Sparkles, Search, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
@@ -143,97 +143,134 @@ const faqs = [
 ];
 
 const steps = [
-  { number: "01", title: "Choose your treatment", description: "Browse our full menu and select the service that suits you." },
-  { number: "02", title: "Select your time", description: "Pick an available date and time that works for your schedule." },
-  { number: "03", title: "Secure your appointment", description: "Pay your 20% deposit to confirm your booking." },
-  { number: "04", title: "Receive confirmation", description: "You will receive a confirmation email with all the details." },
+  { number: "01", title: "Choose", description: "Browse our full menu and select." },
+  { number: "02", title: "Schedule", description: "Pick your preferred date and time." },
+  { number: "03", title: "Confirm", description: "Pay your 20% deposit to secure." },
+  { number: "04", title: "Arrive", description: "We handle the rest on the day." },
 ];
-
-const ServiceCard = ({ service }: { service: Service }) => (
-  <div className="group border border-border p-6 flex flex-col justify-between h-full hover:border-accent/40 transition-colors">
-    <div>
-      <div className="flex items-start justify-between gap-4 mb-3">
-        <h3 className="font-display text-lg leading-tight">{service.title}</h3>
-        <span className="font-body text-sm text-accent whitespace-nowrap font-medium">{service.price}</span>
-      </div>
-      <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">{service.description}</p>
-    </div>
-    <div>
-      <a
-        href={service.setmoreUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 text-sm font-body tracking-wide hover:bg-primary/90 transition-colors w-full justify-center"
-      >
-        Book Now
-        <ExternalLink size={14} />
-      </a>
-      <p className="text-xs text-muted-foreground mt-3 text-center font-body">
-        By booking, you agree to our{" "}
-        <Link to="/terms" className="underline hover:text-foreground transition-colors">booking policies</Link>
-      </p>
-    </div>
-  </div>
-);
 
 const isCourse = (title: string) =>
   /course|sessions\)/i.test(title) || /\d\s*sessions/i.test(title);
 
-const CategorySection = ({ category, services }: { category: string; services: Service[] }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const ServiceCard = ({ service, index }: { service: Service; index: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 12 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3, delay: index * 0.03 }}
+    className="group relative bg-background border border-border hover:border-accent/40 transition-all duration-300"
+  >
+    <div className="p-5 pb-4">
+      <div className="flex items-start justify-between gap-3 mb-2">
+        <h3 className="font-display text-base leading-snug">{service.title}</h3>
+        <span className="font-display text-lg text-accent whitespace-nowrap">{service.price}</span>
+      </div>
+      <p className="font-body text-xs text-muted-foreground leading-relaxed">{service.description}</p>
+    </div>
+    <div className="px-5 pb-5">
+      <a
+        href={service.setmoreUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center gap-2 w-full py-2.5 bg-foreground text-background text-xs font-body tracking-wider uppercase hover:bg-accent transition-colors duration-300"
+      >
+        Book Now
+        <ExternalLink size={12} />
+      </a>
+    </div>
+  </motion.div>
+);
+
+const CategorySection = ({ category, services, isActive, onToggle, index }: { 
+  category: string; services: Service[]; isActive: boolean; onToggle: () => void; index: number 
+}) => {
   const singles = services.filter((s) => !isCourse(s.title));
   const courses = services.filter((s) => isCourse(s.title));
+  const priceRange = services.reduce(
+    (acc, s) => {
+      const num = parseInt(s.price.replace(/[^0-9]/g, ""));
+      if (isNaN(num) || s.price === "Free") return acc;
+      return { min: Math.min(acc.min, num), max: Math.max(acc.max, num) };
+    },
+    { min: Infinity, max: 0 }
+  );
 
   return (
-    <div className="border-b border-border">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: index * 0.05 }}
+      className="border-b border-border last:border-b-0"
+    >
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between py-6 px-2 text-left group"
+        onClick={onToggle}
+        className="w-full flex items-center justify-between py-6 text-left group/cat"
       >
-        <div className="flex items-center gap-4">
-          <h2 className="font-display text-xl md:text-2xl">{category}</h2>
-          <span className="font-body text-xs text-muted-foreground tracking-wide">
-            {services.length} {services.length === 1 ? "service" : "services"}
-          </span>
+        <div className="flex items-center gap-5">
+          <span className="font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground w-6">{String(index + 1).padStart(2, "0")}</span>
+          <h2 className="font-display text-xl md:text-2xl group-hover/cat:text-accent transition-colors">{category}</h2>
         </div>
-        <ChevronDown
-          size={20}
-          className={`text-muted-foreground transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
-        />
+        <div className="flex items-center gap-4">
+          {priceRange.min !== Infinity && (
+            <span className="font-body text-xs text-muted-foreground hidden sm:inline">
+              from £{priceRange.min}
+            </span>
+          )}
+          <span className="font-body text-[10px] tracking-wider text-muted-foreground">
+            {services.length}
+          </span>
+          <ChevronDown
+            size={16}
+            className={`text-muted-foreground transition-transform duration-500 ${isActive ? "rotate-180" : ""}`}
+          />
+        </div>
       </button>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3 }}
-          className="pb-8 px-2"
-        >
-          {singles.length > 0 && (
-            <>
-              {courses.length > 0 && (
-                <p className="font-body text-xs uppercase tracking-widest text-muted-foreground mb-4">Single Sessions</p>
+      <AnimatePresence>
+        {isActive && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="pb-10 pl-0 md:pl-11">
+              {singles.length > 0 && (
+                <>
+                  {courses.length > 0 && (
+                    <div className="flex items-center gap-3 mb-5">
+                      <span className="font-body text-[10px] tracking-[0.25em] uppercase text-accent">Single Sessions</span>
+                      <div className="flex-1 h-px bg-border" />
+                    </div>
+                  )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {singles.map((service, i) => (
+                      <ServiceCard key={i} service={service} index={i} />
+                    ))}
+                  </div>
+                </>
               )}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {singles.map((service, i) => (
-                  <ServiceCard key={i} service={service} />
-                ))}
-              </div>
-            </>
-          )}
-          {courses.length > 0 && (
-            <>
-              <p className="font-body text-xs uppercase tracking-widest text-muted-foreground mb-4 mt-8">Courses</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {courses.map((service, i) => (
-                  <ServiceCard key={i} service={service} />
-                ))}
-              </div>
-            </>
-          )}
-        </motion.div>
-      )}
-    </div>
+              {courses.length > 0 && (
+                <>
+                  <div className="flex items-center gap-3 mb-5 mt-8">
+                    <span className="font-body text-[10px] tracking-[0.25em] uppercase text-accent">Courses</span>
+                    <div className="flex-1 h-px bg-border" />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {courses.map((service, i) => (
+                      <ServiceCard key={i} service={service} index={i} />
+                    ))}
+                  </div>
+                </>
+              )}
+              <p className="text-[10px] text-muted-foreground mt-5 font-body">
+                By booking, you agree to our{" "}
+                <Link to="/terms" className="underline hover:text-foreground transition-colors">clinic policies</Link>
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
@@ -243,135 +280,267 @@ const BookingSystem = () => {
     "Book your aesthetic treatment at Hive Clinic, Manchester City Centre. Lip fillers, skin treatments, anti-wrinkle, body contouring and more."
   );
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCategory, setFilterCategory] = useState<string | null>(null);
+
+  const filteredCategories = useMemo(() => {
+    if (!searchQuery && !filterCategory) return CATEGORIES;
+    return CATEGORIES.filter((cat) => {
+      if (filterCategory && cat !== filterCategory) return false;
+      if (!searchQuery) return true;
+      const services = SERVICES.filter((s) => s.category === cat);
+      return services.some(
+        (s) =>
+          s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          s.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    });
+  }, [searchQuery, filterCategory]);
+
+  const filteredServices = (category: string) => {
+    const services = SERVICES.filter((s) => s.category === category);
+    if (!searchQuery) return services;
+    return services.filter(
+      (s) =>
+        s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        s.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
 
   const scrollToServices = () => {
     document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const totalTreatments = SERVICES.length;
+
   return (
     <Layout>
-      {/* Hero */}
-      <section className="relative pt-32 pb-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-secondary/40 via-secondary/20 to-transparent" />
-        <div className="max-w-5xl mx-auto px-6 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center">
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-accent mb-5">Manchester City Centre</p>
-            <h1 className="font-display text-5xl md:text-7xl mb-5 leading-[1.05]">Book Your Treatment</h1>
-            <p className="font-body text-muted-foreground text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-              Browse our full menu, choose your treatment, and secure your appointment in minutes.
+      {/* Hero — dramatic full-bleed */}
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-foreground text-background">
+        {/* Subtle texture overlay */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }} />
+        
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <p className="font-body text-[10px] tracking-[0.4em] uppercase text-background/50 mb-8">Manchester City Centre</p>
+            <h1 className="font-display text-6xl md:text-8xl lg:text-9xl mb-6 leading-[0.95] tracking-tight">
+              Book Your<br />
+              <span className="italic font-light">Treatment</span>
+            </h1>
+            <p className="font-body text-sm md:text-base text-background/60 max-w-md mx-auto mb-12 leading-relaxed">
+              {totalTreatments} treatments across {CATEGORIES.length} categories. Browse, select, and secure your appointment.
             </p>
           </motion.div>
 
-          {/* Quick-start cards */}
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.15 }} className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+          {/* Quick action row */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-16"
+          >
             <a
               href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
               target="_blank"
               rel="noopener noreferrer"
-              className="group border border-border bg-background/60 backdrop-blur-sm p-6 hover:border-accent/50 transition-all text-center"
+              className="inline-flex items-center gap-3 border border-background/20 px-8 py-3.5 text-xs font-body tracking-[0.2em] uppercase hover:bg-background hover:text-foreground transition-all duration-300"
             >
-              <div className="w-9 h-9 border border-accent/30 flex items-center justify-center mx-auto mb-3 group-hover:border-accent/60 transition-colors">
-                <Clock size={16} className="text-accent" />
-              </div>
-              <h3 className="font-display text-base mb-1">Consultation</h3>
-              <p className="font-body text-xs text-muted-foreground">Not sure? Start here — £25</p>
+              <Clock size={14} />
+              Book a Consultation — £25
             </a>
             <a
               href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=38c99c41-0af9-4b81-b67d-aae0369d51a4&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
               target="_blank"
               rel="noopener noreferrer"
-              className="group border border-border bg-background/60 backdrop-blur-sm p-6 hover:border-accent/50 transition-all text-center"
+              className="inline-flex items-center gap-3 border border-background/20 px-8 py-3.5 text-xs font-body tracking-[0.2em] uppercase hover:bg-background hover:text-foreground transition-all duration-300"
             >
-              <div className="w-9 h-9 border border-accent/30 flex items-center justify-center mx-auto mb-3 group-hover:border-accent/60 transition-colors">
-                <Clock size={16} className="text-accent" />
-              </div>
-              <h3 className="font-display text-base mb-1">Returning Client</h3>
-              <p className="font-body text-xs text-muted-foreground">Book your next session — Free</p>
+              <Sparkles size={14} />
+              Returning Client — Free
             </a>
-            <button
-              onClick={scrollToServices}
-              className="group border border-foreground bg-foreground text-background p-6 hover:bg-accent transition-all text-center"
-            >
-              <div className="w-9 h-9 border border-background/20 flex items-center justify-center mx-auto mb-3">
-                <ArrowDown size={16} />
-              </div>
-              <h3 className="font-display text-base mb-1">Browse All</h3>
-              <p className="font-body text-xs opacity-70">View full treatment menu</p>
-            </button>
           </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.button
+            onClick={scrollToServices}
+            className="mx-auto flex flex-col items-center gap-2 text-background/30 hover:text-background/60 transition-colors"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+          >
+            <span className="font-body text-[9px] tracking-[0.3em] uppercase">Browse Menu</span>
+            <ArrowDown size={16} />
+          </motion.button>
         </div>
       </section>
 
-      {/* Treatment Categories */}
-      <section id="services" className="py-16">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="font-display text-3xl text-center mb-12">All Treatments</h2>
+      {/* How it works — horizontal strip */}
+      <section className="border-b border-border">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4">
+            {steps.map((step, i) => (
+              <div
+                key={step.number}
+                className={`p-6 md:p-8 ${i < 3 ? "border-r border-border" : ""} ${i < 2 ? "border-b md:border-b-0 border-border" : i === 2 ? "border-b md:border-b-0" : ""}`}
+              >
+                <span className="font-display text-2xl text-accent/40 block mb-2">{step.number}</span>
+                <h3 className="font-display text-base mb-1">{step.title}</h3>
+                <p className="font-body text-[11px] text-muted-foreground leading-relaxed">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Search & Filter bar */}
+      <section className="sticky top-0 z-30 bg-background/95 backdrop-blur-md border-b border-border">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="relative flex-1">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search treatments..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 bg-secondary/50 border-0 font-body text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-accent/30"
+              />
+            </div>
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-hide">
+              <button
+                onClick={() => setFilterCategory(null)}
+                className={`whitespace-nowrap px-3 py-1.5 font-body text-[10px] tracking-wider uppercase transition-colors ${
+                  !filterCategory ? "bg-foreground text-background" : "bg-secondary/50 text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                All
+              </button>
+              {CATEGORIES.slice(0, 5).map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setFilterCategory(filterCategory === cat ? null : cat)}
+                  className={`whitespace-nowrap px-3 py-1.5 font-body text-[10px] tracking-wider uppercase transition-colors ${
+                    filterCategory === cat ? "bg-foreground text-background" : "bg-secondary/50 text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+              <button
+                onClick={() => {
+                  const el = document.getElementById("services");
+                  el?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="whitespace-nowrap px-3 py-1.5 font-body text-[10px] tracking-wider uppercase text-muted-foreground hover:text-foreground bg-secondary/50"
+              >
+                More ↓
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Treatment Categories — accordion */}
+      <section id="services" className="py-0">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Section header */}
+          <div className="flex items-center justify-between py-10 border-b border-border">
+            <div>
+              <h2 className="font-display text-3xl md:text-4xl">Treatment Menu</h2>
+              <p className="font-body text-xs text-muted-foreground mt-1">{totalTreatments} treatments available</p>
+            </div>
+            <div className="hidden md:flex items-center gap-2 text-muted-foreground">
+              <Shield size={14} />
+              <span className="font-body text-[10px] tracking-wider uppercase">CQC Compliant</span>
+            </div>
+          </div>
+
           <div>
-            {CATEGORIES.map((category) => {
-              const services = SERVICES.filter((s) => s.category === category);
+            {filteredCategories.map((category, index) => {
+              const services = filteredServices(category);
               if (services.length === 0) return null;
-              return <CategorySection key={category} category={category} services={services} />;
+              return (
+                <CategorySection
+                  key={category}
+                  category={category}
+                  services={services}
+                  isActive={activeCategory === category}
+                  onToggle={() => setActiveCategory(activeCategory === category ? null : category)}
+                  index={index}
+                />
+              );
             })}
           </div>
+
+          {filteredCategories.length === 0 && (
+            <div className="py-20 text-center">
+              <p className="font-body text-sm text-muted-foreground">No treatments match your search.</p>
+              <button
+                onClick={() => { setSearchQuery(""); setFilterCategory(null); }}
+                className="font-body text-xs text-accent underline mt-2"
+              >
+                Clear filters
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* How Booking Works */}
-      <section className="py-20 bg-secondary/30">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="font-display text-3xl text-center mb-14">How Booking Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {steps.map((step) => (
-              <div key={step.number} className="text-center">
-                <span className="font-display text-3xl text-accent/60 block mb-3">{step.number}</span>
-                <h3 className="font-display text-lg mb-2">{step.title}</h3>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed">{step.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-20">
-        <div className="max-w-3xl mx-auto px-6">
-          <h2 className="font-display text-3xl text-center mb-12">Frequently Asked Questions</h2>
-          <div>
-            {faqs.map((faq, i) => (
-              <div key={i} className="border-b border-border">
-                <button
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between py-5 text-left"
-                >
-                  <span className="font-body font-medium">{faq.q}</span>
-                  <ChevronDown
-                    size={18}
-                    className={`flex-shrink-0 ml-4 transition-transform duration-300 ${openFaq === i ? "rotate-180" : ""}`}
-                  />
-                </button>
-                {openFaq === i && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    className="pb-5"
+      {/* FAQ — two-column layout */}
+      <section className="py-24 mt-16 bg-secondary/30">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+            <div className="md:col-span-4">
+              <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent mb-4">Support</p>
+              <h2 className="font-display text-3xl md:text-4xl mb-4">Common Questions</h2>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                Everything you need to know before your appointment.
+              </p>
+            </div>
+            <div className="md:col-span-8">
+              {faqs.map((faq, i) => (
+                <div key={i} className="border-b border-border/60">
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="w-full flex items-center justify-between py-5 text-left group"
                   >
-                    <p className="font-body text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
-                  </motion.div>
-                )}
-              </div>
-            ))}
+                    <span className="font-body text-sm font-medium group-hover:text-accent transition-colors">{faq.q}</span>
+                    <ChevronDown
+                      size={16}
+                      className={`flex-shrink-0 ml-4 text-muted-foreground transition-transform duration-300 ${openFaq === i ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {openFaq === i && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <p className="font-body text-sm text-muted-foreground leading-relaxed pb-5">{faq.a}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Booking Policy */}
-      <section className="py-12 border-t border-border">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="font-body text-sm text-muted-foreground leading-relaxed">
+      {/* Booking Policy — minimal footer strip */}
+      <section className="py-10 border-t border-border">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <p className="font-body text-[11px] text-muted-foreground leading-relaxed">
             20% deposit required to secure your appointment. Deposits are non-refundable. 48 hours notice required to reschedule.
             No-shows lose their deposit. Treatments are non-refundable; results vary. Cash or card accepted.
           </p>
-          <Link to="/terms" className="font-body text-xs text-accent underline mt-3 inline-block">
+          <Link to="/terms" className="font-body text-[10px] text-accent tracking-wider uppercase underline mt-3 inline-block hover:text-foreground transition-colors">
             View full booking policies
           </Link>
         </div>

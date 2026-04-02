@@ -8,14 +8,14 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Lip Filler", desc: "Natural-looking volume and shape enhancement.", from: "£80" },
+  { name: "Lip Filler", desc: "Natural-looking volume and shape enhancement.", from: "£120" },
   { name: "Cheek Filler", desc: "Restore volume and define cheekbone contours.", from: "£160" },
   { name: "Jawline Filler", desc: "Sculpt and define the jawline for a sharper profile.", from: "£170" },
   { name: "Chin Filler", desc: "Balance facial proportions with chin projection.", from: "£160" },
   { name: "Nose Filler", desc: "Non-surgical nose reshaping for a smoother profile.", from: "£200" },
   { name: "Tear Trough Filler", desc: "Reduce dark circles and hollows under the eyes.", from: "£200" },
   { name: "Smile Lines", desc: "Soften nasolabial folds for a more youthful appearance.", from: "£150" },
-  { name: "Facial Balancing", desc: "Multi-area packages for complete facial harmony.", from: "£350" },
+  { name: "Facial Balancing", desc: "Multi-area packages for complete facial harmony.", from: "£200" },
 ];
 
 const faqs = [
@@ -23,13 +23,13 @@ const faqs = [
   { q: "Is dermal filler safe?", a: "Yes, when administered by a qualified practitioner. At Hive Clinic, we use only premium hyaluronic acid fillers and all treatments are carried out by a fully qualified and insured prescriber." },
   { q: "Will it look natural?", a: "Absolutely. We specialise in subtle, balanced enhancements that complement your natural features. Our approach is always 'less is more' - you'll look like the best version of yourself." },
   { q: "What is facial balancing?", a: "Facial balancing uses filler strategically across multiple areas to create overall facial harmony. Rather than treating one area in isolation, we look at the whole face to achieve the most natural, proportionate result." },
-  { q: "How much does dermal filler cost in Manchester?", a: "Dermal filler at Hive Clinic starts from £80 for lip filler (0.5ml). Facial balancing packages start from £350 for 3ml. All treatments include a free consultation." },
+  { q: "How much does dermal filler cost in Manchester?", a: "Dermal filler at Hive Clinic starts from £120 for lip filler (0.5ml). Facial balancing packages start from £200 for 2ml. All treatments include a free consultation." },
 ];
 
 const DermalFiller = () => {
   usePageMeta(
     "Dermal Filler Manchester City Centre | Hive Clinic",
-    "Expert dermal filler treatments from £80 at Hive Clinic, Manchester City Centre. Lip, cheek, jawline and facial balancing by a qualified prescriber. Book today."
+    "Expert dermal filler treatments from £120 at Hive Clinic, Manchester City Centre. Lip, cheek, jawline and facial balancing by a qualified prescriber. Book today."
   );
   const heroImg = useSiteImage("dermalfiller_hero", STOCK.dermalfiller_hero);
   const secondaryImg = useSiteImage("dermalfiller_secondary", STOCK.dermalfiller_secondary);
@@ -47,7 +47,7 @@ const DermalFiller = () => {
           <p className="font-body text-sm text-gold uppercase tracking-[0.2em] mb-4">Expert Facial Sculpting</p>
           <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">Dermal Filler Manchester</h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Expert lip, cheek, jawline, and facial balancing treatments from £80. Natural results by a qualified prescriber in Deansgate.
+            Expert lip, cheek, jawline, and facial balancing treatments from £120. Natural results by a qualified prescriber in Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Qualified Prescriber</span></div>

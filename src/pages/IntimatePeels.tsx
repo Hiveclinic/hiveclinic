@@ -42,11 +42,11 @@ const IntimatePeels = () => {
               <div className="border border-border p-6 mb-8">
                 <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-3">Pricing</p>
                 <div className="space-y-2">
-                  <div className="flex justify-between"><span className="font-body text-sm">Small Area</span><span className="font-display text-lg">£85</span></div>
-                  <div className="flex justify-between"><span className="font-body text-sm">Medium Area</span><span className="font-display text-lg">£110</span></div>
-                  <div className="flex justify-between"><span className="font-body text-sm">Large Area</span><span className="font-display text-lg">£140</span></div>
+                  <div className="flex justify-between"><span className="font-body text-sm">Small Area</span><span className="font-display text-lg">£75</span></div>
+                  <div className="flex justify-between"><span className="font-body text-sm">Medium Area</span><span className="font-display text-lg">£95</span></div>
+                  <div className="flex justify-between"><span className="font-body text-sm">Large Area</span><span className="font-display text-lg">£120</span></div>
                 </div>
-                <p className="font-body text-xs text-muted-foreground mt-3">Courses: Small x3 £235 · Medium x3 £300 · Large x3 £380</p>
+                <p className="font-body text-xs text-muted-foreground mt-3">Courses: Small x3 £210 · Medium x3 £265 · Large x3 £330</p>
               </div>
               <a
                 href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=03d204e6-3e03-4171-a325-8a904a1ad586&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"

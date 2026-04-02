@@ -8,11 +8,13 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Anti-Wrinkle Consultation", desc: "Smooth forehead lines, frown lines, and crow's feet for a naturally refreshed look. Consultation required.", from: "£179" },
-  { name: "Masseter Jaw Slimming", desc: "Slim and contour the jawline for a more defined, feminine shape.", from: "£240" },
-  { name: "Brow Lift", desc: "Subtly elevate the brow for a more open, youthful eye area.", from: "£150" },
-  { name: "Lip Flip", desc: "Enhance the upper lip shape without filler for a natural pout.", from: "£120" },
-  { name: "Gummy Smile Correction", desc: "Reduce gum visibility when smiling for a more balanced look.", from: "£120" },
+  { name: "Anti-Wrinkle 1 Area", desc: "Smooth forehead lines, frown lines, or crow's feet for a naturally refreshed look.", from: "£140" },
+  { name: "Anti-Wrinkle 2 Areas", desc: "Target two areas for a naturally refreshed look. Includes prescriber consultation.", from: "£180" },
+  { name: "Anti-Wrinkle 3 Areas", desc: "Full upper-face treatment covering forehead, frown, and eyes. Free top-up included.", from: "£220" },
+  { name: "Masseter Jaw Slimming", desc: "Slim and contour the jawline for a more defined, feminine shape.", from: "£230" },
+  { name: "Brow Lift", desc: "Subtly elevate the brow for a more open, youthful eye area.", from: "£170" },
+  { name: "Lip Flip", desc: "Enhance the upper lip shape without filler for a natural pout.", from: "£140" },
+  { name: "Gummy Smile Correction", desc: "Reduce gum visibility when smiling for a more balanced look.", from: "£140" },
 ];
 
 const faqs = [
@@ -47,7 +49,7 @@ const AntiWrinkle = () => {
               Anti-Wrinkle Consultation Manchester
             </h1>
             <p className="font-body text-lg text-white/80 mb-6">
-              Wrinkle relaxing treatment consultations from £120. Soften lines and restore a naturally youthful appearance with a qualified prescriber at Hive Clinic, Manchester City Centre.
+              Wrinkle relaxing treatments from £140. Soften lines and restore a naturally youthful appearance with a qualified prescriber at Hive Clinic, Manchester City Centre.
             </p>
             <div className="flex flex-wrap gap-4 mb-8">
               <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Qualified Prescriber</span></div>

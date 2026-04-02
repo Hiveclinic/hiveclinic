@@ -8,10 +8,10 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Lumi Eyes", desc: "Brighten and rejuvenate the under-eye area with this specialist polynucleotide treatment.", price: "£140" },
-  { name: "Seventy Hyal", desc: "Deep hydration booster for plumper, dewy skin with long-lasting moisture retention.", price: "£160" },
+  { name: "Under Eye Skin Booster", desc: "Injectable treatment for dark circles and fine lines under the eye area.", price: "£130" },
+  { name: "Seventy Hyal Skin Booster", desc: "Deep hydration to improve glow, elasticity, and skin firmness.", price: "£140" },
   { name: "Polynucleotides", desc: "Bio-stimulating injections that regenerate skin cells and improve elasticity from within.", price: "£180" },
-  { name: "Injectable Skin Remodelling", desc: "The gold standard in skin remodelling - stimulates collagen and elastin for total skin rejuvenation.", price: "£250" },
+  { name: "Profhilo", desc: "Advanced injectable for skin laxity and hydration. Course of 2 recommended.", price: "£280" },
 ];
 
 const faqs = [
@@ -19,13 +19,13 @@ const faqs = [
   { q: "What is the difference between skin remodelling and fillers?", a: "Skin remodelling treatments disperse across a wide area to stimulate collagen and elastin. Fillers add volume to specific areas. Many clients benefit from both." },
   { q: "How many sessions do I need?", a: "Most skin boosters require 2 sessions 4 weeks apart for optimal results. Our injectable remodelling treatment is typically 2 sessions, with maintenance every 6 months." },
   { q: "When will I see results?", a: "You may notice improved hydration immediately, but the full collagen-stimulating effects develop over 4-8 weeks as your skin regenerates from within." },
-  { q: "How much do skin boosters cost in Manchester?", a: "Skin boosters at Hive Clinic start from £140 for Lumi Eyes. Our injectable skin remodelling treatment, our most popular skin booster, is £250 per session." },
+  { q: "How much do skin boosters cost in Manchester?", a: "Skin boosters at Hive Clinic start from £140 for Lumi Eyes. Our injectable skin remodelling treatment, our most popular skin booster, is £280 per session." },
 ];
 
 const SkinBoosters = () => {
   usePageMeta(
     "Skin Boosters Manchester City Centre | Hive Clinic",
-    "Advanced skin boosters and injectable remodelling from £140 at Hive Clinic, Manchester City Centre. Deep hydration and collagen stimulation. Book today."
+    "Advanced skin boosters and injectable remodelling from £130 at Hive Clinic, Manchester City Centre. Deep hydration and collagen stimulation. Book today."
   );
   const heroImg = useSiteImage("skinboosters_hero", STOCK.skinboosters_hero);
   const secondaryImg = useSiteImage("skinboosters_secondary", STOCK.skinboosters_secondary);
@@ -42,7 +42,7 @@ const SkinBoosters = () => {
           <p className="font-body text-sm text-gold uppercase tracking-[0.2em] mb-4">Glow From Within</p>
           <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">Skin Boosters Manchester</h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Advanced skin boosters and injectable remodelling from £140. Deep hydration and collagen stimulation at Hive Clinic, Deansgate.
+            Advanced skin boosters and injectable remodelling from £130. Deep hydration and collagen stimulation at Hive Clinic, Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Bio-Stimulating Technology</span></div>

@@ -8,7 +8,7 @@ const treatments = [
   { title: "Dermal Filler", desc: "Restore volume and smooth fine lines", link: "/treatments/dermal-filler-manchester", from: "£150", tag: null },
   { title: "Skin Boosters", desc: "Radiant, deeply hydrated complexion", link: "/treatments/skin-boosters-manchester", from: "£130", tag: null },
   { title: "HydraFacial", desc: "Deep cleanse, exfoliate and hydrate", link: "/treatments/hydrafacial-manchester", from: "£150", tag: "Skin Favourite" },
-  { title: "Chemical Peels", desc: "Medical-grade skin renewal", link: "/treatments/chemical-peels-manchester", from: "£85", tag: null },
+  { title: "Chemical Peels", desc: "Medical-grade skin renewal", link: "/treatments/chemical-peels-manchester", from: "£95", tag: null },
 ];
 
 const TreatmentShowcase = () => {

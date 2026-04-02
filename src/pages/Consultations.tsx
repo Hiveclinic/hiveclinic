@@ -51,7 +51,7 @@ const Consultations = () => {
           <div className="border border-border p-8 text-center">
             <Stethoscope size={24} strokeWidth={1.5} className="text-gold mx-auto mb-4" />
             <h3 className="font-display text-2xl mb-2">Prescriber Consultation</h3>
-            <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">Anti-Wrinkle · £30</p>
+            <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">Anti-Wrinkle · £25</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Required prior to anti-wrinkle injections. This is a separate medical service provided by our prescriber.</p>
             <a
                 href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"

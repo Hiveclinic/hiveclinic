@@ -7,9 +7,8 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Glass Skin Boost", desc: "Deep cleansing and intense hydration for a luminous, glass-like finish.", price: "£140" },
-  { name: "Acne Refresh", desc: "Targeted extraction and purification to clear congested, breakout-prone skin.", price: "£130" },
-  { name: "Glow Reset", desc: "A full skin reset - perfect for dull, tired, or dehydrated complexions.", price: "£120" },
+  { name: "Hydrafacial", desc: "Deep cleansing facial to exfoliate, extract, and hydrate. Suitable for all skin types.", price: "£150" },
+  { name: "Glass Skin Hydrafacial", desc: "Hydrafacial cleanse, gentle exfoliation, and targeted skin booster injection for radiant glow.", price: "£190" },
 ];
 
 const faqs = [
@@ -17,13 +16,13 @@ const faqs = [
   { q: "Is a HydraFacial suitable for all skin types?", a: "Yes. HydraFacials are gentle enough for sensitive skin yet effective enough for oily, acne-prone, or mature skin. Your practitioner will customise the treatment to your specific needs." },
   { q: "How often should I get a HydraFacial?", a: "For optimal results, we recommend a HydraFacial every 4-6 weeks. Many clients book monthly as part of their ongoing skincare routine." },
   { q: "Is there any downtime?", a: "None at all. You can return to your normal routine immediately. Most clients apply makeup and go straight back to work or socialising." },
-  { q: "How much does a HydraFacial cost in Manchester?", a: "HydraFacials at Hive Clinic start from £120. Each treatment is tailored to your skin's needs and includes a full consultation." },
+  { q: "How much does a HydraFacial cost in Manchester?", a: "HydraFacials at Hive Clinic start from £150. Each treatment is tailored to your skin's needs and includes a full consultation." },
 ];
 
 const HydraFacial = () => {
   usePageMeta(
     "Hydrafacial Manchester City Centre | Hive Clinic",
-    "Deep cleansing Hydrafacial treatments from £120 at Hive Clinic, Manchester City Centre. Achieve glass-like radiant skin with zero downtime. Book today."
+    "Deep cleansing Hydrafacial treatments from £150 at Hive Clinic, Manchester City Centre. Achieve glass-like radiant skin with zero downtime. Book today."
   );
   const heroImg = useSiteImage("hydrafacial_hero", STOCK.hydrafacial_hero);
   const secondaryImg = useSiteImage("hydrafacial_secondary", STOCK.hydrafacial_secondary);
@@ -40,7 +39,7 @@ const HydraFacial = () => {
           <p className="font-body text-sm text-gold uppercase tracking-[0.2em] mb-4">The Ultimate Skin Reset</p>
           <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">HydraFacial Manchester</h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Deep cleansing, hydrating facials from £120. Achieve glass-like, radiant skin with zero downtime at Hive Clinic, Deansgate.
+            Deep cleansing, hydrating facials from £150. Achieve glass-like, radiant skin with zero downtime at Hive Clinic, Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Clinical-Grade Products</span></div>

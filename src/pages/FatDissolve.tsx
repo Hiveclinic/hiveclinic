@@ -7,8 +7,8 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Small Area", desc: "Chin, bra fat, jawline, upper arms, or lower abdomen.", price: "£120" },
-  { name: "Medium Area", desc: "Full lower abdomen, upper abdomen, waist, flanks, or upper arms.", price: "£180" },
+  { name: "Small Area", desc: "Chin, bra fat, jawline, upper arms, or lower abdomen.", price: "£150" },
+  { name: "Medium Area", desc: "Full lower abdomen, upper abdomen, waist, flanks, or upper arms.", price: "£200" },
   { name: "Large Area", desc: "Full abdomen, back rolls, hips, or thighs.", price: "£250" },
 ];
 
@@ -17,13 +17,13 @@ const faqs = [
   { q: "How many sessions do I need?", a: "Most clients see optimal results after 2-4 sessions, spaced 4-6 weeks apart. The number of sessions depends on the area and amount of fat being treated." },
   { q: "Is fat dissolving painful?", a: "You may feel a mild stinging sensation during injection, followed by some swelling and tenderness for a few days. This is a normal part of the process and indicates the treatment is working." },
   { q: "Are results permanent?", a: "Yes. Once fat cells are destroyed, they do not regenerate. However, maintaining a healthy lifestyle is important to prevent remaining fat cells from enlarging." },
-  { q: "How much does fat dissolving cost in Manchester?", a: "Fat dissolving treatments at Hive Clinic start from £120 for a small area. Larger areas are priced at £180-£250 per session." },
+  { q: "How much does fat dissolving cost in Manchester?", a: "Fat dissolving treatments at Hive Clinic start from £150 for a small area. Larger areas are priced at £200-£250 per session." },
 ];
 
 const FatDissolve = () => {
   usePageMeta(
     "Fat Dissolving Manchester City Centre | Hive Clinic",
-    "Non-surgical fat dissolving injections from £120 at Hive Clinic, Manchester City Centre. Target stubborn fat on chin, abdomen, flanks and more. Book today."
+    "Non-surgical fat dissolving injections from £150 at Hive Clinic, Manchester City Centre. Target stubborn fat on chin, abdomen, flanks and more. Book today."
   );
   const heroImg = useSiteImage("fatdissolve_hero", STOCK.fatdissolve_hero);
   const secondaryImg = useSiteImage("fatdissolve_secondary", STOCK.fatdissolve_secondary);
@@ -40,7 +40,7 @@ const FatDissolve = () => {
           <p className="font-body text-sm text-gold uppercase tracking-[0.2em] mb-4">Non-Surgical Body Contouring</p>
           <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">Fat Dissolving Manchester</h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Non-surgical fat reduction from £120. Target stubborn fat on chin, abdomen, flanks, and more at Hive Clinic, Deansgate.
+            Non-surgical fat reduction from £150. Target stubborn fat on chin, abdomen, flanks, and more at Hive Clinic, Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Non-Surgical</span></div>

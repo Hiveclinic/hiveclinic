@@ -11,14 +11,14 @@ const faqs = [
   { q: "Does lip filler hurt?", a: "We use a topical numbing cream and the filler itself contains anaesthetic, so most clients describe it as a mild pressure. Comfort is our priority." },
   { q: "How long does lip filler last?", a: "Results typically last 6-12 months depending on the product used and your metabolism. We offer top-up appointments to maintain your look." },
   { q: "Will my lips look natural?", a: "Absolutely. We specialise in subtle, balanced enhancements that complement your facial proportions. No one needs to know - unless you tell them." },
-  { q: "How much does lip filler cost?", a: "Lip filler at Hive Clinic starts from just £80 for 0.5ml. A full consultation is included to discuss the best approach for your goals." },
+  { q: "How much does lip filler cost?", a: "Lip filler at Hive Clinic starts from £120 for 0.5ml. A full consultation is included to discuss the best approach for your goals." },
   { q: "Is there any downtime?", a: "You may experience mild swelling for 24-48 hours. Most clients return to normal activities immediately after treatment." },
 ];
 
 const LipFillers = () => {
   usePageMeta(
     "Lip Filler Manchester City Centre | Hive Clinic",
-    "Natural-looking lip filler from £80 at Hive Clinic, Manchester City Centre. Expert lip enhancement by a qualified prescriber in Deansgate. Book your free consultation."
+    "Natural-looking lip filler from £120 at Hive Clinic, Manchester City Centre. Expert lip enhancement by a qualified prescriber in Deansgate. Book your free consultation."
   );
   const heroImg = useSiteImage("lipfillers_hero", STOCK.lipfillers_hero);
   const secondaryImg = useSiteImage("lipfillers_secondary", STOCK.lipfillers_secondary);
@@ -39,7 +39,7 @@ const LipFillers = () => {
             Lip Fillers Manchester
           </h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Natural-looking lip enhancement from just £80. Expert results by a qualified prescriber in the heart of Deansgate.
+            Natural-looking lip enhancement from £120. Expert results by a qualified prescriber in the heart of Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Qualified Prescriber</span></div>
@@ -81,7 +81,7 @@ const LipFillers = () => {
             </div>
             <div className="border border-border p-6">
               <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-2">Starting from</p>
-              <p className="font-display text-4xl">£80 <span className="text-lg text-muted-foreground">/ 0.5ml</span></p>
+              <p className="font-display text-4xl">£120 <span className="text-lg text-muted-foreground">/ 0.5ml</span></p>
               <p className="font-body text-xs text-muted-foreground mt-1">Pay in instalments with Klarna or Clearpay</p>
             </div>
           </div>

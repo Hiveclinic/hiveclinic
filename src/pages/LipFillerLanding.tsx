@@ -7,7 +7,7 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
-  { q: "How much does lip filler cost in Manchester?", a: "Lip filler at Hive Clinic starts from just £80 for 0.5ml. We offer a range of premium hyaluronic acid fillers to suit different goals and budgets." },
+  { q: "How much does lip filler cost in Manchester?", a: "Lip filler at Hive Clinic starts from £120 for 0.5ml. We offer a range of premium hyaluronic acid fillers to suit different goals and budgets." },
   { q: "Does lip filler hurt?", a: "We use topical numbing cream and the filler contains built-in anaesthetic. Most clients describe the sensation as mild pressure rather than pain." },
   { q: "How long does lip filler last?", a: "Results typically last 6-12 months depending on the product used and your metabolism. We offer affordable top-up appointments." },
   { q: "Will my lips look natural?", a: "Absolutely. We specialise in subtle, balanced enhancements that complement your facial proportions. Natural results are our signature." },
@@ -23,8 +23,8 @@ const reviews = [
 
 const LipFillerLanding = () => {
   usePageMeta(
-    "Lip Filler Manchester | From £80 | Hive Clinic",
-    "Natural-looking lip filler from £80 in Manchester City Centre. Expert lip enhancement by a qualified prescriber at Hive Clinic, Deansgate. Book your free consultation today."
+    "Lip Filler Manchester | From £120 | Hive Clinic",
+    "Natural-looking lip filler from £120 in Manchester City Centre. Expert lip enhancement by a qualified prescriber at Hive Clinic, Deansgate. Book your free consultation today."
   );
   const heroImg = useSiteImage("lipfillerlanding_hero", STOCK.lipfillerlanding_hero);
   const secondaryImg = useSiteImage("lipfillerlanding_secondary", STOCK.lipfillerlanding_secondary);
@@ -44,7 +44,7 @@ const LipFillerLanding = () => {
               Lip Filler Manchester
             </h1>
             <p className="font-body text-lg text-white/80 mb-4">
-              Natural-looking lip enhancement from just £80. Expert results by a qualified prescriber in the heart of Manchester City Centre.
+              Natural-looking lip enhancement from £120. Expert results by a qualified prescriber in the heart of Manchester City Centre.
             </p>
             <div className="flex items-center gap-1 mb-6">
               {[1,2,3,4,5].map(i => <Star key={i} size={16} className="text-gold fill-gold" />)}
@@ -76,11 +76,11 @@ const LipFillerLanding = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
             <div>
-              <p className="font-display text-3xl">£80</p>
+              <p className="font-display text-3xl">£120</p>
               <p className="font-body text-sm text-background/60">0.5ml — Subtle Enhancement</p>
             </div>
             <div>
-              <p className="font-display text-3xl">£120</p>
+              <p className="font-display text-3xl">£150</p>
               <p className="font-body text-sm text-background/60">1ml — Full Volume</p>
             </div>
             <div>
@@ -104,7 +104,7 @@ const LipFillerLanding = () => {
                 Every treatment begins with a thorough consultation where we discuss your goals, assess your facial proportions, and recommend the perfect amount of filler to achieve the look you want.
               </p>
               <div className="space-y-4 mb-8">
-                {["Natural results — never overdone", "Premium hyaluronic acid fillers", "Tailored to your facial proportions", "Free consultation included", "Aftercare support and follow-up", "Pay from £80 — instalments available"].map((b) => (
+                {["Natural results — never overdone", "Premium hyaluronic acid fillers", "Tailored to your facial proportions", "Free consultation included", "Aftercare support and follow-up", "Pay from £120 — instalments available"].map((b) => (
                   <div key={b} className="flex items-center gap-3">
                     <CheckCircle size={16} className="text-gold flex-shrink-0" />
                     <span className="font-body text-sm">{b}</span>

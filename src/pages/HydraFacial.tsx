@@ -7,9 +7,8 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Glass Skin Boost", desc: "Deep cleansing and intense hydration for a luminous, glass-like finish.", price: "£140" },
-  { name: "Acne Refresh", desc: "Targeted extraction and purification to clear congested, breakout-prone skin.", price: "£130" },
-  { name: "Glow Reset", desc: "A full skin reset - perfect for dull, tired, or dehydrated complexions.", price: "£120" },
+  { name: "Hydrafacial", desc: "Deep cleansing facial to exfoliate, extract, and hydrate. Suitable for all skin types.", price: "£150" },
+  { name: "Glass Skin Hydrafacial", desc: "Hydrafacial cleanse, gentle exfoliation, and targeted skin booster injection for radiant glow.", price: "£190" },
 ];
 
 const faqs = [

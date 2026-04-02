@@ -7,10 +7,10 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Level 1 Chemical Peel - Face", desc: "For hormonal breakouts, scarring, and rough texture. Includes antibacterial cleanse and clarifying mask.", price: "£85" },
-  { name: "Level 1 Chemical Peel - Back", desc: "Target back acne, scarring, and textural buildup with an intensive peel treatment.", price: "£95" },
+  { name: "BioRePeel Face", desc: "Medical-grade peel to improve acne, texture, and pigmentation with minimal downtime.", price: "£95" },
+  { name: "BioRePeel Body", desc: "Targets back, chest, or shoulders for acne and pigmentation.", price: "£110" },
+  { name: "Level 1 Chemical Peel - Back", desc: "Intensive peel for hormonal breakouts, scarring and rough texture. Includes antibacterial cleanse.", price: "£95" },
   { name: "Level 2 Chemical Peel - Face", desc: "A stronger depigmenting peel for dark spots, melasma, and uneven skin tone.", price: "£110" },
-  { name: "Level 2 Chemical Peel - Back", desc: "Intensive peel for hyperpigmentation and textural buildup on the back.", price: "£125" },
   { name: "Intimate Peel - Small Area", desc: "Gentle brightening peel for intimate areas, underarms, or targeted zones.", price: "from £75" },
   { name: "Body Brightening Treatment", desc: "Specialist depigmenting treatment for hands, underarms, elbows, and knees.", price: "from £120" },
 ];

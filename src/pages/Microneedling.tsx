@@ -7,8 +7,9 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Face Texture Repair", desc: "Microneedling combined with a chemical peel to treat scars, enlarged pores, and uneven texture.", price: "£130" },
-  { name: "Stretch Mark Repair", desc: "Advanced microneedling with salmon DNA and deep hydration for stretch mark reduction.", price: "£150" },
+  { name: "Microneedling with Hydrating Serum", desc: "Dr Pen microneedling with hyaluronic acid serum for improved texture and tone.", price: "£160" },
+  { name: "Microneedling with Skin Booster", desc: "Microneedling combined with mesotherapy or booster infusion for deeper rejuvenation.", price: "£200" },
+  { name: "Stretch Mark Microneedling", desc: "Stimulates collagen to improve stretch mark texture. 3-6 sessions recommended.", price: "£180" },
 ];
 
 const faqs = [

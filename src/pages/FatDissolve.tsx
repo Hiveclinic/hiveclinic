@@ -7,8 +7,8 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Small Area", desc: "Chin, bra fat, jawline, upper arms, or lower abdomen.", price: "£120" },
-  { name: "Medium Area", desc: "Full lower abdomen, upper abdomen, waist, flanks, or upper arms.", price: "£180" },
+  { name: "Small Area", desc: "Chin, bra fat, jawline, upper arms, or lower abdomen.", price: "£150" },
+  { name: "Medium Area", desc: "Full lower abdomen, upper abdomen, waist, flanks, or upper arms.", price: "£200" },
   { name: "Large Area", desc: "Full abdomen, back rolls, hips, or thighs.", price: "£250" },
 ];
 

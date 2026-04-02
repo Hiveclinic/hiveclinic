@@ -3,15 +3,23 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Sparkles } from "lucide-react";
 import Layout from "@/components/Layout";
-import gallery1 from "@/assets/gallery-1.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
-import gallery4 from "@/assets/gallery-4.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
+import catConsultations from "@/assets/cat-consultations.jpg";
+import catDermalFiller from "@/assets/cat-dermal-filler.jpg";
+import catAntiWrinkle from "@/assets/cat-anti-wrinkle.jpg";
+import catChemicalPeels from "@/assets/cat-chemical-peels.jpg";
+import catIntimatePigment from "@/assets/cat-intimate-pigment.jpg";
+import catSkinTreatments from "@/assets/cat-skin-treatments.jpg";
+import catSkinBoosters from "@/assets/cat-skin-boosters.jpg";
+import catMicroneedling from "@/assets/cat-microneedling.jpg";
+import catHydrafacial from "@/assets/cat-hydrafacial.jpg";
+import catFatDissolve from "@/assets/cat-fat-dissolve.jpg";
+import catWellness from "@/assets/cat-wellness.jpg";
+import catIvDrip from "@/assets/cat-iv-drip.jpg";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { supabase } from "@/integrations/supabase/client";
 
-// Fallback images by category — synced with BookingSystem categories
+// Category-specific images — synced with BookingSystem categories
 const CATEGORY_IMAGES: Record<string, string> = {
   "Consultations": gallery3,
   "Dermal Filler": gallery1,

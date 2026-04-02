@@ -21,18 +21,18 @@ import { supabase } from "@/integrations/supabase/client";
 
 // Category-specific images — synced with BookingSystem categories
 const CATEGORY_IMAGES: Record<string, string> = {
-  "Consultations": gallery3,
-  "Dermal Filler": gallery1,
-  "Anti-Wrinkle": gallery3,
-  "Chemical Peels": gallery4,
-  "Intimate Pigment Treatment": gallery5,
-  "Skin Treatments": gallery4,
-  "Skin Boosters": gallery1,
-  "Microneedling": gallery5,
-  "HydroFacial": gallery6,
-  "Fat Dissolve": gallery6,
-  "Wellness": gallery3,
-  "IV Drip Therapy": gallery1,
+  "Consultations": catConsultations,
+  "Dermal Filler": catDermalFiller,
+  "Anti-Wrinkle": catAntiWrinkle,
+  "Chemical Peels": catChemicalPeels,
+  "Intimate Pigment Treatment": catIntimatePigment,
+  "Skin Treatments": catSkinTreatments,
+  "Skin Boosters": catSkinBoosters,
+  "Microneedling": catMicroneedling,
+  "HydroFacial": catHydrafacial,
+  "Fat Dissolve": catFatDissolve,
+  "Wellness": catWellness,
+  "IV Drip Therapy": catIvDrip,
 };
 
 // Fallback links by category — point to treatment pages where they exist

@@ -90,8 +90,8 @@ export const STOCK = {
   dermaplaning_secondary: catSkinTreatments,
 
   // Facial Balancing
-  facialbalancing_hero: catDermalFiller,
-  facialbalancing_secondary: catAntiWrinkle,
+  facialbalancing_hero: catFacialBalancing,
+  facialbalancing_secondary: catFacialBalancing,
 
   // Fat Dissolve
   fatdissolve_hero: catFatDissolve,

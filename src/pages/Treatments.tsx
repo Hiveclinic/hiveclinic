@@ -6,18 +6,18 @@ import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { supabase } from "@/integrations/supabase/client";
 import gallery3 from "@/assets/gallery-3.jpg";
-import catConsultations from "@/assets/cat-consultations.jpg";
+import catConsultations from "@/assets/categories/cat-consultations.jpg";
 import catDermalFiller from "@/assets/categories/cat-dermal-filler.jpg";
 import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle.jpg";
-import catChemicalPeels from "@/assets/cat-chemical-peels.jpg";
-import catIntimatePigment from "@/assets/cat-intimate-pigment.jpg";
-import catSkinTreatments from "@/assets/cat-skin-treatments.jpg";
-import catSkinBoosters from "@/assets/cat-skin-boosters.jpg";
-import catMicroneedling from "@/assets/cat-microneedling.jpg";
+import catChemicalPeels from "@/assets/categories/cat-chemical-peels.jpg";
+import catIntimatePigment from "@/assets/categories/cat-intimate-pigment.jpg";
+import catSkinTreatments from "@/assets/categories/cat-skin-treatments.jpg";
+import catSkinBoosters from "@/assets/categories/cat-skin-boosters.jpg";
+import catMicroneedling from "@/assets/categories/cat-microneedling.jpg";
 import catHydrafacial from "@/assets/categories/cat-hydrofacial.jpg";
 import catFatDissolve from "@/assets/categories/cat-fat-dissolve.jpg";
-import catWellness from "@/assets/cat-wellness.jpg";
-import catIvDrip from "@/assets/cat-iv-drip.jpg";
+import catWellness from "@/assets/categories/cat-wellness.jpg";
+import catIvDrip from "@/assets/categories/cat-iv-drip.jpg";
 
 // Category-specific images — synced with BookingSystem categories
 const CATEGORY_IMAGES: Record<string, string> = {

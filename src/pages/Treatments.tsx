@@ -7,9 +7,9 @@ import { usePageMeta } from "@/hooks/use-page-meta";
 import { supabase } from "@/integrations/supabase/client";
 import gallery3 from "@/assets/gallery-3.jpg";
 import catConsultations from "@/assets/categories/cat-consultations.jpg";
-import catDermalFiller from "@/assets/categories/cat-dermal-filler.jpg";
-import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle.jpg";
-import catChemicalPeels from "@/assets/categories/cat-chemical-peels.jpg";
+import catDermalFiller from "@/assets/categories/cat-dermal-filler-new.jpg";
+import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle-new.jpg";
+import catChemicalPeels from "@/assets/categories/cat-chemical-peels-new.jpg";
 import catIntimatePigment from "@/assets/categories/cat-intimate-pigment.jpg";
 import catSkinTreatments from "@/assets/categories/cat-skin-treatments.jpg";
 import catSkinBoosters from "@/assets/categories/cat-skin-boosters.jpg";
@@ -18,6 +18,10 @@ import catHydrafacial from "@/assets/categories/cat-hydrofacial.jpg";
 import catFatDissolve from "@/assets/categories/cat-fat-dissolve.jpg";
 import catWellness from "@/assets/categories/cat-wellness.jpg";
 import catIvDrip from "@/assets/categories/cat-iv-drip.jpg";
+import catFacialBalancing from "@/assets/categories/cat-facial-balancing.jpg";
+import catSkinRejuvenation from "@/assets/categories/cat-skin-rejuvenation.jpg";
+import catContentModel from "@/assets/categories/cat-content-model.jpg";
+import catFacials from "@/assets/categories/cat-facials-new.jpg";
 
 // Category-specific images — synced with Setmore + DB categories
 const CATEGORY_IMAGES: Record<string, string> = {
@@ -36,11 +40,11 @@ const CATEGORY_IMAGES: Record<string, string> = {
   // Aliases for DB category names that differ from Setmore
   "Fillers": catDermalFiller,
   "Lip Fillers": catDermalFiller,
-  "Facial Balancing": catDermalFiller,
+  "Facial Balancing": catFacialBalancing,
   "Peels": catChemicalPeels,
-  "Facials": catHydrafacial,
-  "Skin Rejuvenation": catSkinBoosters,
-  "Content Model": catDermalFiller,
+  "Facials": catFacials,
+  "Skin Rejuvenation": catSkinRejuvenation,
+  "Content Model": catContentModel,
 };
 
 // Fallback links by category — point to treatment pages where they exist

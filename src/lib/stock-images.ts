@@ -7,11 +7,11 @@ import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 
 // Category-specific images for relevant fallbacks
-import catDermalFiller from "@/assets/categories/cat-dermal-filler.jpg";
-import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle.jpg";
+import catDermalFiller from "@/assets/categories/cat-dermal-filler-new.jpg";
+import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle-new.jpg";
 import catSkinBoosters from "@/assets/categories/cat-skin-boosters.jpg";
 import catHydrafacial from "@/assets/categories/cat-hydrofacial.jpg";
-import catChemicalPeels from "@/assets/categories/cat-chemical-peels.jpg";
+import catChemicalPeels from "@/assets/categories/cat-chemical-peels-new.jpg";
 import catMicroneedling from "@/assets/categories/cat-microneedling.jpg";
 import catFatDissolve from "@/assets/categories/cat-fat-dissolve.jpg";
 import catConsultations from "@/assets/categories/cat-consultations.jpg";
@@ -19,6 +19,10 @@ import catIntimatePigment from "@/assets/categories/cat-intimate-pigment.jpg";
 import catWellness from "@/assets/categories/cat-wellness.jpg";
 import catIvDrip from "@/assets/categories/cat-iv-drip.jpg";
 import catSkinTreatments from "@/assets/categories/cat-skin-treatments.jpg";
+import catFacialBalancing from "@/assets/categories/cat-facial-balancing.jpg";
+import catSkinRejuvenation from "@/assets/categories/cat-skin-rejuvenation.jpg";
+import catContentModel from "@/assets/categories/cat-content-model.jpg";
+import catFacials from "@/assets/categories/cat-facials-new.jpg";
 
 export const STOCK = {
   // Homepage
@@ -86,8 +90,8 @@ export const STOCK = {
   dermaplaning_secondary: catSkinTreatments,
 
   // Facial Balancing
-  facialbalancing_hero: catDermalFiller,
-  facialbalancing_secondary: catAntiWrinkle,
+  facialbalancing_hero: catFacialBalancing,
+  facialbalancing_secondary: catFacialBalancing,
 
   // Fat Dissolve
   fatdissolve_hero: catFatDissolve,

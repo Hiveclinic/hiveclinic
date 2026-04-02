@@ -19,7 +19,7 @@ const faqs = [
   { q: "What is the difference between skin remodelling and fillers?", a: "Skin remodelling treatments disperse across a wide area to stimulate collagen and elastin. Fillers add volume to specific areas. Many clients benefit from both." },
   { q: "How many sessions do I need?", a: "Most skin boosters require 2 sessions 4 weeks apart for optimal results. Our injectable remodelling treatment is typically 2 sessions, with maintenance every 6 months." },
   { q: "When will I see results?", a: "You may notice improved hydration immediately, but the full collagen-stimulating effects develop over 4-8 weeks as your skin regenerates from within." },
-  { q: "How much do skin boosters cost in Manchester?", a: "Skin boosters at Hive Clinic start from £140 for Lumi Eyes. Our injectable skin remodelling treatment, our most popular skin booster, is £250 per session." },
+  { q: "How much do skin boosters cost in Manchester?", a: "Skin boosters at Hive Clinic start from £140 for Lumi Eyes. Our injectable skin remodelling treatment, our most popular skin booster, is £280 per session." },
 ];
 
 const SkinBoosters = () => {

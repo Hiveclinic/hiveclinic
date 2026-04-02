@@ -20,13 +20,13 @@ const faqs = [
   { q: "How many sessions do I need?", a: "We typically recommend 3-8 sessions depending on your concerns. Results improve progressively with each treatment. Course packages are available at a reduced price." },
   { q: "Is a chemical peel painful?", a: "You may feel a mild tingling or warming sensation during the peel, which is completely normal. Any discomfort is temporary and subsides quickly." },
   { q: "What is the downtime?", a: "Mild peeling and redness may occur for 2-5 days depending on the strength of the peel. We provide full aftercare instructions to support healing." },
-  { q: "How much do chemical peels cost in Manchester?", a: "Chemical peels at Hive Clinic start from £85 for a single session. Course packages of 3 are available from £230, offering better value for ongoing treatment plans." },
+  { q: "How much do chemical peels cost in Manchester?", a: "Chemical peels at Hive Clinic start from £95 for a single session. Course packages of 3 are available from £230, offering better value for ongoing treatment plans." },
 ];
 
 const ChemicalPeels = () => {
   usePageMeta(
     "Chemical Peels Manchester City Centre | Hive Clinic",
-    "Professional chemical peels from £85 at Hive Clinic, Manchester City Centre. Treat acne, scarring, pigmentation and uneven texture. Book a consultation."
+    "Professional chemical peels from £95 at Hive Clinic, Manchester City Centre. Treat acne, scarring, pigmentation and uneven texture. Book a consultation."
   );
   const heroImg = useSiteImage("chemicalpeels_hero", STOCK.chemicalpeels_hero);
   const secondaryImg = useSiteImage("chemicalpeels_secondary", STOCK.chemicalpeels_secondary);
@@ -43,7 +43,7 @@ const ChemicalPeels = () => {
           <p className="font-body text-sm text-gold uppercase tracking-[0.2em] mb-4">Transform Your Skin</p>
           <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">Chemical Peels Manchester</h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Professional chemical peels from £85. Target acne, scarring, pigmentation, and uneven texture at Hive Clinic, Deansgate.
+            Professional chemical peels from £95. Target acne, scarring, pigmentation, and uneven texture at Hive Clinic, Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Clinical-Grade Peels</span></div>

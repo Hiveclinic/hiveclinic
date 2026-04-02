@@ -16,13 +16,13 @@ const faqs = [
   { q: "Does microneedling hurt?", a: "A topical numbing cream is applied before treatment to minimise discomfort. Most clients describe the sensation as a light scratching feeling." },
   { q: "How many sessions do I need?", a: "For optimal results, we typically recommend 3-6 sessions spaced 4-6 weeks apart. Improvement is progressive and builds with each treatment." },
   { q: "What is the downtime?", a: "Expect redness and mild sensitivity for 24-48 hours, similar to mild sunburn. Most clients return to normal activities the following day." },
-  { q: "How much does microneedling cost in Manchester?", a: "Microneedling at Hive Clinic starts from £130 for face texture repair. Stretch mark repair with salmon DNA is £150 per session." },
+  { q: "How much does microneedling cost in Manchester?", a: "Microneedling at Hive Clinic starts from £160 for microneedling texture repair. Stretch mark repair with salmon DNA is £150 per session." },
 ];
 
 const Microneedling = () => {
   usePageMeta(
     "Microneedling Manchester City Centre | Hive Clinic",
-    "Advanced microneedling with chemical peel from £130 at Hive Clinic, Manchester City Centre. Repair scars, texture, pores and stretch marks. Book now."
+    "Advanced microneedling with chemical peel from £160 at Hive Clinic, Manchester City Centre. Repair scars, texture, pores and stretch marks. Book now."
   );
   const heroImg = useSiteImage("microneedling_hero", STOCK.microneedling_hero);
   const secondaryImg = useSiteImage("microneedling_secondary", STOCK.microneedling_secondary);
@@ -39,7 +39,7 @@ const Microneedling = () => {
           <p className="font-body text-sm text-gold uppercase tracking-[0.2em] mb-4">Advanced Skin Repair</p>
           <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">Microneedling Manchester</h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Advanced microneedling with chemical peel from £130. Repair scars, texture, pores, and stretch marks at Hive Clinic, Deansgate.
+            Advanced microneedling with chemical peel from £160. Repair scars, texture, pores, and stretch marks at Hive Clinic, Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Clinical-Grade Treatment</span></div>

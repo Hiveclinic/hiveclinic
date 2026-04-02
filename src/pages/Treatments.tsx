@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Sparkles } from "lucide-react";
 import Layout from "@/components/Layout";
+import { usePageMeta } from "@/hooks/use-page-meta";
+import { supabase } from "@/integrations/supabase/client";
 import gallery3 from "@/assets/gallery-3.jpg";
 import catConsultations from "@/assets/cat-consultations.jpg";
 import catDermalFiller from "@/assets/categories/cat-dermal-filler.jpg";

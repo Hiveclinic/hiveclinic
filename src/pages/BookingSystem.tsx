@@ -251,56 +251,54 @@ const BookingSystem = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="pt-32 pb-20 bg-secondary/30">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h1 className="font-display text-5xl md:text-7xl mb-6">Book Your Treatment</h1>
-            <p className="font-body text-muted-foreground text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-              Refined, natural results. Select your treatment below to book directly.
+      <section className="relative pt-32 pb-24 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-secondary/40 via-secondary/20 to-transparent" />
+        <div className="max-w-5xl mx-auto px-6 relative z-10">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center">
+            <p className="font-body text-xs tracking-[0.3em] uppercase text-accent mb-5">Manchester City Centre</p>
+            <h1 className="font-display text-5xl md:text-7xl mb-5 leading-[1.05]">Book Your Treatment</h1>
+            <p className="font-body text-muted-foreground text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+              Browse our full menu, choose your treatment, and secure your appointment in minutes.
             </p>
-            <button
-              onClick={scrollToServices}
-              className="inline-flex items-center gap-2 border border-foreground px-8 py-3 font-body text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors"
-            >
-              View Treatments
-              <ArrowDown size={16} />
-            </button>
           </motion.div>
-        </div>
-      </section>
 
-      {/* Quick Start */}
-      <section className="py-16 border-b border-border">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="font-display text-2xl text-center mb-8">Quick Start</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Quick-start cards */}
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.15 }} className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <a
               href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
               target="_blank"
               rel="noopener noreferrer"
-              className="group border border-border p-8 hover:border-accent/40 transition-colors text-center"
+              className="group border border-border bg-background/60 backdrop-blur-sm p-6 hover:border-accent/50 transition-all text-center"
             >
-              <div className="w-10 h-10 border border-accent/30 flex items-center justify-center mx-auto mb-4">
-                <Clock size={18} className="text-accent" />
+              <div className="w-9 h-9 border border-accent/30 flex items-center justify-center mx-auto mb-3 group-hover:border-accent/60 transition-colors">
+                <Clock size={16} className="text-accent" />
               </div>
-              <h3 className="font-display text-xl mb-2">Skin Consultation</h3>
-              <p className="font-body text-sm text-muted-foreground mb-1">20 mins - £25</p>
-              <p className="font-body text-xs text-muted-foreground">Not sure what treatment you need? Start here.</p>
+              <h3 className="font-display text-base mb-1">Consultation</h3>
+              <p className="font-body text-xs text-muted-foreground">Not sure? Start here — £25</p>
             </a>
             <a
               href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=38c99c41-0af9-4b81-b67d-aae0369d51a4&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
               target="_blank"
               rel="noopener noreferrer"
-              className="group border border-border p-8 hover:border-accent/40 transition-colors text-center"
+              className="group border border-border bg-background/60 backdrop-blur-sm p-6 hover:border-accent/50 transition-all text-center"
             >
-              <div className="w-10 h-10 border border-accent/30 flex items-center justify-center mx-auto mb-4">
-                <Clock size={18} className="text-accent" />
+              <div className="w-9 h-9 border border-accent/30 flex items-center justify-center mx-auto mb-3 group-hover:border-accent/60 transition-colors">
+                <Clock size={16} className="text-accent" />
               </div>
-              <h3 className="font-display text-xl mb-2">Returning Client</h3>
-              <p className="font-body text-sm text-muted-foreground mb-1">30 mins - Free</p>
-              <p className="font-body text-xs text-muted-foreground">Book your next session within a treatment course.</p>
+              <h3 className="font-display text-base mb-1">Returning Client</h3>
+              <p className="font-body text-xs text-muted-foreground">Book your next session — Free</p>
             </a>
-          </div>
+            <button
+              onClick={scrollToServices}
+              className="group border border-foreground bg-foreground text-background p-6 hover:bg-accent transition-all text-center"
+            >
+              <div className="w-9 h-9 border border-background/20 flex items-center justify-center mx-auto mb-3">
+                <ArrowDown size={16} />
+              </div>
+              <h3 className="font-display text-base mb-1">Browse All</h3>
+              <p className="font-body text-xs opacity-70">View full treatment menu</p>
+            </button>
+          </motion.div>
         </div>
       </section>
 

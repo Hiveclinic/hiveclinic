@@ -5,19 +5,17 @@ import { ArrowRight, Star, Sparkles } from "lucide-react";
 import Layout from "@/components/Layout";
 import gallery3 from "@/assets/gallery-3.jpg";
 import catConsultations from "@/assets/cat-consultations.jpg";
-import catDermalFiller from "@/assets/cat-dermal-filler.jpg";
-import catAntiWrinkle from "@/assets/cat-anti-wrinkle.jpg";
+import catDermalFiller from "@/assets/categories/cat-dermal-filler.jpg";
+import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle.jpg";
 import catChemicalPeels from "@/assets/cat-chemical-peels.jpg";
 import catIntimatePigment from "@/assets/cat-intimate-pigment.jpg";
 import catSkinTreatments from "@/assets/cat-skin-treatments.jpg";
 import catSkinBoosters from "@/assets/cat-skin-boosters.jpg";
 import catMicroneedling from "@/assets/cat-microneedling.jpg";
-import catHydrafacial from "@/assets/cat-hydrafacial.jpg";
-import catFatDissolve from "@/assets/cat-fat-dissolve.jpg";
+import catHydrafacial from "@/assets/categories/cat-hydrofacial.jpg";
+import catFatDissolve from "@/assets/categories/cat-fat-dissolve.jpg";
 import catWellness from "@/assets/cat-wellness.jpg";
 import catIvDrip from "@/assets/cat-iv-drip.jpg";
-import { usePageMeta } from "@/hooks/use-page-meta";
-import { supabase } from "@/integrations/supabase/client";
 
 // Category-specific images — synced with BookingSystem categories
 const CATEGORY_IMAGES: Record<string, string> = {

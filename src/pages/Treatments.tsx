@@ -40,11 +40,11 @@ const CATEGORY_IMAGES: Record<string, string> = {
   // Aliases for DB category names that differ from Setmore
   "Fillers": catDermalFiller,
   "Lip Fillers": catDermalFiller,
-  "Facial Balancing": catDermalFiller,
+  "Facial Balancing": catFacialBalancing,
   "Peels": catChemicalPeels,
-  "Facials": catHydrafacial,
-  "Skin Rejuvenation": catSkinBoosters,
-  "Content Model": catDermalFiller,
+  "Facials": catFacials,
+  "Skin Rejuvenation": catSkinRejuvenation,
+  "Content Model": catContentModel,
 };
 
 // Fallback links by category — point to treatment pages where they exist

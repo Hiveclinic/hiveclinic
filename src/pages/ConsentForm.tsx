@@ -136,7 +136,7 @@ const ConsentForm = () => {
       supabase.functions.invoke("send-email", {
         body: {
           to: "hello@hiveclinicuk.com",
-          subject: `📋 New Consent Form — ${fullName}`,
+          subject: `📋 New Consent Form — ${fullName} — ${treatmentType}`,
           html: adminHtml,
         },
       });

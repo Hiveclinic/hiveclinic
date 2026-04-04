@@ -33,20 +33,25 @@ const IntimatePeels = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-16">
             <div>
               <h2 className="font-display text-4xl mb-6">Confidence in Every Detail</h2>
-              <p className="font-body text-muted-foreground leading-relaxed mb-8">Our intimate and body peels use gentle, professional-grade formulations to address discolouration and uneven tone in sensitive areas. Treatments are carried out in complete privacy and comfort.</p>
+              <p className="font-body text-muted-foreground leading-relaxed mb-8">Our intimate pigment treatments use gentle, professional-grade formulations to address discolouration and uneven tone in sensitive areas. Treatments are carried out in complete privacy and comfort.</p>
               <div className="space-y-4 mb-8">
                 {["Bikini line, inner thighs & underarms", "Brightening & tone refinement", "Not a whitening treatment", "Course packages available", "Complete privacy and discretion"].map(b => (
                   <div key={b} className="flex items-center gap-3"><CheckCircle size={14} strokeWidth={1.5} className="text-gold flex-shrink-0" /><span className="font-body text-sm">{b}</span></div>
                 ))}
               </div>
               <div className="border border-border p-6 mb-8">
-                <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-3">Pricing</p>
+                <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-3">Single Sessions</p>
                 <div className="space-y-2">
-                  <div className="flex justify-between"><span className="font-body text-sm">Small Area</span><span className="font-display text-lg">£75</span></div>
-                  <div className="flex justify-between"><span className="font-body text-sm">Medium Area</span><span className="font-display text-lg">£95</span></div>
-                  <div className="flex justify-between"><span className="font-body text-sm">Large Area</span><span className="font-display text-lg">£120</span></div>
+                  <div className="flex justify-between"><span className="font-body text-sm">Bikini Line Pigment Treatment</span><span className="font-display text-lg">£110</span></div>
+                  <div className="flex justify-between"><span className="font-body text-sm">Underarm Pigment Treatment</span><span className="font-display text-lg">£110</span></div>
+                  <div className="flex justify-between"><span className="font-body text-sm">Inner Thigh Pigment Treatment</span><span className="font-display text-lg">£120</span></div>
                 </div>
-                <p className="font-body text-xs text-muted-foreground mt-3">Courses: Small x3 £210 · Medium x3 £265 · Large x3 £330</p>
+                <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-3 mt-6">Courses (3 Sessions)</p>
+                <div className="space-y-2">
+                  <div className="flex justify-between"><span className="font-body text-sm">Bikini Line Course</span><span className="font-display text-lg">£300</span></div>
+                  <div className="flex justify-between"><span className="font-body text-sm">Underarm Course</span><span className="font-display text-lg">£300</span></div>
+                  <div className="flex justify-between"><span className="font-body text-sm">Inner Thigh Course</span><span className="font-display text-lg">£330</span></div>
+                </div>
               </div>
               <a
                 href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=03d204e6-3e03-4171-a325-8a904a1ad586&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"

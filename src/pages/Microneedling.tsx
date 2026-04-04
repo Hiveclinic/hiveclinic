@@ -10,6 +10,9 @@ const treatments = [
   { name: "Microneedling with Hydrating Serum", desc: "Dr Pen microneedling with hyaluronic acid serum for improved texture and tone.", price: "£160" },
   { name: "Microneedling with Skin Booster", desc: "Microneedling combined with mesotherapy or booster infusion for deeper rejuvenation.", price: "£200" },
   { name: "Stretch Mark Microneedling", desc: "Stimulates collagen to improve stretch mark texture. 3-6 sessions recommended.", price: "£180" },
+  { name: "Microneedling Course (3 Sessions)", desc: "Course of 3 hydrating serum sessions for progressive results.", price: "£420" },
+  { name: "Microneedling + Booster Course (3 Sessions)", desc: "Course of 3 booster-infused sessions for maximum rejuvenation.", price: "£540" },
+  { name: "Stretch Mark Course (3 Sessions)", desc: "Course of 3 stretch mark treatments for visible improvement.", price: "£480" },
 ];
 
 const faqs = [
@@ -17,7 +20,7 @@ const faqs = [
   { q: "Does microneedling hurt?", a: "A topical numbing cream is applied before treatment to minimise discomfort. Most clients describe the sensation as a light scratching feeling." },
   { q: "How many sessions do I need?", a: "For optimal results, we typically recommend 3-6 sessions spaced 4-6 weeks apart. Improvement is progressive and builds with each treatment." },
   { q: "What is the downtime?", a: "Expect redness and mild sensitivity for 24-48 hours, similar to mild sunburn. Most clients return to normal activities the following day." },
-  { q: "How much does microneedling cost in Manchester?", a: "Microneedling at Hive Clinic starts from £160 for microneedling texture repair. Stretch mark repair with salmon DNA is £150 per session." },
+  { q: "How much does microneedling cost in Manchester?", a: "Microneedling at Hive Clinic starts from £160 for a single session with hydrating serum. Course packages of 3 start from £420 for better value." },
 ];
 
 const Microneedling = () => {

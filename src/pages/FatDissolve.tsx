@@ -10,6 +10,9 @@ const treatments = [
   { name: "Small Area", desc: "Chin, bra fat, jawline, upper arms, or lower abdomen.", price: "£150" },
   { name: "Medium Area", desc: "Full lower abdomen, upper abdomen, waist, flanks, or upper arms.", price: "£200" },
   { name: "Large Area", desc: "Full abdomen, back rolls, hips, or thighs.", price: "£250" },
+  { name: "Small Area Course (3 Sessions)", desc: "Course of 3 small area treatments for optimal results.", price: "£400" },
+  { name: "Medium Area Course (3 Sessions)", desc: "Course of 3 medium area treatments.", price: "£540" },
+  { name: "Large Area Course (3 Sessions)", desc: "Course of 3 large area treatments.", price: "£700" },
 ];
 
 const faqs = [
@@ -17,7 +20,7 @@ const faqs = [
   { q: "How many sessions do I need?", a: "Most clients see optimal results after 2-4 sessions, spaced 4-6 weeks apart. The number of sessions depends on the area and amount of fat being treated." },
   { q: "Is fat dissolving painful?", a: "You may feel a mild stinging sensation during injection, followed by some swelling and tenderness for a few days. This is a normal part of the process and indicates the treatment is working." },
   { q: "Are results permanent?", a: "Yes. Once fat cells are destroyed, they do not regenerate. However, maintaining a healthy lifestyle is important to prevent remaining fat cells from enlarging." },
-  { q: "How much does fat dissolving cost in Manchester?", a: "Fat dissolving treatments at Hive Clinic start from £150 for a small area. Larger areas are priced at £200-£250 per session." },
+  { q: "How much does fat dissolving cost in Manchester?", a: "Fat dissolving treatments at Hive Clinic start from £150 for a small area. Course packages of 3 sessions start from £400, offering significant savings." },
 ];
 
 const FatDissolve = () => {

@@ -7,12 +7,11 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "BioRePeel Face", desc: "Medical-grade peel to improve acne, texture, and pigmentation with minimal downtime.", price: "£95" },
+  { name: "BioRePeel Face", desc: "Medical-grade TCA peel to improve acne, texture, and pigmentation with minimal downtime.", price: "£95" },
   { name: "BioRePeel Body", desc: "Targets back, chest, or shoulders for acne and pigmentation.", price: "£110" },
-  { name: "Level 1 Chemical Peel - Back", desc: "Intensive peel for hormonal breakouts, scarring and rough texture. Includes antibacterial cleanse.", price: "£95" },
-  { name: "Level 2 Chemical Peel - Face", desc: "A stronger depigmenting peel for dark spots, melasma, and uneven skin tone.", price: "£110" },
-  { name: "Intimate Peel - Small Area", desc: "Gentle brightening peel for intimate areas, underarms, or targeted zones.", price: "from £75" },
-  { name: "Body Brightening Treatment", desc: "Specialist depigmenting treatment for hands, underarms, elbows, and knees.", price: "from £120" },
+  { name: "BioRePeel Face Course (3 Sessions)", desc: "Course of 3 face peels for progressive results. Save £15.", price: "£270" },
+  { name: "BioRePeel Body Course (3 Sessions)", desc: "Course of 3 body peels for deeper improvement.", price: "£300" },
+  { name: "Glass Skin Treatment", desc: "Combines exfoliation with hydrating actives for a luminous, dewy finish.", price: "£140" },
 ];
 
 const faqs = [

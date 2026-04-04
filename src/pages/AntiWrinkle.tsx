@@ -14,7 +14,9 @@ const treatments = [
   { name: "Masseter Jaw Slimming", desc: "Slim and contour the jawline for a more defined, feminine shape.", from: "£230" },
   { name: "Brow Lift", desc: "Subtly elevate the brow for a more open, youthful eye area.", from: "£170" },
   { name: "Lip Flip", desc: "Enhance the upper lip shape without filler for a natural pout.", from: "£140" },
-  { name: "Gummy Smile Correction", desc: "Reduce gum visibility when smiling for a more balanced look.", from: "£140" },
+  { name: "Gummy Smile", desc: "Reduce gum visibility when smiling for a more balanced look.", from: "£140" },
+  { name: "Bunny Lines", desc: "Smooth lines on the sides of the nose that appear when scrunching.", from: "£140" },
+  { name: "Excessive Sweating (Underarms)", desc: "Significantly reduce underarm sweating for 4-6 months.", from: "£350" },
 ];
 
 const faqs = [

@@ -8,14 +8,18 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Lip Filler", desc: "Natural-looking volume and shape enhancement.", from: "£120" },
+  { name: "Lip Filler 0.5ml", desc: "Subtle volume and hydration for a natural enhancement.", from: "£120" },
+  { name: "Lip Filler 1ml", desc: "Natural-looking volume and shape enhancement.", from: "£150" },
   { name: "Cheek Filler", desc: "Restore volume and define cheekbone contours.", from: "£160" },
   { name: "Jawline Filler", desc: "Sculpt and define the jawline for a sharper profile.", from: "£170" },
   { name: "Chin Filler", desc: "Balance facial proportions with chin projection.", from: "£160" },
   { name: "Nose Filler", desc: "Non-surgical nose reshaping for a smoother profile.", from: "£200" },
   { name: "Tear Trough Filler", desc: "Reduce dark circles and hollows under the eyes.", from: "£200" },
-  { name: "Smile Lines", desc: "Soften nasolabial folds for a more youthful appearance.", from: "£150" },
-  { name: "Facial Balancing", desc: "Multi-area packages for complete facial harmony.", from: "£200" },
+  { name: "Filler Dissolve", desc: "Safely dissolve unwanted or migrated filler.", from: "£100" },
+  { name: "Facial Balancing 2ml", desc: "Multi-area filler for overall facial harmony.", from: "£200" },
+  { name: "Facial Balancing 3ml", desc: "Strategic filler placement across multiple areas.", from: "£420" },
+  { name: "Facial Balancing 4ml", desc: "Comprehensive facial sculpting and contouring.", from: "£550" },
+  { name: "Facial Balancing 5ml", desc: "Full-face transformation for complete harmony.", from: "£650" },
 ];
 
 const faqs = [

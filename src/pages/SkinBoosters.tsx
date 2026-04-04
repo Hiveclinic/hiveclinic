@@ -12,6 +12,8 @@ const treatments = [
   { name: "Seventy Hyal Skin Booster", desc: "Deep hydration to improve glow, elasticity, and skin firmness.", price: "£140" },
   { name: "Polynucleotides", desc: "Bio-stimulating injections that regenerate skin cells and improve elasticity from within.", price: "£180" },
   { name: "Profhilo", desc: "Advanced injectable for skin laxity and hydration. Course of 2 recommended.", price: "£280" },
+  { name: "Under Eye Booster Course (3 Sessions)", desc: "Course of 3 under-eye treatments for progressive improvement.", price: "£360" },
+  { name: "Seventy Hyal Course (3 Sessions)", desc: "Course of 3 hydration boosters for lasting radiance.", price: "£380" },
 ];
 
 const faqs = [

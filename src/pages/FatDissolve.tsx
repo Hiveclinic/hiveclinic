@@ -10,6 +10,9 @@ const treatments = [
   { name: "Small Area", desc: "Chin, bra fat, jawline, upper arms, or lower abdomen.", price: "£150" },
   { name: "Medium Area", desc: "Full lower abdomen, upper abdomen, waist, flanks, or upper arms.", price: "£200" },
   { name: "Large Area", desc: "Full abdomen, back rolls, hips, or thighs.", price: "£250" },
+  { name: "Small Area Course (3 Sessions)", desc: "Course of 3 small area treatments for optimal results.", price: "£400" },
+  { name: "Medium Area Course (3 Sessions)", desc: "Course of 3 medium area treatments.", price: "£540" },
+  { name: "Large Area Course (3 Sessions)", desc: "Course of 3 large area treatments.", price: "£700" },
 ];
 
 const faqs = [

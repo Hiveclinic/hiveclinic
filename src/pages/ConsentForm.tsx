@@ -111,6 +111,7 @@ const ConsentForm = () => {
 
     const now = new Date().toISOString();
     const formData = {
+      treatmentType,
       personal: { fullName, email, phone, dob },
       medical: { medicalConditions, medications, allergies, pregnant, previousTreatment },
       risksConsent: { resultsVary, risksUnderstood, disclosedAll, treatmentRefused, consentTreatment },

@@ -82,7 +82,8 @@ const ConsentForm = () => {
           fullName.trim().length > 1 &&
           /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
           phone.trim().length >= 10 &&
-          !!dob
+          !!dob &&
+          !!treatmentType
         );
       case 2:
         return pregnant !== "" && previousTreatment !== "";

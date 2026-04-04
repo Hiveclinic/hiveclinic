@@ -250,6 +250,30 @@ const ConsentForm = () => {
                         <label className={labelStyle}>Date of Birth *</label>
                         <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} className={inputStyle} />
                       </div>
+                      <div>
+                        <label className={labelStyle}>Treatment Type *</label>
+                        <select
+                          value={treatmentType}
+                          onChange={(e) => setTreatmentType(e.target.value)}
+                          className={inputStyle}
+                        >
+                          <option value="">Select your treatment…</option>
+                          {(() => {
+                            const grouped: Record<string, typeof treatments> = {};
+                            treatments.forEach((t) => {
+                              if (!grouped[t.category]) grouped[t.category] = [];
+                              grouped[t.category].push(t);
+                            });
+                            return Object.entries(grouped).map(([cat, items]) => (
+                              <optgroup key={cat} label={cat}>
+                                {items.map((t) => (
+                                  <option key={t.id} value={t.name}>{t.name}</option>
+                                ))}
+                              </optgroup>
+                            ));
+                          })()}
+                        </select>
+                      </div>
                     </div>
                   </div>
                 )}

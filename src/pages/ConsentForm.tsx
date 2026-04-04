@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft, ChevronRight, Send } from "lucide-react";
 import Layout from "@/components/Layout";
@@ -18,11 +18,27 @@ const ConsentForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  // Treatment type
+  const [treatmentType, setTreatmentType] = useState("");
+  const [treatments, setTreatments] = useState<{ id: string; name: string; category: string }[]>([]);
+
   // Section 1 – Personal Details
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [dob, setDob] = useState("");
+
+  useEffect(() => {
+    supabase
+      .from("treatments")
+      .select("id, name, category")
+      .eq("active", true)
+      .order("category")
+      .order("sort_order")
+      .then(({ data }) => {
+        if (data) setTreatments(data);
+      });
+  }, []);
 
   // Section 2 – Medical Information
   const [medicalConditions, setMedicalConditions] = useState("");
@@ -66,7 +82,8 @@ const ConsentForm = () => {
           fullName.trim().length > 1 &&
           /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
           phone.trim().length >= 10 &&
-          !!dob
+          !!dob &&
+          !!treatmentType
         );
       case 2:
         return pregnant !== "" && previousTreatment !== "";
@@ -94,6 +111,7 @@ const ConsentForm = () => {
 
     const now = new Date().toISOString();
     const formData = {
+      treatmentType,
       personal: { fullName, email, phone, dob },
       medical: { medicalConditions, medications, allergies, pregnant, previousTreatment },
       risksConsent: { resultsVary, risksUnderstood, disclosedAll, treatmentRefused, consentTreatment },
@@ -118,7 +136,7 @@ const ConsentForm = () => {
       supabase.functions.invoke("send-email", {
         body: {
           to: "hello@hiveclinicuk.com",
-          subject: `📋 New Consent Form — ${fullName}`,
+          subject: `📋 New Consent Form — ${fullName} — ${treatmentType}`,
           html: adminHtml,
         },
       });
@@ -231,6 +249,30 @@ const ConsentForm = () => {
                       <div>
                         <label className={labelStyle}>Date of Birth *</label>
                         <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} className={inputStyle} />
+                      </div>
+                      <div>
+                        <label className={labelStyle}>Treatment Type *</label>
+                        <select
+                          value={treatmentType}
+                          onChange={(e) => setTreatmentType(e.target.value)}
+                          className={inputStyle}
+                        >
+                          <option value="">Select your treatment…</option>
+                          {(() => {
+                            const grouped: Record<string, typeof treatments> = {};
+                            treatments.forEach((t) => {
+                              if (!grouped[t.category]) grouped[t.category] = [];
+                              grouped[t.category].push(t);
+                            });
+                            return Object.entries(grouped).map(([cat, items]) => (
+                              <optgroup key={cat} label={cat}>
+                                {items.map((t) => (
+                                  <option key={t.id} value={t.name}>{t.name}</option>
+                                ))}
+                              </optgroup>
+                            ));
+                          })()}
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -435,6 +477,7 @@ function buildAdminEmail(d: any) {
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px">
   <h1 style="font-size:22px;color:#0d0d0d;border-bottom:2px solid #b8860b;padding-bottom:10px">📋 New Consent Form Submission</h1>
   <p style="color:#666;font-size:13px">Submitted: ${new Date().toLocaleString("en-GB")}</p>
+  <p style="font-size:14px;margin-top:10px"><strong>Treatment:</strong> ${d.treatmentType || "Not specified"}</p>
 
   <h2 style="font-size:16px;margin-top:20px;color:#b8860b">Personal Details</h2>
   <table style="width:100%;font-size:13px;border-collapse:collapse">

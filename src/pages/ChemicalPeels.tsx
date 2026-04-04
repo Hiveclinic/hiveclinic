@@ -19,7 +19,7 @@ const faqs = [
   { q: "How many sessions do I need?", a: "We typically recommend 3-8 sessions depending on your concerns. Results improve progressively with each treatment. Course packages are available at a reduced price." },
   { q: "Is a chemical peel painful?", a: "You may feel a mild tingling or warming sensation during the peel, which is completely normal. Any discomfort is temporary and subsides quickly." },
   { q: "What is the downtime?", a: "Mild peeling and redness may occur for 2-5 days depending on the strength of the peel. We provide full aftercare instructions to support healing." },
-  { q: "How much do chemical peels cost in Manchester?", a: "Chemical peels at Hive Clinic start from £95 for a single session. Course packages of 3 are available from £230, offering better value for ongoing treatment plans." },
+  { q: "How much do chemical peels cost in Manchester?", a: "BioRePeel at Hive Clinic starts from £95 for a single face session. Course packages of 3 are available from £270, offering better value for ongoing treatment plans." },
 ];
 
 const ChemicalPeels = () => {

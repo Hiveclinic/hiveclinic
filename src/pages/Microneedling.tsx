@@ -20,7 +20,7 @@ const faqs = [
   { q: "Does microneedling hurt?", a: "A topical numbing cream is applied before treatment to minimise discomfort. Most clients describe the sensation as a light scratching feeling." },
   { q: "How many sessions do I need?", a: "For optimal results, we typically recommend 3-6 sessions spaced 4-6 weeks apart. Improvement is progressive and builds with each treatment." },
   { q: "What is the downtime?", a: "Expect redness and mild sensitivity for 24-48 hours, similar to mild sunburn. Most clients return to normal activities the following day." },
-  { q: "How much does microneedling cost in Manchester?", a: "Microneedling at Hive Clinic starts from £160 for microneedling texture repair. Stretch mark repair with salmon DNA is £150 per session." },
+  { q: "How much does microneedling cost in Manchester?", a: "Microneedling at Hive Clinic starts from £160 for a single session with hydrating serum. Course packages of 3 start from £420 for better value." },
 ];
 
 const Microneedling = () => {

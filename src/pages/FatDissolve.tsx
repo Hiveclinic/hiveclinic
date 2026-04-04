@@ -20,7 +20,7 @@ const faqs = [
   { q: "How many sessions do I need?", a: "Most clients see optimal results after 2-4 sessions, spaced 4-6 weeks apart. The number of sessions depends on the area and amount of fat being treated." },
   { q: "Is fat dissolving painful?", a: "You may feel a mild stinging sensation during injection, followed by some swelling and tenderness for a few days. This is a normal part of the process and indicates the treatment is working." },
   { q: "Are results permanent?", a: "Yes. Once fat cells are destroyed, they do not regenerate. However, maintaining a healthy lifestyle is important to prevent remaining fat cells from enlarging." },
-  { q: "How much does fat dissolving cost in Manchester?", a: "Fat dissolving treatments at Hive Clinic start from £150 for a small area. Larger areas are priced at £200-£250 per session." },
+  { q: "How much does fat dissolving cost in Manchester?", a: "Fat dissolving treatments at Hive Clinic start from £150 for a small area. Course packages of 3 sessions start from £400, offering significant savings." },
 ];
 
 const FatDissolve = () => {

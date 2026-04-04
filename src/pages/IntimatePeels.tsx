@@ -26,8 +26,8 @@ const IntimatePeels = () => {
         <div className="max-w-7xl mx-auto px-6">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mb-16">
             <p className="font-body text-xs tracking-[0.3em] uppercase text-gold mb-4">Specialist Body Treatments</p>
-            <h1 className="font-display text-5xl md:text-6xl mb-4">Intimate & Body Peels</h1>
-            <p className="font-body text-muted-foreground max-w-xl mx-auto leading-relaxed">Gentle, professional peels for intimate and body areas. Brightening and tone refinement in a safe, comfortable environment.</p>
+            <h1 className="font-display text-5xl md:text-6xl mb-4">Intimate Pigment Treatment</h1>
+            <p className="font-body text-muted-foreground max-w-xl mx-auto leading-relaxed">Professional pigment treatments for intimate and body areas. Brightening and tone refinement in a safe, comfortable environment.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-16">

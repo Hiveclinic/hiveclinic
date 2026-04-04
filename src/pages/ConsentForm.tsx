@@ -18,11 +18,27 @@ const ConsentForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  // Treatment type
+  const [treatmentType, setTreatmentType] = useState("");
+  const [treatments, setTreatments] = useState<{ id: string; name: string; category: string }[]>([]);
+
   // Section 1 – Personal Details
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [dob, setDob] = useState("");
+
+  useEffect(() => {
+    supabase
+      .from("treatments")
+      .select("id, name, category")
+      .eq("active", true)
+      .order("category")
+      .order("sort_order")
+      .then(({ data }) => {
+        if (data) setTreatments(data);
+      });
+  }, []);
 
   // Section 2 – Medical Information
   const [medicalConditions, setMedicalConditions] = useState("");

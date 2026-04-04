@@ -477,6 +477,7 @@ function buildAdminEmail(d: any) {
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px">
   <h1 style="font-size:22px;color:#0d0d0d;border-bottom:2px solid #b8860b;padding-bottom:10px">📋 New Consent Form Submission</h1>
   <p style="color:#666;font-size:13px">Submitted: ${new Date().toLocaleString("en-GB")}</p>
+  <p style="font-size:14px;margin-top:10px"><strong>Treatment:</strong> ${d.treatmentType || "Not specified"}</p>
 
   <h2 style="font-size:16px;margin-top:20px;color:#b8860b">Personal Details</h2>
   <table style="width:100%;font-size:13px;border-collapse:collapse">

@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
-import { ChevronDown, ExternalLink, Clock, ArrowDown, Sparkles, Search, Shield } from "lucide-react";
+import { ChevronDown, ExternalLink, Clock, ArrowDown, Sparkles, Search, Shield, Flame } from "lucide-react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
@@ -11,14 +11,20 @@ type Service = {
   description: string;
   category: string;
   setmoreUrl: string;
+  isOffer?: boolean;
+  offerLabel?: string;
 };
 
 const SERVICES: Service[] = [
+  // Offers
+  { title: "Signature 1ml Lip Filler Package", price: "£99", description: "Tailored 1ml lip enhancement. Includes personalised lip shaping and full aftercare. Limited availability — content may be taken for portfolio.", category: "Offers", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=02998549-483a-4e15-a0a5-13c25bfb587f&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false", isOffer: true, offerLabel: "LIMITED OFFER" },
+  { title: "2ml Facial Balance Package", price: "£220", description: "2ml dermal filler placed across lips, chin, cheeks, or jawline for overall facial harmony. Includes facial assessment and aftercare.", category: "Offers", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=96efd2da-f3e5-4cf9-a0af-1c6ef46d8c4c&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false", isOffer: true, offerLabel: "LIMITED OFFER" },
+
   // Consultations
-  { title: "Skin Consultation", price: "£25", description: "Full skin assessment and personalised treatment plan. Suitable if you are unsure what to book.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "In-Person Consultation", price: "£25", description: "Full skin assessment and personalised treatment plan. Suitable if you are unsure what to book.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "Prescriber Consultation (Anti-Wrinkle)", price: "£25", description: "Required before anti-wrinkle treatments. Includes medical assessment.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=dd88f406-0705-4cf0-a38a-39163a47d63b&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "Repeat Session Booking", price: "Free", description: "For returning clients scheduling a repeat session within their treatment plan.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=38c99c41-0af9-4b81-b67d-aae0369d51a4&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Review Appointment (2-3 Weeks)", price: "Free", description: "Complimentary follow-up to ensure results have settled. Minor adjustments included if required.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=5650870b-f532-42d1-b12b-640f7d4cb8ae&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Review Appointment (2–3 Weeks)", price: "Free", description: "Complimentary follow-up to ensure results have settled. Minor adjustments included if required.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=5650870b-f532-42d1-b12b-640f7d4cb8ae&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
 
   // Dermal Filler
   { title: "Lip Filler - 1ml", price: "£150", description: "Enhances shape, symmetry, and definition while maintaining a natural balance.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=8316cf5c-ce1f-4868-83be-6e95c9390c75&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
@@ -32,6 +38,9 @@ const SERVICES: Service[] = [
   { title: "Jawline Filler (Per ML)", price: "£170", description: "Creates definition and structure through precise contouring.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=543f6a92-b63b-426d-8f1e-386e0f6f16ec&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "Cheek Filler (Per ML)", price: "£160", description: "Restores volume and lift to the mid-face, enhancing contour and structure.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=474efd20-68cf-4214-a750-6b44c51759b4&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "Chin Filler", price: "£160", description: "Refines the facial profile, balances proportions, and defines the jawline.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=11778a78-5033-4823-a394-924b62d5d859&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Smile Lines (Nasolabial Folds)", price: "£150", description: "Softens deep creases around the mouth, restoring smoothness and youthful balance.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=6e0a1319-e929-43bf-a70f-ab404877f86c&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Marionette Lines", price: "£150", description: "Targets lines from mouth corners to chin, lifting and rejuvenating the lower face.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=63dbac2f-2b18-463b-90bd-7bcce84e10ea&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Touch Up / Refresh (Existing Clients)", price: "£95", description: "Small refinements or maintenance of existing filler within 6 months.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=39c8518c-bf5f-41a4-8bd3-a8a2a66b0def&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "Filler Dissolve", price: "£100", description: "Removes unwanted or migrated filler safely. Patch test required 24hr prior.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=182a2a64-610e-4762-82d5-e1dd88d16e47&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
 
   // Anti-Wrinkle
@@ -48,14 +57,8 @@ const SERVICES: Service[] = [
   // Chemical Peels
   { title: "BioRePeel Face", price: "£95", description: "Medical-grade peel to improve acne, texture, and pigmentation with minimal downtime.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=e065bcdb-44e5-4f70-bb9c-6c62fdcc5490%7Cd453b54f-1bf8-4c49-9403-eaa77cf778a8&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "BioRePeel Body", price: "£110", description: "Targets back, chest, or shoulders for acne and pigmentation.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=b87df557-d48b-404c-bd76-c148fa8cc78f%7Cd453b54f-1bf8-4c49-9403-eaa77cf778a8&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Level 1 Chemical Peel (Back)", price: "£95", description: "Intensive peel for hormonal breakouts, scarring and rough texture. Includes antibacterial cleanse.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=88651283-8e16-464b-ab93-47bdbaa2dc69&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Level 2 Chemical Peel (Face)", price: "£110", description: "Strong depigmenting peel for dark spots, melasma and uneven tone.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=5345012f-74ea-4ac4-b607-23fa74fe5752&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "BioRePeel Face Course (3 Sessions)", price: "£270", description: "Course of 3 treatments. Recommended for ongoing skin concerns.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=90aa375d-c263-4b5b-a0c8-91de5ee0b069%7Cd453b54f-1bf8-4c49-9403-eaa77cf778a8&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "BioRePeel Body Course (3 Sessions)", price: "£300", description: "Course of 3 treatments for one body area.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=2de6d961-d715-452d-9b75-81889ce871e0%7Cd453b54f-1bf8-4c49-9403-eaa77cf778a8&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Level 1 Chemical Peel Face Course (3)", price: "£230", description: "Course of 3 for hormonal breakouts, scarring and texture.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=59cadb1d-77f7-4c22-accf-15df8a830dcf&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Level 1 Chemical Peel Back Course (3)", price: "£260", description: "Course of 3 for back acne, scarring and texture.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=08ae34ae-c60b-4025-b842-009e175deb71&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Level 2 Chemical Peel Face Course (3)", price: "£300", description: "Course of 3 for dark spots, melasma and uneven tone.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=718b17e6-3064-4a2f-8a75-22c5dad2fb0e&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Level 2 Chemical Peel Back Course (3)", price: "£330", description: "Course of 3 for back pigmentation and texture.", category: "Chemical Peels", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=d25a3b1e-1cdc-476a-9751-a9316a9b258a&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
 
   // Intimate Pigment Treatment
   { title: "Bikini Line Pigment Treatment", price: "£110", description: "Chemical exfoliation and pigment control for bikini line discolouration.", category: "Intimate Pigment Treatment", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a0cb1ac1-c09b-4216-9aaa-95cd11165fba&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
@@ -77,9 +80,6 @@ const SERVICES: Service[] = [
   { title: "Glass Skin Treatment", price: "£140", description: "BioRePeel combined with hyaluronic acid infusion to smooth, refine, and hydrate.", category: "Skin Treatments", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a8e75820-b5b7-422b-9af0-d821ef086115&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "BioRePeel Face Course (3 Sessions)", price: "£270", description: "Course of 3 treatments for the full face.", category: "Skin Treatments", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=90aa375d-c263-4b5b-a0c8-91de5ee0b069%7C3c6e1b69-0f48-4607-96e4-97ecfbcdb4ee&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "BioRePeel Body Course (3 Sessions)", price: "£300", description: "Course of 3 treatments for one body area.", category: "Skin Treatments", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=2de6d961-d715-452d-9b75-81889ce871e0%7C3c6e1b69-0f48-4607-96e4-97ecfbcdb4ee&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Melanostop - Hands", price: "£120", description: "Depigmenting peel to brighten sun damage, dark spots and uneven tone on the hands.", category: "Skin Treatments", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=ee852217-6fae-464d-9baa-5535886f5b32&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Melanostop - Underarms", price: "£150", description: "Targeted peel for underarm pigmentation and uneven tone.", category: "Skin Treatments", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=804528a4-4ac9-47b7-9300-1ce35dbbc931&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Melanostop - Elbows & Knees", price: "£130", description: "Strong depigmenting peel to brighten dark elbows and knees.", category: "Skin Treatments", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=51751850-aa49-49d8-9305-aefc7b77a1de&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
 
   // Skin Boosters
   { title: "Seventy Hyal Skin Booster", price: "£140", description: "Deep hydration to improve glow, elasticity, and skin firmness.", category: "Skin Boosters", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=feb7a509-46e1-4e37-a041-837bf98ec763&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
@@ -119,6 +119,7 @@ const SERVICES: Service[] = [
 ];
 
 const CATEGORIES = [
+  "Offers",
   "Consultations",
   "Dermal Filler",
   "Anti-Wrinkle",
@@ -152,6 +153,38 @@ const steps = [
 const isCourse = (title: string) =>
   /course|sessions\)/i.test(title) || /\d\s*sessions/i.test(title);
 
+const OfferCard = ({ service }: { service: Service }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.5 }}
+    className="group relative bg-background border-2 border-accent/50 hover:border-accent transition-all duration-300 overflow-hidden"
+  >
+    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-accent/80 to-accent" />
+    <div className="p-6">
+      <div className="flex items-center gap-2 mb-3">
+        <Flame size={14} className="text-accent" />
+        <span className="font-body text-[10px] tracking-[0.25em] uppercase text-accent font-semibold">{service.offerLabel}</span>
+      </div>
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <h3 className="font-display text-lg leading-snug">{service.title}</h3>
+        <span className="font-display text-2xl text-accent whitespace-nowrap">{service.price}</span>
+      </div>
+      <p className="font-body text-xs text-muted-foreground leading-relaxed mb-4">{service.description}</p>
+      <a
+        href={service.setmoreUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center gap-2 w-full py-3 bg-accent text-accent-foreground text-xs font-body tracking-wider uppercase hover:bg-accent/90 transition-colors duration-300"
+      >
+        Book This Offer
+        <ExternalLink size={12} />
+      </a>
+    </div>
+  </motion.div>
+);
+
 const ServiceCard = ({ service, index }: { service: Service; index: number }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -184,6 +217,7 @@ const ServiceCard = ({ service, index }: { service: Service; index: number }) =>
 const CategorySection = ({ category, services, isActive, onToggle, index }: { 
   category: string; services: Service[]; isActive: boolean; onToggle: () => void; index: number 
 }) => {
+  const isOffers = category === "Offers";
   const singles = services.filter((s) => !isCourse(s.title));
   const courses = services.filter((s) => isCourse(s.title));
   const priceRange = services.reduce(
@@ -194,6 +228,60 @@ const CategorySection = ({ category, services, isActive, onToggle, index }: {
     },
     { min: Infinity, max: 0 }
   );
+
+  if (isOffers) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="border-b border-border last:border-b-0"
+      >
+        <button
+          onClick={onToggle}
+          className="w-full flex items-center justify-between py-6 text-left group/cat"
+        >
+          <div className="flex items-center gap-5">
+            <Flame size={18} className="text-accent" />
+            <h2 className="font-display text-xl md:text-2xl text-accent group-hover/cat:text-accent transition-colors">{category}</h2>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="font-body text-[10px] tracking-wider text-accent font-semibold uppercase hidden sm:inline">
+              Limited Time
+            </span>
+            <span className="font-body text-[10px] tracking-wider text-muted-foreground">
+              {services.length}
+            </span>
+            <ChevronDown
+              size={16}
+              className={`text-accent transition-transform duration-500 ${isActive ? "rotate-180" : ""}`}
+            />
+          </div>
+        </button>
+        <AnimatePresence>
+          {isActive && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="pb-10 pl-0 md:pl-11">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {services.map((service) => (
+                    <OfferCard key={service.title} service={service} />
+                  ))}
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-5 font-body">
+                  Limited availability. Content may be taken for portfolio and marketing purposes. A consultation will be carried out prior to treatment.
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -207,7 +295,7 @@ const CategorySection = ({ category, services, isActive, onToggle, index }: {
         className="w-full flex items-center justify-between py-6 text-left group/cat"
       >
         <div className="flex items-center gap-5">
-          <span className="font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground w-6">{String(index + 1).padStart(2, "0")}</span>
+          <span className="font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground w-6">{String(index).padStart(2, "0")}</span>
           <h2 className="font-display text-xl md:text-2xl group-hover/cat:text-accent transition-colors">{category}</h2>
         </div>
         <div className="flex items-center gap-4">
@@ -281,7 +369,7 @@ const BookingSystem = () => {
     "Book your aesthetic treatment at Hive Clinic, Manchester City Centre. Lip fillers, skin treatments, anti-wrinkle, body contouring and more."
   );
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string | null>("Offers");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState<string | null>(null);
 
@@ -313,7 +401,7 @@ const BookingSystem = () => {
     document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const totalTreatments = SERVICES.length;
+  const totalTreatments = SERVICES.filter(s => s.category !== "Offers").length;
 
   return (
     <Layout>
@@ -334,7 +422,7 @@ const BookingSystem = () => {
               <span className="italic font-light">Treatment</span>
             </h1>
             <p className="font-body text-sm md:text-base text-background/60 max-w-md mx-auto mb-12 leading-relaxed">
-              {totalTreatments} treatments across {CATEGORIES.length} categories. Browse, select, and secure your appointment.
+              {totalTreatments} treatments across {CATEGORIES.length - 1} categories. Browse, select, and secure your appointment.
             </p>
           </motion.div>
 
@@ -419,7 +507,15 @@ const BookingSystem = () => {
               >
                 All
               </button>
-              {CATEGORIES.slice(0, 5).map((cat) => (
+              <button
+                onClick={() => setFilterCategory(filterCategory === "Offers" ? null : "Offers")}
+                className={`whitespace-nowrap px-3 py-1.5 font-body text-[10px] tracking-wider uppercase transition-colors flex items-center gap-1 ${
+                  filterCategory === "Offers" ? "bg-accent text-accent-foreground" : "bg-secondary/50 text-accent hover:text-accent"
+                }`}
+              >
+                <Flame size={10} /> Offers
+              </button>
+              {CATEGORIES.slice(1, 5).map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setFilterCategory(filterCategory === cat ? null : cat)}

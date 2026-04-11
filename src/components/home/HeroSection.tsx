@@ -45,7 +45,7 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
             </h1>
 
             <p className="font-body text-[15px] text-white/45 leading-[1.7] mb-10 max-w-lg">
-              Expert treatments by qualified practitioners. Personalised plans, premium products, and natural results — in the heart of Manchester.
+              Expert treatments by qualified practitioners. Personalised plans, premium products, and natural results - in the heart of Manchester.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">

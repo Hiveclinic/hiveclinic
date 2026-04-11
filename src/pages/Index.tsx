@@ -14,6 +14,7 @@ import SocialProof from "@/components/home/SocialProof";
 import BlogPreview from "@/components/home/BlogPreview";
 import FinalCTA from "@/components/home/FinalCTA";
 import WhyHive from "@/components/home/WhyHive";
+import OffersSection from "@/components/home/OffersSection";
 
 const staticReviews = [
   { name: "Sarah J.", text: "I had lip fillers done by Bianca and I'm so happy with the results. She listened to what I wanted and made me feel so comfortable.", stars: 5 },
@@ -80,6 +81,7 @@ const Index = () => {
       />
       <HeroSection heroImg={heroImg} />
       <WhyHive />
+      <OffersSection />
       <TreatmentShowcase />
       <ResultsGallery images={galleryImages} />
       <SocialProof reviews={reviews} />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Sparkles, CheckCircle, Clock } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const SKIN_CONCERNS = [
@@ -196,7 +196,6 @@ const TreatmentHelper = () => {
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
       <div className="flex items-center gap-2 mb-6">
-        <Sparkles size={20} className="text-gold" />
         <h3 className="font-display text-2xl">Find Your Perfect Treatment</h3>
       </div>
 

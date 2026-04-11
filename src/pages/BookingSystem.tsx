@@ -22,9 +22,7 @@ const SERVICES: Service[] = [
 
   // Consultations
   { title: "In-Person Consultation", price: "£25", description: "Full skin assessment and personalised treatment plan. Suitable if you are unsure what to book.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Prescriber Consultation (Anti-Wrinkle)", price: "£25", description: "Required before anti-wrinkle treatments. Includes medical assessment.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=dd88f406-0705-4cf0-a38a-39163a47d63b&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "Repeat Session Booking", price: "Free", description: "For returning clients scheduling a repeat session within their treatment plan.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=38c99c41-0af9-4b81-b67d-aae0369d51a4&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Review Appointment (2–3 Weeks)", price: "Free", description: "Complimentary follow-up to ensure results have settled. Minor adjustments included if required.", category: "Consultations", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=5650870b-f532-42d1-b12b-640f7d4cb8ae&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
 
   // Dermal Filler
   { title: "Lip Filler - 1ml", price: "£150", description: "Enhances shape, symmetry, and definition while maintaining a natural balance.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=8316cf5c-ce1f-4868-83be-6e95c9390c75&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
@@ -116,6 +114,13 @@ const SERVICES: Service[] = [
   // IV Drip Therapy
   { title: "IV Vitamin Drip", price: "£180", description: "Vitamin infusion delivered directly into the bloodstream.", category: "IV Drip Therapy", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=b8d150c4-4a99-4ac3-8e78-a82fbe3b6245&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "IV Booster Add-On", price: "£40", description: "Add Vitamin C, Biotin, or Glutathione to your treatment.", category: "IV Drip Therapy", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=98f98970-3e24-4d61-87ee-ad7ae464d5c5&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+
+  // Content Model
+  { title: "1ml Lip Filler (Model)", price: "£99", description: "Tailored 1ml lip enhancement. Content will be taken for marketing purposes. Full price £150 if content declined.", category: "Content Model", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=2e89acbb-1de8-4c6b-abbb-eec917d72003&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "2ml Facial Balancing (Model)", price: "£199", description: "2ml facial balancing. Areas may include lips, nose, cheeks, chin or jaw. Full price £300 if content declined.", category: "Content Model", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=1e555efd-5356-459b-9f80-44129d2debb6&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "3ml Facial Balancing (Model)", price: "£299", description: "3ml facial balancing to enhance overall facial structure. Full price £420 if content declined.", category: "Content Model", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a465b4d0-b24b-4f41-a01d-ae9d340fe569&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "4ml Facial Balancing (Model)", price: "£399", description: "4ml full-face enhancement for structure, definition and harmony. Full price £550 if content declined.", category: "Content Model", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a9ef4756-b061-4221-9c1a-12ee0fd4c09f&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Feature Refinement (Model)", price: "£120", description: "Targeted enhancement of nose, chin or jaw. Full price from £180 if content declined.", category: "Content Model", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=0929bfe0-279c-4e1f-91d1-d9457db9a168&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
 ];
 
 const CATEGORIES = [
@@ -132,6 +137,7 @@ const CATEGORIES = [
   "Fat Dissolve",
   "Wellness",
   "IV Drip Therapy",
+  "Content Model",
 ];
 
 const faqs = [

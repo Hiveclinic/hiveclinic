@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Camera, ChevronDown, ExternalLink, MapPin, Check, MessageCircle } from "lucide-react";
+import { ArrowRight, Camera, ChevronDown, ExternalLink, MapPin, Check, MessageCircle, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
@@ -13,15 +13,25 @@ type ModelService = {
   setmoreUrl: string;
 };
 
-// When you add "Content Model" treatments in Setmore, add them here.
-// Leave this array empty to show the "no slots" fallback.
-const MODEL_SERVICES: ModelService[] = [];
+const MODEL_SERVICES: ModelService[] = [
+  { title: "1ml Lip Filler (Model)", price: "£99", description: "Tailored 1ml lip enhancement. Content will be taken for marketing and portfolio purposes. Full price of £150 charged if content is declined.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=2e89acbb-1de8-4c6b-abbb-eec917d72003&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "2ml Facial Balancing (Model)", price: "£199", description: "2ml facial balancing for subtle, tailored refinement. Areas may include lips, nose, cheeks, chin or jaw. Tear trough not included.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=1e555efd-5356-459b-9f80-44129d2debb6&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "3ml Facial Balancing (Model)", price: "£299", description: "3ml facial balancing to enhance overall facial structure and balance. Areas may include lips, nose, cheeks, chin or jaw.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a465b4d0-b24b-4f41-a01d-ae9d340fe569&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "4ml Facial Balancing (Model)", price: "£399", description: "4ml facial balancing for more advanced, full-face enhancement. Designed to create structure, definition and harmony.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a9ef4756-b061-4221-9c1a-12ee0fd4c09f&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Feature Refinement (Model)", price: "£120", description: "Targeted enhancement of a specific feature — nose, chin or jaw. Full price from £180 charged if content is declined.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=0929bfe0-279c-4e1f-91d1-d9457db9a168&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+];
 
 const MODEL_CATEGORIES = [
   ...new Set(MODEL_SERVICES.map((s) => s.category)),
 ];
 
 const WHATSAPP_GROUP = "https://chat.whatsapp.com/EghTmYahXgY6P2f1J1BD6I?mode=gi_t";
+
+const UPCOMING_DATES = [
+  { date: "Thursday 16th April", slots: "Limited" },
+  { date: "Saturday 25th April", slots: "Limited" },
+  { date: "Thursday 30th April", slots: "Limited" },
+];
 
 const isCourse = (title: string) =>
   /course|sessions\)/i.test(title) || /\d\s*sessions/i.test(title);
@@ -54,7 +64,7 @@ const ServiceCard = ({ service }: { service: ModelService }) => (
 );
 
 const CategorySection = ({ category, services }: { category: string; services: ModelService[] }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const singles = services.filter((s) => !isCourse(s.title));
   const courses = services.filter((s) => isCourse(s.title));
 
@@ -145,6 +155,30 @@ const MuseLanding = () => {
         </div>
       </section>
 
+      {/* Upcoming Dates */}
+      <section className="py-16 bg-accent/5 border-y border-accent/20">
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div {...fadeIn} className="text-center mb-10">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <CalendarDays size={16} className="text-accent" />
+              <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent font-semibold">Next Available Dates</p>
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl">April Model Sessions</h2>
+          </motion.div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            {UPCOMING_DATES.map((d) => (
+              <motion.div key={d.date} {...fadeIn} className="border border-accent/30 bg-background p-6 text-center">
+                <p className="font-display text-lg mb-1">{d.date}</p>
+                <p className="font-body text-xs text-accent uppercase tracking-wider">{d.slots}</p>
+              </motion.div>
+            ))}
+          </div>
+          <p className="text-center font-body text-xs text-muted-foreground mt-6">
+            Book below or join the WhatsApp group for instant notifications when new dates drop.
+          </p>
+        </div>
+      </section>
+
       {/* What Are Model Sessions */}
       <section className="py-20 bg-secondary">
         <div className="max-w-3xl mx-auto px-6 text-center">
@@ -160,7 +194,7 @@ const MuseLanding = () => {
         </div>
       </section>
 
-      {/* Available Treatments or Empty State */}
+      {/* Available Treatments */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
           {MODEL_SERVICES.length > 0 ? (
@@ -173,6 +207,9 @@ const MuseLanding = () => {
                   return <CategorySection key={category} category={category} services={services} />;
                 })}
               </div>
+              <p className="text-center text-xs text-muted-foreground mt-8 font-body max-w-lg mx-auto">
+                By booking a model appointment, you agree to content being taken for marketing and portfolio purposes. If you do not wish for content to be taken, the full price will be charged on arrival.
+              </p>
             </>
           ) : (
             <motion.div {...fadeIn} className="text-center max-w-xl mx-auto">
@@ -205,9 +242,12 @@ const MuseLanding = () => {
             <div className="space-y-5">
               {[
                 "Content sessions require consent for photos and video",
+                "If you do not wish for content to be taken, the full treatment price will apply",
+                "Please send a clear front and side profile photo before your appointment via WhatsApp or Instagram DM",
                 "Treatments are carried out at Hive Clinic in Deansgate",
                 "Limited availability each month",
                 "Full consultation is carried out before treatment",
+                "Klarna available — message us on WhatsApp or Instagram to arrange",
               ].map((point) => (
                 <div key={point} className="flex items-start gap-4">
                   <Check size={16} className="text-accent flex-shrink-0 mt-0.5" />
@@ -226,15 +266,25 @@ const MuseLanding = () => {
             <p className="font-display text-3xl md:text-5xl leading-tight mb-8">
               Limited model appointments available each month
             </p>
-            <a
-              href={WHATSAPP_GROUP}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors"
-            >
-              <MessageCircle size={16} />
-              Join WhatsApp Group <ArrowRight size={14} />
-            </a>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=cca90b33-33e4-473a-8255-038617ac5368&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors"
+              >
+                Book Model Slot <ArrowRight size={14} />
+              </a>
+              <a
+                href={WHATSAPP_GROUP}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-10 py-4 border border-foreground/20 text-foreground font-body text-sm tracking-widest uppercase hover:bg-foreground/5 transition-colors"
+              >
+                <MessageCircle size={16} />
+                Join WhatsApp Group
+              </a>
+            </div>
           </motion.div>
         </div>
       </section>

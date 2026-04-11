@@ -125,6 +125,7 @@ const SERVICES: Service[] = [
 
 const CATEGORIES = [
   "Offers",
+  "Content Model",
   "Consultations",
   "Dermal Filler",
   "Anti-Wrinkle",
@@ -137,7 +138,6 @@ const CATEGORIES = [
   "Fat Dissolve",
   "Wellness",
   "IV Drip Therapy",
-  "Content Model",
 ];
 
 const faqs = [

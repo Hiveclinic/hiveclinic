@@ -18,10 +18,9 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
       <motion.div className="absolute inset-0" style={{ scale: heroScale, opacity: heroOpacity }}>
         <div className="w-full h-full relative">
           <img
-            key={heroImg}
             src={heroImg}
             alt="Hive Clinic - Premium Aesthetics Manchester"
-            className="w-full h-full object-cover absolute inset-0"
+            className="w-full h-full object-cover absolute inset-0 transition-opacity duration-700"
             loading="eager"
             decoding="async"
             fetchPriority="high"

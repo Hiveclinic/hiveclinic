@@ -5,7 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
-import { motion } from "framer-motion";
 
 import HeroSection from "@/components/home/HeroSection";
 import TreatmentShowcase from "@/components/home/TreatmentShowcase";
@@ -13,6 +12,7 @@ import ResultsGallery from "@/components/home/ResultsGallery";
 import SocialProof from "@/components/home/SocialProof";
 import BlogPreview from "@/components/home/BlogPreview";
 import FinalCTA from "@/components/home/FinalCTA";
+import WhyHive from "@/components/home/WhyHive";
 
 const staticReviews = [
   { name: "Sarah J.", text: "I had lip fillers done by Bianca and I'm so happy with the results. She listened to what I wanted and made me feel so comfortable.", stars: 5 },
@@ -23,7 +23,7 @@ const staticReviews = [
 const Index = () => {
   usePageMeta(
     "Hive Clinic | Aesthetic Clinic Manchester City Centre",
-    "Hive Clinic offers advanced skin treatments in Manchester City Centre including chemical peels, hydrafacial, microneedling, skin boosters and lip enhancement. Book a consultation today."
+    "Advanced aesthetic treatments in Manchester City Centre. Lip fillers, dermal filler, anti-wrinkle, skin boosters, HydraFacial and more. Book your consultation today."
   );
 
   const [reviews, setReviews] = useState(staticReviews);
@@ -48,33 +48,41 @@ const Index = () => {
       });
   }, []);
 
+  // JSON-LD structured data for SEO
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "name": "Hive Clinic",
+    "description": "Advanced aesthetic treatments in Manchester City Centre",
+    "url": "https://hiveclinic.lovable.app",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "25 Saint John Street",
+      "addressLocality": "Manchester",
+      "postalCode": "M3 4DT",
+      "addressCountry": "GB"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "reviewCount": "100",
+      "bestRating": "5"
+    },
+    "priceRange": "££"
+  };
+
   return (
     <Layout>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <HeroSection heroImg={heroImg} />
+      <WhyHive />
       <TreatmentShowcase />
       <ResultsGallery images={galleryImages} />
-
-      {/* Treatment Finder - inline section */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <p className="font-body text-[10px] tracking-[0.3em] uppercase text-gold mb-2">Not Sure Where to Start?</p>
-              <h2 className="font-display text-3xl md:text-4xl mb-4">Find your perfect treatment.</h2>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                Answer a few quick questions and we will recommend the best treatments for your goals and skin type.
-              </p>
-            </motion.div>
-            <TreatmentHelper />
-          </div>
-        </div>
-      </section>
-
       <SocialProof reviews={reviews} />
+      <TreatmentHelper />
       <BlogPreview />
       <FinalCTA />
     </Layout>

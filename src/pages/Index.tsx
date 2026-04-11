@@ -82,7 +82,25 @@ const Index = () => {
       <TreatmentShowcase />
       <ResultsGallery images={galleryImages} />
       <SocialProof reviews={reviews} />
-      <TreatmentHelper />
+      {/* Treatment Finder */}
+      <section className="py-20 md:py-28 border-b border-border" aria-label="Treatment finder">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <p className="font-body text-[10px] tracking-[0.3em] uppercase text-gold mb-3">Not Sure Where to Start?</p>
+              <h2 className="font-display text-3xl md:text-4xl mb-4">Find your perfect treatment.</h2>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                Answer a few quick questions and we'll recommend the best treatments for your goals and skin type.
+              </p>
+            </motion.div>
+            <TreatmentHelper />
+          </div>
+        </div>
+      </section>
       <BlogPreview />
       <FinalCTA />
     </Layout>

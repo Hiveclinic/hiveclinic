@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Sparkles, CheckCircle, Clock } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const SKIN_CONCERNS = [

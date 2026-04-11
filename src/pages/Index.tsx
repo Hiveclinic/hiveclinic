@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
+import { motion } from "framer-motion";
 
 import HeroSection from "@/components/home/HeroSection";
 import TreatmentShowcase from "@/components/home/TreatmentShowcase";

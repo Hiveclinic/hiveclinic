@@ -50,7 +50,7 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
             </h1>
 
             <p className="font-body text-sm md:text-base text-white/50 leading-relaxed mb-8 max-w-md">
-              Medically-led treatments by qualified prescribers in Manchester City Centre. Natural results you will love.
+              Expert aesthetic treatments by qualified practitioners in Manchester City Centre. Natural results you will love.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">

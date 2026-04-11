@@ -55,14 +55,14 @@ const PRP = () => {
             <h2 className="font-display text-4xl md:text-5xl mb-6">Your Body's Own Rejuvenation</h2>
             <p className="font-body text-muted-foreground leading-relaxed mb-8">PRP therapy harnesses the growth factors in your own blood to stimulate collagen production, improve skin texture, reduce scarring, and support hair growth. It's 100% natural and tailored entirely to you.</p>
             <div className="space-y-4 mb-8">
-              {["Vampire Facial — skin rejuvenation", "Under Eye — dark circles & texture", "Scalp — hair growth support", "100% natural using your own plasma", "Consultation required"].map(b => (
+              {["Vampire Facial - skin rejuvenation", "Under Eye - dark circles & texture", "Scalp - hair growth support", "100% natural using your own plasma", "Consultation required"].map(b => (
                 <div key={b} className="flex items-center gap-3"><CheckCircle size={14} strokeWidth={1.5} className="text-gold flex-shrink-0" /><span className="font-body text-sm">{b}</span></div>
               ))}
             </div>
             <div className="border border-border p-6 mb-8">
               <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-2">Pricing</p>
-              <p className="font-display text-2xl">Facial / Under Eye — £325</p>
-              <p className="font-display text-2xl mt-1">Scalp — £425</p>
+              <p className="font-display text-2xl">Facial / Under Eye - £325</p>
+              <p className="font-display text-2xl mt-1">Scalp - £425</p>
             </div>
             <a
                 href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"

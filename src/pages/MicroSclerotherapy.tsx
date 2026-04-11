@@ -10,7 +10,7 @@ const faqs = [
   { q: "What is micro sclerotherapy?", a: "Micro sclerotherapy is a minimally invasive treatment for thread veins (spider veins) on the legs. A sclerosing solution is injected into the affected veins, causing them to collapse and fade." },
   { q: "Is the treatment painful?", a: "Most clients describe it as a mild stinging sensation. The needles used are very fine and the procedure is well-tolerated." },
   { q: "How many sessions will I need?", a: "Most clients need 2-3 sessions spaced 6-8 weeks apart for optimal clearance. This depends on the extent of the thread veins." },
-  { q: "Is there any aftercare?", a: "Yes — compression stockings must be worn for 1-2 weeks after treatment. You should also avoid hot baths, strenuous exercise, and sun exposure during this period." },
+  { q: "Is there any aftercare?", a: "Yes - compression stockings must be worn for 1-2 weeks after treatment. You should also avoid hot baths, strenuous exercise, and sun exposure during this period." },
   { q: "Can all thread veins be treated?", a: "We treat leg thread veins only. A consultation is required to assess suitability. Varicose veins require different treatment." },
 ];
 
@@ -63,9 +63,9 @@ const MicroSclerotherapy = () => {
             <div className="border border-border p-6 mb-8">
               <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-2">Pricing</p>
               <div className="space-y-2">
-                <p className="font-display text-2xl">Small Area — £225</p>
-                <p className="font-display text-2xl">Medium Area — £325</p>
-                <p className="font-display text-2xl">Large Area — £475</p>
+                <p className="font-display text-2xl">Small Area - £225</p>
+                <p className="font-display text-2xl">Medium Area - £325</p>
+                <p className="font-display text-2xl">Large Area - £475</p>
               </div>
             </div>
             <a

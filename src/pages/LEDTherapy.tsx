@@ -32,7 +32,7 @@ const LEDTherapy = () => {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-xl">
             <p className="font-body text-sm text-gold uppercase tracking-[0.2em] mb-4">Advanced Skin Science</p>
             <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">LED Light Therapy Manchester</h1>
-            <p className="font-body text-lg text-white/80 mb-6">Targeted light therapy to heal, rejuvenate, and transform your skin — zero downtime.</p>
+            <p className="font-body text-lg text-white/80 mb-6">Targeted light therapy to heal, rejuvenate, and transform your skin - zero downtime.</p>
             <div className="flex flex-wrap gap-4 mb-8">
               <div className="flex items-center gap-2"><Shield size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">Non-Invasive</span></div>
               <div className="flex items-center gap-2"><Award size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">All Skin Types</span></div>
@@ -56,7 +56,7 @@ const LEDTherapy = () => {
               <h2 className="font-display text-4xl md:text-5xl mb-6">Science-Backed Skin Healing</h2>
               <p className="font-body text-muted-foreground leading-relaxed mb-8">Our medical-grade LED panels deliver precise wavelengths of light to stimulate cellular repair, boost collagen production, and calm inflammation. Each session is tailored to your skin's needs.</p>
               <div className="space-y-4 mb-8">
-                {["Red light — collagen stimulation", "Blue light — acne & bacteria", "Green light — pigmentation", "Yellow light — inflammation & redness", "No downtime or discomfort"].map(b => (
+                {["Red light - collagen stimulation", "Blue light - acne & bacteria", "Green light - pigmentation", "Yellow light - inflammation & redness", "No downtime or discomfort"].map(b => (
                   <div key={b} className="flex items-center gap-3"><CheckCircle size={14} strokeWidth={1.5} className="text-gold flex-shrink-0" /><span className="font-body text-sm">{b}</span></div>
                 ))}
               </div>

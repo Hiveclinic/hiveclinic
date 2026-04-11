@@ -11,13 +11,13 @@ const faqs = [
   { q: "Does lip filler hurt?", a: "We use topical numbing cream and the filler contains built-in anaesthetic. Most clients describe the sensation as mild pressure rather than pain." },
   { q: "How long does lip filler last?", a: "Results typically last 6-12 months depending on the product used and your metabolism. We offer affordable top-up appointments." },
   { q: "Will my lips look natural?", a: "Absolutely. We specialise in subtle, balanced enhancements that complement your facial proportions. Natural results are our signature." },
-  { q: "What's the difference between 0.5ml and 1ml?", a: "0.5ml gives a subtle enhancement — perfect for first-timers or a natural refresh. 1ml provides more noticeable volume and definition. Bianca will advise during your consultation." },
+  { q: "What's the difference between 0.5ml and 1ml?", a: "0.5ml gives a subtle enhancement - perfect for first-timers or a natural refresh. 1ml provides more noticeable volume and definition. Bianca will advise during your consultation." },
   { q: "Is there any downtime?", a: "Mild swelling is normal for 24-48 hours. Most clients return to their daily routine immediately after treatment." },
 ];
 
 const reviews = [
   { name: "Sophie M.", text: "Best lip filler I've ever had. So natural and Bianca made me feel completely at ease. Already booked my top-up!" },
-  { name: "Lauren T.", text: "I was so nervous but Bianca talked me through everything. My lips look amazing — subtle but exactly what I wanted." },
+  { name: "Lauren T.", text: "I was so nervous but Bianca talked me through everything. My lips look amazing - subtle but exactly what I wanted." },
   { name: "Jessica R.", text: "Finally found a clinic in Manchester I trust. The results speak for themselves. 10/10 recommend Hive Clinic." },
 ];
 
@@ -77,11 +77,11 @@ const LipFillerLanding = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
             <div>
               <p className="font-display text-3xl">£120</p>
-              <p className="font-body text-sm text-background/60">0.5ml — Subtle Enhancement</p>
+              <p className="font-body text-sm text-background/60">0.5ml - Subtle Enhancement</p>
             </div>
             <div>
               <p className="font-display text-3xl">£150</p>
-              <p className="font-body text-sm text-background/60">1ml — Full Volume</p>
+              <p className="font-body text-sm text-background/60">1ml - Full Volume</p>
             </div>
             <div>
               <p className="font-body text-xs text-background/40 mt-1">Pay in instalments with</p>
@@ -98,13 +98,13 @@ const LipFillerLanding = () => {
             <div>
               <h2 className="font-display text-4xl md:text-5xl mb-6">Why Choose Hive Clinic for Lip Filler?</h2>
               <p className="font-body text-muted-foreground leading-relaxed mb-6">
-                Finding the right clinic for lip filler in Manchester can feel overwhelming. At Hive Clinic, Bianca specialises exclusively in subtle, natural-looking lip enhancement — no overfilled results, no cookie-cutter approach.
+                Finding the right clinic for lip filler in Manchester can feel overwhelming. At Hive Clinic, Bianca specialises exclusively in subtle, natural-looking lip enhancement - no overfilled results, no cookie-cutter approach.
               </p>
               <p className="font-body text-muted-foreground leading-relaxed mb-8">
                 Every treatment begins with a thorough consultation where we discuss your goals, assess your facial proportions, and recommend the perfect amount of filler to achieve the look you want.
               </p>
               <div className="space-y-4 mb-8">
-                {["Natural results — never overdone", "Premium hyaluronic acid fillers", "Tailored to your facial proportions", "Free consultation included", "Aftercare support and follow-up", "Pay from £120 — instalments available"].map((b) => (
+                {["Natural results - never overdone", "Premium hyaluronic acid fillers", "Tailored to your facial proportions", "Free consultation included", "Aftercare support and follow-up", "Pay from £120 - instalments available"].map((b) => (
                   <div key={b} className="flex items-center gap-3">
                     <CheckCircle size={16} className="text-gold flex-shrink-0" />
                     <span className="font-body text-sm">{b}</span>
@@ -182,7 +182,7 @@ const LipFillerLanding = () => {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="font-display text-4xl md:text-5xl mb-6">Book Your Lip Filler Consultation</h2>
           <p className="font-body text-muted-foreground mb-8 max-w-xl mx-auto">
-            Free consultations available this week. Hive Clinic, Manchester City Centre — Deansgate.
+            Free consultations available this week. Hive Clinic, Manchester City Centre - Deansgate.
           </p>
           <a
                 href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=8316cf5c-ce1f-4868-83be-6e95c9390c75&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"

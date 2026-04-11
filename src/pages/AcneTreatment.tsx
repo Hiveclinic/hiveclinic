@@ -7,7 +7,7 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
-  { q: "What treatments help with acne?", a: "We offer chemical peels, HydraFacial, microneedling and LED light therapy — all proven to target active acne, reduce breakouts and improve skin texture over time." },
+  { q: "What treatments help with acne?", a: "We offer chemical peels, HydraFacial, microneedling and LED light therapy - all proven to target active acne, reduce breakouts and improve skin texture over time." },
   { q: "How many sessions will I need?", a: "Most clients see visible improvement after 3-6 sessions depending on severity. We create a personalised treatment plan during your consultation." },
   { q: "Can you treat acne scars?", a: "Yes. Microneedling and chemical peels are particularly effective at reducing acne scarring, promoting collagen production and smoothing skin texture." },
   { q: "Is there any downtime?", a: "Downtime varies by treatment. Chemical peels may cause mild flaking for 2-5 days. HydraFacial has zero downtime. We'll advise you during consultation." },
@@ -74,7 +74,7 @@ const AcneTreatment = () => {
             <div>
               <h2 className="font-display text-4xl md:text-5xl mb-6">Struggling With Breakouts?</h2>
               <p className="font-body text-muted-foreground leading-relaxed mb-6">
-                Acne affects people of all ages and can seriously impact your confidence. At Hive Clinic in Manchester City Centre, we offer a range of advanced skin treatments specifically designed to target the root causes of acne — from excess oil production and clogged pores to bacteria and inflammation.
+                Acne affects people of all ages and can seriously impact your confidence. At Hive Clinic in Manchester City Centre, we offer a range of advanced skin treatments specifically designed to target the root causes of acne - from excess oil production and clogged pores to bacteria and inflammation.
               </p>
               <p className="font-body text-muted-foreground leading-relaxed mb-8">
                 Whether you're dealing with active breakouts, persistent blackheads, or acne scarring, Bianca will create a personalised treatment plan tailored to your skin type and goals.

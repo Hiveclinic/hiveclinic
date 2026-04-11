@@ -74,7 +74,7 @@ const HyperpigmentationTreatment = () => {
             <div>
               <h2 className="font-display text-4xl md:text-5xl mb-6">Uneven Skin Tone Holding You Back?</h2>
               <p className="font-body text-muted-foreground leading-relaxed mb-6">
-                Hyperpigmentation — dark patches, sun spots, melasma and post-inflammatory marks — is one of the most common skin concerns. At Hive Clinic in Manchester City Centre, we use advanced professional treatments to target excess melanin production and restore an even, radiant complexion.
+                Hyperpigmentation - dark patches, sun spots, melasma and post-inflammatory marks - is one of the most common skin concerns. At Hive Clinic in Manchester City Centre, we use advanced professional treatments to target excess melanin production and restore an even, radiant complexion.
               </p>
               <p className="font-body text-muted-foreground leading-relaxed mb-8">
                 Bianca will assess your pigmentation type during a thorough consultation and recommend a tailored treatment plan using the most effective combination of treatments for your skin.

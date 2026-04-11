@@ -24,7 +24,7 @@ const Consultations = () => {
             <Video size={24} strokeWidth={1.5} className="text-gold mx-auto mb-4" />
             <h3 className="font-display text-2xl mb-2">Free Phone Consultation</h3>
             <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">30 minutes · Free · Over the Phone</p>
-            <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Suitability check, treatment planning, and pre-book guidance — all over the phone from the comfort of your home.</p>
+            <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Suitability check, treatment planning, and pre-book guidance - all over the phone from the comfort of your home.</p>
             <a
                 href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
                 target="_blank"
@@ -69,9 +69,9 @@ const Consultations = () => {
           </div>
           <div>
             <h2 className="font-display text-4xl mb-6">Why a Consultation Matters</h2>
-            <p className="font-body text-muted-foreground leading-relaxed mb-8">A consultation isn't just a formality — it's the foundation of your treatment. We assess your skin, discuss your concerns, and create a bespoke plan that aligns with your goals and budget.</p>
+            <p className="font-body text-muted-foreground leading-relaxed mb-8">A consultation isn't just a formality - it's the foundation of your treatment. We assess your skin, discuss your concerns, and create a bespoke plan that aligns with your goals and budget.</p>
             <div className="space-y-4">
-              {["Thorough skin assessment", "Honest, realistic expectations", "No pressure — ever", "Treatment plan tailored to you", "All questions answered"].map(b => (
+              {["Thorough skin assessment", "Honest, realistic expectations", "No pressure - ever", "Treatment plan tailored to you", "All questions answered"].map(b => (
                 <div key={b} className="flex items-center gap-3"><CheckCircle size={14} strokeWidth={1.5} className="text-gold flex-shrink-0" /><span className="font-body text-sm">{b}</span></div>
               ))}
             </div>

@@ -7,7 +7,7 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
-  { q: "What is facial balancing?", a: "Facial balancing uses strategic placement of dermal filler across multiple areas of the face to create harmonious proportions and symmetry — rather than treating one area in isolation." },
+  { q: "What is facial balancing?", a: "Facial balancing uses strategic placement of dermal filler across multiple areas of the face to create harmonious proportions and symmetry - rather than treating one area in isolation." },
   { q: "How much filler is used?", a: "We offer 3ml, 5ml, and 7ml packages depending on your goals. A personalised treatment plan is created following your assessment." },
   { q: "Is there downtime?", a: "You may experience mild swelling or bruising for 2-5 days. Most clients return to normal activities within 24 hours." },
   { q: "How long do results last?", a: "Results typically last 12-18 months depending on the areas treated and the products used." },
@@ -53,7 +53,7 @@ const FacialBalancing = () => {
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="font-display text-4xl md:text-5xl mb-6">The Art of Proportion</h2>
-            <p className="font-body text-muted-foreground leading-relaxed mb-8">Facial balancing is our most transformative service. Rather than treating one area, we assess your entire face to create a cohesive, natural result. Whether it's adding definition to the jawline, projection to the chin, or structure to the cheeks — every millilitre is placed with purpose.</p>
+            <p className="font-body text-muted-foreground leading-relaxed mb-8">Facial balancing is our most transformative service. Rather than treating one area, we assess your entire face to create a cohesive, natural result. Whether it's adding definition to the jawline, projection to the chin, or structure to the cheeks - every millilitre is placed with purpose.</p>
             <div className="space-y-4 mb-8">
               {["Multi-area treatment in one session", "Personalised to your facial structure", "Premium hyaluronic acid fillers", "Natural, proportionate results", "Comprehensive aftercare included"].map(b => (
                 <div key={b} className="flex items-center gap-3"><CheckCircle size={14} strokeWidth={1.5} className="text-gold flex-shrink-0" /><span className="font-body text-sm">{b}</span></div>
@@ -62,10 +62,10 @@ const FacialBalancing = () => {
             <div className="border border-border p-6 mb-8">
               <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-2">Packages</p>
               <div className="space-y-2">
-                <p className="font-display text-2xl">2ml — £200</p>
-                <p className="font-display text-2xl">3ml — £420</p>
-                <p className="font-display text-2xl">4ml — £550</p>
-                <p className="font-display text-2xl">5ml — £650</p>
+                <p className="font-display text-2xl">2ml - £200</p>
+                <p className="font-display text-2xl">3ml - £420</p>
+                <p className="font-display text-2xl">4ml - £550</p>
+                <p className="font-display text-2xl">5ml - £650</p>
               </div>
             </div>
             <a

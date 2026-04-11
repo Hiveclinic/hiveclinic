@@ -18,7 +18,7 @@ const MODEL_SERVICES: ModelService[] = [
   { title: "2ml Facial Balancing (Model)", price: "£199", description: "2ml facial balancing for subtle, tailored refinement. Areas may include lips, nose, cheeks, chin or jaw. Tear trough not included.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=1e555efd-5356-459b-9f80-44129d2debb6&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "3ml Facial Balancing (Model)", price: "£299", description: "3ml facial balancing to enhance overall facial structure and balance. Areas may include lips, nose, cheeks, chin or jaw.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a465b4d0-b24b-4f41-a01d-ae9d340fe569&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
   { title: "4ml Facial Balancing (Model)", price: "£399", description: "4ml facial balancing for more advanced, full-face enhancement. Designed to create structure, definition and harmony.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a9ef4756-b061-4221-9c1a-12ee0fd4c09f&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Feature Refinement (Model)", price: "£120", description: "Targeted enhancement of a specific feature — nose, chin or jaw. Full price from £180 charged if content is declined.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=0929bfe0-279c-4e1f-91d1-d9457db9a168&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "Feature Refinement (Model)", price: "£120", description: "Targeted enhancement of a specific feature - nose, chin or jaw. Full price from £180 charged if content is declined.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=0929bfe0-279c-4e1f-91d1-d9457db9a168&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
 ];
 
 const MODEL_CATEGORIES = [
@@ -247,7 +247,7 @@ const MuseLanding = () => {
                 "Treatments are carried out at Hive Clinic in Deansgate",
                 "Limited availability each month",
                 "Full consultation is carried out before treatment",
-                "Klarna available — message us on WhatsApp or Instagram to arrange",
+                "Klarna available - message us on WhatsApp or Instagram to arrange",
               ].map((point) => (
                 <div key={point} className="flex items-start gap-4">
                   <Check size={16} className="text-accent flex-shrink-0 mt-0.5" />

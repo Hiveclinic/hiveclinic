@@ -23,7 +23,7 @@ const FinalCTA = () => (
           Your journey starts with a conversation.
         </h2>
         <p className="font-body text-[15px] text-background/35 mb-10 max-w-md mx-auto leading-[1.7]">
-          Book a consultation to discuss your goals — no pressure, no obligation. Just expert advice tailored to you.
+          Book a consultation to discuss your goals - no pressure, no obligation. Just expert advice tailored to you.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">

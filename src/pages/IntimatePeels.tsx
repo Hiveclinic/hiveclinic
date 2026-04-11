@@ -8,7 +8,7 @@ import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "What areas can be treated?", a: "Bikini line, inner thighs, and underarms. We also treat other body areas on consultation." },
-  { q: "Is this a skin whitening treatment?", a: "No. Intimate peels are designed for brightening and tone refinement only — evening out discolouration caused by friction, hormones, or shaving." },
+  { q: "Is this a skin whitening treatment?", a: "No. Intimate peels are designed for brightening and tone refinement only - evening out discolouration caused by friction, hormones, or shaving." },
   { q: "How many sessions are recommended?", a: "A course of 3 is recommended for optimal results, with sessions spaced 2-4 weeks apart." },
   { q: "Is the treatment painful?", a: "You may feel a mild tingling or warmth during application. The peel is carefully formulated for sensitive areas." },
 ];

@@ -25,7 +25,7 @@ const Privacy = () => {
                 <li><strong>Identity Data:</strong> Name, date of birth, photographic ID (for age verification).</li>
                 <li><strong>Contact Data:</strong> Email address, telephone number, postal address.</li>
                 <li><strong>Health Data:</strong> Medical history, allergies, medications, skin conditions, and treatment records (Special Category Data under UK GDPR Article 9).</li>
-                <li><strong>Financial Data:</strong> Payment card details (processed securely via Stripe — we do not store full card numbers), payment history.</li>
+                <li><strong>Financial Data:</strong> Payment card details (processed securely via Stripe - we do not store full card numbers), payment history.</li>
                 <li><strong>Visual Data:</strong> Before and after photographs (only with your explicit consent).</li>
                 <li><strong>Technical Data:</strong> IP address, browser type, device information, cookies (see Section 8).</li>
                 <li><strong>Communication Data:</strong> Enquiry messages, WhatsApp conversations, email correspondence.</li>
@@ -53,7 +53,7 @@ const Privacy = () => {
                 <li>To send appointment confirmations, reminders, and aftercare instructions.</li>
                 <li>To maintain accurate medical records as required by professional regulations.</li>
                 <li>To communicate with you about your treatments and respond to enquiries.</li>
-                <li>To send marketing communications (only with your consent — you can unsubscribe at any time).</li>
+                <li>To send marketing communications (only with your consent - you can unsubscribe at any time).</li>
                 <li>To improve our website and services through anonymised analytics.</li>
               </ul>
             </div>

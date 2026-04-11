@@ -53,16 +53,16 @@ const Mesotherapy = () => {
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="font-display text-4xl md:text-5xl mb-6">Feed Your Skin From Within</h2>
-            <p className="font-body text-muted-foreground leading-relaxed mb-8">Mesotherapy delivers a tailored cocktail of vitamins, minerals, and hyaluronic acid directly into the mesoderm — the layer of skin where cellular renewal happens. The result is deeply hydrated, luminous, and healthier-looking skin.</p>
+            <p className="font-body text-muted-foreground leading-relaxed mb-8">Mesotherapy delivers a tailored cocktail of vitamins, minerals, and hyaluronic acid directly into the mesoderm - the layer of skin where cellular renewal happens. The result is deeply hydrated, luminous, and healthier-looking skin.</p>
             <div className="space-y-4 mb-8">
-              {["Face hydration & brightening", "Under eye rejuvenation", "Scalp — hair support therapy", "Customised vitamin cocktails", "Course discounts available"].map(b => (
+              {["Face hydration & brightening", "Under eye rejuvenation", "Scalp - hair support therapy", "Customised vitamin cocktails", "Course discounts available"].map(b => (
                 <div key={b} className="flex items-center gap-3"><CheckCircle size={14} strokeWidth={1.5} className="text-gold flex-shrink-0" /><span className="font-body text-sm">{b}</span></div>
               ))}
             </div>
             <div className="border border-border p-6 mb-8">
               <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-2">Pricing</p>
-              <p className="font-display text-2xl">Face / Under Eye — £155</p>
-              <p className="font-display text-2xl mt-1">Scalp — £210</p>
+              <p className="font-display text-2xl">Face / Under Eye - £155</p>
+              <p className="font-display text-2xl mt-1">Scalp - £210</p>
               <p className="font-body text-xs text-muted-foreground mt-2">Course of 3: 10% saving · Course of 6: 15% saving</p>
             </div>
             <a

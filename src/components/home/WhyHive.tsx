@@ -19,7 +19,7 @@ const pillars = [
   {
     number: "04",
     title: "Transparent Pricing",
-    text: "Clear pricing with no hidden fees. 20% deposit to secure your appointment — the remaining balance is paid on the day.",
+    text: "Clear pricing with no hidden fees. 20% deposit to secure your appointment - the remaining balance is paid on the day.",
   },
 ];
 

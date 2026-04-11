@@ -17,7 +17,7 @@ type Service = {
 
 const SERVICES: Service[] = [
   // Offers
-  { title: "Signature 1ml Lip Filler Package", price: "£99", description: "Tailored 1ml lip enhancement. Includes personalised lip shaping and full aftercare. Limited availability — content may be taken for portfolio.", category: "Offers", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=02998549-483a-4e15-a0a5-13c25bfb587f&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false", isOffer: true, offerLabel: "LIMITED OFFER" },
+  { title: "Signature 1ml Lip Filler Package", price: "£99", description: "Tailored 1ml lip enhancement. Includes personalised lip shaping and full aftercare. Limited availability - content may be taken for portfolio.", category: "Offers", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=02998549-483a-4e15-a0a5-13c25bfb587f&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false", isOffer: true, offerLabel: "LIMITED OFFER" },
   { title: "2ml Facial Balance Package", price: "£220", description: "2ml dermal filler placed across lips, chin, cheeks, or jawline for overall facial harmony. Includes facial assessment and aftercare.", category: "Offers", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=96efd2da-f3e5-4cf9-a0af-1c6ef46d8c4c&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false", isOffer: true, offerLabel: "LIMITED OFFER" },
 
   // Consultations
@@ -411,7 +411,7 @@ const BookingSystem = () => {
 
   return (
     <Layout>
-      {/* Hero — dramatic full-bleed */}
+      {/* Hero - dramatic full-bleed */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-foreground text-background">
         {/* Subtle texture overlay */}
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }} />
@@ -446,7 +446,7 @@ const BookingSystem = () => {
               className="inline-flex items-center gap-3 border border-background/20 px-8 py-3.5 text-xs font-body tracking-[0.2em] uppercase hover:bg-background hover:text-foreground transition-all duration-300"
             >
               <Clock size={14} />
-              Book a Consultation — £25
+              Book a Consultation - £25
             </a>
             <a
               href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=38c99c41-0af9-4b81-b67d-aae0369d51a4&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
@@ -455,7 +455,7 @@ const BookingSystem = () => {
               className="inline-flex items-center gap-3 border border-background/20 px-8 py-3.5 text-xs font-body tracking-[0.2em] uppercase hover:bg-background hover:text-foreground transition-all duration-300"
             >
               <Sparkles size={14} />
-              Returning Client — Free
+              Returning Client - Free
             </a>
           </motion.div>
 
@@ -472,7 +472,7 @@ const BookingSystem = () => {
         </div>
       </section>
 
-      {/* How it works — horizontal strip */}
+      {/* How it works - horizontal strip */}
       <section className="border-b border-border">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4">
@@ -546,7 +546,7 @@ const BookingSystem = () => {
         </div>
       </section>
 
-      {/* Treatment Categories — accordion */}
+      {/* Treatment Categories - accordion */}
       <section id="services" className="py-0">
         <div className="max-w-7xl mx-auto px-6">
           {/* Section header */}
@@ -592,7 +592,7 @@ const BookingSystem = () => {
         </div>
       </section>
 
-      {/* FAQ — two-column layout */}
+      {/* FAQ - two-column layout */}
       <section className="py-24 mt-16 bg-secondary/30">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
@@ -636,7 +636,7 @@ const BookingSystem = () => {
         </div>
       </section>
 
-      {/* Booking Policy — minimal footer strip */}
+      {/* Booking Policy - minimal footer strip */}
       <section className="py-10 border-t border-border">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p className="font-body text-[11px] text-muted-foreground leading-relaxed">

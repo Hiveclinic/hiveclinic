@@ -136,7 +136,7 @@ const ConsentForm = () => {
       supabase.functions.invoke("send-email", {
         body: {
           to: "hello@hiveclinicuk.com",
-          subject: `📋 New Consent Form — ${fullName} — ${treatmentType}`,
+          subject: `📋 New Consent Form - ${fullName} - ${treatmentType}`,
           html: adminHtml,
         },
       });
@@ -377,7 +377,7 @@ const ConsentForm = () => {
                 {step === 6 && (
                   <div className={sectionStyle}>
                     <h3 className={headingStyle}>Marketing & Media Consent</h3>
-                    <p className={subStyle}>These are optional — you can skip this step.</p>
+                    <p className={subStyle}>These are optional - you can skip this step.</p>
                     <div className="space-y-1">
                       <label className={checkboxRow}>
                         <input type="checkbox" checked={consentPhotos} onChange={(e) => setConsentPhotos(e.target.checked)} className={checkboxStyle} />
@@ -510,7 +510,7 @@ function buildAdminEmail(d: any) {
   <p style="font-size:13px">Photos: ${tick(d.marketing.consentPhotos)} | Marketing: ${tick(d.marketing.consentMarketing)} | Withdraw understood: ${tick(d.marketing.consentWithdraw)}</p>
 
   <h2 style="font-size:16px;margin-top:20px;color:#b8860b">Signature</h2>
-  <p style="font-size:13px"><strong>${d.signature.name}</strong> — ${new Date(d.signature.date).toLocaleString("en-GB")}</p>
+  <p style="font-size:13px"><strong>${d.signature.name}</strong> - ${new Date(d.signature.date).toLocaleString("en-GB")}</p>
 </div>`;
 }
 

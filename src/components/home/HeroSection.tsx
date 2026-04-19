@@ -2,8 +2,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const SETMORE_CONSULTATION = "https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false";
-
 interface HeroSectionProps {
   heroImg: string;
 }
@@ -49,15 +47,13 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <a
-                href={SETMORE_CONSULTATION}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/bookings#book"
                 className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gold text-white font-body text-[11px] tracking-[0.2em] uppercase hover:bg-gold-dark transition-colors duration-300"
               >
                 Book Consultation
                 <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-              </a>
+              </Link>
               <Link
                 to="/bookings"
                 className="inline-flex items-center justify-center gap-3 px-8 py-4 border border-white/12 text-white font-body text-[11px] tracking-[0.2em] uppercase hover:border-white/30 transition-colors duration-300"

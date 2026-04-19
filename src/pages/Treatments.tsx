@@ -21,7 +21,7 @@ import catIvDrip from "@/assets/categories/cat-iv-drip.jpg";
 import catFacialBalancing from "@/assets/categories/cat-facial-balancing.jpg";
 import catContentModel from "@/assets/categories/cat-content-model.jpg";
 
-// Category-specific images — synced with Setmore + DB categories
+// Category-specific images - synced with Acuity + DB categories
 const CATEGORY_IMAGES: Record<string, string> = {
   "Consultations": catConsultations,
   "Dermal Filler": catDermalFiller,

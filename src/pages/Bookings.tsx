@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
+import AcuityEmbed from "@/components/AcuityEmbed";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { usePageMeta } from "@/hooks/use-page-meta";
@@ -28,14 +29,8 @@ const Bookings = () => {
           </motion.div>
 
           {/* Booking embed - full width */}
-          <div className="mb-24 -mx-6">
-            <iframe
-              src="https://hiveclinicuk.setmore.com"
-              title="Book an appointment at Hive Clinic"
-              className="w-full border-0"
-              style={{ height: "800px" }}
-              loading="lazy"
-            />
+          <div className="mb-24">
+            <AcuityEmbed id="book" />
           </div>
 
           {/* FAQ */}

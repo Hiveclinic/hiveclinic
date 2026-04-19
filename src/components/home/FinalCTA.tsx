@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import klarnaLogo from "@/assets/klarna-logo.png";
 import clearpayLogo from "@/assets/clearpay-logo.png";
 
-const SETMORE_CONSULTATION = "https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false";
-
 const FinalCTA = () => (
   <section className="relative py-24 md:py-32 bg-foreground text-background overflow-hidden" aria-label="Book a consultation">
     <div className="absolute inset-0 opacity-[0.03]">
@@ -27,15 +25,13 @@ const FinalCTA = () => (
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
-          <a
-            href={SETMORE_CONSULTATION}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/bookings#book"
             className="group inline-flex items-center gap-3 px-10 py-4 bg-gold text-white font-body text-[11px] tracking-[0.2em] uppercase hover:bg-gold-dark transition-colors duration-300"
           >
             Book Consultation
             <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-          </a>
+          </Link>
           <Link
             to="/bookings"
             className="inline-flex items-center gap-3 px-10 py-4 border border-white/10 text-background/60 font-body text-[11px] tracking-[0.2em] uppercase hover:border-white/25 hover:text-background transition-colors duration-300"

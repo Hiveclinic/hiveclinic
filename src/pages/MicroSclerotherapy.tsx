@@ -40,9 +40,7 @@ const MicroSclerotherapy = () => {
               <div className="flex items-center gap-2"><Clock size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">30-60 Min Sessions</span></div>
             </div>
             <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/bookings#book"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
                 Book Consultation <ArrowRight size={14} />
               </a>
@@ -69,9 +67,7 @@ const MicroSclerotherapy = () => {
               </div>
             </div>
             <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/bookings#book"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
                 Book Consultation <ArrowRight size={14} />
               </a>
@@ -123,9 +119,7 @@ const MicroSclerotherapy = () => {
           <h2 className="font-display text-4xl md:text-5xl mb-4">Reclaim Your Confidence</h2>
           <p className="font-body text-muted-foreground mb-8">Book a consultation to discuss your thread vein concerns.</p>
           <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/bookings#book"
                 className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
                 Book Consultation <ArrowRight size={14} />
               </a>

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
+import AcuityEmbed from "@/components/AcuityEmbed";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
@@ -39,9 +40,7 @@ const FacialBalancing = () => {
               <div className="flex items-center gap-2"><Clock size={14} strokeWidth={1.5} className="text-gold" /><span className="font-body text-sm text-white/70">60-90 Mins</span></div>
             </div>
             <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=cb094103-11f5-475c-8c06-d30ea7f30dfe&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/bookings#book"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
                 Book Consultation <ArrowRight size={14} />
               </a>
@@ -69,9 +68,7 @@ const FacialBalancing = () => {
               </div>
             </div>
             <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=cb094103-11f5-475c-8c06-d30ea7f30dfe&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/bookings#book"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
                 Book Consultation <ArrowRight size={14} />
               </a>
@@ -124,14 +121,13 @@ const FacialBalancing = () => {
           <h2 className="font-display text-4xl md:text-5xl mb-4">Transform Your Profile</h2>
           <p className="font-body text-muted-foreground mb-8">Book a facial balancing consultation.</p>
           <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=cb094103-11f5-475c-8c06-d30ea7f30dfe&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/bookings#book"
                 className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
                 Book Consultation <ArrowRight size={14} />
               </a>
         </div>
       </section>
+          <AcuityEmbed id="book" />
     </Layout>
   );
 };

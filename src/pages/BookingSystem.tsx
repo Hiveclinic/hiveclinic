@@ -1,10 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-import { ChevronDown, ArrowDown, Flame, Camera, ArrowRight } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { ChevronDown, ArrowDown, Flame, Camera, ArrowRight, Search, Clock } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import AcuityEmbed from "@/components/AcuityEmbed";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { supabase } from "@/integrations/supabase/client";
+
+const ACUITY_OWNER = "39098354";
 
 const faqs = [
   { q: "Do I need a consultation first?", a: "Yes - for all injectable treatments, an initial consultation is required. This ensures your safety and allows us to create a personalised treatment plan." },
@@ -22,13 +26,70 @@ const steps = [
   { number: "04", title: "Arrive", description: "We handle the rest on the day." },
 ];
 
+interface Treatment {
+  id: string;
+  name: string;
+  slug: string;
+  category: string;
+  price: number;
+  duration_mins: number;
+  on_offer: boolean;
+  offer_price: number | null;
+  offer_label: string | null;
+  acuity_appointment_type_id: string | null;
+  sort_order: number | null;
+}
+
+const buildAcuityUrl = (t: Treatment) => {
+  const p = new URLSearchParams({ owner: ACUITY_OWNER, ref: "embedded_csp" });
+  if (t.acuity_appointment_type_id) {
+    p.set("appointmentType", t.acuity_appointment_type_id);
+  } else {
+    // Fallback: deep-link by category name (works if Acuity categories match DB).
+    p.set("category", t.category);
+  }
+  return `https://app.acuityscheduling.com/schedule.php?${p.toString()}`;
+};
+
 const BookingSystem = () => {
   usePageMeta(
     "Book Your Treatment | Hive Clinic Manchester",
     "Book your aesthetic treatment at Hive Clinic, Manchester City Centre. Live availability for lip fillers, skin treatments, anti-wrinkle and more."
   );
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<Treatment | null>(null);
   const location = useLocation();
+
+  const { data: treatments = [], isLoading } = useQuery({
+    queryKey: ["bookings-treatments"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("treatments")
+        .select("id, name, slug, category, price, duration_mins, on_offer, offer_price, offer_label, acuity_appointment_type_id, sort_order")
+        .eq("active", true)
+        .order("sort_order", { ascending: true })
+        .order("name", { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as Treatment[];
+    },
+  });
+
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    treatments.forEach(t => set.add(t.category));
+    return ["All", ...Array.from(set).sort()];
+  }, [treatments]);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return treatments.filter(t => {
+      if (activeCategory !== "All" && t.category !== activeCategory) return false;
+      if (q && !t.name.toLowerCase().includes(q) && !t.category.toLowerCase().includes(q)) return false;
+      return true;
+    });
+  }, [treatments, activeCategory, search]);
 
   // Smooth-scroll to #book if hash is present.
   useEffect(() => {
@@ -42,6 +103,18 @@ const BookingSystem = () => {
 
   const scrollToBook = () => {
     document.getElementById("book")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const scrollToPicker = () => {
+    document.getElementById("picker")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleSelect = (t: Treatment) => {
+    setSelected(t);
+    // Scroll to embed after a tick so the iframe re-renders with new src.
+    setTimeout(() => {
+      document.getElementById("book")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   };
 
   return (
@@ -62,17 +135,17 @@ const BookingSystem = () => {
               <span className="italic font-light">Treatment</span>
             </h1>
             <p className="font-body text-sm md:text-base text-background/60 max-w-md mx-auto mb-10 leading-relaxed">
-              Live availability. Real-time booking. Choose your treatment, pick a slot, you're in.
+              Browse the menu, choose a treatment, pick a slot. Live availability, secure checkout.
             </p>
           </motion.div>
 
           <motion.button
-            onClick={scrollToBook}
+            onClick={scrollToPicker}
             className="mx-auto flex flex-col items-center gap-2 text-background/40 hover:text-background/80 transition-colors"
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
           >
-            <span className="font-body text-[10px] tracking-[0.3em] uppercase">Open Scheduler</span>
+            <span className="font-body text-[10px] tracking-[0.3em] uppercase">Browse Treatments</span>
             <ArrowDown size={16} />
           </motion.button>
         </div>
@@ -100,7 +173,7 @@ const BookingSystem = () => {
       <section className="py-14 border-b border-border">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
-            onClick={scrollToBook}
+            onClick={scrollToPicker}
             className="group text-left bg-secondary/40 hover:bg-secondary transition-all duration-300 p-8 border border-border hover:border-accent/40"
           >
             <div className="flex items-center gap-2 mb-3">
@@ -109,10 +182,10 @@ const BookingSystem = () => {
             </div>
             <h3 className="font-display text-2xl md:text-3xl mb-2 group-hover:text-accent transition-colors">This month's specials</h3>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">
-              Signature lip filler and facial balancing packages at limited promotional pricing. Available now in the scheduler.
+              Signature lip filler and facial balancing packages at limited promotional pricing.
             </p>
             <span className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.2em] uppercase text-foreground group-hover:text-accent transition-colors">
-              Open Scheduler <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+              Browse Treatments <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
             </span>
           </button>
 
@@ -135,8 +208,150 @@ const BookingSystem = () => {
         </div>
       </section>
 
-      {/* Acuity scheduler embed */}
-      <AcuityEmbed id="book" />
+      {/* Treatment Picker (Setmore-style) */}
+      <section id="picker" className="py-20 bg-secondary/30 border-b border-border">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent mb-3">Step 01</p>
+            <h2 className="font-display text-3xl md:text-5xl mb-4">Choose Your Treatment</h2>
+            <p className="font-body text-sm text-muted-foreground max-w-xl mx-auto">
+              Select a service to load live availability. Checkout is secured by Acuity.
+            </p>
+          </div>
+
+          {/* Search */}
+          <div className="max-w-md mx-auto mb-8 relative">
+            <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search treatments..."
+              className="w-full bg-background border border-border pl-11 pr-4 py-3 font-body text-sm placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
+            />
+          </div>
+
+          {/* Category chips */}
+          <div className="flex flex-wrap justify-center gap-2 mb-10">
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-2 font-body text-[10px] tracking-[0.2em] uppercase border transition-all ${
+                  activeCategory === cat
+                    ? "bg-foreground text-background border-foreground"
+                    : "bg-background text-muted-foreground border-border hover:border-accent hover:text-foreground"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Cards grid */}
+          {isLoading ? (
+            <div className="text-center py-20 font-body text-xs tracking-[0.3em] uppercase text-muted-foreground">
+              Loading treatments...
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="text-center py-20 font-body text-sm text-muted-foreground">
+              No treatments match your search.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filtered.map(t => {
+                const isSelected = selected?.id === t.id;
+                const displayPrice = t.on_offer && t.offer_price ? t.offer_price : t.price;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => handleSelect(t)}
+                    className={`group text-left bg-background p-6 border transition-all duration-300 ${
+                      isSelected
+                        ? "border-accent shadow-lg"
+                        : "border-border hover:border-accent/60 hover:shadow-md"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-body text-[9px] tracking-[0.25em] uppercase text-accent mb-2">{t.category}</p>
+                        <h3 className="font-display text-xl leading-tight group-hover:text-accent transition-colors">
+                          {t.name}
+                        </h3>
+                      </div>
+                      {t.on_offer && (
+                        <span className="flex-shrink-0 bg-accent text-accent-foreground text-[9px] tracking-[0.15em] uppercase px-2 py-1 font-medium">
+                          {t.offer_label || "Offer"}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
+                      <div className="flex items-center gap-3 text-muted-foreground">
+                        <span className="inline-flex items-center gap-1.5 font-body text-[11px]">
+                          <Clock size={11} /> {t.duration_mins} min
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        {t.on_offer && t.offer_price ? (
+                          <div className="flex items-baseline gap-2">
+                            <span className="font-body text-xs line-through text-muted-foreground">£{Number(t.price).toFixed(0)}</span>
+                            <span className="font-display text-2xl text-accent">£{Number(displayPrice).toFixed(0)}</span>
+                          </div>
+                        ) : (
+                          <span className="font-display text-2xl">£{Number(displayPrice).toFixed(0)}</span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 inline-flex items-center gap-2 font-body text-[10px] tracking-[0.2em] uppercase text-foreground group-hover:text-accent transition-colors">
+                      {isSelected ? "Loaded below" : "Book this"}
+                      <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Acuity scheduler embed - dynamic based on selection */}
+      <section className="py-6 bg-background">
+        <div className="max-w-[880px] mx-auto px-4 mb-2 flex items-center justify-between">
+          <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent">
+            {selected ? "Step 02 — Pick Your Slot" : "Step 02 — Live Availability"}
+          </p>
+          {selected && (
+            <button
+              onClick={() => setSelected(null)}
+              className="font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+            >
+              ← All treatments
+            </button>
+          )}
+        </div>
+        {selected && (
+          <div className="max-w-[880px] mx-auto px-4 mb-4">
+            <div className="bg-secondary/40 border border-border px-5 py-3 flex items-center justify-between">
+              <div>
+                <p className="font-body text-[9px] tracking-[0.25em] uppercase text-muted-foreground">Selected</p>
+                <p className="font-display text-lg">{selected.name}</p>
+              </div>
+              <p className="font-display text-xl text-accent">
+                £{Number(selected.on_offer && selected.offer_price ? selected.offer_price : selected.price).toFixed(0)}
+              </p>
+            </div>
+          </div>
+        )}
+        <AcuityEmbed
+          id="book"
+          appointmentTypeId={selected?.acuity_appointment_type_id || undefined}
+          category={selected && !selected.acuity_appointment_type_id ? selected.category : undefined}
+          bare
+          className="max-w-[880px] mx-auto px-3 md:px-4"
+        />
+      </section>
 
       {/* FAQ */}
       <section className="py-24 bg-secondary/30">

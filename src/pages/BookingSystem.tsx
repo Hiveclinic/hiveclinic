@@ -360,8 +360,6 @@ const BookingSystem = () => {
 
                 <a
                   href={buildAcuityUrl(details)}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="group flex items-center justify-center gap-2 w-full bg-foreground text-background py-4 font-body text-xs tracking-[0.25em] uppercase hover:bg-accent transition-colors"
                 >
                   Book on Acuity

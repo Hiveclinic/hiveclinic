@@ -110,7 +110,6 @@ export type Database = {
           payment_status: string
           reminder_sent: boolean
           reschedule_count: number
-          setmore_booking_id: string | null
           status: string
           stripe_payment_intent_id: string | null
           stripe_session_id: string | null
@@ -141,7 +140,6 @@ export type Database = {
           payment_status?: string
           reminder_sent?: boolean
           reschedule_count?: number
-          setmore_booking_id?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
           stripe_session_id?: string | null
@@ -172,7 +170,6 @@ export type Database = {
           payment_status?: string
           reminder_sent?: boolean
           reschedule_count?: number
-          setmore_booking_id?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
           stripe_session_id?: string | null

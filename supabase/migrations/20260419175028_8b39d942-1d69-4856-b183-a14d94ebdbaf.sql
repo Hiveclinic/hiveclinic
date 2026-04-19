@@ -1,0 +1,1 @@
+ALTER TABLE public.bookings DROP COLUMN IF EXISTS setmore_booking_id;

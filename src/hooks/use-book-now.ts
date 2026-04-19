@@ -56,11 +56,11 @@ export const useBookNow = () => {
       let opts: BookNowOptions | string | undefined;
       if (typeof eOrOptions === "string") {
         opts = eOrOptions;
-      } else if (eOrOptions && "preventDefault" in eOrOptions) {
-        eOrOptions.preventDefault?.();
+      } else if (eOrOptions && typeof (eOrOptions as React.MouseEvent).preventDefault === "function") {
+        (eOrOptions as React.MouseEvent).preventDefault?.();
         opts = maybeCategory;
       } else {
-        opts = eOrOptions;
+        opts = eOrOptions as BookNowOptions | undefined;
       }
       window.open(buildUrl(opts), "_blank", "noopener,noreferrer");
     },

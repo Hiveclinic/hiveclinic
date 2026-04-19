@@ -1,0 +1,260 @@
+/* =====================================================================
+   HIVE CLINIC – Acuity Scheduling custom CSS
+   ---------------------------------------------------------------------
+   Paste this into Acuity:
+     Acuity dashboard → Business Settings → Customize Appearance
+     → Advanced CSS
+
+   Goal: strip Acuity's own header/branding/footers so the embedded
+   iframe shows ONLY the booking flow (service list → calendar →
+   checkout), styled to match the Hive Clinic site (cream background,
+   warm beige/gold accents, Cormorant Garamond + Satoshi).
+
+   Fonts must be loaded by Acuity – the @import at the top handles that.
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap');
+
+/* ---------- Brand tokens (mirror site index.css) ------------------- */
+:root {
+  --hv-bg:        #ffffff;          /* background */
+  --hv-cream:     #f5f1ea;          /* secondary */
+  --hv-ink:       #0d0d0d;          /* foreground */
+  --hv-muted:     #666666;          /* muted-foreground */
+  --hv-border:    #e7e1d6;          /* border */
+  --hv-accent:    #8a6a3d;          /* warm beige/gold */
+  --hv-accent-dk: #6e5430;
+  --hv-radius:    0px;              /* site uses sharp corners */
+}
+
+/* ---------- Global reset ------------------------------------------- */
+html, body {
+  background: var(--hv-bg) !important;
+  color: var(--hv-ink) !important;
+  font-family: 'Satoshi', system-ui, sans-serif !important;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  margin: 0;
+  padding: 0;
+}
+
+/* Hide Acuity's own page chrome (header, logo, footer, powered-by) */
+#header,
+#scheduling-header,
+.scheduling-page-header,
+.business-info,
+.business-name,
+.business-logo,
+#site-footer,
+.acuity-footer,
+.powered-by-acuity,
+a[href*="acuityscheduling.com"][class*="powered"],
+.continue-shopping,
+#schedulingContainer > .header { display: none !important; }
+
+/* Tighten outer padding so it sits flush in our iframe */
+#main, #scheduling-container, .container, .scheduling-page {
+  background: var(--hv-bg) !important;
+  padding: 16px !important;
+  max-width: 100% !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* ---------- Typography --------------------------------------------- */
+h1, h2, h3, h4, h5,
+.appointment-type-name,
+.section-title,
+.choose-appointment-title {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--hv-ink) !important;
+}
+
+h1 { font-size: 1.9rem !important; }
+h2 { font-size: 1.5rem !important; }
+h3 { font-size: 1.15rem !important; }
+
+p, label, .description, .appointment-type-description,
+.duration, .price, .form-group, input, select, textarea {
+  font-family: 'Satoshi', system-ui, sans-serif !important;
+  color: var(--hv-ink) !important;
+}
+
+.description, .appointment-type-description, .duration, .help-text {
+  color: var(--hv-muted) !important;
+  font-size: 0.85rem !important;
+  line-height: 1.5 !important;
+}
+
+/* Tiny uppercase labels (Hive style) */
+.section-title, .group-title, legend {
+  text-transform: uppercase !important;
+  font-family: 'Satoshi', sans-serif !important;
+  font-size: 10px !important;
+  letter-spacing: 0.3em !important;
+  color: var(--hv-accent) !important;
+  font-weight: 600 !important;
+  margin-bottom: 14px !important;
+}
+
+/* ---------- Service / appointment-type cards ----------------------- */
+.appointment-type,
+.babel-appointment-type,
+li.babel-appointment-type {
+  background: var(--hv-cream) !important;
+  border: 1px solid var(--hv-border) !important;
+  border-radius: var(--hv-radius) !important;
+  padding: 18px 20px !important;
+  margin-bottom: 10px !important;
+  transition: all 0.25s ease !important;
+}
+.appointment-type:hover,
+.babel-appointment-type:hover {
+  background: #ffffff !important;
+  border-color: var(--hv-accent) !important;
+  transform: translateY(-1px);
+}
+.appointment-type-name { font-size: 1.1rem !important; margin-bottom: 4px !important; }
+.price { color: var(--hv-accent) !important; font-weight: 600 !important; }
+
+/* ---------- Calendar ----------------------------------------------- */
+.calendar, .ui-datepicker, #calendar {
+  background: var(--hv-bg) !important;
+  border: 1px solid var(--hv-border) !important;
+  border-radius: var(--hv-radius) !important;
+}
+.ui-datepicker-header, .calendar-header {
+  background: var(--hv-ink) !important;
+  color: var(--hv-bg) !important;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 1rem !important;
+  letter-spacing: 0.05em !important;
+  padding: 12px !important;
+}
+.ui-datepicker-header a,
+.ui-datepicker-prev, .ui-datepicker-next { color: var(--hv-bg) !important; }
+
+td a, .ui-state-default {
+  background: var(--hv-bg) !important;
+  border: 1px solid var(--hv-border) !important;
+  color: var(--hv-ink) !important;
+  font-family: 'Satoshi', sans-serif !important;
+  border-radius: var(--hv-radius) !important;
+  transition: all 0.2s ease;
+}
+td a:hover, .ui-state-default:hover,
+.ui-state-active, .ui-state-highlight {
+  background: var(--hv-accent) !important;
+  color: var(--hv-bg) !important;
+  border-color: var(--hv-accent) !important;
+}
+
+/* Time slot chips */
+.time, .time-selection a, .babel-time {
+  background: var(--hv-bg) !important;
+  border: 1px solid var(--hv-border) !important;
+  color: var(--hv-ink) !important;
+  border-radius: var(--hv-radius) !important;
+  padding: 10px 16px !important;
+  font-family: 'Satoshi', sans-serif !important;
+  font-size: 0.85rem !important;
+  letter-spacing: 0.05em !important;
+  transition: all 0.2s ease;
+}
+.time:hover, .time-selection a:hover, .babel-time:hover {
+  background: var(--hv-ink) !important;
+  color: var(--hv-bg) !important;
+  border-color: var(--hv-ink) !important;
+}
+.time.selected, .babel-time.selected {
+  background: var(--hv-accent) !important;
+  color: var(--hv-bg) !important;
+  border-color: var(--hv-accent) !important;
+}
+
+/* ---------- Forms (intake + checkout) ------------------------------ */
+input[type="text"], input[type="email"], input[type="tel"],
+input[type="password"], input[type="number"], input[type="date"],
+select, textarea {
+  background: var(--hv-bg) !important;
+  border: 1px solid var(--hv-border) !important;
+  border-radius: var(--hv-radius) !important;
+  padding: 12px 14px !important;
+  font-family: 'Satoshi', sans-serif !important;
+  font-size: 0.9rem !important;
+  color: var(--hv-ink) !important;
+  transition: border-color 0.2s ease;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none !important;
+  border-color: var(--hv-accent) !important;
+  box-shadow: 0 0 0 1px var(--hv-accent) !important;
+}
+
+label {
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+/* ---------- Primary buttons ---------------------------------------- */
+button, input[type="submit"], .btn, .button, a.button,
+.continue-button, .submit-button, #continue-button {
+  background: var(--hv-ink) !important;
+  color: var(--hv-bg) !important;
+  border: 1px solid var(--hv-ink) !important;
+  border-radius: var(--hv-radius) !important;
+  padding: 14px 28px !important;
+  font-family: 'Satoshi', sans-serif !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.25em !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  box-shadow: none !important;
+}
+button:hover, input[type="submit"]:hover, .btn:hover,
+.button:hover, a.button:hover,
+.continue-button:hover, .submit-button:hover, #continue-button:hover {
+  background: var(--hv-accent) !important;
+  border-color: var(--hv-accent) !important;
+  color: var(--hv-bg) !important;
+}
+
+/* Secondary / back links */
+a.back-button, .secondary-button {
+  background: transparent !important;
+  color: var(--hv-muted) !important;
+  border: 1px solid var(--hv-border) !important;
+}
+a.back-button:hover, .secondary-button:hover {
+  color: var(--hv-ink) !important;
+  border-color: var(--hv-ink) !important;
+}
+
+/* ---------- Order summary / sidebar -------------------------------- */
+.summary, .order-summary, .booking-summary, aside {
+  background: var(--hv-cream) !important;
+  border: 1px solid var(--hv-border) !important;
+  border-radius: var(--hv-radius) !important;
+  padding: 20px !important;
+}
+
+/* ---------- Mobile -------------------------------------------------- */
+@media (max-width: 640px) {
+  #main, #scheduling-container { padding: 8px !important; }
+  h1 { font-size: 1.5rem !important; }
+  .time, .time-selection a, .babel-time { padding: 12px 14px !important; }
+  button, input[type="submit"], .btn { padding: 14px 20px !important; }
+}
+
+/* ---------- Hide Acuity upsell / cross-sell banners ---------------- */
+.upsell, .cross-sell, .promo-banner, .marketing-banner { display: none !important; }

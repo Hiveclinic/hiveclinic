@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Shield, Award, Clock, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
+import AcuityEmbed from "@/components/AcuityEmbed";
 import ModelCTA from "@/components/ModelCTA";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { useSiteImage } from "@/hooks/use-site-image";
@@ -173,7 +174,8 @@ const LipFillers = () => {
     </section>
 
       <ModelCTA />
-  </Layout>
+        <AcuityEmbed id="book" />
+    </Layout>
   );
 };
 

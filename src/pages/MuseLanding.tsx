@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Camera, ChevronDown, ExternalLink, MapPin, Check, MessageCircle, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
+import AcuityEmbed from "@/components/AcuityEmbed";
 import { usePageMeta } from "@/hooks/use-page-meta";
 
 type ModelService = {
@@ -286,6 +287,7 @@ const MuseLanding = () => {
           </motion.div>
         </div>
       </section>
+          <AcuityEmbed id="book" />
     </Layout>
   );
 };

@@ -1,14 +1,12 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
-import { ChevronDown, ArrowDown, Flame, Camera, ArrowRight, Search, Clock } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useMemo } from "react";
+import { ChevronDown, ArrowDown, Flame, Camera, ArrowRight, Search, Clock, ExternalLink, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
-import AcuityEmbed from "@/components/AcuityEmbed";
 import { usePageMeta } from "@/hooks/use-page-meta";
+import { ACUITY_BOOKING_URL } from "@/hooks/use-book-now";
 import { supabase } from "@/integrations/supabase/client";
-
-const ACUITY_OWNER = "39098354";
 
 const faqs = [
   { q: "Do I need a consultation first?", a: "Yes - for all injectable treatments, an initial consultation is required. This ensures your safety and allows us to create a personalised treatment plan." },
@@ -20,10 +18,10 @@ const faqs = [
 ];
 
 const steps = [
-  { number: "01", title: "Choose", description: "Select your treatment from the menu." },
-  { number: "02", title: "Schedule", description: "Pick your preferred date and time." },
-  { number: "03", title: "Confirm", description: "Secure your slot in seconds." },
-  { number: "04", title: "Arrive", description: "We handle the rest on the day." },
+  { number: "01", title: "Choose", description: "Browse the treatment menu." },
+  { number: "02", title: "Review", description: "See details, duration and price." },
+  { number: "03", title: "Schedule", description: "Pick your slot on Acuity." },
+  { number: "04", title: "Confirm", description: "Secure checkout, instant booking." },
 ];
 
 interface Treatment {
@@ -36,38 +34,35 @@ interface Treatment {
   on_offer: boolean;
   offer_price: number | null;
   offer_label: string | null;
+  description: string | null;
   acuity_appointment_type_id: string | null;
   sort_order: number | null;
 }
 
 const buildAcuityUrl = (t: Treatment) => {
-  const p = new URLSearchParams({ owner: ACUITY_OWNER, ref: "embedded_csp" });
   if (t.acuity_appointment_type_id) {
-    p.set("appointmentType", t.acuity_appointment_type_id);
-  } else {
-    // Fallback: deep-link by category name (works if Acuity categories match DB).
-    p.set("category", t.category);
+    const p = new URLSearchParams({ appointmentType: t.acuity_appointment_type_id });
+    return `${ACUITY_BOOKING_URL}?${p.toString()}`;
   }
-  return `https://app.acuityscheduling.com/schedule.php?${p.toString()}`;
+  return `${ACUITY_BOOKING_URL}?category=${encodeURIComponent(t.category)}`;
 };
 
 const BookingSystem = () => {
   usePageMeta(
     "Book Your Treatment | Hive Clinic Manchester",
-    "Book your aesthetic treatment at Hive Clinic, Manchester City Centre. Live availability for lip fillers, skin treatments, anti-wrinkle and more."
+    "Book your aesthetic treatment at Hive Clinic, Manchester City Centre. Live availability via Acuity for lip fillers, skin treatments, anti-wrinkle and more."
   );
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<Treatment | null>(null);
-  const location = useLocation();
+  const [details, setDetails] = useState<Treatment | null>(null);
 
   const { data: treatments = [], isLoading } = useQuery({
-    queryKey: ["bookings-treatments"],
+    queryKey: ["bookings-treatments-v2"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("treatments")
-        .select("id, name, slug, category, price, duration_mins, on_offer, offer_price, offer_label, acuity_appointment_type_id, sort_order")
+        .select("id, name, slug, category, price, duration_mins, on_offer, offer_price, offer_label, description, acuity_appointment_type_id, sort_order")
         .eq("active", true)
         .order("sort_order", { ascending: true })
         .order("name", { ascending: true });
@@ -91,30 +86,8 @@ const BookingSystem = () => {
     });
   }, [treatments, activeCategory, search]);
 
-  // Smooth-scroll to #book if hash is present.
-  useEffect(() => {
-    if (location.hash === "#book") {
-      const t = setTimeout(() => {
-        document.getElementById("book")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
-      return () => clearTimeout(t);
-    }
-  }, [location]);
-
-  const scrollToBook = () => {
-    document.getElementById("book")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   const scrollToPicker = () => {
     document.getElementById("picker")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const handleSelect = (t: Treatment) => {
-    setSelected(t);
-    // Scroll to embed after a tick so the iframe re-renders with new src.
-    setTimeout(() => {
-      document.getElementById("book")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 50);
   };
 
   return (
@@ -122,7 +95,6 @@ const BookingSystem = () => {
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-foreground text-background">
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")" }} />
-
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center py-24">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -135,7 +107,7 @@ const BookingSystem = () => {
               <span className="italic font-light">Treatment</span>
             </h1>
             <p className="font-body text-sm md:text-base text-background/60 max-w-md mx-auto mb-10 leading-relaxed">
-              Browse the menu, choose a treatment, pick a slot. Live availability, secure checkout.
+              Browse the menu, review your treatment, then book instantly on our secure scheduler.
             </p>
           </motion.div>
 
@@ -169,7 +141,7 @@ const BookingSystem = () => {
         </div>
       </section>
 
-      {/* Highlight banners: Offers + Content Model */}
+      {/* Highlight banners */}
       <section className="py-14 border-b border-border">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
@@ -182,7 +154,7 @@ const BookingSystem = () => {
             </div>
             <h3 className="font-display text-2xl md:text-3xl mb-2 group-hover:text-accent transition-colors">This month's specials</h3>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">
-              Signature lip filler and facial balancing packages at limited promotional pricing.
+              Signature treatments at limited promotional pricing.
             </p>
             <span className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.2em] uppercase text-foreground group-hover:text-accent transition-colors">
               Browse Treatments <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
@@ -208,14 +180,14 @@ const BookingSystem = () => {
         </div>
       </section>
 
-      {/* Treatment Picker (Setmore-style) */}
-      <section id="picker" className="py-20 bg-secondary/30 border-b border-border">
+      {/* Treatment Picker */}
+      <section id="picker" className="py-20 bg-secondary/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
-            <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent mb-3">Step 01</p>
-            <h2 className="font-display text-3xl md:text-5xl mb-4">Choose Your Treatment</h2>
+            <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent mb-3">Choose Your Treatment</p>
+            <h2 className="font-display text-3xl md:text-5xl mb-4">The Menu</h2>
             <p className="font-body text-sm text-muted-foreground max-w-xl mx-auto">
-              Select a service to load live availability. Checkout is secured by Acuity.
+              Tap any treatment to review details. Booking opens in our secure scheduler.
             </p>
           </div>
 
@@ -260,17 +232,12 @@ const BookingSystem = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map(t => {
-                const isSelected = selected?.id === t.id;
                 const displayPrice = t.on_offer && t.offer_price ? t.offer_price : t.price;
                 return (
                   <button
                     key={t.id}
-                    onClick={() => handleSelect(t)}
-                    className={`group text-left bg-background p-6 border transition-all duration-300 ${
-                      isSelected
-                        ? "border-accent shadow-lg"
-                        : "border-border hover:border-accent/60 hover:shadow-md"
-                    }`}
+                    onClick={() => setDetails(t)}
+                    className="group text-left bg-background p-6 border border-border hover:border-accent/60 hover:shadow-md transition-all duration-300"
                   >
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <div className="flex-1 min-w-0">
@@ -287,25 +254,21 @@ const BookingSystem = () => {
                     </div>
 
                     <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
-                      <div className="flex items-center gap-3 text-muted-foreground">
-                        <span className="inline-flex items-center gap-1.5 font-body text-[11px]">
-                          <Clock size={11} /> {t.duration_mins} min
-                        </span>
-                      </div>
-                      <div className="text-right">
-                        {t.on_offer && t.offer_price ? (
-                          <div className="flex items-baseline gap-2">
-                            <span className="font-body text-xs line-through text-muted-foreground">£{Number(t.price).toFixed(0)}</span>
-                            <span className="font-display text-2xl text-accent">£{Number(displayPrice).toFixed(0)}</span>
-                          </div>
-                        ) : (
-                          <span className="font-display text-2xl">£{Number(displayPrice).toFixed(0)}</span>
-                        )}
-                      </div>
+                      <span className="inline-flex items-center gap-1.5 font-body text-[11px] text-muted-foreground">
+                        <Clock size={11} /> {t.duration_mins} min
+                      </span>
+                      {t.on_offer && t.offer_price ? (
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-body text-xs line-through text-muted-foreground">£{Number(t.price).toFixed(0)}</span>
+                          <span className="font-display text-2xl text-accent">£{Number(displayPrice).toFixed(0)}</span>
+                        </div>
+                      ) : (
+                        <span className="font-display text-2xl">£{Number(displayPrice).toFixed(0)}</span>
+                      )}
                     </div>
 
                     <div className="mt-4 inline-flex items-center gap-2 font-body text-[10px] tracking-[0.2em] uppercase text-foreground group-hover:text-accent transition-colors">
-                      {isSelected ? "Loaded below" : "Book this"}
+                      View Details
                       <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
                     </div>
                   </button>
@@ -316,45 +279,84 @@ const BookingSystem = () => {
         </div>
       </section>
 
-      {/* Acuity scheduler embed - dynamic based on selection */}
-      <section className="py-6 bg-background">
-        <div className="max-w-[880px] mx-auto px-4 mb-2 flex items-center justify-between">
-          <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent">
-            {selected ? "Step 02 — Pick Your Slot" : "Step 02 — Live Availability"}
-          </p>
-          {selected && (
-            <button
-              onClick={() => setSelected(null)}
-              className="font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+      {/* Details Modal */}
+      <AnimatePresence>
+        {details && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setDetails(null)}
+            className="fixed inset-0 z-[100] bg-foreground/70 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-6"
+          >
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 40, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative bg-background w-full md:max-w-lg md:mx-auto max-h-[90vh] overflow-y-auto border-t md:border border-border shadow-2xl"
             >
-              ← All treatments
-            </button>
-          )}
-        </div>
-        {selected && (
-          <div className="max-w-[880px] mx-auto px-4 mb-4">
-            <div className="bg-secondary/40 border border-border px-5 py-3 flex items-center justify-between">
-              <div>
-                <p className="font-body text-[9px] tracking-[0.25em] uppercase text-muted-foreground">Selected</p>
-                <p className="font-display text-lg">{selected.name}</p>
+              <button
+                onClick={() => setDetails(null)}
+                aria-label="Close"
+                className="absolute top-4 right-4 p-2 text-muted-foreground hover:text-foreground transition-colors z-10"
+              >
+                <X size={18} />
+              </button>
+
+              <div className="p-7 md:p-9">
+                <p className="font-body text-[10px] tracking-[0.3em] uppercase text-accent mb-3">{details.category}</p>
+                <h3 className="font-display text-3xl md:text-4xl leading-tight mb-5">{details.name}</h3>
+
+                <div className="flex items-baseline gap-3 mb-6 pb-6 border-b border-border">
+                  {details.on_offer && details.offer_price ? (
+                    <>
+                      <span className="font-display text-4xl text-accent">£{Number(details.offer_price).toFixed(0)}</span>
+                      <span className="font-body text-base line-through text-muted-foreground">£{Number(details.price).toFixed(0)}</span>
+                      {details.offer_label && (
+                        <span className="ml-auto bg-accent text-accent-foreground text-[9px] tracking-[0.15em] uppercase px-2 py-1 font-medium">
+                          {details.offer_label}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="font-display text-4xl">£{Number(details.price).toFixed(0)}</span>
+                  )}
+                </div>
+
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                    <Clock size={14} />
+                    <span className="font-body text-sm">{details.duration_mins} minute appointment</span>
+                  </div>
+                  {details.description && (
+                    <p className="font-body text-sm text-muted-foreground leading-relaxed pt-2">
+                      {details.description}
+                    </p>
+                  )}
+                </div>
+
+                <a
+                  href={buildAcuityUrl(details)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-center gap-2 w-full bg-foreground text-background py-4 font-body text-xs tracking-[0.25em] uppercase hover:bg-accent transition-colors"
+                >
+                  Book on Acuity
+                  <ExternalLink size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                </a>
+                <p className="text-center font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground mt-4">
+                  Opens in a new tab · Secure scheduler
+                </p>
               </div>
-              <p className="font-display text-xl text-accent">
-                £{Number(selected.on_offer && selected.offer_price ? selected.offer_price : selected.price).toFixed(0)}
-              </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
-        <AcuityEmbed
-          id="book"
-          appointmentTypeId={selected?.acuity_appointment_type_id || undefined}
-          category={selected && !selected.acuity_appointment_type_id ? selected.category : undefined}
-          bare
-          className="max-w-[880px] mx-auto px-3 md:px-4"
-        />
-      </section>
+      </AnimatePresence>
 
       {/* FAQ */}
-      <section className="py-24 bg-secondary/30">
+      <section className="py-24 bg-background border-t border-border">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
             <div className="md:col-span-4">

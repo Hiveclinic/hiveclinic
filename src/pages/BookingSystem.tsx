@@ -39,12 +39,33 @@ interface Treatment {
   sort_order: number | null;
 }
 
+// Map our clean category labels back to the exact Acuity category path segment.
+// Acuity URLs require the "✦ " prefix as it appears in the source scheduler.
+const ACUITY_CATEGORY_MAP: Record<string, string> = {
+  "Anti Wrinkle (Botox)": "✦ ANTI WRINKLE (BOTOX)",
+  "Chemical Peels": "✦ CHEMCIAL PEELS",
+  "Consultation": "✦ CONSULTATION",
+  "Correction": "✦ CORRECTION",
+  "Facial Balancing": "✦ FACIAL BALANCING",
+  "Fat Dissolve": "✦ FAT DISSOLVE",
+  "Lips": "✦ LIPS",
+  "Skin Boosters": "✦ SKIN BOOSTERS",
+  "Skin Treatments": "✦ SKIN TREATMENTS",
+};
+
+// Single shared calendar (Bianca Spencer) on the live Acuity scheduler.
+const ACUITY_CALENDAR_ID = "13962538";
+const ACUITY_SCHEDULE_BASE = "https://hiveclinicuk.as.me/schedule/9c3d2206";
+
 const buildAcuityUrl = (t: Treatment) => {
-  if (t.acuity_appointment_type_id) {
-    const p = new URLSearchParams({ appointmentType: t.acuity_appointment_type_id });
-    return `${ACUITY_BOOKING_URL}?${p.toString()}`;
+  const acuityCat = ACUITY_CATEGORY_MAP[t.category];
+  if (t.acuity_appointment_type_id && acuityCat) {
+    return `${ACUITY_SCHEDULE_BASE}/category/${encodeURIComponent(acuityCat)}/appointment/${t.acuity_appointment_type_id}/calendar/${ACUITY_CALENDAR_ID}`;
   }
-  return `${ACUITY_BOOKING_URL}?category=${encodeURIComponent(t.category)}`;
+  if (acuityCat) {
+    return `${ACUITY_SCHEDULE_BASE}/category/${encodeURIComponent(acuityCat)}`;
+  }
+  return ACUITY_BOOKING_URL;
 };
 
 const BookingSystem = () => {

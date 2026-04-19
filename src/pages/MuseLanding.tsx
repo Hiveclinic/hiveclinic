@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Camera, ChevronDown, ExternalLink, MapPin, Check, MessageCircle, CalendarDays } from "lucide-react";
+import { ArrowRight, Camera, ChevronDown, MapPin, Check, MessageCircle, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import AcuityEmbed from "@/components/AcuityEmbed";
@@ -11,15 +11,14 @@ type ModelService = {
   price: string;
   description: string;
   category: string;
-  setmoreUrl: string;
 };
 
 const MODEL_SERVICES: ModelService[] = [
-  { title: "1ml Lip Filler (Model)", price: "£99", description: "Tailored 1ml lip enhancement. Content will be taken for marketing and portfolio purposes. Full price of £150 charged if content is declined.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=2e89acbb-1de8-4c6b-abbb-eec917d72003&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "2ml Facial Balancing (Model)", price: "£199", description: "2ml facial balancing for subtle, tailored refinement. Areas may include lips, nose, cheeks, chin or jaw. Tear trough not included.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=1e555efd-5356-459b-9f80-44129d2debb6&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "3ml Facial Balancing (Model)", price: "£299", description: "3ml facial balancing to enhance overall facial structure and balance. Areas may include lips, nose, cheeks, chin or jaw.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a465b4d0-b24b-4f41-a01d-ae9d340fe569&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "4ml Facial Balancing (Model)", price: "£399", description: "4ml facial balancing for more advanced, full-face enhancement. Designed to create structure, definition and harmony.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=a9ef4756-b061-4221-9c1a-12ee0fd4c09f&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
-  { title: "Feature Refinement (Model)", price: "£120", description: "Targeted enhancement of a specific feature - nose, chin or jaw. Full price from £180 charged if content is declined.", category: "Dermal Filler", setmoreUrl: "https://hiveclinicuk.setmore.com/book?step=additional-products&products=0929bfe0-279c-4e1f-91d1-d9457db9a168&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false" },
+  { title: "1ml Lip Filler (Model)", price: "£99", description: "Tailored 1ml lip enhancement. Content will be taken for marketing and portfolio purposes. Full price of £150 charged if content is declined.", category: "Dermal Filler" },
+  { title: "2ml Facial Balancing (Model)", price: "£199", description: "2ml facial balancing for subtle, tailored refinement. Areas may include lips, nose, cheeks, chin or jaw. Tear trough not included.", category: "Dermal Filler" },
+  { title: "3ml Facial Balancing (Model)", price: "£299", description: "3ml facial balancing to enhance overall facial structure and balance. Areas may include lips, nose, cheeks, chin or jaw.", category: "Dermal Filler" },
+  { title: "4ml Facial Balancing (Model)", price: "£399", description: "4ml facial balancing for more advanced, full-face enhancement. Designed to create structure, definition and harmony.", category: "Dermal Filler" },
+  { title: "Feature Refinement (Model)", price: "£120", description: "Targeted enhancement of a specific feature - nose, chin or jaw. Full price from £180 charged if content is declined.", category: "Dermal Filler" },
 ];
 
 const MODEL_CATEGORIES = [
@@ -47,15 +46,13 @@ const ServiceCard = ({ service }: { service: ModelService }) => (
       <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">{service.description}</p>
     </div>
     <div>
-      <a
-        href={service.setmoreUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        to="/bookings#book"
         className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 text-sm font-body tracking-wide hover:bg-primary/90 transition-colors w-full justify-center"
       >
         Book Now
-        <ExternalLink size={14} />
-      </a>
+        <ArrowRight size={14} />
+      </Link>
       <p className="text-xs text-muted-foreground mt-3 text-center font-body">
         By booking, you agree to our{" "}
         <Link to="/terms" className="underline hover:text-foreground transition-colors">booking policies</Link>

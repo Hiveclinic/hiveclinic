@@ -1,27 +1,26 @@
 import { useCallback } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+
+const ACUITY_URL = "https://hiveclinicuk.as.me/";
 
 /**
  * Hook for unified Book Now behaviour.
- * - On /bookings: smooth-scrolls to the embedded scheduler (#book).
- * - Anywhere else: navigates to /bookings#book.
+ * Opens Acuity scheduling in a new tab. Optional category deep-links
+ * straight to that section in Acuity.
  */
 export const useBookNow = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  return useCallback(
-    (e?: React.MouseEvent) => {
-      e?.preventDefault();
-      if (location.pathname === "/bookings") {
-        const el = document.getElementById("book");
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
-          return;
-        }
-      }
-      navigate("/bookings#book");
-    },
-    [location.pathname, navigate]
-  );
+  return useCallback((eOrCategory?: React.MouseEvent | string, maybeCategory?: string) => {
+    let category: string | undefined;
+    if (typeof eOrCategory === "string") {
+      category = eOrCategory;
+    } else {
+      eOrCategory?.preventDefault?.();
+      category = maybeCategory;
+    }
+    const url = category
+      ? `${ACUITY_URL}?category=${encodeURIComponent(category)}`
+      : ACUITY_URL;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }, []);
 };
+
+export const ACUITY_BOOKING_URL = ACUITY_URL;

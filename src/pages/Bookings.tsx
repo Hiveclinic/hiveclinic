@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
-import AcuityEmbed from "@/components/AcuityEmbed";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { usePageMeta } from "@/hooks/use-page-meta";
 
@@ -28,9 +27,19 @@ const Bookings = () => {
             </p>
           </motion.div>
 
-          {/* Booking embed - full width */}
-          <div className="mb-24">
-            <AcuityEmbed id="book" />
+          {/* Book on Acuity */}
+          <div id="book" className="mb-24 text-center">
+            <a
+              href="https://hiveclinicuk.as.me/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors"
+            >
+              Open Scheduler <ExternalLink size={14} />
+            </a>
+            <p className="font-body text-xs text-muted-foreground mt-4">
+              Live availability · Secure checkout
+            </p>
           </div>
 
           {/* FAQ */}

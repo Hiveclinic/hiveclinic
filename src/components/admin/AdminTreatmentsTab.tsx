@@ -42,6 +42,7 @@ type Treatment = {
   offer_price: number | null;
   offer_label: string | null;
   image_url: string | null;
+  acuity_appointment_type_id: string | null;
 };
 
 const EMPTY_TREATMENT = {
@@ -101,6 +102,7 @@ const AdminTreatmentsTab = () => {
       active: t.active, category: t.category, description: t.description,
       on_offer: t.on_offer, offer_price: t.offer_price, offer_label: t.offer_label,
       slug: t.slug, image_url: t.image_url,
+      acuity_appointment_type_id: t.acuity_appointment_type_id?.trim() || null,
     }).eq("id", t.id);
     if (error) { toast.error("Failed to save"); return; }
     toast.success(`${t.name} updated`);
@@ -351,6 +353,18 @@ const AdminTreatmentsTab = () => {
                       <label className="font-body text-xs text-muted-foreground block mb-1">Image URL</label>
                       <input value={t.image_url || ""} onChange={e => updateField(t.id, "image_url", e.target.value || null)} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none" placeholder="https://... or leave empty" />
                       {t.image_url && <img src={t.image_url} alt={t.name} className="mt-2 w-20 h-20 object-cover border border-border" />}
+                    </div>
+                    <div>
+                      <label className="font-body text-xs text-muted-foreground block mb-1">
+                        Acuity Appointment Type ID
+                        <span className="ml-2 text-muted-foreground/70 normal-case">(deep-links the Book Now card to the exact Acuity service)</span>
+                      </label>
+                      <input
+                        value={t.acuity_appointment_type_id || ""}
+                        onChange={e => updateField(t.id, "acuity_appointment_type_id", e.target.value)}
+                        className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none"
+                        placeholder="e.g. 92115330"
+                      />
                     </div>
                     <div className="flex gap-2">
                       <button onClick={() => saveOne(t)} className="px-4 py-2 bg-foreground text-background font-body text-xs uppercase tracking-wider hover:bg-accent transition-colors"><Save size={12} className="inline mr-1" /> Save</button>

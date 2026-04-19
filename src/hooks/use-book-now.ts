@@ -62,7 +62,7 @@ export const useBookNow = () => {
       } else {
         opts = eOrOptions as BookNowOptions | undefined;
       }
-      window.open(buildUrl(opts), "_blank", "noopener,noreferrer");
+      window.location.href = buildUrl(opts);
     },
     [],
   );

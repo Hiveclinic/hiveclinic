@@ -1,77 +1,65 @@
 
 
-## Plan: Resync Treatments with Setmore + Keep Stripe Checkout + Manual Booking Notifications
+## Migrate from Setmore to Acuity Scheduling
 
-### Problem
+### Goal
+Replace every Setmore touchpoint with Acuity, embed the Acuity scheduler as a premium in-page experience on `/bookings`, and add embedded schedulers on high-intent treatment landing pages. Keep existing Stripe/deposit/admin infrastructure untouched (per your answer).
 
-Comparing your live Setmore page against the hardcoded website data, there are numerous mismatches:
+### What you still need to send
+Paste your Acuity embed snippet (the `<iframe ...>` plus the `embed.js` `<script>` Acuity gives you under **Customize Appearance → Direct scheduling page → Embed**). I'll drop it into a single `AcuityEmbed` component so it's used everywhere consistently.
 
-**Price differences found:**
-- Facial Balancing 3ml: Website £350 vs Setmore £420
-- Facial Balancing 5ml: Website £500 vs Setmore £650
-- Anti-Wrinkle 2 Areas: Website £179 vs Setmore £180
-- Masseter: Website £240 vs Setmore £230
-- Lip Flip: Website £85 vs Setmore £140
-- Seventy Hyal Skin Booster: Website £160 vs Setmore £140
-- Profhilo: Website £250 vs Setmore £280
-
-**Wrong Setmore product IDs (links go to wrong service):**
-- Facial Balancing 3ml, 5ml
-- Anti-Wrinkle 2 Areas, 3 Areas
-- Masseter, Lip Flip
-- Seventy Hyal, Polynucleotides, Profhilo
-
-**Missing from website:**
-- Several services in the "Other" category on Setmore (duplicate listings, review appointments, etc.)
-- "DO NOT BOOK" header entries on Setmore need to be filtered out
-
-**URL format:**
-- Setmore's own links use `step=additional-products` - this needs to be added back to all URLs
+If you also have **category-specific** Acuity URLs (e.g. an "owner=XXX&appointmentType=YYY" link for Lips), share those too - they'll power the high-intent embeds. Otherwise all embeds show the full scheduler.
 
 ---
 
-### What Will Be Done
+### 1. New shared component: `AcuityEmbed`
+- `src/components/AcuityEmbed.tsx`
+- Loads Acuity's `embed.js` once, renders the iframe inside a centered, max-width 900px, cream-background container with 80px vertical padding.
+- Props: `appointmentTypeId?` (filters scheduler to one category), `minHeight?` (default ~900px), `className?`.
+- Mobile: `width: 100%`, no horizontal scroll, removes Acuity's default border.
+- Brand wrapper: soft cream (`bg-secondary`), no harsh borders, generous whitespace - matches the editorial aesthetic.
 
-#### 1. Full Treatment Data Resync (~1 file, major rewrite)
+### 2. `/bookings` page rebuild (`src/pages/BookingSystem.tsx`)
+- Remove the entire SERVICES array, CATEGORIES, OfferCard, search/filter UI.
+- Keep: page header, Offers + Content Model highlight banners (now linking to scrolled embed), FAQ section.
+- New layout:
+  ```text
+  Hero (title + subtitle)
+  Offers / Content Model banners (compact)
+  <AcuityEmbed id="book" />     ← centered, 900px, cream bg, 80px padding
+  FAQ
+  ```
+- Scroll-to-section anchor: `#book`.
 
-Rewrite the entire `SERVICES` array in `BookingSystem.tsx` to match Setmore exactly:
-- Correct all prices to match Setmore
-- Correct all product IDs to match Setmore
-- Add `step=additional-products` back to all URLs (Setmore's own format)
-- Filter out "DO NOT BOOK" placeholder entries
-- Match category names to Setmore's structure
-- Remove services that no longer exist on Setmore
+### 3. Global "Book Now" button behaviour
+- New helper `useBookNow()` hook (or simple util):
+  - On `/bookings`: smooth scroll to `#book`.
+  - Anywhere else: `navigate('/bookings#book')`.
+- Update `Layout`/`NavLink`/sticky mobile button/`HeroSection`/`FinalCTA`/`ModelCTA`/`TreatmentChatbot` etc. to use it. No `target="_blank"`, no Setmore URLs.
 
-#### 2. Update Treatment Landing Page Links (~20+ files)
+### 4. Treatment pages - mixed strategy
+- **Embed scheduler at bottom of high-intent pages** (Book Now scrolls to it):
+  - `LipFillers`, `LipFillerLanding`, `FacialBalancing`, `AntiWrinkle`, `DermalFiller`, `MuseLanding`
+  - Use `<AcuityEmbed appointmentTypeId={...} />` if you supply category IDs, else full scheduler.
+- **Link to `/bookings#book`** (no embed) for all other pages:
+  - `HydraFacial`, `ChemicalPeels`, `SkinBoosters`, `FatDissolve`, `Microneedling`, `Dermaplaning`, `LEDTherapy`, `Mesotherapy`, `PRP`, `MicroSclerotherapy`, `Consultations`, `IntimatePeels`, `AcneTreatment`, `HyperpigmentationTreatment`, `BlogPost`, `Treatments`.
 
-Update all individual treatment pages with corrected Setmore URLs and `step=additional-products` format.
+### 5. Sweep & remove all Setmore references
+- Replace every `https://hiveclinicuk.setmore.com/...` link with the Book Now helper across **~28 files** (homepage `HeroSection`, `FinalCTA`, `OffersSection`, `MuseLanding`, all treatment pages, `BlogPost`, `Treatments`, etc.).
+- Rename the `SETMORE_CONSULTATION` constant in `HeroSection.tsx` and remove similar constants elsewhere.
+- Update the comment in `Treatments.tsx` ("synced with Setmore + DB categories" → "synced with Acuity").
+- Leave `supabase/types.ts` `setmore_booking_id` column alone (auto-generated; the column itself can be dropped later via migration if desired - not part of this pass).
 
-#### 3. Update Homepage + Component Links (~3 files)
-
-Fix HeroSection, FinalCTA, and any other components with Setmore links.
-
-#### 4. Keep Stripe Checkout (no changes)
-
-The existing Stripe checkout flow via `create-booking-checkout` edge function stays as-is. No modifications needed.
-
-#### 5. Booking Notification System (new)
-
-When a booking comes through your website's Stripe checkout, you already get a confirmation email. To help you manually add these to Setmore:
-- Enhance the existing `send-booking-email` edge function to also send a clinic-facing notification email with all booking details (name, treatment, date, time)
-- This gives you a clear email to reference when adding the booking to Setmore manually
+### 6. Out of scope (per your answer "keep everything")
+- Not touching: `confirm-booking`, `create-booking-checkout`, `stripe-webhook`, `BookingSuccess`, `BookingCancelled`, `AdminBookingsTab`, `bookings` table. These remain functional for any non-Acuity flows you keep.
 
 ---
 
-### Technical Details
+### Files touched (high level)
+- **New**: `src/components/AcuityEmbed.tsx`, `src/hooks/use-book-now.ts`
+- **Rewritten**: `src/pages/BookingSystem.tsx`
+- **Edited (CTA swap + optional embed)**: `src/components/home/HeroSection.tsx`, `FinalCTA.tsx`, `OffersSection.tsx`, `Layout.tsx`, `ModelCTA.tsx`, `TreatmentChatbot.tsx`, `src/pages/MuseLanding.tsx`, `LipFillers.tsx`, `LipFillerLanding.tsx`, `FacialBalancing.tsx`, `AntiWrinkle.tsx`, `DermalFiller.tsx`, plus all remaining treatment landing pages, `Treatments.tsx`, `BlogPost.tsx`, `Consultations.tsx`.
 
-**Files modified:**
-- `src/pages/BookingSystem.tsx` - full SERVICES array rewrite with corrected data
-- `src/components/home/HeroSection.tsx` - URL format fix
-- `src/components/home/FinalCTA.tsx` - URL format fix
-- ~20 treatment landing pages - URL corrections
-- `supabase/functions/send-booking-email/index.ts` - add clinic notification email
-
-**No database changes needed.**
-
-**Future Setmore sync:** Since Setmore doesn't offer a public API for automated syncing, when you update treatments on Setmore, you would ask me to re-scrape and update the website to match. This is the most reliable approach given Setmore's limitations.
+### Open question (must answer before I implement)
+Paste the Acuity embed snippet (and any category-specific URLs you want for Lips / Facial Balancing / Anti-Wrinkle / Dermal Filler / MuseLanding). Once that lands, I'll execute the plan in one pass.
 

@@ -48,9 +48,7 @@ const LipFillers = () => {
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
             <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=8316cf5c-ce1f-4868-83be-6e95c9390c75&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/bookings#book"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-body text-sm tracking-widest uppercase hover:bg-white/90 transition-colors">
                 Book Free Consultation <ArrowRight size={14} />
               </a>
@@ -162,9 +160,7 @@ const LipFillers = () => {
         <p className="font-body text-muted-foreground mb-8">Book a free consultation - no obligation, just a friendly chat about your goals.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=8316cf5c-ce1f-4868-83be-6e95c9390c75&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/bookings#book"
                 className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors">
                 Book Free Consultation <ArrowRight size={14} />
               </a>

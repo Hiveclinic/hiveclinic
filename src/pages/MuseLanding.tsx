@@ -268,9 +268,7 @@ const MuseLanding = () => {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=cca90b33-33e4-473a-8255-038617ac5368&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/bookings#book"
                 className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-foreground/90 transition-colors"
               >
                 Book Model Slot <ArrowRight size={14} />

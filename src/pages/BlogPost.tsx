@@ -107,9 +107,7 @@ const BlogPost = () => {
             <p className="font-body text-sm text-muted-foreground mb-6">Book a free consultation to discuss your treatment goals.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://hiveclinicuk.setmore.com/book?step=additional-products&products=745f4a19-36cf-403c-8f7e-608f494585db&type=service&staff=0a5b72c9-c493-414f-9822-50a8b097701e&staffSelected=false"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/bookings#book"
                 className="inline-flex items-center gap-2 px-8 py-3 bg-foreground text-background font-body text-sm tracking-widest uppercase hover:bg-accent transition-colors"
               >
                 Book Consultation <ArrowRight size={14} />

@@ -989,6 +989,7 @@ export type Database = {
       treatments: {
         Row: {
           active: boolean
+          acuity_appointment_type_id: string | null
           category: string
           created_at: string
           deposit_amount: number | null
@@ -1009,6 +1010,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          acuity_appointment_type_id?: string | null
           category?: string
           created_at?: string
           deposit_amount?: number | null
@@ -1029,6 +1031,7 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          acuity_appointment_type_id?: string | null
           category?: string
           created_at?: string
           deposit_amount?: number | null

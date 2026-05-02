@@ -22,7 +22,9 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
           decoding="async"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+        {/* Summer-warmed gradient: keeps text readable but adds a sun-kissed amber wash */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--gold)/0.18)] via-transparent to-[hsl(var(--peach)/0.12)] mix-blend-soft-light" />
       </motion.div>
 
       <div className="relative z-10 h-full flex flex-col justify-end pb-16 md:pb-24">

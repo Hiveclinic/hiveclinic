@@ -15,7 +15,7 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
       <div className="container-edit pt-6 md:pt-20 pb-10 md:pb-24">
         {/* Mobile: image first. Desktop: copy left, image right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-end">
-          {/* Image column — order-first on mobile so phone users see imagery instantly */}
+          {/* Image column - order-first on mobile so phone users see imagery instantly */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -25,7 +25,7 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
             <div className="relative">
               <img
                 src={heroImg}
-                alt="Hive Clinic Manchester — aesthetic editorial portrait"
+                alt="Hive Clinic Manchester - aesthetic editorial portrait"
                 className="w-full aspect-[4/5] object-cover"
                 loading="eager"
                 decoding="async"

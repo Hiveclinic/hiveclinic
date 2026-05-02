@@ -45,11 +45,11 @@ const faqs = [
   },
   {
     q: "Is there a separate Anti-Wrinkle Consultation?",
-    a: "Yes — an Anti-Wrinkle Consultation can be booked on its own, free of charge. UK regulations require a face-to-face prescriber assessment before any toxin treatment, so even returning clients are reassessed at every appointment.",
+    a: "Yes - an Anti-Wrinkle Consultation can be booked on its own, free of charge. UK regulations require a face-to-face prescriber assessment before any toxin treatment, so even returning clients are reassessed at every appointment.",
   },
   {
     q: "Who carries out my treatment?",
-    a: "All injectable and prescription-only treatments are performed by Bianca, a qualified aesthetic practitioner. Prescription medicines (such as anti-wrinkle toxin) are prescribed under a face-to-face consultation in line with GPhC and JCCP guidance — we never prescribe remotely.",
+    a: "All injectable and prescription-only treatments are performed by Bianca, a qualified aesthetic practitioner. Prescription medicines (such as anti-wrinkle toxin) are prescribed under a face-to-face consultation in line with GPhC and JCCP guidance - we never prescribe remotely.",
   },
   {
     q: "Can I pay with Klarna or Clearpay?",
@@ -61,19 +61,19 @@ const faqs = [
   },
   {
     q: "Can I reschedule if something comes up?",
-    a: "Of course — we just ask for at least 48 hours notice so we can offer the slot to someone on the waiting list. You can reschedule once free of charge inside that window via your confirmation email or WhatsApp.",
+    a: "Of course - we just ask for at least 48 hours notice so we can offer the slot to someone on the waiting list. You can reschedule once free of charge inside that window via your confirmation email or WhatsApp.",
   },
   {
     q: "What happens if I reschedule late or miss my appointment?",
-    a: "Inside 48 hours the deposit is forfeited and a fresh deposit is required to rebook. No-shows are charged for the full appointment cost, as the time is held exclusively for you. Genuine emergencies are reviewed case by case — please let us know as early as you can.",
+    a: "Inside 48 hours the deposit is forfeited and a fresh deposit is required to rebook. No-shows are charged for the full appointment cost, as the time is held exclusively for you. Genuine emergencies are reviewed case by case - please let us know as early as you can.",
   },
   {
-    q: "I'm unwell or have a cold sore — can I still come in?",
-    a: "Please don't. Active illness, fever, cold sores, recent dental work or compromised skin can affect treatment safety and results. Message us as soon as possible — we'll move your appointment without losing your deposit when you let us know in good time.",
+    q: "I'm unwell or have a cold sore - can I still come in?",
+    a: "Please don't. Active illness, fever, cold sores, recent dental work or compromised skin can affect treatment safety and results. Message us as soon as possible - we'll move your appointment without losing your deposit when you let us know in good time.",
   },
   {
     q: "Can I have treatment if I'm pregnant or breastfeeding?",
-    a: "Injectable treatments (anti-wrinkle, dermal filler, skin boosters, fat dissolve) are not offered during pregnancy or while breastfeeding. Several of our facials and peels are also unsuitable — please flag this when booking and we'll guide you to safe alternatives.",
+    a: "Injectable treatments (anti-wrinkle, dermal filler, skin boosters, fat dissolve) are not offered during pregnancy or while breastfeeding. Several of our facials and peels are also unsuitable - please flag this when booking and we'll guide you to safe alternatives.",
   },
   {
     q: "When should I arrive?",
@@ -81,7 +81,7 @@ const faqs = [
   },
   {
     q: "Where are you based?",
-    a: "Hive Clinic, 25 Saint John Street, Manchester M3 4DT — two minutes from Deansgate. Paid street parking and several NCP car parks are within a five-minute walk.",
+    a: "Hive Clinic, 25 Saint John Street, Manchester M3 4DT - two minutes from Deansgate. Paid street parking and several NCP car parks are within a five-minute walk.",
   },
 ];
 
@@ -216,7 +216,7 @@ export default function BookingSystem() {
             transition={{ delay: 0.15 }}
             className="font-body text-[15px] md:text-base text-bone/65 max-w-lg mx-auto leading-[1.7] mb-6"
           >
-            Pick a treatment from the menu — the live calendar opens to that exact service. Pay a 20% deposit to confirm, the balance comes due on the day.
+            Pick a treatment from the menu - the live calendar opens to that exact service. Pay a 20% deposit to confirm, the balance comes due on the day.
           </motion.p>
 
           {/* Klarna / Clearpay strip */}
@@ -241,7 +241,7 @@ export default function BookingSystem() {
         </div>
       </section>
 
-      {/* Category nav — taps deep-link the iframe AND scroll to it */}
+      {/* Category nav - taps deep-link the iframe AND scroll to it */}
       {!loading && (
         <section className="sticky top-[89px] z-30 bg-background/92 backdrop-blur-md border-b border-border">
           <div className="max-w-6xl mx-auto px-4 py-2.5 overflow-x-auto">
@@ -376,7 +376,7 @@ export default function BookingSystem() {
         </div>
       </section>
 
-      {/* Calendar CTA — opens compact popup */}
+      {/* Calendar CTA - opens compact popup */}
       <section id="book" className="bg-bone-deep/40 border-y border-border" ref={embedRef}>
         <div className="max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14 text-center">
           <p className="eyebrow text-champagne mb-2">Live Calendar</p>
@@ -408,7 +408,7 @@ export default function BookingSystem() {
         </div>
       </section>
 
-      {/* Booking modal — compact, scrollable iframe */}
+      {/* Booking modal - compact, scrollable iframe */}
       {modalOpen && (
         <div
           className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-ink/70 backdrop-blur-sm"

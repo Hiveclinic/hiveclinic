@@ -8,18 +8,18 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Lip Filler 0.5ml", desc: "Subtle volume and hydration for a natural enhancement.", from: "£120" },
-  { name: "Lip Filler 1ml", desc: "Natural-looking volume and shape enhancement.", from: "£150" },
-  { name: "Cheek Filler", desc: "Restore volume and define cheekbone contours.", from: "£160" },
-  { name: "Jawline Filler", desc: "Sculpt and define the jawline for a sharper profile.", from: "£170" },
-  { name: "Chin Filler", desc: "Balance facial proportions with chin projection.", from: "£160" },
-  { name: "Nose Filler", desc: "Non-surgical nose reshaping for a smoother profile.", from: "£200" },
-  { name: "Tear Trough Filler", desc: "Reduce dark circles and hollows under the eyes.", from: "£200" },
-  { name: "Filler Dissolve", desc: "Safely dissolve unwanted or migrated filler.", from: "£100" },
-  { name: "Facial Balancing 2ml", desc: "Multi-area filler for overall facial harmony.", from: "£200" },
-  { name: "Facial Balancing 3ml", desc: "Strategic filler placement across multiple areas.", from: "£420" },
-  { name: "Facial Balancing 4ml", desc: "Comprehensive facial sculpting and contouring.", from: "£550" },
-  { name: "Facial Balancing 5ml", desc: "Full-face transformation for complete harmony.", from: "£650" },
+  { name: "Lip Filler 0.5ml", desc: "Subtle volume and hydration for a natural enhancement.", from: "£100" },
+  { name: "Lip Filler 0.8ml", desc: "A balanced step-up for shape and softness.", from: "£140" },
+  { name: "Lip Filler 1ml", desc: "Natural-looking volume and shape enhancement.", from: "£160" },
+  { name: "Lip Top Up", desc: "Refresh existing lip filler to maintain shape and volume.", from: "£120" },
+  { name: "Cheek Filler 1ml", desc: "Restore volume and define cheekbone contours.", from: "£200" },
+  { name: "Jawline Filler 1ml", desc: "Sculpt and define the jawline for a sharper profile.", from: "£220" },
+  { name: "Chin Filler 1ml", desc: "Balance facial proportions with chin projection.", from: "£180" },
+  { name: "Smile Line Filler 1ml", desc: "Soften nasolabial folds for a refreshed mid-face.", from: "£180" },
+  { name: "Facial Balancing 3ml", desc: "Strategic filler placement across multiple areas.", from: "£299" },
+  { name: "Facial Balancing 4ml", desc: "Comprehensive facial sculpting and contouring.", from: "£399" },
+  { name: "Facial Balancing 5ml", desc: "Full-face transformation for complete harmony.", from: "£499" },
+  { name: "Facial Contouring 6ml", desc: "Advanced multi-zone sculpting for dramatic harmony.", from: "£599" },
 ];
 
 const faqs = [
@@ -27,7 +27,7 @@ const faqs = [
   { q: "Is dermal filler safe?", a: "Yes, when administered by a qualified practitioner. At Hive Clinic, we use only premium hyaluronic acid fillers and all treatments are carried out by a fully qualified and insured prescriber." },
   { q: "Will it look natural?", a: "Absolutely. We specialise in subtle, balanced enhancements that complement your natural features. Our approach is always 'less is more' - you'll look like the best version of yourself." },
   { q: "What is facial balancing?", a: "Facial balancing uses filler strategically across multiple areas to create overall facial harmony. Rather than treating one area in isolation, we look at the whole face to achieve the most natural, proportionate result." },
-  { q: "How much does dermal filler cost in Manchester?", a: "Dermal filler at Hive Clinic starts from £120 for lip filler (0.5ml). Facial balancing packages start from £200 for 2ml. All treatments include a free consultation." },
+  { q: "How much does dermal filler cost in Manchester?", a: "Dermal filler at Hive Clinic starts from £100 for lip filler (0.5ml). Facial balancing packages start from £299 for 3ml. All treatments include a complimentary consultation." },
 ];
 
 const DermalFiller = () => {

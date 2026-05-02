@@ -4,7 +4,6 @@ const ACUITY_URL = "https://hiveclinicuk.as.me/";
 const ACUITY_SCHEDULE_BASE = "https://hiveclinicuk.as.me/schedule/9c3d2206";
 const ACUITY_CALENDAR_ID = "13962538";
 
-// Map our clean category labels back to the exact Acuity category path segment.
 const ACUITY_CATEGORY_MAP: Record<string, string> = {
   "Anti Wrinkle (Botox)": "✦ ANTI WRINKLE (BOTOX)",
   "Chemical Peels": "✦ CHEMCIAL PEELS",
@@ -36,16 +35,9 @@ const buildUrl = (opts?: BookNowOptions | string): string => {
 };
 
 /**
- * Hook for unified Book Now behaviour.
- * Opens Acuity scheduling in a new tab. Optional category + appointmentTypeId
- * deep-links straight to that calendar pre-filtered to the chosen service.
- *
- * Usage:
- *   const book = useBookNow();
- *   book();                                          // generic scheduler
- *   book("Lips");                                    // category landing
- *   book(e, "Lips");                                 // event + category
- *   book({ category: "Lips", appointmentTypeId: "92112291" }); // specific service
+ * Routes the user to /bookings#book and emits a window event with the
+ * pre-built Acuity URL so the embedded iframe can deep-link without leaving
+ * the site. The native browser back button continues to work.
  */
 export const useBookNow = () => {
   return useCallback(
@@ -62,7 +54,20 @@ export const useBookNow = () => {
       } else {
         opts = eOrOptions as BookNowOptions | undefined;
       }
-      window.location.href = buildUrl(opts);
+      const url = buildUrl(opts);
+
+      // If we're already on /bookings, just dispatch the event so the embed updates.
+      if (typeof window !== "undefined" && window.location.pathname === "/bookings") {
+        window.dispatchEvent(new CustomEvent("hive:book", { detail: { url } }));
+        const el = document.getElementById("book");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        // Persist target URL for the bookings page to pick up on mount.
+        try {
+          sessionStorage.setItem("hive:bookUrl", url);
+        } catch {}
+        window.location.href = "/bookings#book";
+      }
     },
     [],
   );

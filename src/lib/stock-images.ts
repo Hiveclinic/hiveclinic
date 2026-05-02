@@ -7,11 +7,11 @@ import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
 
 // Category-specific images for relevant fallbacks
-import catDermalFiller from "@/assets/categories/cat-dermal-filler-new.jpg";
-import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle-new.jpg";
+import catDermalFiller from "@/assets/categories/cat-dermal-filler.jpg";
+import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle.jpg";
 import catSkinBoosters from "@/assets/categories/cat-skin-boosters.jpg";
 import catHydrafacial from "@/assets/categories/cat-hydrofacial.jpg";
-import catChemicalPeels from "@/assets/categories/cat-chemical-peels-new.jpg";
+import catChemicalPeels from "@/assets/categories/cat-chemical-peels.jpg";
 import catMicroneedling from "@/assets/categories/cat-microneedling.jpg";
 import catFatDissolve from "@/assets/categories/cat-fat-dissolve.jpg";
 import catConsultations from "@/assets/categories/cat-consultations.jpg";
@@ -22,7 +22,7 @@ import catSkinTreatments from "@/assets/categories/cat-skin-treatments.jpg";
 import catFacialBalancing from "@/assets/categories/cat-facial-balancing.jpg";
 import catSkinRejuvenation from "@/assets/categories/cat-skin-rejuvenation.jpg";
 import catContentModel from "@/assets/categories/cat-content-model.jpg";
-import catFacials from "@/assets/categories/cat-facials-new.jpg";
+import catFacials from "@/assets/categories/cat-hydrofacial.jpg";
 
 // Luxe brand imagery (girly luxury baddie set)
 import luxeHero from "@/assets/luxe/hero-home.jpg";

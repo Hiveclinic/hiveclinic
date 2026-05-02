@@ -9,9 +9,9 @@ import { trackBookNow } from "@/hooks/use-tracking";
 import { useBookNow } from "@/hooks/use-book-now";
 import gallery3 from "@/assets/gallery-3.jpg";
 import catConsultations from "@/assets/categories/cat-consultations.jpg";
-import catDermalFiller from "@/assets/categories/cat-dermal-filler-new.jpg";
-import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle-new.jpg";
-import catChemicalPeels from "@/assets/categories/cat-chemical-peels-new.jpg";
+import catDermalFiller from "@/assets/categories/cat-dermal-filler.jpg";
+import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle.jpg";
+import catChemicalPeels from "@/assets/categories/cat-chemical-peels.jpg";
 import catIntimatePigment from "@/assets/categories/cat-intimate-pigment.jpg";
 import catSkinTreatments from "@/assets/categories/cat-skin-treatments.jpg";
 import catSkinBoosters from "@/assets/categories/cat-skin-boosters.jpg";
@@ -234,14 +234,15 @@ const Treatments = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ delay: i * 0.04, duration: 0.5 }}
-                  className="border-b border-border group"
+                  className="border-b border-border group cursor-pointer"
+                  onClick={() => {
+                    trackBookNow("treatments_grid_card", cat.title);
+                    book(cat.title);
+                  }}
                 >
-                  <div className="grid grid-cols-12 gap-4 md:gap-8 items-center py-6 md:py-8">
+                  <div className="grid grid-cols-12 gap-3 md:gap-8 items-center py-5 md:py-8">
                     {/* Image */}
-                    <Link
-                      to={cat.link}
-                      className="col-span-3 md:col-span-2 block"
-                    >
+                    <div className="col-span-4 md:col-span-2 block">
                       <div className="aspect-square overflow-hidden bg-secondary">
                         <img
                           src={cat.img}
@@ -250,48 +251,46 @@ const Treatments = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         />
                       </div>
-                    </Link>
+                    </div>
 
                     {/* Title */}
-                    <Link
-                      to={cat.link}
-                      className="col-span-9 md:col-span-6"
-                    >
-                      <div className="flex items-baseline gap-3 flex-wrap">
-                        <span className="font-display italic text-base text-gold/60">
+                    <div className="col-span-8 md:col-span-6">
+                      <div className="flex items-baseline gap-2 md:gap-3 flex-wrap">
+                        <span className="font-display italic text-sm md:text-base text-champagne/60">
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <h2 className="font-display text-2xl md:text-4xl group-hover:text-gold transition-colors">
+                        <h2 className="font-display text-xl md:text-3xl group-hover:text-champagne transition-colors">
                           {cat.title}
                         </h2>
                         {cat.hasOffer && (
-                          <span className="font-body text-[9px] tracking-[0.25em] uppercase text-gold border border-gold/40 px-2 py-0.5">
+                          <span className="font-body text-[9px] tracking-[0.25em] uppercase text-champagne border border-champagne/40 px-2 py-0.5">
                             Offer
                           </span>
                         )}
                       </div>
-                      <p className="font-display italic text-sm md:text-base text-gold/70 mt-1.5">
+                      <p className="display-italic text-sm md:text-base text-champagne/70 mt-1">
                         {cat.tagline}
                       </p>
-                      <p className="font-body text-[11px] tracking-[0.25em] uppercase text-muted-foreground mt-2">
-                        {cat.treatmentCount} {cat.treatmentCount === 1 ? "treatment" : "treatments"}
+                      <p className="font-body text-[10px] md:text-[11px] tracking-[0.25em] uppercase text-muted-foreground mt-1.5">
+                        {cat.treatmentCount} {cat.treatmentCount === 1 ? "treatment" : "treatments"} · Tap to book
                       </p>
-                    </Link>
+                    </div>
 
                     {/* Price + Book */}
-                    <div className="col-span-12 md:col-span-4 md:text-right pt-4 md:pt-0 border-t md:border-t-0 border-border/50 mt-2 md:mt-0">
+                    <div className="col-span-12 md:col-span-4 md:text-right pt-3 md:pt-0 border-t md:border-t-0 border-border/50 mt-1 md:mt-0">
                       <div className="flex md:flex-col md:items-end items-center justify-between md:gap-3 gap-4">
                         <div className="md:text-right">
-                          <p className="font-body text-[10px] tracking-[0.25em] uppercase text-muted-foreground">From</p>
-                          <p className="font-display text-2xl md:text-3xl">{cat.startingFrom}</p>
+                          <p className="eyebrow text-muted-foreground">From</p>
+                          <p className="font-display text-xl md:text-3xl">{cat.startingFrom}</p>
                         </div>
                         <button
                           type="button"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             trackBookNow("treatments_grid", cat.title);
                             book(cat.title);
                           }}
-                          className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-[10px] tracking-[0.25em] uppercase hover:bg-gold transition-colors"
+                          className="inline-flex items-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-ink text-bone font-body text-[10px] tracking-[0.25em] uppercase hover:bg-aubergine transition-colors"
                         >
                           Book <ArrowRight size={12} />
                         </button>

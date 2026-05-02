@@ -265,12 +265,12 @@ const Layout = ({
             <div>
               <h4 className="font-display text-lg mb-4">Opening Hours</h4>
               <div className="font-body text-sm text-background/60 space-y-1">
-                <p>Mon: 10:00 - 17:00</p>
+                <p>Mon: 10:00 - 16:00</p>
                 <p>Tue: 10:00 - 17:00</p>
                 <p>Wed: Closed</p>
-                <p>Thu: 11:00 - 18:30</p>
-                <p>Fri: 10:00 - 17:00</p>
-                <p>Sat: 10:00 - 15:00</p>
+                <p>Thu: 12:00 - 20:00</p>
+                <p>Fri: 10:00 - 18:00</p>
+                <p>Sat: 10:00 - 17:00</p>
                 <p>Sun: Closed</p>
               </div>
               <p className="font-body text-xs text-background/40 mt-3">Bank holiday hours may vary.</p>

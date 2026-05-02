@@ -246,8 +246,9 @@ const Treatments = () => {
                       <div className="aspect-square overflow-hidden bg-secondary">
                         <img
                           src={cat.img}
-                          alt={`${cat.title} treatments at Hive Clinic Manchester`}
+                          alt={`${cat.title} - ${cat.tagline} at Hive Clinic Manchester, from ${cat.startingFrom}`}
                           loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         />
                       </div>

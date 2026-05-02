@@ -5,6 +5,7 @@ import { ArrowRight, Sparkles, Clock, ShieldCheck } from "lucide-react";
 import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { supabase } from "@/integrations/supabase/client";
+import { trackBookNow } from "@/hooks/use-tracking";
 
 // Order categories the same way Acuity presents them
 const CATEGORY_ORDER = [
@@ -243,6 +244,7 @@ export default function Pricing() {
                             <div className="col-span-5 sm:col-span-1 sm:text-right">
                               <Link
                                 to={`/bookings${it.acuity_appointment_type_id ? `?type=${it.acuity_appointment_type_id}` : ""}`}
+                                onClick={() => trackBookNow("pricing_row", cat, it.name)}
                                 className="inline-flex items-center gap-1 font-body text-[10px] tracking-widest uppercase text-foreground/70 hover:text-gold transition-colors"
                               >
                                 Book <ArrowRight size={10} />
@@ -274,6 +276,7 @@ export default function Pricing() {
           </p>
           <Link
             to="/bookings"
+            onClick={() => trackBookNow("pricing_footer")}
             className="inline-flex items-center gap-2 px-10 py-4 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors"
           >
             Book Now <ArrowRight size={13} />

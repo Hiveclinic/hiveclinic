@@ -1,5 +1,6 @@
 /* Sleek baddie luxe: nude + cocoa + champagne, with aubergine deep + dusty rose accents */
 @import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&display=swap');
 
@@ -106,20 +107,21 @@
     @apply bg-background text-foreground;
     font-family: 'Manrope', system-ui, sans-serif;
     font-feature-settings: 'ss01', 'cv11';
-    letter-spacing: 0.005em;
+    letter-spacing: -0.005em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Display: Tenor Sans (clean, tall, expensive). Sub-display: Marcellus (subtle serif breath). */
+  /* Display: Tenor Sans (clean, tall, expensive). Sub-display: Marcellus. Italic accent: Italiana (more feminine). */
   h1, h2 {
     font-family: 'Tenor Sans', serif;
-    letter-spacing: 0.005em;
+    letter-spacing: -0.01em;
     font-weight: 400;
+    line-height: 0.98;
   }
   h3, h4, h5, h6 {
     font-family: 'Marcellus', 'Tenor Sans', serif;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.005em;
     font-weight: 400;
   }
 

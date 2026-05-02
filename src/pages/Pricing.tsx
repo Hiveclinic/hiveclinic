@@ -86,8 +86,9 @@ export default function Pricing() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative bg-summer-gradient pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-sun-soft pointer-events-none" />
+      <section className="relative bg-foreground text-background pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gold blur-[180px]" />
         <div className="relative max-w-5xl mx-auto px-6 text-center">
           <motion.p
             initial={{ opacity: 0, y: 8 }}

@@ -1,71 +1,166 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { trackBookNow } from "@/hooks/use-tracking";
+import gallery3 from "@/assets/gallery-3.jpg";
+import catDermalFiller from "@/assets/categories/cat-dermal-filler-new.jpg";
+import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle-new.jpg";
+import catChemicalPeels from "@/assets/categories/cat-chemical-peels-new.jpg";
+import catSkinTreatments from "@/assets/categories/cat-skin-treatments.jpg";
+import catSkinBoosters from "@/assets/categories/cat-skin-boosters.jpg";
+import catFatDissolve from "@/assets/categories/cat-fat-dissolve.jpg";
+import catFacialBalancing from "@/assets/categories/cat-facial-balancing.jpg";
 
-const treatments = [
-  { title: "Lip Fillers", desc: "Subtle volume and natural definition", link: "/treatments/lip-fillers-manchester", from: "£120", tag: "Most Popular" },
-  { title: "Anti-Wrinkle", desc: "Soften lines, prevent new ones forming", link: "/treatments/anti-wrinkle-manchester", from: "£140" },
-  { title: "Dermal Filler", desc: "Restore volume and contour key features", link: "/treatments/dermal-filler-manchester", from: "£150" },
-  { title: "Skin Boosters", desc: "Deep hydration and radiance from within", link: "/treatments/skin-boosters-manchester", from: "£130" },
-  { title: "HydraFacial", desc: "Deep cleanse, exfoliate and hydrate", link: "/treatments/hydrafacial-manchester", from: "£150" },
-  { title: "Chemical Peels", desc: "Medical-grade skin renewal and clarity", link: "/treatments/chemical-peels-manchester", from: "£95" },
+const FALLBACK: Record<string, string> = {
+  "Anti Wrinkle (Botox)": catAntiWrinkle,
+  Lips: catDermalFiller,
+  "Facial Balancing": catFacialBalancing,
+  "Skin Boosters": catSkinBoosters,
+  "Skin Treatments": catSkinTreatments,
+  "Chemical Peels": catChemicalPeels,
+  "Fat Dissolve": catFatDissolve,
+};
+
+const LINKS: Record<string, string> = {
+  "Anti Wrinkle (Botox)": "/treatments/anti-wrinkle-injections-manchester",
+  Lips: "/treatments/lip-fillers-manchester",
+  "Facial Balancing": "/treatments/facial-balancing-manchester",
+  "Skin Boosters": "/treatments/skin-boosters-manchester",
+  "Skin Treatments": "/treatments/microneedling-manchester",
+  "Chemical Peels": "/treatments/chemical-peels-manchester",
+  "Fat Dissolve": "/treatments/fat-dissolving-manchester",
+};
+
+// IG-style preferred display order, mirrors Acuity scheduler hierarchy
+const ORDER = [
+  "Anti Wrinkle (Botox)",
+  "Lips",
+  "Facial Balancing",
+  "Skin Boosters",
+  "Skin Treatments",
+  "Chemical Peels",
+  "Fat Dissolve",
 ];
 
-const TreatmentShowcase = () => (
-  <section className="py-20 md:py-28" aria-label="Popular treatments">
-    <div className="max-w-7xl mx-auto px-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14"
-      >
-        <div>
-          <p className="font-body text-[10px] tracking-[0.3em] uppercase text-gold mb-3">Treatments</p>
-          <h2 className="font-display text-3xl md:text-5xl leading-tight">Tailored to you.</h2>
-        </div>
-        <Link
-          to="/bookings"
-          className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.15em] uppercase text-muted-foreground hover:text-gold transition-colors"
-        >
-          Full treatment menu <ArrowRight size={12} />
-        </Link>
-      </motion.div>
+type Row = { name: string; category: string; price: number; on_offer: boolean; offer_price: number | null; image_url: string | null };
+type Cat = { title: string; from: string; count: number; img: string; link: string };
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
-        {treatments.map((t, i) => (
-          <motion.div
-            key={t.title}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.06, duration: 0.5 }}
+const TreatmentShowcase = () => {
+  const [cats, setCats] = useState<Cat[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("treatments")
+      .select("name, category, price, on_offer, offer_price, image_url")
+      .eq("active", true)
+      .then(({ data }) => {
+        if (!data) return;
+        const map = new Map<string, Row[]>();
+        for (const r of data as Row[]) {
+          if (!ORDER.includes(r.category)) continue;
+          if (!map.has(r.category)) map.set(r.category, []);
+          map.get(r.category)!.push(r);
+        }
+        const built: Cat[] = ORDER.filter((c) => map.has(c)).map((c) => {
+          const list = map.get(c)!;
+          const lowest = Math.min(
+            ...list
+              .map((t) => (t.on_offer && t.offer_price ? Number(t.offer_price) : Number(t.price)))
+              .filter((n) => n > 0),
+          );
+          const firstImg = list.find((t) => t.image_url)?.image_url;
+          return {
+            title: c,
+            from: !Number.isFinite(lowest) || lowest === 0 ? "POA" : `£${lowest.toFixed(0)}`,
+            count: list.length,
+            img: firstImg || FALLBACK[c] || gallery3,
+            link: LINKS[c] || `/bookings`,
+          };
+        });
+        setCats(built);
+      });
+  }, []);
+
+  return (
+    <section className="py-24 md:py-32 bg-foreground text-background" aria-label="Treatment categories">
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16"
+        >
+          <div>
+            <p className="font-body text-[10px] tracking-[0.4em] uppercase text-gold mb-3">The Menu</p>
+            <h2 className="font-display text-4xl md:text-6xl leading-[0.98] text-background">
+              Select a <span className="italic text-gold">category</span> to begin.
+            </h2>
+          </div>
+          <Link
+            to="/pricing"
+            className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.25em] uppercase text-background/60 hover:text-gold transition-colors border-b border-gold/30 pb-1"
           >
-            <Link
-              to={t.link}
-              className="group flex flex-col justify-between p-8 md:p-10 bg-background hover:bg-secondary/40 transition-all duration-300 h-full min-h-[180px]"
+            Full price list <ArrowRight size={12} />
+          </Link>
+        </motion.div>
+
+        {/* Acuity-style vertical category list */}
+        <div className="border-t border-white/10">
+          {cats.map((c, i) => (
+            <motion.div
+              key={c.title}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ delay: i * 0.04, duration: 0.5 }}
+              className="border-b border-white/10 group"
             >
-              <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <h3 className="font-display text-xl md:text-2xl group-hover:text-gold transition-colors duration-300">{t.title}</h3>
-                  {t.tag && (
-                    <span className="font-body text-[8px] tracking-[0.2em] uppercase text-gold/70 border border-gold/20 px-2 py-0.5">
-                      {t.tag}
-                    </span>
-                  )}
+              <Link
+                to={c.link}
+                onClick={() => trackBookNow("home_showcase", c.title)}
+                className="grid grid-cols-12 gap-4 md:gap-8 items-center py-6 md:py-8 hover:bg-white/[0.02] transition-colors"
+              >
+                <div className="col-span-3 md:col-span-2">
+                  <div className="aspect-square overflow-hidden bg-white/5">
+                    <img
+                      src={c.img}
+                      alt={`${c.title} treatments`}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
                 </div>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
-              </div>
-              <div className="flex items-center justify-between mt-6 pt-4 border-t border-border/60">
-                <span className="font-body text-sm text-foreground/70">From {t.from}</span>
-                <ArrowRight size={14} className="text-muted-foreground/40 group-hover:text-gold group-hover:translate-x-1 transition-all duration-300" />
-              </div>
-            </Link>
-          </motion.div>
-        ))}
+                <div className="col-span-6 md:col-span-7">
+                  <div className="flex items-baseline gap-3 flex-wrap">
+                    <span className="font-display italic text-base text-gold/60">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="font-display text-2xl md:text-4xl text-background group-hover:text-gold transition-colors">
+                      {c.title}
+                    </h3>
+                  </div>
+                  <p className="font-body text-[11px] tracking-[0.25em] uppercase text-background/40 mt-2">
+                    {c.count} {c.count === 1 ? "treatment" : "treatments"}
+                  </p>
+                </div>
+                <div className="col-span-3 md:col-span-3 text-right">
+                  <p className="font-body text-[10px] tracking-[0.25em] uppercase text-background/40 mb-1">
+                    From
+                  </p>
+                  <div className="flex items-center justify-end gap-3">
+                    <span className="font-display text-2xl md:text-3xl text-background">{c.from}</span>
+                    <ArrowRight size={16} className="text-background/30 group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default TreatmentShowcase;

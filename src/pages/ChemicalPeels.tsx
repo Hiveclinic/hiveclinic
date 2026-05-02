@@ -75,7 +75,7 @@ const ChemicalPeels = () => {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <p className="font-body text-sm text-muted-foreground">Course packages of 3 available from £210. <Link to="/bookings" className="text-gold hover:underline">View full pricing</Link></p>
+          <p className="font-body text-sm text-muted-foreground">Course packages of 3 available from £270. <Link to="/bookings" className="text-gold hover:underline">View full pricing</Link></p>
         </div>
       </div>
     </section>

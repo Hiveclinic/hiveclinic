@@ -38,9 +38,6 @@ import Admin from "./pages/Admin";
 import Aftercare from "./pages/Aftercare";
 import CustomerPortal from "./pages/CustomerPortal";
 import Privacy from "./pages/Privacy";
-import AcneTreatment from "./pages/AcneTreatment";
-import HyperpigmentationTreatment from "./pages/HyperpigmentationTreatment";
-import LipFillerLanding from "./pages/LipFillerLanding";
 import MuseLanding from "./pages/MuseLanding";
 
 import ConsentForm from "./pages/ConsentForm";
@@ -92,10 +89,6 @@ const AnimatedRoutes = () => {
           <Route path="/aftercare" element={<PageTransition><Aftercare /></PageTransition>} />
           <Route path="/my-appointments" element={<PageTransition><CustomerPortal /></PageTransition>} />
           <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />
-          <Route path="/acne-treatment-manchester" element={<PageTransition><AcneTreatment /></PageTransition>} />
-          <Route path="/hyperpigmentation-treatment-manchester" element={<PageTransition><HyperpigmentationTreatment /></PageTransition>} />
-          <Route path="/lip-filler-manchester" element={<PageTransition><LipFillerLanding /></PageTransition>} />
-          <Route path="/muse" element={<PageTransition><MuseLanding /></PageTransition>} />
           <Route path="/content-models" element={<PageTransition><MuseLanding /></PageTransition>} />
           
           <Route path="/consent-form" element={<PageTransition><ConsentForm /></PageTransition>} />

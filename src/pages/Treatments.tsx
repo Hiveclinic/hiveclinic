@@ -85,6 +85,7 @@ const CATEGORY_TAGLINES: Record<string, string> = {
 // Display order - luxury-first, offers first to drive conversion
 const CATEGORY_ORDER = [
   "Offers",
+  "Consultation",
   "Anti Wrinkle (Botox)",
   "Lips",
   "Facial Balancing",
@@ -92,7 +93,6 @@ const CATEGORY_ORDER = [
   "Skin Treatments",
   "Chemical Peels",
   "Fat Dissolve",
-  "Consultation",
   "Correction",
   "Content Model",
 ];

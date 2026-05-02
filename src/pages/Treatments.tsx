@@ -6,6 +6,7 @@ import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { supabase } from "@/integrations/supabase/client";
 import { trackBookNow } from "@/hooks/use-tracking";
+import { useBookNow } from "@/hooks/use-book-now";
 import gallery3 from "@/assets/gallery-3.jpg";
 import catConsultations from "@/assets/categories/cat-consultations.jpg";
 import catDermalFiller from "@/assets/categories/cat-dermal-filler-new.jpg";
@@ -125,6 +126,7 @@ const Treatments = () => {
 
   const [categories, setCategories] = useState<CategoryCard[]>([]);
   const [loading, setLoading] = useState(true);
+  const book = useBookNow();
 
   useEffect(() => {
     const fetchTreatments = async () => {
@@ -283,13 +285,16 @@ const Treatments = () => {
                           <p className="font-body text-[10px] tracking-[0.25em] uppercase text-muted-foreground">From</p>
                           <p className="font-display text-2xl md:text-3xl">{cat.startingFrom}</p>
                         </div>
-                        <Link
-                          to="/bookings#book"
-                          onClick={() => trackBookNow("treatments_grid", cat.title)}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            trackBookNow("treatments_grid", cat.title);
+                            book(cat.title);
+                          }}
                           className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-[10px] tracking-[0.25em] uppercase hover:bg-gold transition-colors"
                         >
                           Book <ArrowRight size={12} />
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </div>

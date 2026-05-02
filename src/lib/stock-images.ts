@@ -24,15 +24,40 @@ import catSkinRejuvenation from "@/assets/categories/cat-skin-rejuvenation.jpg";
 import catContentModel from "@/assets/categories/cat-content-model.jpg";
 import catFacials from "@/assets/categories/cat-facials-new.jpg";
 
+// Luxe brand imagery (girly luxury baddie set)
+import luxeHero from "@/assets/luxe/hero-home.jpg";
+import luxeLips from "@/assets/luxe/signature-lips.jpg";
+import luxeProfhilo from "@/assets/luxe/signature-profhilo.jpg";
+import luxeTox from "@/assets/luxe/signature-tox.jpg";
+import luxeClinic1 from "@/assets/luxe/clinic-1.jpg";
+import luxeClinic2 from "@/assets/luxe/clinic-2.jpg";
+import luxeFounder from "@/assets/luxe/founder.jpg";
+import luxeFriends from "@/assets/luxe/lifestyle-friends.jpg";
+import luxePeels from "@/assets/luxe/category-peels.jpg";
+import luxeInjectables from "@/assets/luxe/category-injectables.jpg";
+
+export const LUXE = {
+  hero: luxeHero,
+  lips: luxeLips,
+  profhilo: luxeProfhilo,
+  tox: luxeTox,
+  clinic1: luxeClinic1,
+  clinic2: luxeClinic2,
+  founder: luxeFounder,
+  friends: luxeFriends,
+  peels: luxePeels,
+  injectables: luxeInjectables,
+} as const;
+
 export const STOCK = {
   // Homepage
-  hero_home: gallery1,
-  gallery_1: gallery1,
-  gallery_2: gallery2,
-  gallery_3: gallery3,
-  gallery_4: gallery4,
-  gallery_5: gallery5,
-  gallery_6: gallery6,
+  hero_home: luxeHero,
+  gallery_1: luxeHero,
+  gallery_2: luxeLips,
+  gallery_3: luxeProfhilo,
+  gallery_4: luxeClinic1,
+  gallery_5: luxeFriends,
+  gallery_6: luxeClinic2,
 
   // About
   about_hero: gallery1,

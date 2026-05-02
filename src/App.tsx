@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Index from "./pages/Index";
 import Treatments from "./pages/Treatments";
+import Pricing from "./pages/Pricing";
 import LipFillers from "./pages/LipFillers";
 import AntiWrinkle from "./pages/AntiWrinkle";
 import DermalFiller from "./pages/DermalFiller";
@@ -59,6 +60,7 @@ const AnimatedRoutes = () => {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<PageTransition><Index /></PageTransition>} />
           <Route path="/treatments" element={<PageTransition><Treatments /></PageTransition>} />
+          <Route path="/pricing" element={<PageTransition><Pricing /></PageTransition>} />
           <Route path="/treatments/lip-fillers-manchester" element={<PageTransition><LipFillers /></PageTransition>} />
           <Route path="/treatments/anti-wrinkle-injections-manchester" element={<PageTransition><AntiWrinkle /></PageTransition>} />
           <Route path="/treatments/dermal-filler-manchester" element={<PageTransition><DermalFiller /></PageTransition>} />

@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, ShieldCheck, Award, Star } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { supabase } from "@/integrations/supabase/client";
+import { trackBookNow } from "@/hooks/use-tracking";
 import gallery3 from "@/assets/gallery-3.jpg";
 import catConsultations from "@/assets/categories/cat-consultations.jpg";
 import catDermalFiller from "@/assets/categories/cat-dermal-filler-new.jpg";
@@ -171,196 +172,151 @@ const Treatments = () => {
 
   return (
     <Layout>
-      {/* Editorial hero */}
-      <section className="relative bg-summer-gradient pt-32 pb-24 overflow-hidden">
-        <div className="absolute inset-0 bg-sun-soft pointer-events-none" />
-        {/* Giant decorative type */}
-        <p
-          className="absolute -bottom-10 -right-10 font-display italic text-[28vw] leading-none text-gold/[0.05] select-none pointer-events-none"
-          aria-hidden
-        >
-          edit
-        </p>
+      {/* Dark editorial hero — mirrors the Acuity scheduler vibe */}
+      <section className="relative bg-foreground text-background pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gold blur-[180px]" />
+        </div>
 
         <div className="relative max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="md:col-span-8"
-            >
-              <p className="font-body text-[11px] tracking-[0.4em] uppercase text-gold mb-6">
-                The Hive Edit — Spring / Summer 26
-              </p>
-              <h1 className="font-display text-6xl md:text-8xl leading-[0.95]">
-                A treatment <br />
-                <span className="italic text-gold">for every</span> <br />
-                version of you.
-              </h1>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="md:col-span-4"
-            >
-              <p className="font-body text-base text-muted-foreground leading-relaxed mb-6">
-                From subtle refinements to architectural sculpting — every
-                appointment begins with a conversation, and ends with a result
-                that feels distinctly you.
-              </p>
-              <Link
-                to="/pricing"
-                className="inline-flex items-center gap-2 font-body text-[11px] tracking-widest uppercase text-foreground border-b border-gold pb-1 hover:text-gold transition-colors"
-              >
-                See full price list <ArrowRight size={12} />
-              </Link>
-            </motion.div>
-          </div>
-
-          {/* Trust strip */}
-          <div className="mt-16 pt-8 border-t border-sand grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { icon: ShieldCheck, label: "Qualified Prescriber" },
-              { icon: Star, label: "100+ Five-Star Reviews" },
-              { icon: Sparkles, label: "Free Consultations" },
-              { icon: Award, label: "Pay Monthly Available" },
-            ].map((b) => (
-              <div key={b.label} className="flex items-center gap-3">
-                <b.icon size={14} strokeWidth={1.5} className="text-gold" />
-                <span className="font-body text-[11px] tracking-widest uppercase text-muted-foreground">
-                  {b.label}
-                </span>
-              </div>
-            ))}
-          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="font-body text-[11px] tracking-[0.45em] uppercase text-gold mb-6"
+          >
+            The Hive Menu
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="font-display text-5xl md:text-7xl text-background leading-[0.98] max-w-4xl"
+          >
+            Treatments. <span className="italic text-gold">Tailored to you.</span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15 }}
+            className="font-body text-base text-background/55 mt-8 max-w-xl leading-relaxed"
+          >
+            Select a category to explore. Every treatment mirrors what you'll
+            see at booking — same names, same prices, same expert care.
+          </motion.p>
         </div>
       </section>
 
-      {/* Categories — magazine-style asymmetric grid */}
-      <section className="py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* Acuity-style category list */}
+      <section className="py-20 md:py-28 bg-background">
+        <div className="max-w-6xl mx-auto px-6">
           {loading ? (
             <p className="text-center font-body text-muted-foreground animate-pulse">
-              Loading the edit…
+              Loading the menu…
             </p>
           ) : (
-            <div className="space-y-20 md:space-y-28">
-              {categories.map((cat, i) => {
-                const reverse = i % 2 === 1;
-                return (
-                  <motion.article
-                    key={cat.title}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.6 }}
-                    className={`grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-14 items-center ${
-                      reverse ? "md:[&>*:first-child]:order-2" : ""
-                    }`}
-                  >
+            <div className="border-t border-border">
+              {categories.map((cat, i) => (
+                <motion.article
+                  key={cat.title}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ delay: i * 0.04, duration: 0.5 }}
+                  className="border-b border-border group"
+                >
+                  <div className="grid grid-cols-12 gap-4 md:gap-8 items-center py-6 md:py-8">
                     {/* Image */}
                     <Link
                       to={cat.link}
-                      className="md:col-span-7 group block relative overflow-hidden"
+                      className="col-span-3 md:col-span-2 block"
                     >
-                      <div className="aspect-[4/5] md:aspect-[16/11] overflow-hidden bg-muted">
+                      <div className="aspect-square overflow-hidden bg-secondary">
                         <img
                           src={cat.img}
                           alt={`${cat.title} treatments at Hive Clinic Manchester`}
-                          className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-[1200ms] ease-out"
                           loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         />
                       </div>
-                      {/* Floating index */}
-                      <div className="absolute top-5 left-5 bg-background/90 backdrop-blur px-3 py-2">
-                        <span className="font-display italic text-2xl text-gold">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="font-body text-[10px] tracking-widest uppercase text-muted-foreground ml-2">
-                          / {String(categories.length).padStart(2, "0")}
-                        </span>
-                      </div>
-                      {cat.hasOffer && (
-                        <div className="absolute top-5 right-5 bg-gold text-background font-body text-[10px] tracking-widest uppercase px-3 py-1.5">
-                          Offer
-                        </div>
-                      )}
                     </Link>
 
-                    {/* Copy */}
-                    <div className="md:col-span-5">
-                      <p className="font-body text-[10px] tracking-[0.4em] uppercase text-gold mb-4">
-                        {cat.treatmentCount} treatment
-                        {cat.treatmentCount !== 1 ? "s" : ""}
-                      </p>
-                      <h2 className="font-display text-4xl md:text-5xl leading-tight mb-3">
-                        {cat.title}
-                      </h2>
-                      <p className="font-display italic text-xl text-gold/80 mb-5">
+                    {/* Title */}
+                    <Link
+                      to={cat.link}
+                      className="col-span-9 md:col-span-6"
+                    >
+                      <div className="flex items-baseline gap-3 flex-wrap">
+                        <span className="font-display italic text-base text-gold/60">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <h2 className="font-display text-2xl md:text-4xl group-hover:text-gold transition-colors">
+                          {cat.title}
+                        </h2>
+                        {cat.hasOffer && (
+                          <span className="font-body text-[9px] tracking-[0.25em] uppercase text-gold border border-gold/40 px-2 py-0.5">
+                            Offer
+                          </span>
+                        )}
+                      </div>
+                      <p className="font-display italic text-sm md:text-base text-gold/70 mt-1.5">
                         {cat.tagline}
                       </p>
-                      <p className="font-body text-sm text-muted-foreground leading-relaxed mb-8 max-w-md">
-                        {cat.desc}
+                      <p className="font-body text-[11px] tracking-[0.25em] uppercase text-muted-foreground mt-2">
+                        {cat.treatmentCount} {cat.treatmentCount === 1 ? "treatment" : "treatments"}
                       </p>
+                    </Link>
 
-                      <div className="flex items-end justify-between border-t border-sand pt-5">
-                        <div>
-                          <p className="font-body text-[10px] tracking-widest uppercase text-muted-foreground mb-1">
-                            From
-                          </p>
-                          <p className="font-display text-3xl">
-                            {cat.startingFrom}
-                          </p>
+                    {/* Price + Book */}
+                    <div className="col-span-12 md:col-span-4 md:text-right pt-4 md:pt-0 border-t md:border-t-0 border-border/50 mt-2 md:mt-0">
+                      <div className="flex md:flex-col md:items-end items-center justify-between md:gap-3 gap-4">
+                        <div className="md:text-right">
+                          <p className="font-body text-[10px] tracking-[0.25em] uppercase text-muted-foreground">From</p>
+                          <p className="font-display text-2xl md:text-3xl">{cat.startingFrom}</p>
                         </div>
-                        <div className="flex flex-col gap-2 items-end">
-                          <Link
-                            to={cat.link}
-                            className="inline-flex items-center gap-2 font-body text-[11px] tracking-widest uppercase text-foreground hover:text-gold transition-colors"
-                          >
-                            Explore <ArrowRight size={12} />
-                          </Link>
-                          <Link
-                            to="/bookings"
-                            className="inline-flex items-center gap-2 px-5 py-3 bg-foreground text-background font-body text-[11px] tracking-widest uppercase hover:bg-accent transition-colors"
-                          >
-                            Book
-                          </Link>
-                        </div>
+                        <Link
+                          to="/bookings#book"
+                          onClick={() => trackBookNow("treatments_grid", cat.title)}
+                          className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-body text-[10px] tracking-[0.25em] uppercase hover:bg-gold transition-colors"
+                        >
+                          Book <ArrowRight size={12} />
+                        </Link>
                       </div>
                     </div>
-                  </motion.article>
-                );
-              })}
+                  </div>
+                </motion.article>
+              ))}
             </div>
           )}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="relative py-28 bg-cream-warm border-t border-sand overflow-hidden">
-        <div className="absolute inset-0 bg-sun-soft pointer-events-none" />
+      <section className="relative py-24 md:py-28 bg-foreground text-background border-t border-white/10 overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.04]">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gold blur-[160px]" />
+        </div>
         <div className="relative max-w-3xl mx-auto px-6 text-center">
-          <Sparkles size={22} className="text-gold mx-auto mb-5" />
-          <h3 className="font-display text-4xl md:text-5xl mb-5 leading-tight">
+          <Sparkles size={20} className="text-gold mx-auto mb-5" />
+          <h3 className="font-display text-4xl md:text-5xl mb-5 leading-tight text-background">
             Not sure which treatment is right?
           </h3>
-          <p className="font-body text-base text-muted-foreground mb-10 max-w-md mx-auto">
+          <p className="font-body text-base text-background/55 mb-10 max-w-md mx-auto">
             Book a free consultation and we'll create a personalised plan
             tailored to your goals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/bookings#book"
-              className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-foreground text-background font-body text-xs tracking-widest uppercase hover:bg-accent transition-colors"
+            <Link
+              to="/bookings#book"
+              onClick={() => trackBookNow("treatments_footer")}
+              className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-gold text-white font-body text-xs tracking-[0.25em] uppercase hover:bg-gold-dark transition-colors"
             >
               Book Free Consultation <ArrowRight size={14} />
-            </a>
+            </Link>
             <a
               href="https://wa.me/447795008114"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-10 py-4 border border-foreground/20 font-body text-xs tracking-widest uppercase hover:border-gold hover:text-gold transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-10 py-4 border border-white/20 text-background font-body text-xs tracking-[0.25em] uppercase hover:border-gold hover:text-gold transition-colors"
             >
               Message on WhatsApp
             </a>

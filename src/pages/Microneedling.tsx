@@ -106,7 +106,7 @@ const Microneedling = () => {
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="font-display text-4xl md:text-5xl text-center mb-4">What Our Clients Say</h2>
-        <p className="font-body text-muted-foreground text-center mb-16">Rated 5 stars across 100+ reviews</p>
+        <p className="font-body text-muted-foreground text-center mb-16">Rated 5 stars · Five-Star Reviews</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             { name: "Chloe D.", text: "My acne scarring has improved so much after just 3 sessions. The combination with the chemical peel makes such a difference." },

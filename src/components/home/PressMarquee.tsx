@@ -3,7 +3,7 @@ import { Star } from "lucide-react";
 
 const items = [
   "5.0 Google Rating",
-  "100+ Five-Star Reviews",
+  "Five-Star Reviews",
   "Qualified Practitioners",
   "Bespoke Treatment Plans",
   "Manchester City Centre",

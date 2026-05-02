@@ -33,7 +33,7 @@ const faqs = [
 const DermalFiller = () => {
   usePageMeta(
     "Dermal Filler Manchester City Centre | Hive Clinic",
-    "Expert dermal filler treatments from £120 at Hive Clinic, Manchester City Centre. Lip, cheek, jawline and facial balancing by a qualified prescriber. Book today."
+    "Expert dermal filler treatments from £100 at Hive Clinic, Manchester City Centre. Lip, cheek, jawline and facial balancing by a qualified prescriber. Book today."
   );
   const heroImg = useSiteImage("dermalfiller_hero", STOCK.dermalfiller_hero);
   const secondaryImg = useSiteImage("dermalfiller_secondary", STOCK.dermalfiller_secondary);
@@ -51,7 +51,7 @@ const DermalFiller = () => {
           <p className="font-body text-sm text-gold uppercase tracking-[0.2em] mb-4">Expert Facial Sculpting</p>
           <h1 className="font-display text-5xl md:text-7xl text-white leading-[1.1] mb-6">Dermal Filler Manchester</h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Expert lip, cheek, jawline, and facial balancing treatments from £120. Natural results by a qualified prescriber in Deansgate.
+            Expert lip, cheek, jawline, and facial balancing treatments from £100. Natural results by a qualified prescriber in Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Qualified Prescriber</span></div>

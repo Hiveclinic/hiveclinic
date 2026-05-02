@@ -299,7 +299,29 @@ function CatalogDriftBanner({ onNavigate }: { onNavigate: (tab: string) => void 
         if (data) setState({ in_sync: data.in_sync, issues: data.issues_count, ran_at: data.ran_at });
       });
   }, []);
-  if (!state || state.in_sync) return null;
+  if (!state) return null;
+  const ago = (() => {
+    const diff = (Date.now() - new Date(state.ran_at).getTime()) / 1000;
+    if (diff < 60) return "just now";
+    if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} hr ago`;
+    return `${Math.floor(diff / 86400)}d ago`;
+  })();
+  if (state.in_sync) {
+    return (
+      <button
+        onClick={() => onNavigate("catalog-sync")}
+        className="w-full text-left border-l-4 border-l-emerald-500 border border-border bg-emerald-50/40 hover:bg-emerald-50/70 transition-colors p-3 flex items-center gap-3"
+      >
+        <Star size={16} className="text-emerald-600 flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <p className="font-body text-xs">
+            <span className="font-medium">Catalog in sync</span> with the live booking scheduler · checked {ago}
+          </p>
+        </div>
+      </button>
+    );
+  }
   return (
     <button
       onClick={() => onNavigate("catalog-sync")}

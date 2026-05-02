@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Sparkles, Clock, ShieldCheck, ChevronDown, Maximize2, ExternalLink } from "lucide-react";
+import { ArrowRight, Sparkles, Clock, ShieldCheck, ChevronDown, Maximize2, ExternalLink, RefreshCw } from "lucide-react";
 import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { supabase } from "@/integrations/supabase/client";

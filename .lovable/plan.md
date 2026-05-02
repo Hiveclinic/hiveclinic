@@ -1,124 +1,78 @@
-## Goal
+# Custom Acuity Booking - Final Wire-Up
 
-Replace the current redirect-only `/bookings` page with a fully custom Hive Clinic booking flow powered by the live Acuity API. Categories, treatments, availability, offers and appointment creation all come from Acuity. Confirmation + consent stay inside Acuity (per your decision). Site gets a subtle summer refresh.
+## Status
 
-## Security note - read first
+The three secure server-side endpoints are already built and deployed:
 
-The API key you pasted in chat is now exposed in the conversation log. **Please rotate it in Acuity → Business Settings → Integrations → API → "Reset key"** before we use it. The new key will be stored as an encrypted Supabase secret (`ACUITY_API_KEY`), only ever read by edge functions, never bundled into the browser, never committed to the repo.
+- `acuity-catalog` -> GET services (appointment types + categories)
+- `acuity-availability` -> GET dates + times for a given `appointmentTypeId`
+- `acuity-create-appointment` -> POST to book (name, email, phone, appointmentTypeId, datetime)
 
----
+All three:
+- Use HTTP Basic Auth with `ACUITY_USER_ID` + `ACUITY_API_KEY` (server-side only, never exposed to the browser)
+- Hit `https://acuityscheduling.com/api/v1`
+- Are fronted via `supabase.functions.invoke()` from the client
 
-## Pre-work (immediately after you approve)
+**Blocker:** As of the last test (seconds ago), Acuity is still returning:
+> 403 - "API access is only available on Powerhouse plans"
 
-I'll request two secrets via the secrets tool. You paste them into the prompt (not the chat):
-1. `ACUITY_USER_ID` = `39098354`
-2. `ACUITY_API_KEY` = the **new** key after rotation
+This means the Powerhouse upgrade either hasn't activated on Acuity's side yet or the API key was issued before the upgrade and needs to be re-generated.
 
-Then I build everything below.
+## Step 1 - Verify Powerhouse access (required before anything else)
 
----
+1. In Acuity: **Integrations -> API** -> confirm "API access is enabled" (no upgrade banner).
+2. **Reset the API key** (recommended - the old key was issued under the previous plan and may still carry the old permission scope). Paste the new key when prompted.
+3. I'll re-test `acuity-catalog`. Expected: a JSON payload with `categories` and `treatments`.
 
-## What gets built
+If 403 persists after a fresh key, the upgrade hasn't fully propagated on Acuity's end - usually 5-10 minutes; sometimes a support ticket.
 
-### 1. Three Acuity edge functions (server-side only, HTTP Basic Auth)
+## Step 2 - Build the custom booking UI
 
-| Function | Acuity endpoint | Purpose |
-|---|---|---|
-| `acuity-catalog` | `GET /api/v1/appointment-types` + `GET /api/v1/categories` | Live category + treatment list with prices, durations, and any `discountPrice` |
-| `acuity-availability` | `GET /availability/dates` and `GET /availability/times` | Bookable days, then time slots for a chosen date + appointment type |
-| `acuity-create-appointment` | `POST /api/v1/appointments` | Creates the appointment with name/email/phone/notes, returns Acuity's confirmation URL |
-
-Notes:
-- 60-second in-memory cache on `acuity-catalog` so repeat visitors don't hammer Acuity.
-- All inputs validated with zod; clear 400s on bad input.
-- All responses include CORS headers.
-- Errors logged but Acuity's raw error body never leaked to the client.
-
-### 2. New `/bookings` flow (single page, progressive disclosure)
+Once `/api/acuity/services` returns 200, replace the current Setmore-style `/bookings` page with a true in-site flow:
 
 ```text
-[Hero - Book Your Treatment]
-   ↓
-[Featured / Offers strip]    auto-detected: any type with discountPrice, or
-   ↓                         category name containing OFFER / TOX / SPECIAL
-[Category tabs]              only the live Acuity categories
-   ↓
-[Treatment grid]             card: name, price, duration, "Select"
-   ↓
-[Date picker]                calendar from /availability/dates
-   ↓
-[Time slots]                 chips from /availability/times
-   ↓
-[Details form]               name, email, phone, notes (zod validated)
-   ↓
-[Policies + GDPR consent]    writes to existing gdpr_consents
-   ↓
-[Confirm & Book]             calls acuity-create-appointment
-   ↓
-window.location → Acuity confirmation URL (where consent + payment live)
+/bookings
+  +-- FeaturedStrip       (auto-detect offers via name/category match: "Tox", "Offer", "Limited")
+  +-- CategoryTabs        (driven by live Acuity categories)
+  +-- TreatmentGrid       (cards: name, duration, price, "Book" CTA)
+  +-- BookingDrawer       (opens on card tap)
+        +-- Step 1: DatePicker        (calls acuity-availability?date=...)
+        +-- Step 2: TimeSlots         (calls acuity-availability?appointmentTypeId&date)
+        +-- Step 3: ClientForm        (name / email / phone)
+        +-- Step 4: Confirm           (POST acuity-create-appointment)
+        +-- Step 5: Success           (redirect to Acuity's confirmationPage URL so existing consent forms run)
 ```
 
-Mobile: full-width single column, 48px+ tap targets, sticky "Continue" button.
-Desktop: centred at max-w-2xl, steps stack inline as completed.
+Design tokens (already added):
+- `--cream`, `--cream-warm`, `--champagne` for the summer refresh
+- Cormorant Garamond headings, Satoshi body, fine-line 1.5px icons (project core rules)
 
-### 3. Offers - automatic from Acuity
+UX rules respected:
+- One screen, progressive disclosure via drawer
+- No heavy animations, no embed
+- Standard hyphens (-) in copy, "Anti-Wrinkle Consultation" never abbreviated
+- "Booking source of truth" memory updated from Setmore -> Acuity
 
-No admin toggle. The catalog function flags `featured: true` when `discountPrice` is set or the parent category name matches `/offer|tox|special/i`. The Featured strip hides cleanly when nothing is flagged.
+## Step 3 - Frontend hooks
 
-### 4. Confirmation + consent
+New hooks under `src/hooks/`:
+- `useAcuityCatalog()` - 60s SWR, falls back to cached snapshot if API is down
+- `useAcuityAvailability(typeId, date)`
+- `useCreateAcuityAppointment()`
 
-Per your decision, Acuity already handles confirmation + consent. So:
-- After successful API call → redirect to the `confirmationPage` URL Acuity returns.
-- No new `/booking-confirmation` page.
-- Existing `consent_form_templates` / `consent_submissions` left alone (still used by admin + customer portal).
+## Step 4 - Cleanup
 
-### 5. Summer refresh (subtle, brand-safe)
+- Delete the Setmore deep-link logic from `use-book-now.ts` (now obsolete)
+- Drop `src/components/admin/AdminTreatmentsTab.tsx` Setmore/Acuity ID inputs (catalog is now read live)
+- Update memory: booking source of truth -> Acuity API
 
-- New `--cream` token (~`30 25% 97%`) for `/bookings` page background instead of pure white.
-- New muted `--champagne` token (~`38 30% 70%`) used only on hover states + the featured ribbon.
-- Lighter section dividers (~5% lighter than current `--border`).
-- Softer card shadows (`shadow-[0_2px_12px_-4px_rgba(0,0,0,0.06)]`).
-- A touch more breathing room (py-20 → py-24 on hero + offers).
+## What I will NOT do
 
-Black, cream and gold remain primary. No tropical themes, no bright colours.
+- Embed Acuity (per your spec)
+- Call Acuity from the browser
+- Ship secrets to the frontend bundle
+- Rebuild the consent-form flow (Acuity already handles it post-book)
 
-### 6. Database
+## Action needed from you before I build the UI
 
-One small additive migration: `acuity_cache` singleton table (`id text pk | data jsonb | fetched_at timestamptz`) so the page still loads instantly if Acuity has a hiccup. RLS: admins manage, anyone can select. **No destructive changes.** Existing `treatments` table stays - it still drives `/treatments/*` SEO pages and the admin dashboard, just no longer renders `/bookings`.
-
-### 7. Files
-
-```text
-NEW   supabase/functions/acuity-catalog/index.ts
-NEW   supabase/functions/acuity-availability/index.ts
-NEW   supabase/functions/acuity-create-appointment/index.ts
-NEW   supabase/migrations/<ts>_acuity_cache.sql
-NEW   src/components/booking/FeaturedStrip.tsx
-NEW   src/components/booking/CategoryTabs.tsx
-NEW   src/components/booking/TreatmentGrid.tsx
-NEW   src/components/booking/DateTimePicker.tsx
-NEW   src/components/booking/DetailsForm.tsx
-NEW   src/hooks/use-acuity-catalog.ts
-NEW   src/hooks/use-acuity-availability.ts
-EDIT  src/pages/BookingSystem.tsx   - rewritten as orchestrator
-EDIT  src/pages/Bookings.tsx        - redirect to /bookings
-EDIT  src/index.css                 - cream + champagne tokens
-EDIT  tailwind.config.ts            - expose new tokens
-```
-
-Untouched: admin dashboard, all `/treatments/*` landing pages, consent system, payment system, every other booking flow.
-
-### 8. Acceptance checks
-
-- `/bookings` loads live category + treatment list under 800ms (cached).
-- Treatment → date → time → details → "Confirm" creates a real Acuity appointment (verifiable in Acuity dashboard).
-- Any Acuity type with `discountPrice` appears in Featured with strikethrough pricing.
-- API keys never in network requests or browser bundle.
-- Mobile single-column with 48px+ tap targets.
-- Black/cream/gold preserved; only page background and a couple of hover states show summer refresh.
-
----
-
-## Out of scope (so this stays focused)
-
-- Per-user OAuth, rebuilding admin dashboard, Stripe checkout changes, consent form rewrite, treatment landing pages, IV/Wellness/Body categories that don't exist on Acuity.
+Reply once you've confirmed in Acuity that **Integrations -> API** shows access enabled and (ideally) that you've reset the key. I'll re-test, and on a 200 response I'll build Steps 2-4 in one pass.

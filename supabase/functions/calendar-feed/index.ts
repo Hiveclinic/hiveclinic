@@ -5,12 +5,11 @@ serve(async (req) => {
   const url = new URL(req.url);
   const token = url.searchParams.get("token");
 
-  // Token auth - match against first 20 chars of anon key (used in admin UI)
-  const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
+  // Use a dedicated, randomly-generated secret (NOT derived from the public anon key).
+  const expectedToken = Deno.env.get("CALENDAR_FEED_PASSWORD") ?? "";
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-  const expectedToken = anonKey.substring(0, 20);
 
-  if (!token || token !== expectedToken) {
+  if (!expectedToken || !token || token.length < 16 || token !== expectedToken) {
     return new Response("Unauthorized", { status: 401 });
   }
 
@@ -29,64 +28,27 @@ serve(async (req) => {
 
     if (error) throw error;
 
-    const now = new Date();
-    const stamp = now.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    const now = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "").substring(0, 15) + "Z";
+    let ics = `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Hive Clinic//Bookings//EN\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\nX-WR-CALNAME:Hive Clinic Bookings\r\nX-WR-TIMEZONE:Europe/London\r\n`;
 
-    let ical = [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "PRODID:-//Hive Clinic//Booking Calendar//EN",
-      "CALSCALE:GREGORIAN",
-      "METHOD:PUBLISH",
-      "X-WR-CALNAME:Hive Clinic Bookings",
-      "X-WR-TIMEZONE:Europe/London",
-    ];
-
-    for (const b of bookings || []) {
-      const dateStr = b.booking_date.replace(/-/g, "");
-      const [hours, minutes] = b.booking_time.split(":");
-      const startTime = `${dateStr}T${hours}${minutes}00`;
-
-      // Calculate end time
+    for (const b of (bookings ?? []) as any[]) {
       const startDate = new Date(`${b.booking_date}T${b.booking_time}`);
-      const endDate = new Date(startDate.getTime() + b.duration_mins * 60000);
+      const endDate = new Date(startDate.getTime() + (b.duration_mins ?? 60) * 60 * 1000);
+      const startTime = startDate.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "").substring(0, 15);
       const endTime = endDate.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "").substring(0, 15);
-
-      const treatmentName = b.treatments?.name || "Booking";
-      const summary = `${treatmentName} - ${b.customer_name}`;
-      const description = [
-        `Client: ${b.customer_name}`,
-        `Email: ${b.customer_email}`,
-        b.customer_phone ? `Phone: ${b.customer_phone}` : "",
-        `Price: £${b.total_price}`,
-        `Payment: ${b.payment_status}`,
-        b.notes ? `Notes: ${b.notes}` : "",
-      ].filter(Boolean).join("\\n");
-
-      ical.push(
-        "BEGIN:VEVENT",
-        `UID:${b.id}@hiveclinic`,
-        `DTSTAMP:${stamp}`,
-        `DTSTART;TZID=Europe/London:${startTime}`,
-        `DTEND;TZID=Europe/London:${endTime}`,
-        `SUMMARY:${summary}`,
-        `DESCRIPTION:${description}`,
-        `STATUS:CONFIRMED`,
-        "END:VEVENT"
-      );
+      const summary = `${b.treatments?.name ?? "Booking"} - ${b.customer_name ?? ""}`.replace(/[,;\\]/g, " ");
+      const desc = `Status: ${b.status}\\nPayment: ${b.payment_status ?? ""}`;
+      ics += `BEGIN:VEVENT\r\nUID:${b.id}@hiveclinic\r\nDTSTAMP:${now}\r\nDTSTART:${startTime}Z\r\nDTEND:${endTime}Z\r\nSUMMARY:${summary}\r\nDESCRIPTION:${desc}\r\nEND:VEVENT\r\n`;
     }
+    ics += `END:VCALENDAR\r\n`;
 
-    ical.push("END:VCALENDAR");
-
-    return new Response(ical.join("\r\n"), {
+    return new Response(ics, {
       headers: {
         "Content-Type": "text/calendar; charset=utf-8",
-        "Content-Disposition": 'attachment; filename="hive-clinic-bookings.ics"',
-        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Cache-Control": "no-cache",
       },
     });
-  } catch (error) {
-    console.error("[CALENDAR-FEED] Error:", error);
-    return new Response("Internal Server Error", { status: 500 });
+  } catch (e) {
+    return new Response(`Error: ${e instanceof Error ? e.message : String(e)}`, { status: 500 });
   }
 });

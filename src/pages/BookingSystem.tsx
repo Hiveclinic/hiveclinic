@@ -356,96 +356,122 @@ export default function BookingSystem() {
         </div>
       </section>
 
-      {/* Embedded Acuity scheduler */}
+      {/* Calendar CTA — opens compact popup */}
       <section id="book" className="bg-bone-deep/40 border-y border-border" ref={embedRef}>
-        <div className={`mx-auto px-5 md:px-8 py-10 md:py-14 ${expanded ? "max-w-7xl" : "max-w-5xl"}`}>
-          <div className="flex items-end justify-between gap-4 mb-5">
-            <div>
-              <p className="eyebrow text-champagne mb-2">Live Calendar</p>
-              <h2 className="font-display text-2xl md:text-3xl leading-tight">Pick your time.</h2>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setIframeNonce((n) => n + 1)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 border border-border hover:border-champagne text-foreground/70 hover:text-foreground font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
-                aria-label="Reload calendar"
-              >
-                <RefreshCw size={12} strokeWidth={1.5} className={iframeLoading ? "animate-spin" : ""} />
-                Reload
-              </button>
-              <button
-                type="button"
-                onClick={() => setExpanded((v) => !v)}
-                className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 border border-border hover:border-champagne text-foreground/70 hover:text-foreground font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
-                aria-label={expanded ? "Collapse calendar" : "Expand calendar"}
-              >
-                <Maximize2 size={12} strokeWidth={1.5} />
-                {expanded ? "Collapse" : "Expand"}
-              </button>
-              <a
-                href={embedUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-2 border border-border hover:border-champagne text-foreground/70 hover:text-foreground font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
-              >
-                <ExternalLink size={12} strokeWidth={1.5} />
-                New tab
-              </a>
-            </div>
-          </div>
-          <div
-            className="relative bg-background border border-border shadow-lg overflow-hidden"
-            style={{ minHeight: expanded ? "920px" : "780px" }}
-          >
-            {iframeLoading && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 bg-background/95 backdrop-blur-sm px-6">
-                {/* Skeleton mimic of Acuity calendar */}
-                <div className="w-full max-w-md space-y-4 animate-pulse">
-                  <div className="h-5 w-2/3 bg-muted rounded mx-auto" />
-                  <div className="h-3 w-1/2 bg-muted/70 rounded mx-auto" />
-                  <div className="grid grid-cols-7 gap-2 pt-4">
-                    {Array.from({ length: 21 }).map((_, i) => (
-                      <div key={i} className="h-9 bg-muted/60 rounded" />
-                    ))}
-                  </div>
-                  <div className="flex gap-2 pt-3">
-                    <div className="h-10 flex-1 bg-muted/70 rounded" />
-                    <div className="h-10 flex-1 bg-muted/70 rounded" />
-                    <div className="h-10 flex-1 bg-muted/70 rounded" />
-                  </div>
-                </div>
-                <div className="flex flex-col items-center gap-3">
-                  <p className="font-body text-[11px] tracking-[0.3em] uppercase text-muted-foreground">
-                    Loading live calendar…
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setIframeNonce((n) => n + 1)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 border border-champagne/50 hover:border-champagne text-champagne font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
-                  >
-                    <RefreshCw size={12} strokeWidth={1.5} />
-                    Taking a while? Retry
-                  </button>
-                </div>
-              </div>
-            )}
-            <iframe
-              key={`${embedUrl}-${iframeNonce}`}
-              src={embedUrl}
-              title="Hive Clinic booking calendar"
-              width="100%"
-              height={expanded ? 920 : 780}
-              frameBorder="0"
-              className="w-full block"
-              onLoad={() => setIframeLoading(false)}
-            />
-          </div>
-          <p className="font-body text-[11px] text-muted-foreground mt-3">
-            Tip: tap a treatment from the menu above to jump straight to its calendar.
+        <div className="max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14 text-center">
+          <p className="eyebrow text-champagne mb-2">Live Calendar</p>
+          <h2 className="font-display text-2xl md:text-3xl leading-tight mb-3">Pick your time.</h2>
+          <p className="font-body text-sm text-muted-foreground max-w-md mx-auto mb-6">
+            Tap any treatment above, or open the calendar to browse all availability in one place.
           </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                setEmbedUrl(ACUITY_BOOKING_URL);
+                setModalOpen(true);
+              }}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background hover:bg-champagne hover:text-ink font-body text-[11px] tracking-[0.3em] uppercase transition-colors"
+            >
+              Open calendar <ArrowRight size={13} strokeWidth={1.5} />
+            </button>
+            <a
+              href={ACUITY_BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-4 py-3 border border-border hover:border-champagne text-foreground/70 hover:text-foreground font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
+            >
+              <ExternalLink size={12} strokeWidth={1.5} />
+              New tab
+            </a>
+          </div>
         </div>
       </section>
+
+      {/* Booking modal — compact, scrollable iframe */}
+      {modalOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-ink/70 backdrop-blur-sm"
+          onClick={() => setModalOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Book a treatment"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full sm:max-w-2xl h-[88vh] sm:h-[82vh] bg-background sm:rounded-lg shadow-2xl flex flex-col overflow-hidden border border-border"
+          >
+            <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border bg-background">
+              <div className="min-w-0">
+                <p className="eyebrow text-champagne text-[9px]">Live Calendar</p>
+                <p className="font-display text-base leading-tight truncate">Book your treatment</p>
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIframeNonce((n) => n + 1)}
+                  className="p-2 text-foreground/70 hover:text-foreground transition-colors"
+                  aria-label="Reload calendar"
+                >
+                  <RefreshCw size={15} strokeWidth={1.5} className={iframeLoading ? "animate-spin" : ""} />
+                </button>
+                <a
+                  href={embedUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 text-foreground/70 hover:text-foreground transition-colors"
+                  aria-label="Open in new tab"
+                >
+                  <ExternalLink size={15} strokeWidth={1.5} />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="p-2 text-foreground/70 hover:text-foreground transition-colors"
+                  aria-label="Close"
+                >
+                  <X size={18} strokeWidth={1.5} />
+                </button>
+              </div>
+            </div>
+            <div className="relative flex-1 overflow-hidden bg-background">
+              {iframeLoading && (
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 bg-background/95 backdrop-blur-sm px-6">
+                  <div className="w-full max-w-sm space-y-4 animate-pulse">
+                    <div className="h-5 w-2/3 bg-muted rounded mx-auto" />
+                    <div className="h-3 w-1/2 bg-muted/70 rounded mx-auto" />
+                    <div className="grid grid-cols-7 gap-2 pt-4">
+                      {Array.from({ length: 21 }).map((_, i) => (
+                        <div key={i} className="h-8 bg-muted/60 rounded" />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center gap-3">
+                    <p className="font-body text-[11px] tracking-[0.3em] uppercase text-muted-foreground">
+                      Loading live calendar…
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setIframeNonce((n) => n + 1)}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 border border-champagne/50 hover:border-champagne text-champagne font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
+                    >
+                      <RefreshCw size={12} strokeWidth={1.5} />
+                      Taking a while? Retry
+                    </button>
+                  </div>
+                </div>
+              )}
+              <iframe
+                key={`${embedUrl}-${iframeNonce}`}
+                src={embedUrl}
+                title="Hive Clinic booking calendar"
+                className="w-full h-full block border-0"
+                onLoad={() => setIframeLoading(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* FAQ */}
       <section className="py-14 md:py-20 bg-background">

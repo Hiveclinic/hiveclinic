@@ -249,17 +249,13 @@ const Layout = ({
             <div>
               <h4 className="font-display text-lg mb-4">Treatments</h4>
               {[
-                { name: "Lip Filler", to: "/lip-filler-manchester" },
-                { name: "Dermal Filler", to: "/treatments/dermal-filler-manchester" },
+                { name: "Lip Filler", to: "/treatments/lip-fillers-manchester" },
                 { name: "Anti-Wrinkle Consultation", to: "/treatments/anti-wrinkle-injections-manchester" },
+                { name: "Facial Balancing", to: "/treatments/facial-balancing-manchester" },
+                { name: "Skin Boosters", to: "/treatments/skin-boosters-manchester" },
                 { name: "HydraFacial", to: "/treatments/hydrafacial-manchester" },
                 { name: "Chemical Peels", to: "/treatments/chemical-peels-manchester" },
-                { name: "Skin Boosters", to: "/treatments/skin-boosters-manchester" },
-                { name: "Microneedling", to: "/treatments/microneedling-manchester" },
-                { name: "Acne Treatment", to: "/acne-treatment-manchester" },
-                { name: "Hyperpigmentation", to: "/hyperpigmentation-treatment-manchester" },
                 { name: "Fat Dissolve", to: "/treatments/fat-dissolving-manchester" },
-                { name: "Mesotherapy", to: "/treatments/mesotherapy-manchester" },
                 { name: "All Treatments", to: "/treatments" },
                 { name: "Full Price List", to: "/pricing" },
               ].map(s => (

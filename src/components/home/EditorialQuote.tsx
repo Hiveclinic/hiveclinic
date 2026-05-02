@@ -1,52 +1,69 @@
 import { motion } from "framer-motion";
+import { LUXE } from "@/lib/stock-images";
 
-// Magazine-style editorial pull-quote that breaks up the page rhythm.
 const EditorialQuote = () => (
-  <section className="relative py-24 md:py-36 bg-summer-cream overflow-hidden">
-    <div className="absolute inset-0 bg-sun-soft pointer-events-none" />
-
-    {/* Decorative type */}
+  <section className="relative py-24 md:py-36 bg-ink text-bone bg-noise overflow-hidden">
+    {/* Giant decorative type */}
     <p
-      className="absolute top-6 left-1/2 -translate-x-1/2 font-display italic text-[18vw] leading-none text-gold/[0.06] select-none pointer-events-none"
+      className="absolute -top-6 left-1/2 -translate-x-1/2 font-display italic text-[28vw] leading-none text-bone/[0.04] select-none pointer-events-none whitespace-nowrap"
       aria-hidden
     >
-      Hive
+      hive.
     </p>
 
-    <div className="relative max-w-4xl mx-auto px-6 text-center">
-      <motion.p
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="font-body text-[10px] tracking-[0.5em] uppercase text-gold mb-8"
-      >
-        — A note from the founder —
-      </motion.p>
-
-      <motion.blockquote
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.05 }}
-        className="font-display text-3xl md:text-5xl leading-tight md:leading-[1.15] mb-10"
-      >
-        “Aesthetics should never feel <span className="italic text-gold">clinical</span>. It should feel like
-        you, on your <span className="italic text-gold">best day</span> — every day.”
-      </motion.blockquote>
-
+    <div className="relative max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
       <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.15 }}
-        className="inline-flex items-center gap-3"
+        className="lg:col-span-4"
       >
-        <div className="h-px w-12 bg-gold" />
-        <p className="font-body text-[11px] tracking-[0.3em] uppercase text-muted-foreground">
-          Bianca · Founder & Lead Aesthetician
-        </p>
-        <div className="h-px w-12 bg-gold" />
+        <div className="polaroid max-w-xs mx-auto lg:mx-0 -rotate-2">
+          <img
+            src={LUXE.founder}
+            alt="Bianca, founder of Hive Clinic Manchester"
+            className="w-full aspect-[4/5] object-cover"
+            loading="lazy"
+          />
+          <p className="absolute bottom-3 left-0 right-0 text-center font-script text-base text-ink/70">
+            Bianca · Founder
+          </p>
+        </div>
       </motion.div>
+
+      <div className="lg:col-span-8">
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="eyebrow text-rose mb-6"
+        >
+          A note from the founder
+        </motion.p>
+
+        <motion.blockquote
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.05 }}
+          className="font-display text-3xl md:text-5xl leading-[1.15] mb-8"
+        >
+          Aesthetics shouldn't feel <span className="font-script italic text-rose">clinical</span>. It should feel like you, on your <span className="font-script italic text-rose">best day</span>, every day.
+        </motion.blockquote>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.15 }}
+          className="flex items-center gap-3"
+        >
+          <div className="h-px w-12 bg-gold" />
+          <p className="font-body text-[11px] tracking-[0.32em] uppercase text-bone/60">
+            Bianca · Founder & Lead Aesthetician
+          </p>
+        </motion.div>
+      </div>
     </div>
   </section>
 );

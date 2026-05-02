@@ -1,25 +1,21 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { trackBookNow } from "@/hooks/use-tracking";
-import gallery3 from "@/assets/gallery-3.jpg";
-import catDermalFiller from "@/assets/categories/cat-dermal-filler-new.jpg";
-import catAntiWrinkle from "@/assets/categories/cat-anti-wrinkle-new.jpg";
-import catChemicalPeels from "@/assets/categories/cat-chemical-peels-new.jpg";
+import { LUXE } from "@/lib/stock-images";
 import catSkinTreatments from "@/assets/categories/cat-skin-treatments.jpg";
-import catSkinBoosters from "@/assets/categories/cat-skin-boosters.jpg";
 import catFatDissolve from "@/assets/categories/cat-fat-dissolve.jpg";
 import catFacialBalancing from "@/assets/categories/cat-facial-balancing.jpg";
 
 const FALLBACK: Record<string, string> = {
-  "Anti Wrinkle (Botox)": catAntiWrinkle,
-  Lips: catDermalFiller,
+  "Anti Wrinkle (Botox)": LUXE.tox,
+  Lips: LUXE.lips,
   "Facial Balancing": catFacialBalancing,
-  "Skin Boosters": catSkinBoosters,
+  "Skin Boosters": LUXE.profhilo,
   "Skin Treatments": catSkinTreatments,
-  "Chemical Peels": catChemicalPeels,
+  "Chemical Peels": LUXE.peels,
   "Fat Dissolve": catFatDissolve,
 };
 
@@ -33,7 +29,6 @@ const LINKS: Record<string, string> = {
   "Fat Dissolve": "/treatments/fat-dissolving-manchester",
 };
 
-// IG-style preferred display order, mirrors Acuity scheduler hierarchy
 const ORDER = [
   "Anti Wrinkle (Botox)",
   "Lips",
@@ -75,8 +70,8 @@ const TreatmentShowcase = () => {
             title: c,
             from: !Number.isFinite(lowest) || lowest === 0 ? "POA" : `£${lowest.toFixed(0)}`,
             count: list.length,
-            img: firstImg || FALLBACK[c] || gallery3,
-            link: LINKS[c] || `/bookings`,
+            img: firstImg || FALLBACK[c] || LUXE.lips,
+            link: LINKS[c] || `/treatments`,
           };
         });
         setCats(built);
@@ -84,30 +79,30 @@ const TreatmentShowcase = () => {
   }, []);
 
   return (
-    <section className="py-24 md:py-32 bg-foreground text-background" aria-label="Treatment categories">
+    <section className="py-24 md:py-32 bg-ink text-bone bg-noise" aria-label="Treatment categories">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16"
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16"
         >
           <div>
-            <p className="font-body text-[10px] tracking-[0.4em] uppercase text-gold mb-3">The Menu</p>
-            <h2 className="font-display text-4xl md:text-6xl leading-[0.98] text-background">
-              Select a <span className="italic text-gold">category</span> to begin.
+            <p className="eyebrow text-rose mb-4">The Menu</p>
+            <h2 className="font-display text-4xl md:text-6xl text-bone leading-[1.02]">
+              Pick your
+              <span className="font-script italic text-rose"> ritual.</span>
             </h2>
           </div>
           <Link
             to="/pricing"
-            className="inline-flex items-center gap-2 font-body text-[11px] tracking-[0.25em] uppercase text-background/60 hover:text-gold transition-colors border-b border-gold/30 pb-1"
+            className="self-start inline-flex items-center gap-2 font-body text-[11px] tracking-[0.28em] uppercase text-bone/60 hover:text-rose border-b border-rose/40 pb-1 transition-colors"
           >
-            Full price list <ArrowRight size={12} />
+            Full price list <ArrowUpRight size={13} />
           </Link>
         </motion.div>
 
-        {/* Acuity-style vertical category list */}
-        <div className="border-t border-white/10">
+        <div className="border-t border-bone/10">
           {cats.map((c, i) => (
             <motion.div
               key={c.title}
@@ -115,43 +110,41 @@ const TreatmentShowcase = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ delay: i * 0.04, duration: 0.5 }}
-              className="border-b border-white/10 group"
+              className="border-b border-bone/10 group"
             >
               <Link
                 to={c.link}
                 onClick={() => trackBookNow("home_showcase", c.title)}
-                className="grid grid-cols-12 gap-4 md:gap-8 items-center py-6 md:py-8 hover:bg-white/[0.02] transition-colors"
+                className="grid grid-cols-12 gap-4 md:gap-8 items-center py-7 md:py-10 hover:bg-bone/[0.03] transition-colors"
               >
                 <div className="col-span-3 md:col-span-2">
-                  <div className="aspect-square overflow-hidden bg-white/5">
+                  <div className="aspect-[4/5] overflow-hidden bg-bone/5">
                     <img
                       src={c.img}
                       alt={`${c.title} treatments`}
                       loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1200ms]"
                     />
                   </div>
                 </div>
                 <div className="col-span-6 md:col-span-7">
-                  <div className="flex items-baseline gap-3 flex-wrap">
-                    <span className="font-display italic text-base text-gold/60">
+                  <div className="flex items-baseline gap-4 flex-wrap">
+                    <span className="numeral text-xl md:text-2xl">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <h3 className="font-display text-2xl md:text-4xl text-background group-hover:text-gold transition-colors">
+                    <h3 className="font-display text-2xl md:text-5xl text-bone group-hover:text-rose transition-colors">
                       {c.title}
                     </h3>
                   </div>
-                  <p className="font-body text-[11px] tracking-[0.25em] uppercase text-background/40 mt-2">
+                  <p className="font-body text-[11px] tracking-[0.28em] uppercase text-bone/40 mt-3 ml-0 md:ml-9">
                     {c.count} {c.count === 1 ? "treatment" : "treatments"}
                   </p>
                 </div>
                 <div className="col-span-3 md:col-span-3 text-right">
-                  <p className="font-body text-[10px] tracking-[0.25em] uppercase text-background/40 mb-1">
-                    From
-                  </p>
+                  <p className="font-body text-[10px] tracking-[0.28em] uppercase text-bone/40 mb-1">From</p>
                   <div className="flex items-center justify-end gap-3">
-                    <span className="font-display text-2xl md:text-3xl text-background">{c.from}</span>
-                    <ArrowRight size={16} className="text-background/30 group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                    <span className="font-display text-2xl md:text-4xl text-bone">{c.from}</span>
+                    <ArrowUpRight size={18} className="text-bone/30 group-hover:text-rose group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
                   </div>
                 </div>
               </Link>

@@ -394,7 +394,7 @@ const BookingSystem = () => {
               exit={{ y: 60, opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
-              className="relative bg-cream w-full md:max-w-3xl md:mx-auto h-full md:h-[90vh] flex flex-col border-t md:border border-border shadow-2xl"
+              className="relative bg-bone w-full md:max-w-3xl md:mx-auto h-full md:h-[90vh] flex flex-col border-t md:border border-border shadow-2xl"
             >
               {/* Branded header */}
               <div className="flex items-center justify-between px-5 md:px-7 py-4 border-b border-border bg-background/60 backdrop-blur-md">
@@ -426,7 +426,7 @@ const BookingSystem = () => {
               <iframe
                 src={buildAcuityUrl(scheduling)}
                 title={`Book ${scheduling.name}`}
-                className="flex-1 w-full bg-cream"
+                className="flex-1 w-full bg-bone"
                 frameBorder={0}
                 loading="lazy"
                 allow="payment"

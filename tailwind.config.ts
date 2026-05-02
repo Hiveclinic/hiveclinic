@@ -44,16 +44,28 @@ export default {
           light: "hsl(var(--gold-light))",
           dark: "hsl(var(--gold-dark))",
         },
-        cream: {
-          DEFAULT: "hsl(var(--cream))",
-          warm: "hsl(var(--cream-warm))",
+        ink: {
+          DEFAULT: "hsl(var(--ink))",
+          soft: "hsl(var(--ink-soft))",
+        },
+        bone: "hsl(var(--bone))",
+        blush: {
+          DEFAULT: "hsl(var(--blush))",
+          deep: "hsl(var(--blush-deep))",
+        },
+        rose: {
+          DEFAULT: "hsl(var(--rose))",
+          deep: "hsl(var(--rose-deep))",
+        },
+        burgundy: {
+          DEFAULT: "hsl(var(--burgundy))",
+          deep: "hsl(var(--burgundy-deep))",
         },
         champagne: "hsl(var(--champagne))",
-        peach: {
-          DEFAULT: "hsl(var(--peach))",
-          soft: "hsl(var(--peach-soft))",
+        chrome: {
+          DEFAULT: "hsl(var(--chrome))",
+          deep: "hsl(var(--chrome-deep))",
         },
-        sand: "hsl(var(--sand))",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

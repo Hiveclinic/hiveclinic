@@ -1,127 +1,134 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Flame, Camera } from "lucide-react";
+import { ArrowUpRight, Camera, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { trackBookNow } from "@/hooks/use-tracking";
+import { LUXE } from "@/lib/stock-images";
 
-const offers = [
+// Three signature treatments. Editorial cards. No "this month's specials" energy.
+const signatures = [
   {
-    title: "Signature 1ml Lip Filler",
-    price: "£99",
-    description: "Tailored 1ml lip enhancement with personalised lip shaping and full aftercare. Limited availability.",
+    eyebrow: "House Signature",
+    title: "Lip Filler",
+    subtitle: "Naturally plump. Never overdone.",
+    price: "from £99",
+    image: LUXE.lips,
+    link: "/treatments/lip-fillers-manchester",
+    src: "home_signature_lips",
   },
   {
-    title: "2ml Facial Balance Package",
-    price: "£220",
-    description: "2ml dermal filler placed across lips, chin, cheeks, or jawline for overall facial harmony.",
+    eyebrow: "Skin Hero",
+    title: "Profhilo",
+    subtitle: "Glass-like glow in 4 weeks.",
+    price: "from £230",
+    image: LUXE.profhilo,
+    link: "/treatments/skin-boosters-manchester",
+    src: "home_signature_profhilo",
   },
-];
-
-const modelServices = [
-  { title: "1ml Lip Filler", price: "£99" },
-  { title: "2ml Facial Balancing", price: "£199" },
-  { title: "3ml Facial Balancing", price: "£299" },
-  { title: "4ml Facial Balancing", price: "£399" },
-  { title: "Feature Refinement", price: "£120" },
+  {
+    eyebrow: "Limited",
+    title: "Hive Tox Day",
+    subtitle: "Anti-wrinkle, refined and elegant.",
+    price: "from £120",
+    image: LUXE.tox,
+    link: "/treatments/anti-wrinkle-injections-manchester",
+    src: "home_signature_tox",
+  },
 ];
 
 const OffersSection = () => (
-  <section className="py-20 md:py-28 border-b border-border" aria-label="Current offers and content model programme">
+  <section className="py-24 md:py-32 bg-blush/40 relative" aria-label="Signature treatments">
     <div className="max-w-7xl mx-auto px-6">
-      {/* Offers */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="mb-16"
+        className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14"
       >
-        <div className="flex items-center gap-2 mb-3">
-          <Flame size={14} className="text-gold" />
-          <p className="font-body text-[10px] tracking-[0.3em] uppercase text-gold">Limited Offers</p>
+        <div>
+          <p className="eyebrow text-burgundy mb-4 flex items-center gap-2">
+            <Sparkles size={12} className="text-burgundy" /> The Signature Edit
+          </p>
+          <h2 className="font-display text-4xl md:text-6xl text-ink leading-[1.02] max-w-2xl">
+            Three treatments, one
+            <span className="font-script italic text-burgundy"> obsession.</span>
+          </h2>
         </div>
-        <h2 className="font-display text-3xl md:text-5xl leading-tight mb-10">
-          This month's specials.
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border border border-border">
-          {offers.map((o, i) => (
-            <motion.div
-              key={o.title}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="bg-background"
-            >
-              <Link
-                to="/bookings#book"
-                onClick={() => trackBookNow("home_offers", undefined, o.title)}
-                className="group flex flex-col justify-between p-8 md:p-10 h-full hover:bg-secondary/40 transition-all duration-300"
-              >
-                <div>
-                  <span className="inline-block font-body text-[8px] tracking-[0.2em] uppercase text-gold border border-gold/25 px-2 py-0.5 mb-4">
-                    Limited Offer
-                  </span>
-                  <h3 className="font-display text-xl md:text-2xl group-hover:text-gold transition-colors duration-300 mb-2">{o.title}</h3>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed">{o.description}</p>
-                </div>
-                <div className="flex items-center justify-between mt-6 pt-4 border-t border-border/60">
-                  <span className="font-display text-2xl text-gold">{o.price}</span>
-                  <ArrowRight size={14} className="text-muted-foreground/40 group-hover:text-gold group-hover:translate-x-1 transition-all duration-300" />
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+        <Link
+          to="/treatments"
+          className="self-start inline-flex items-center gap-2 font-body text-[11px] tracking-[0.28em] uppercase text-ink/60 hover:text-burgundy border-b border-burgundy/30 pb-1 transition-colors"
+        >
+          Full menu
+          <ArrowUpRight size={13} />
+        </Link>
       </motion.div>
 
-      {/* Content Model Programme */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        {signatures.map((s, i) => (
+          <motion.div
+            key={s.title}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1, duration: 0.6 }}
+          >
+            <Link
+              to={s.link}
+              onClick={() => trackBookNow(s.src, undefined, s.title)}
+              className="block group"
+            >
+              <div className="relative overflow-hidden bg-ink/5 aspect-[4/5] mb-5">
+                <img
+                  src={s.image}
+                  alt={s.title}
+                  className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-[1200ms] ease-out"
+                  loading="lazy"
+                />
+                <div className="absolute top-4 left-4 bg-bone/95 px-3 py-1">
+                  <span className="eyebrow text-burgundy">{s.eyebrow}</span>
+                </div>
+                <div className="absolute bottom-4 right-4 btn-gold w-20 h-20 rounded-full flex flex-col items-center justify-center text-center shadow-xl">
+                  <span className="font-body text-[8px] tracking-[0.25em] uppercase text-ink/70">From</span>
+                  <span className="font-display text-base text-ink leading-none">{s.price.replace('from ', '')}</span>
+                </div>
+              </div>
+              <div className="flex items-baseline justify-between gap-3">
+                <div>
+                  <h3 className="font-display text-2xl md:text-3xl text-ink group-hover:text-burgundy transition-colors">
+                    {s.title}
+                  </h3>
+                  <p className="font-body text-sm text-ink/60 mt-1">{s.subtitle}</p>
+                </div>
+                <ArrowUpRight size={20} className="text-ink/30 group-hover:text-burgundy group-hover:-translate-y-1 group-hover:translate-x-1 transition-all flex-shrink-0" />
+              </div>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Content model strip */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
+        className="mt-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-ink text-bone p-8 md:p-12 bg-noise"
       >
-        <div className="flex items-center gap-2 mb-3">
-          <Camera size={14} className="text-gold" />
-          <p className="font-body text-[10px] tracking-[0.3em] uppercase text-gold">Content Model Programme</p>
+        <div className="lg:col-span-7">
+          <p className="eyebrow text-rose mb-3 flex items-center gap-2">
+            <Camera size={12} /> Content Model Programme
+          </p>
+          <h3 className="font-display text-2xl md:text-4xl leading-tight mb-3">
+            Camera-confident? Treatments at <span className="font-script italic text-rose">reduced rates</span>.
+          </h3>
+          <p className="font-body text-sm text-bone/65 leading-relaxed max-w-xl">
+            Trade your before-and-afters for premium treatments. From £99 lip filler to £399 4ml facial balancing.
+          </p>
         </div>
-        <h2 className="font-display text-2xl md:text-4xl leading-tight mb-4">
-          Reduced rates for content.
-        </h2>
-        <p className="font-body text-sm text-muted-foreground leading-relaxed max-w-xl mb-8">
-          Get treatments at reduced prices in exchange for before and after photos and video content for our portfolio. Perfect if you are camera-confident and looking for a great deal.
-        </p>
-
-        <div className="border border-border bg-background">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-px bg-border">
-            {modelServices.map((s, i) => (
-              <motion.div
-                key={s.title}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05, duration: 0.4 }}
-                className="p-6 bg-background text-center"
-              >
-                <p className="font-display text-sm mb-1">{s.title}</p>
-                <p className="font-display text-xl text-gold">{s.price}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-6 flex flex-col sm:flex-row gap-3">
+        <div className="lg:col-span-5 flex flex-col sm:flex-row gap-3 lg:justify-end">
           <Link
             to="/content-models"
-            className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gold text-white font-body text-[11px] tracking-[0.2em] uppercase hover:bg-gold-dark transition-colors duration-300"
+            className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-bone text-ink font-body text-[11px] tracking-[0.28em] uppercase hover:bg-rose hover:text-ink transition-colors"
           >
-            View Model Programme
-            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <Link
-            to="/bookings#book"
-            className="inline-flex items-center justify-center gap-3 px-8 py-4 border border-border text-foreground/60 font-body text-[11px] tracking-[0.2em] uppercase hover:border-gold/30 hover:text-gold transition-colors duration-300"
-          >
-            Full Treatment Menu
+            See the programme
           </Link>
         </div>
       </motion.div>

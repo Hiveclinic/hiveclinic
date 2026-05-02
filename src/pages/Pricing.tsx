@@ -42,6 +42,16 @@ export default function Pricing() {
   usePageMeta(
     "Treatment Prices | Hive Clinic Manchester",
     "Full transparent price list for every aesthetic treatment at Hive Clinic Manchester. Anti-wrinkle, lip filler, skin boosters, peels, facial balancing and more.",
+    {
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.hiveclinicuk.com/" },
+          { "@type": "ListItem", position: 2, name: "Pricing", item: "https://www.hiveclinicuk.com/pricing" },
+        ],
+      },
+    },
   );
 
   const [rows, setRows] = useState<Row[]>([]);

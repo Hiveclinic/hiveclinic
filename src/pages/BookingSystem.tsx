@@ -88,6 +88,7 @@ export default function BookingSystem() {
   const [expanded, setExpanded] = useState(false);
   const [iframeLoading, setIframeLoading] = useState(true);
   const [iframeNonce, setIframeNonce] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
   const embedRef = useRef<HTMLDivElement>(null);
   const book = useBookNow();
 

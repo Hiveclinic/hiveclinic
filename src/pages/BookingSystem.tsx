@@ -183,6 +183,11 @@ export default function BookingSystem() {
 
   const handleCategoryBook = (cat: string) => {
     trackBookNow("bookings_category_nav", cat);
+    setOpenCats((s) => ({ ...s, [cat]: true }));
+    requestAnimationFrame(() => {
+      const el = document.getElementById(`cat-${slug(cat)}`);
+      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
     book(cat);
   };
 

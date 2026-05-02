@@ -58,6 +58,7 @@ const NAV_GROUPS = [
     label: "Services",
     items: [
       { key: "treatments" as TabKey, label: "Treatments", icon: <Stethoscope size={15} strokeWidth={1.5} /> },
+      { key: "catalog-sync" as TabKey, label: "Catalog Sync", icon: <Shield size={15} strokeWidth={1.5} /> },
       { key: "packages" as TabKey, label: "Packages", icon: <Package size={15} strokeWidth={1.5} /> },
       { key: "discounts" as TabKey, label: "Discounts", icon: <Tag size={15} strokeWidth={1.5} /> },
     ],

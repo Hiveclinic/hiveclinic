@@ -1,47 +1,38 @@
 import { motion } from "framer-motion";
-import { Award, MapPin, Quote, ShieldCheck, Sparkles, Star } from "lucide-react";
+import { Star } from "lucide-react";
 
-// Premium editorial trust bar that sits high on the page.
-// Replaces the "boring" generic banner with a magazine-style
-// statement + scrolling marquee of values.
+// Editorial trust marquee. Magazine masthead vibe.
 const items = [
-  { icon: Star, text: "100+ Five-star reviews" },
-  { icon: ShieldCheck, text: "Qualified prescriber" },
-  { icon: Award, text: "CE-marked products" },
-  { icon: Sparkles, text: "Bespoke treatment plans" },
-  { icon: MapPin, text: "Manchester city centre" },
-  { icon: Star, text: "100+ Five-star reviews" },
-  { icon: ShieldCheck, text: "Qualified prescriber" },
-  { icon: Award, text: "CE-marked products" },
-  { icon: Sparkles, text: "Bespoke treatment plans" },
-  { icon: MapPin, text: "Manchester city centre" },
+  "5.0 Google Rating",
+  "100+ Five-Star Reviews",
+  "Qualified Practitioners",
+  "Bespoke Treatment Plans",
+  "Manchester City Centre",
+  "Klarna · Clearpay",
+  "CE-Marked Products",
 ];
 
 const PressMarquee = () => (
   <section
-    className="relative py-10 md:py-14 bg-foreground text-background overflow-hidden"
+    className="relative py-6 md:py-7 bg-ink text-bone overflow-hidden border-y border-burgundy/40"
     aria-label="Trust marks"
   >
-    <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-foreground to-transparent z-10 pointer-events-none" />
-    <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-foreground to-transparent z-10 pointer-events-none" />
+    <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-ink to-transparent z-10 pointer-events-none" />
+    <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-ink to-transparent z-10 pointer-events-none" />
     <motion.div
       initial={{ x: 0 }}
       animate={{ x: "-50%" }}
-      transition={{ duration: 38, repeat: Infinity, ease: "linear" }}
-      className="flex gap-12 whitespace-nowrap"
+      transition={{ duration: 42, repeat: Infinity, ease: "linear" }}
+      className="flex gap-12 whitespace-nowrap items-center"
       style={{ width: "max-content" }}
     >
-      {[...items, ...items].map((it, i) => (
-        <div key={i} className="flex items-center gap-3 shrink-0">
-          <it.icon size={14} strokeWidth={1.5} className="text-gold" />
-          <span className="font-body text-[11px] tracking-[0.4em] uppercase text-background/80">
-            {it.text}
+      {[...items, ...items, ...items].map((it, i) => (
+        <div key={i} className="flex items-center gap-6 shrink-0">
+          <Star size={11} className="fill-gold text-gold" />
+          <span className="font-display italic text-[15px] md:text-lg text-bone/90">
+            {it}
           </span>
-          <Quote
-            size={10}
-            strokeWidth={1.5}
-            className="text-gold/40 ml-6 rotate-180"
-          />
+          <span className="font-script text-rose/60 text-2xl leading-none">·</span>
         </div>
       ))}
     </motion.div>

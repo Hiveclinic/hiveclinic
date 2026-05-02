@@ -28,8 +28,9 @@ import AdminMarketingTab from "@/components/admin/AdminMarketingTab";
 import AdminMediaLibraryTab from "@/components/admin/AdminMediaLibraryTab";
 import AdminStaffTab from "@/components/admin/AdminStaffTab";
 import AdminSettingsTab from "@/components/admin/AdminSettingsTab";
+import AdminCatalogSyncTab from "@/components/admin/AdminCatalogSyncTab";
 
-type TabKey = "dashboard" | "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers" | "site" | "reviews" | "finance" | "consultations" | "inventory" | "marketing" | "media" | "staff" | "settings" | "packages";
+type TabKey = "dashboard" | "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers" | "site" | "reviews" | "finance" | "consultations" | "inventory" | "marketing" | "media" | "staff" | "settings" | "packages" | "catalog-sync";
 
 const NAV_GROUPS = [
   {

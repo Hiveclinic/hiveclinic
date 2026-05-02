@@ -7,43 +7,49 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
+    /* Summer refresh: warm cream base, softer contrast, sun-kissed accents.
+       Kept on the warm-beige + gold luxury spine - just lighter and friendlier. */
+    --background: 36 40% 98%;
+    --foreground: 25 18% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card-foreground: 25 18% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover-foreground: 25 18% 12%;
 
-    --primary: 0 0% 5%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 25 18% 12%;
+    --primary-foreground: 36 40% 98%;
 
-    --secondary: 30 10% 95%;
-    --secondary-foreground: 0 0% 5%;
+    --secondary: 34 35% 94%;
+    --secondary-foreground: 25 18% 12%;
 
-    --muted: 30 10% 95%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 34 28% 93%;
+    --muted-foreground: 25 10% 38%;
 
-    --accent: 30 40% 40%;
+    --accent: 28 55% 48%;
     --accent-foreground: 0 0% 100%;
 
-    --gold: 30 40% 40%;
-    --gold-light: 35 50% 75%;
-    --gold-dark: 28 35% 30%;
+    --gold: 32 55% 48%;
+    --gold-light: 38 70% 78%;
+    --gold-dark: 28 45% 32%;
 
-    --cream: 30 25% 97%;
-    --cream-warm: 32 30% 95%;
-    --champagne: 38 30% 70%;
+    /* Summer accent palette */
+    --cream: 38 50% 97%;
+    --cream-warm: 34 55% 93%;
+    --champagne: 38 50% 75%;
+    --peach: 22 70% 82%;
+    --peach-soft: 26 60% 92%;
+    --sand: 36 35% 88%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 70% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 10% 90%;
-    --input: 30 10% 90%;
-    --ring: 30 40% 40%;
+    --border: 32 20% 88%;
+    --input: 32 20% 88%;
+    --ring: 32 55% 48%;
 
-    --radius: 0rem;
+    --radius: 0.25rem;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 20%;
@@ -124,5 +130,25 @@
 
   .border-gold {
     border-color: hsl(var(--gold));
+  }
+
+  /* Summer refresh utilities - subtle, luxury, never tropical */
+  .bg-summer-cream {
+    background-color: hsl(var(--cream));
+  }
+
+  .bg-summer-gradient {
+    background-image:
+      radial-gradient(at 12% 0%, hsl(var(--peach-soft) / 0.55) 0px, transparent 55%),
+      radial-gradient(at 88% 12%, hsl(var(--gold-light) / 0.45) 0px, transparent 50%),
+      linear-gradient(180deg, hsl(var(--cream)) 0%, hsl(var(--background)) 100%);
+  }
+
+  .bg-sun-soft {
+    background-image: radial-gradient(circle at 30% 20%, hsl(var(--gold-light) / 0.35), transparent 60%);
+  }
+
+  .divider-soft {
+    border-color: hsl(var(--sand));
   }
 }

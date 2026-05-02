@@ -49,6 +49,11 @@ export default {
           warm: "hsl(var(--cream-warm))",
         },
         champagne: "hsl(var(--champagne))",
+        peach: {
+          DEFAULT: "hsl(var(--peach))",
+          soft: "hsl(var(--peach-soft))",
+        },
+        sand: "hsl(var(--sand))",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

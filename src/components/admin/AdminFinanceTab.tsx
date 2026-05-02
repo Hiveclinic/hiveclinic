@@ -148,7 +148,7 @@ const AdminFinanceTab = () => {
           </div>
 
           <div className="bg-card border border-border rounded-xl p-5">
-            <h3 className="font-display text-lg mb-4">Revenue Trend — 6 Months</h3>
+            <h3 className="font-display text-lg mb-4">Revenue Trend - 6 Months</h3>
             <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={monthlyData}>
@@ -218,7 +218,7 @@ const AdminFinanceTab = () => {
                 <div key={p.id} className={`bg-card border border-border rounded-xl p-4 flex flex-wrap items-center justify-between gap-2 ${p.refund ? "border-red-500/20" : ""}`}>
                   <div>
                     <p className="font-body text-sm font-medium">{p.customer_email}</p>
-                    <p className="font-body text-[11px] text-muted-foreground">{p.payment_method} — {format(new Date(p.created_at), "d MMM yyyy HH:mm")}</p>
+                    <p className="font-body text-[11px] text-muted-foreground">{p.payment_method} - {format(new Date(p.created_at), "d MMM yyyy HH:mm")}</p>
                     {p.notes && <p className="font-body text-[11px] text-muted-foreground italic mt-0.5">{p.notes}</p>}
                   </div>
                   <span className={`font-display text-lg ${p.refund ? "text-red-500" : "text-green-600"}`}>

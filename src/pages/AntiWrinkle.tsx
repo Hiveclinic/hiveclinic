@@ -20,10 +20,10 @@ const treatments = [
 ];
 
 const faqs = [
-  { q: "How long do wrinkle relaxing treatments last?", a: "Results typically last 3–4 months. With regular treatments, many clients find results last longer over time as muscles weaken." },
+  { q: "How long do wrinkle relaxing treatments last?", a: "Results typically last 3-4 months. With regular treatments, many clients find results last longer over time as muscles weaken." },
   { q: "Will I still be able to move my face?", a: "Absolutely. We use precise dosing to soften lines while preserving natural movement and expression. You'll look refreshed, never frozen." },
-  { q: "How quickly will I see results?", a: "You'll start to notice results within 3–5 days, with full effect visible at around 2 weeks." },
-  { q: "Is the treatment painful?", a: "Most clients describe it as a tiny pinch. The needles used are extremely fine, and the procedure takes just 10–15 minutes." },
+  { q: "How quickly will I see results?", a: "You'll start to notice results within 3-5 days, with full effect visible at around 2 weeks." },
+  { q: "Is the treatment painful?", a: "Most clients describe it as a tiny pinch. The needles used are extremely fine, and the procedure takes just 10-15 minutes." },
   { q: "Do I need a consultation first?", a: "Yes. A consultation with a qualified prescriber is required prior to any wrinkle relaxing treatment. This is included in the treatment price." },
 ];
 
@@ -56,7 +56,7 @@ const AntiWrinkle = () => {
             <div className="flex flex-wrap gap-4 mb-8">
               <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Qualified Prescriber</span></div>
               <div className="flex items-center gap-2"><Award size={14} className="text-gold" /><span className="font-body text-sm text-white/70">5-Star Rated</span></div>
-              <div className="flex items-center gap-2"><Clock size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Results in 3–5 Days</span></div>
+              <div className="flex items-center gap-2"><Clock size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Results in 3-5 Days</span></div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <a

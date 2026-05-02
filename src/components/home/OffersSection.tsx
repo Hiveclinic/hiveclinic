@@ -5,7 +5,7 @@ import { trackBookNow } from "@/hooks/use-tracking";
 import { useBookNow } from "@/hooks/use-book-now";
 import { LUXE } from "@/lib/stock-images";
 
-// Three signature treatments — sleek editorial cards.
+// Three signature treatments - sleek editorial cards.
 const signatures = [
   {
     eyebrow: "House Signature",

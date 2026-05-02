@@ -66,7 +66,7 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
             </div>
           </motion.div>
 
-          {/* Image column — single editorial frame, no rotation, no stamps */}
+          {/* Image column - single editorial frame, no rotation, no stamps */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
             <div className="relative">
               <img
                 src={heroImg}
-                alt="Hive Clinic Manchester — aesthetic editorial portrait"
+                alt="Hive Clinic Manchester - aesthetic editorial portrait"
                 className="w-full aspect-[4/5] object-cover"
                 loading="eager"
                 decoding="async"

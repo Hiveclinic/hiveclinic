@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 interface ResultsGalleryProps { images: string[]; }
 
-// Editorial grid — no rotated polaroids, no captions cluttering the image.
+// Editorial grid - no rotated polaroids, no captions cluttering the image.
 const ResultsGallery = ({ images }: ResultsGalleryProps) => {
   return (
     <section className="section-y bg-bone" aria-label="Results gallery">

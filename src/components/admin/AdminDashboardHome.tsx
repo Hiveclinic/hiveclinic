@@ -181,7 +181,7 @@ const AdminDashboardHome = ({ onNavigate }: { onNavigate: (tab: string) => void 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Revenue Chart */}
         <div className="lg:col-span-2 bg-card border border-border rounded-xl p-5">
-          <h3 className="font-display text-lg mb-4">Revenue — Last 8 Weeks</h3>
+          <h3 className="font-display text-lg mb-4">Revenue - Last 8 Weeks</h3>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={weeklyRevenue}>
@@ -277,7 +277,7 @@ const AdminDashboardHome = ({ onNavigate }: { onNavigate: (tab: string) => void 
               </div>
             )}
             {stats.pendingForms === 0 && stats.lowStockAlerts === 0 && stats.noShows === 0 && (
-              <div className="py-8 text-center"><Star size={18} className="mx-auto text-accent mb-2" /><p className="font-body text-sm text-muted-foreground">All clear — no alerts</p></div>
+              <div className="py-8 text-center"><Star size={18} className="mx-auto text-accent mb-2" /><p className="font-body text-sm text-muted-foreground">All clear - no alerts</p></div>
             )}
           </div>
         </div>
@@ -329,7 +329,7 @@ function CatalogDriftBanner({ onNavigate }: { onNavigate: (tab: string) => void 
     >
       <AlertTriangle size={18} className="text-amber-600 flex-shrink-0" />
       <div className="flex-1 min-w-0">
-        <p className="font-body text-sm font-medium">Catalog drift detected — {state.issues} issue{state.issues === 1 ? "" : "s"} between website and live booking scheduler.</p>
+        <p className="font-body text-sm font-medium">Catalog drift detected - {state.issues} issue{state.issues === 1 ? "" : "s"} between website and live booking scheduler.</p>
         <p className="font-body text-xs text-muted-foreground">Last checked {new Date(state.ran_at).toLocaleString("en-GB")} · Click to review.</p>
       </div>
     </button>

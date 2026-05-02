@@ -179,7 +179,7 @@ export default function Pricing() {
                     transition={{ duration: 0.5 }}
                     className="scroll-mt-32"
                   >
-                    {/* Category header — editorial */}
+                    {/* Category header - editorial */}
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-10 pb-6 border-b border-chrome/40">
                       <div className="md:col-span-1 hidden md:block">
                         <p className="font-display text-5xl text-gold/40 italic">

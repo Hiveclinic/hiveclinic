@@ -281,8 +281,8 @@ const AdminConsultationsTab = () => {
       .sig{margin-top:30px;border-top:2px solid #333;padding-top:10px}
       .meta{color:#999;font-size:12px;margin-top:40px}
       @media print{body{margin:20px}}</style></head><body>
-      <h1>Hive Clinic — ${template?.name || "Consent Form"}</h1>
-      <h2>${submission.customer_name} — ${format(new Date(submission.created_at), "d MMMM yyyy")}</h2>
+      <h1>Hive Clinic - ${template?.name || "Consent Form"}</h1>
+      <h2>${submission.customer_name} - ${format(new Date(submission.created_at), "d MMMM yyyy")}</h2>
       <table>${formDataEntries}</table>
       ${submission.signature_url ? `<div class="sig"><p style="font-size:12px;color:#666">Client Signature:</p><img src="${submission.signature_url}" style="max-height:80px" /></div>` : ""}
       <p class="meta">Status: ${submission.status} | Practitioner sign-off: ${submission.practitioner_sign_off ? "Yes" : "No"}${submission.signed_at ? ` | Signed: ${format(new Date(submission.signed_at), "d MMM yyyy HH:mm")}` : ""}</p>
@@ -370,7 +370,7 @@ const AdminConsultationsTab = () => {
                   <div className="border border-border rounded-lg max-h-32 overflow-y-auto">
                     {filteredClients.slice(0, 8).map(c => (
                       <button key={c.id} onClick={() => { setNewSubmission(p => ({ ...p, client_id: c.id })); setClientSearch(c.full_name || c.email); }} className="w-full text-left px-3 py-2 hover:bg-secondary font-body text-sm transition-colors">
-                        {c.full_name || "—"} <span className="text-muted-foreground text-xs">({c.email})</span>
+                        {c.full_name || "-"} <span className="text-muted-foreground text-xs">({c.email})</span>
                       </button>
                     ))}
                   </div>
@@ -438,7 +438,7 @@ const AdminConsultationsTab = () => {
                           {Object.entries(s.form_data as Record<string, any>).map(([key, value]) => (
                             <div key={key} className="flex gap-3 py-1.5 border-b border-border/50 last:border-0">
                               <span className="font-body text-xs font-medium w-40 shrink-0">{key}</span>
-                              <span className="font-body text-xs text-muted-foreground">{String(value) || "—"}</span>
+                              <span className="font-body text-xs text-muted-foreground">{String(value) || "-"}</span>
                             </div>
                           ))}
                         </div>
@@ -495,7 +495,7 @@ const AdminConsultationsTab = () => {
           {templates.length === 0 ? (
             <div className="py-12 text-center bg-card border border-border rounded-xl">
               <FileText size={24} className="mx-auto text-muted-foreground mb-2" />
-              <p className="font-body text-sm text-muted-foreground">No templates yet — create your first one</p>
+              <p className="font-body text-sm text-muted-foreground">No templates yet - create your first one</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -551,7 +551,7 @@ const AdminConsultationsTab = () => {
                         <FileText size={16} className="text-accent" />
                         <div>
                           <p className="font-body text-sm font-medium">{t.name}</p>
-                          <p className="font-body text-[11px] text-muted-foreground">{t.form_type.replace("_", " ")} — v{t.version} — {t.fields.length} fields</p>
+                          <p className="font-body text-[11px] text-muted-foreground">{t.form_type.replace("_", " ")} - v{t.version} - {t.fields.length} fields</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">

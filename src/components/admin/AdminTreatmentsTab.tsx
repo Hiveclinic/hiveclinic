@@ -258,7 +258,7 @@ const AdminTreatmentsTab = () => {
                         price: data.suggested_price || p.price,
                         slug: data.slug || p.slug,
                       }));
-                      toast.success("AI suggestions applied — review and adjust");
+                      toast.success("AI suggestions applied - review and adjust");
                     } catch (err) {
                       toast.error("AI suggestion failed");
                     } finally {

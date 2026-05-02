@@ -105,6 +105,7 @@ export default function BookingSystem() {
   const [loading, setLoading] = useState(true);
   const [embedUrl, setEmbedUrl] = useState<string>(ACUITY_BOOKING_URL);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openCats, setOpenCats] = useState<Record<string, boolean>>({});
   const [expanded, setExpanded] = useState(false);
   const [iframeLoading, setIframeLoading] = useState(true);
   const [iframeNonce, setIframeNonce] = useState(0);

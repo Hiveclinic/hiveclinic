@@ -28,8 +28,9 @@ import AdminMarketingTab from "@/components/admin/AdminMarketingTab";
 import AdminMediaLibraryTab from "@/components/admin/AdminMediaLibraryTab";
 import AdminStaffTab from "@/components/admin/AdminStaffTab";
 import AdminSettingsTab from "@/components/admin/AdminSettingsTab";
+import AdminCatalogSyncTab from "@/components/admin/AdminCatalogSyncTab";
 
-type TabKey = "dashboard" | "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers" | "site" | "reviews" | "finance" | "consultations" | "inventory" | "marketing" | "media" | "staff" | "settings" | "packages";
+type TabKey = "dashboard" | "bookings" | "calendar" | "treatments" | "availability" | "blocked" | "discounts" | "payments" | "clients" | "contacts" | "subscribers" | "site" | "reviews" | "finance" | "consultations" | "inventory" | "marketing" | "media" | "staff" | "settings" | "packages" | "catalog-sync";
 
 const NAV_GROUPS = [
   {
@@ -57,6 +58,7 @@ const NAV_GROUPS = [
     label: "Services",
     items: [
       { key: "treatments" as TabKey, label: "Treatments", icon: <Stethoscope size={15} strokeWidth={1.5} /> },
+      { key: "catalog-sync" as TabKey, label: "Catalog Sync", icon: <Shield size={15} strokeWidth={1.5} /> },
       { key: "packages" as TabKey, label: "Packages", icon: <Package size={15} strokeWidth={1.5} /> },
       { key: "discounts" as TabKey, label: "Discounts", icon: <Tag size={15} strokeWidth={1.5} /> },
     ],
@@ -294,6 +296,7 @@ const Admin = () => {
             {tab === "bookings" && <AdminBookingsTab />}
             {tab === "calendar" && <AdminCalendarView />}
             {tab === "treatments" && <AdminTreatmentsTab />}
+            {tab === "catalog-sync" && <AdminCatalogSyncTab />}
             {tab === "packages" && <AdminPaymentPlansTab />}
             {tab === "payments" && <AdminPaymentPlansTab />}
             {tab === "clients" && <AdminClientsTab />}

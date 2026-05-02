@@ -19,6 +19,9 @@ const navLinks = [{
   to: "/treatments",
   label: "Treatments"
 }, {
+  to: "/pricing",
+  label: "Pricing"
+}, {
   to: "/content-models",
   label: "Content Models"
 }, {
@@ -47,6 +50,7 @@ type SearchResult = {
 const STATIC_PAGES: SearchResult[] = [
   { type: "page", name: "Home", link: "/" },
   { type: "page", name: "Treatments", link: "/treatments" },
+  { type: "page", name: "Pricing", link: "/pricing" },
   { type: "page", name: "Content Models", link: "/content-models" },
   { type: "page", name: "About Us", link: "/about" },
   { type: "page", name: "Results & Gallery", link: "/results" },
@@ -257,6 +261,7 @@ const Layout = ({
                 { name: "Fat Dissolve", to: "/treatments/fat-dissolving-manchester" },
                 { name: "Mesotherapy", to: "/treatments/mesotherapy-manchester" },
                 { name: "All Treatments", to: "/treatments" },
+                { name: "Full Price List", to: "/pricing" },
               ].map(s => (
                 <Link key={s.to} to={s.to} className="block font-body text-sm text-background/60 hover:text-background mb-2">{s.name}</Link>
               ))}

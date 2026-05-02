@@ -153,6 +153,7 @@ const AdminDashboardHome = ({ onNavigate }: { onNavigate: (tab: string) => void 
 
   return (
     <div className="space-y-6">
+      <CatalogDriftBanner onNavigate={onNavigate} />
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {kpiCards.map((card) => (
@@ -285,4 +286,33 @@ const AdminDashboardHome = ({ onNavigate }: { onNavigate: (tab: string) => void 
   );
 };
 
+function CatalogDriftBanner({ onNavigate }: { onNavigate: (tab: string) => void }) {
+  const [state, setState] = useState<{ in_sync: boolean; issues: number; ran_at: string } | null>(null);
+  useEffect(() => {
+    supabase
+      .from("catalog_sync_log")
+      .select("in_sync, issues_count, ran_at")
+      .order("ran_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setState({ in_sync: data.in_sync, issues: data.issues_count, ran_at: data.ran_at });
+      });
+  }, []);
+  if (!state || state.in_sync) return null;
+  return (
+    <button
+      onClick={() => onNavigate("catalog-sync")}
+      className="w-full text-left border-l-4 border-l-amber-500 border border-border bg-amber-50/50 hover:bg-amber-50 transition-colors p-4 flex items-center gap-3"
+    >
+      <AlertTriangle size={18} className="text-amber-600 flex-shrink-0" />
+      <div className="flex-1 min-w-0">
+        <p className="font-body text-sm font-medium">Catalog drift detected — {state.issues} issue{state.issues === 1 ? "" : "s"} between website and live booking scheduler.</p>
+        <p className="font-body text-xs text-muted-foreground">Last checked {new Date(state.ran_at).toLocaleString("en-GB")} · Click to review.</p>
+      </div>
+    </button>
+  );
+}
+
 export default AdminDashboardHome;
+

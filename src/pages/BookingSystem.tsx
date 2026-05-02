@@ -113,19 +113,30 @@ export default function BookingSystem() {
       if (stored) {
         setEmbedUrl(stored);
         sessionStorage.removeItem("hive:bookUrl");
-        setTimeout(() => {
-          document.getElementById("book")?.scrollIntoView({ behavior: "smooth" });
-        }, 250);
+        setModalOpen(true);
       }
     } catch {}
 
     const handler = (e: Event) => {
       const detail = (e as CustomEvent).detail;
-      if (detail?.url) setEmbedUrl(detail.url);
+      if (detail?.url) {
+        setEmbedUrl(detail.url);
+        setModalOpen(true);
+      }
     };
     window.addEventListener("hive:book", handler);
     return () => window.removeEventListener("hive:book", handler);
   }, []);
+
+  // Lock body scroll while the booking modal is open
+  useEffect(() => {
+    if (!modalOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [modalOpen]);
 
   // Reset iframe loading state on URL change or manual retry
   useEffect(() => {

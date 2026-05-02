@@ -153,6 +153,7 @@ const AdminDashboardHome = ({ onNavigate }: { onNavigate: (tab: string) => void 
 
   return (
     <div className="space-y-6">
+      <CatalogDriftBanner onNavigate={onNavigate} />
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {kpiCards.map((card) => (

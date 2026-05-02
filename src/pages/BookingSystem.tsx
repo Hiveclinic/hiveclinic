@@ -355,6 +355,15 @@ export default function BookingSystem() {
             <div className="flex items-center gap-2">
               <button
                 type="button"
+                onClick={() => setIframeNonce((n) => n + 1)}
+                className="inline-flex items-center gap-1.5 px-3 py-2 border border-border hover:border-champagne text-foreground/70 hover:text-foreground font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
+                aria-label="Reload calendar"
+              >
+                <RefreshCw size={12} strokeWidth={1.5} className={iframeLoading ? "animate-spin" : ""} />
+                Reload
+              </button>
+              <button
+                type="button"
                 onClick={() => setExpanded((v) => !v)}
                 className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 border border-border hover:border-champagne text-foreground/70 hover:text-foreground font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
                 aria-label={expanded ? "Collapse calendar" : "Expand calendar"}
@@ -374,17 +383,50 @@ export default function BookingSystem() {
             </div>
           </div>
           <div
-            className="bg-background border border-border shadow-lg overflow-hidden"
+            className="relative bg-background border border-border shadow-lg overflow-hidden"
             style={{ minHeight: expanded ? "920px" : "780px" }}
           >
+            {iframeLoading && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 bg-background/95 backdrop-blur-sm px-6">
+                {/* Skeleton mimic of Acuity calendar */}
+                <div className="w-full max-w-md space-y-4 animate-pulse">
+                  <div className="h-5 w-2/3 bg-muted rounded mx-auto" />
+                  <div className="h-3 w-1/2 bg-muted/70 rounded mx-auto" />
+                  <div className="grid grid-cols-7 gap-2 pt-4">
+                    {Array.from({ length: 21 }).map((_, i) => (
+                      <div key={i} className="h-9 bg-muted/60 rounded" />
+                    ))}
+                  </div>
+                  <div className="flex gap-2 pt-3">
+                    <div className="h-10 flex-1 bg-muted/70 rounded" />
+                    <div className="h-10 flex-1 bg-muted/70 rounded" />
+                    <div className="h-10 flex-1 bg-muted/70 rounded" />
+                  </div>
+                </div>
+                <div className="flex flex-col items-center gap-3">
+                  <p className="font-body text-[11px] tracking-[0.3em] uppercase text-muted-foreground">
+                    Loading live calendar…
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setIframeNonce((n) => n + 1)}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 border border-champagne/50 hover:border-champagne text-champagne font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
+                  >
+                    <RefreshCw size={12} strokeWidth={1.5} />
+                    Taking a while? Retry
+                  </button>
+                </div>
+              </div>
+            )}
             <iframe
-              key={embedUrl}
+              key={`${embedUrl}-${iframeNonce}`}
               src={embedUrl}
               title="Hive Clinic booking calendar"
               width="100%"
               height={expanded ? 920 : 780}
               frameBorder="0"
               className="w-full block"
+              onLoad={() => setIframeLoading(false)}
             />
           </div>
           <p className="font-body text-[11px] text-muted-foreground mt-3">

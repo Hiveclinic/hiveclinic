@@ -6,6 +6,7 @@ import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { supabase } from "@/integrations/supabase/client";
 import { trackBookNow } from "@/hooks/use-tracking";
+import { useBookNow } from "@/hooks/use-book-now";
 
 // Order categories the same way Acuity presents them
 const CATEGORY_ORDER = [
@@ -56,6 +57,7 @@ export default function Pricing() {
 
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
+  const book = useBookNow();
 
   useEffect(() => {
     supabase
@@ -254,13 +256,19 @@ export default function Pricing() {
                               )}
                             </div>
                             <div className="col-span-5 sm:col-span-1 sm:text-right">
-                              <Link
-                                to={`/bookings${it.acuity_appointment_type_id ? `?type=${it.acuity_appointment_type_id}` : ""}`}
-                                onClick={() => trackBookNow("pricing_row", cat, it.name)}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  trackBookNow("pricing_row", cat, it.name);
+                                  book({
+                                    category: it.category,
+                                    appointmentTypeId: it.acuity_appointment_type_id ?? undefined,
+                                  });
+                                }}
                                 className="inline-flex items-center gap-1 font-body text-[10px] tracking-widest uppercase text-foreground/70 hover:text-gold transition-colors"
                               >
                                 Book <ArrowRight size={10} />
-                              </Link>
+                              </button>
                             </div>
                           </li>
                         );

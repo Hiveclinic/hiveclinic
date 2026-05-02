@@ -11,7 +11,7 @@ const faqs = [
   { q: "Does lip filler hurt?", a: "We use a topical numbing cream and the filler itself contains anaesthetic, so most clients describe it as a mild pressure. Comfort is our priority." },
   { q: "How long does lip filler last?", a: "Results typically last 6-12 months depending on the product used and your metabolism. We offer top-up appointments to maintain your look." },
   { q: "Will my lips look natural?", a: "Absolutely. We specialise in subtle, balanced enhancements that complement your facial proportions. No one needs to know - unless you tell them." },
-  { q: "How much does lip filler cost?", a: "Lip filler at Hive Clinic starts from £120 for 0.5ml. A full consultation is included to discuss the best approach for your goals." },
+  { q: "How much does lip filler cost?", a: "Lip filler at Hive Clinic starts from £100 for 0.5ml, with 1ml from £160. A complimentary consultation is included to discuss the best approach for your goals." },
   { q: "Is there any downtime?", a: "You may experience mild swelling for 24-48 hours. Most clients return to normal activities immediately after treatment." },
 ];
 
@@ -79,7 +79,7 @@ const LipFillers = () => {
             </div>
             <div className="border border-border p-6">
               <p className="font-body text-sm text-muted-foreground uppercase tracking-wider mb-2">Starting from</p>
-              <p className="font-display text-4xl">£120 <span className="text-lg text-muted-foreground">/ 0.5ml</span></p>
+              <p className="font-display text-4xl">£100 <span className="text-lg text-muted-foreground">/ 0.5ml</span></p>
               <p className="font-body text-xs text-muted-foreground mt-1">Pay in instalments with Klarna or Clearpay</p>
             </div>
           </div>

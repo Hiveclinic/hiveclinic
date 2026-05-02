@@ -40,24 +40,44 @@ const fmt = (n: number) => (n === 0 ? "Free" : `£${Number(n).toFixed(0)}`);
 
 const faqs = [
   {
-    q: "Do I need a consultation before treatment?",
-    a: "Yes — every injectable treatment includes a face-to-face consultation with a qualified prescriber, either before the appointment or as the first part of it. We'll review your medical history, discuss your goals and confirm the treatment is right for you.",
+    q: "Do I need a consultation before my first treatment?",
+    a: "Yes. Every new client has a complimentary face-to-face consultation with our qualified practitioner before any injectable treatment. We review your medical history, discuss your goals and confirm the plan is right for you. For most treatments the consultation is built into your appointment, so you can be assessed and treated on the same day.",
+  },
+  {
+    q: "Is there a separate Anti-Wrinkle Consultation?",
+    a: "Yes — an Anti-Wrinkle Consultation can be booked on its own, free of charge. UK regulations require a face-to-face prescriber assessment before any toxin treatment, so even returning clients are reassessed at every appointment.",
+  },
+  {
+    q: "Who carries out my treatment?",
+    a: "All injectable and prescription-only treatments are performed by Bianca, a qualified aesthetic practitioner. Prescription medicines (such as anti-wrinkle toxin) are prescribed under a face-to-face consultation in line with GPhC and JCCP guidance — we never prescribe remotely.",
   },
   {
     q: "Can I pay with Klarna or Clearpay?",
-    a: "Yes. Both are available at checkout on the booking confirmation step. You'll be able to split your treatment into 3 interest-free payments. Klarna and Clearpay handle their own credit checks; approval isn't guaranteed.",
+    a: "Yes. Both are available at the booking confirmation step and let you split the cost into 3 interest-free payments. Klarna and Clearpay handle their own credit checks, so approval isn't guaranteed.",
   },
   {
     q: "How much is the booking deposit?",
-    a: "A 20% non-refundable deposit secures your appointment, deducted from your final balance on the day. The rest can be paid by card, cash, bank transfer or Klarna / Clearpay.",
+    a: "A 20% non-refundable deposit secures your appointment and is deducted from your balance on the day. The remainder can be paid by card, cash, bank transfer, Klarna or Clearpay.",
   },
   {
-    q: "What's your cancellation policy?",
-    a: "We need at least 48 hours notice to reschedule or cancel. Inside 48 hours the deposit is forfeited; no-shows are charged for the full appointment. The earlier you let us know, the easier it is for someone on the waiting list.",
+    q: "Can I reschedule if something comes up?",
+    a: "Of course — we just ask for at least 48 hours notice so we can offer the slot to someone on the waiting list. You can reschedule once free of charge inside that window via your confirmation email or WhatsApp.",
+  },
+  {
+    q: "What happens if I reschedule late or miss my appointment?",
+    a: "Inside 48 hours the deposit is forfeited and a fresh deposit is required to rebook. No-shows are charged for the full appointment cost, as the time is held exclusively for you. Genuine emergencies are reviewed case by case — please let us know as early as you can.",
+  },
+  {
+    q: "I'm unwell or have a cold sore — can I still come in?",
+    a: "Please don't. Active illness, fever, cold sores, recent dental work or compromised skin can affect treatment safety and results. Message us as soon as possible — we'll move your appointment without losing your deposit when you let us know in good time.",
+  },
+  {
+    q: "Can I have treatment if I'm pregnant or breastfeeding?",
+    a: "Injectable treatments (anti-wrinkle, dermal filler, skin boosters, fat dissolve) are not offered during pregnancy or while breastfeeding. Several of our facials and peels are also unsuitable — please flag this when booking and we'll guide you to safe alternatives.",
   },
   {
     q: "When should I arrive?",
-    a: "Please arrive at your exact appointment time, not earlier. The studio is intimate and we treat one client at a time so you get our full attention.",
+    a: "Please arrive at your exact appointment time, not earlier. The studio is intimate and we treat one client at a time so you receive our full attention. If you're running late, a quick message helps us hold your slot where possible.",
   },
   {
     q: "Where are you based?",

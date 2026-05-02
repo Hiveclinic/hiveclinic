@@ -11,6 +11,7 @@ import clearpayLogo from "@/assets/clearpay-logo.png";
 
 const CATEGORY_ORDER = [
   "Offers",
+  "Consultation",
   "Anti Wrinkle (Botox)",
   "Lips",
   "Facial Balancing",
@@ -18,7 +19,6 @@ const CATEGORY_ORDER = [
   "Skin Treatments",
   "Chemical Peels",
   "Fat Dissolve",
-  "Consultation",
   "Correction",
   "Content Model",
 ];

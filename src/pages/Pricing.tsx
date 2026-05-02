@@ -42,6 +42,16 @@ export default function Pricing() {
   usePageMeta(
     "Treatment Prices | Hive Clinic Manchester",
     "Full transparent price list for every aesthetic treatment at Hive Clinic Manchester. Anti-wrinkle, lip filler, skin boosters, peels, facial balancing and more.",
+    {
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.hiveclinicuk.com/" },
+          { "@type": "ListItem", position: 2, name: "Pricing", item: "https://www.hiveclinicuk.com/pricing" },
+        ],
+      },
+    },
   );
 
   const [rows, setRows] = useState<Row[]>([]);
@@ -76,32 +86,34 @@ export default function Pricing() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative bg-summer-gradient pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-sun-soft pointer-events-none" />
+      <section className="relative bg-foreground text-background pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gold blur-[180px]" />
+        </div>
         <div className="relative max-w-5xl mx-auto px-6 text-center">
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             className="font-body text-[11px] tracking-[0.4em] uppercase text-gold mb-5"
           >
-            Transparent Pricing — Synced With Booking
+            Transparent Pricing - Synced With Booking
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="font-display text-5xl md:text-7xl leading-[1.05] mb-6"
+            className="font-display text-5xl md:text-7xl leading-[1.05] mb-6 text-background"
           >
             Every treatment.<br />
-            <span className="italic text-gold">Every price.</span>
+            <span className="font-script text-gold text-6xl md:text-8xl">every price.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.15 }}
-            className="font-body text-base text-muted-foreground max-w-xl mx-auto leading-relaxed mb-10"
+            className="font-body text-base text-background/55 max-w-xl mx-auto leading-relaxed mb-10"
           >
-            The exact menu you see at checkout — service names, durations and
+            The exact menu you see at checkout - service names, durations and
             prices pulled live from our booking system. No hidden fees, no
             surprises.
           </motion.p>
@@ -114,7 +126,7 @@ export default function Pricing() {
             ].map((b) => (
               <div key={b.label} className="flex items-center gap-2">
                 <b.icon size={13} strokeWidth={1.5} className="text-gold" />
-                <span className="font-body text-[11px] tracking-widest uppercase text-muted-foreground">
+                <span className="font-body text-[11px] tracking-widest uppercase text-background/55">
                   {b.label}
                 </span>
               </div>

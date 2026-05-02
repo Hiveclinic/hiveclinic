@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600;1,9..144,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -96,7 +96,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-family: 'Manrope', system-ui, sans-serif;
     font-feature-settings: 'ss01', 'cv11';
     letter-spacing: 0.005em;
     -webkit-font-smoothing: antialiased;
@@ -104,9 +104,9 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Fraunces', 'Cormorant Garamond', serif;
-    font-feature-settings: 'ss01';
-    letter-spacing: -0.015em;
+    font-family: 'Tenor Sans', 'Cormorant Garamond', serif;
+    letter-spacing: 0.005em;
+    font-weight: 400;
   }
 
   ::selection {
@@ -116,9 +116,10 @@
 }
 
 @layer utilities {
-  .font-display { font-family: 'Fraunces', serif; }
-  .font-script  { font-family: 'Italiana', serif; }
-  .font-body    { font-family: 'Inter Tight', sans-serif; }
+  .font-display { font-family: 'Tenor Sans', serif; letter-spacing: 0.01em; }
+  .font-script  { font-family: 'Pinyon Script', cursive; }
+  .font-body    { font-family: 'Manrope', sans-serif; }
+  .font-serif-accent { font-family: 'Tenor Sans', serif; }
 
   .text-gold     { color: hsl(var(--gold)); }
   .bg-gold       { background-color: hsl(var(--gold)); }
@@ -135,7 +136,7 @@
   .border-chrome { border-color: hsl(var(--chrome)); }
 
   .eyebrow {
-    font-family: 'Inter Tight', sans-serif;
+    font-family: 'Manrope', sans-serif;
     font-size: 10px;
     letter-spacing: 0.32em;
     text-transform: uppercase;
@@ -143,9 +144,8 @@
   }
 
   .display-italic {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-variation-settings: 'opsz' 144, 'SOFT' 100;
+    font-family: 'Pinyon Script', cursive;
+    font-style: normal;
   }
 
   /* Backgrounds */
@@ -217,8 +217,7 @@
 
   /* Decorative serif numerals */
   .numeral {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
+    font-family: 'Tenor Sans', serif;
     font-feature-settings: 'lnum';
     color: hsl(var(--gold));
   }

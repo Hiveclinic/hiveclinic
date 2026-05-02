@@ -111,6 +111,16 @@ const Treatments = () => {
   usePageMeta(
     "Treatments | Hive Clinic Manchester City Centre",
     "Browse all aesthetic treatments at Hive Clinic, Manchester City Centre. Lip fillers, skin boosters, chemical peels, microneedling and more.",
+    {
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://www.hiveclinicuk.com/" },
+          { "@type": "ListItem", position: 2, name: "Treatments", item: "https://www.hiveclinicuk.com/treatments" },
+        ],
+      },
+    },
   );
 
   const [categories, setCategories] = useState<CategoryCard[]>([]);

@@ -15,6 +15,8 @@ import BlogPreview from "@/components/home/BlogPreview";
 import FinalCTA from "@/components/home/FinalCTA";
 import WhyHive from "@/components/home/WhyHive";
 import OffersSection from "@/components/home/OffersSection";
+import PressMarquee from "@/components/home/PressMarquee";
+import EditorialQuote from "@/components/home/EditorialQuote";
 
 const staticReviews = [
   { name: "Sarah J.", text: "I had lip fillers done by Bianca and I'm so happy with the results. She listened to what I wanted and made me feel so comfortable.", stars: 5 },
@@ -80,8 +82,10 @@ const Index = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <HeroSection heroImg={heroImg} />
+      <PressMarquee />
       <WhyHive />
       <OffersSection />
+      <EditorialQuote />
       <TreatmentShowcase />
       <ResultsGallery images={galleryImages} />
       <SocialProof reviews={reviews} />

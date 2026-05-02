@@ -215,6 +215,39 @@ export type Database = {
           },
         ]
       }
+      catalog_sync_log: {
+        Row: {
+          acuity_total: number
+          db_total: number
+          id: string
+          in_sync: boolean
+          issues_count: number
+          ran_at: string
+          report: Json
+          source: string
+        }
+        Insert: {
+          acuity_total?: number
+          db_total?: number
+          id?: string
+          in_sync?: boolean
+          issues_count?: number
+          ran_at?: string
+          report?: Json
+          source?: string
+        }
+        Update: {
+          acuity_total?: number
+          db_total?: number
+          id?: string
+          in_sync?: boolean
+          issues_count?: number
+          ran_at?: string
+          report?: Json
+          source?: string
+        }
+        Relationships: []
+      }
       client_images: {
         Row: {
           customer_email: string

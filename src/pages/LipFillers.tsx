@@ -18,7 +18,7 @@ const faqs = [
 const LipFillers = () => {
   usePageMeta(
     "Lip Filler Manchester City Centre | Hive Clinic",
-    "Natural-looking lip filler from £120 at Hive Clinic, Manchester City Centre. Expert lip enhancement by a qualified prescriber in Deansgate. Book your free consultation."
+    "Natural-looking lip filler from £100 at Hive Clinic, Manchester City Centre. Expert lip enhancement by a qualified prescriber in Deansgate. Book your free consultation."
   );
   const heroImg = useSiteImage("lipfillers_hero", STOCK.lipfillers_hero);
   const secondaryImg = useSiteImage("lipfillers_secondary", STOCK.lipfillers_secondary);
@@ -39,7 +39,7 @@ const LipFillers = () => {
             Lip Fillers Manchester
           </h1>
           <p className="font-body text-lg text-white/80 mb-6">
-            Natural-looking lip enhancement from £120. Expert results by a qualified prescriber in the heart of Deansgate.
+            Natural-looking lip enhancement from £100. Expert results by a qualified prescriber in the heart of Deansgate.
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Qualified Prescriber</span></div>

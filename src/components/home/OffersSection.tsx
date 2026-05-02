@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Flame, Camera } from "lucide-react";
 import { Link } from "react-router-dom";
+import { trackBookNow } from "@/hooks/use-tracking";
 
 const offers = [
   {
@@ -53,6 +54,7 @@ const OffersSection = () => (
             >
               <Link
                 to="/bookings#book"
+                onClick={() => trackBookNow("home_offers", undefined, o.title)}
                 className="group flex flex-col justify-between p-8 md:p-10 h-full hover:bg-secondary/40 transition-all duration-300"
               >
                 <div>

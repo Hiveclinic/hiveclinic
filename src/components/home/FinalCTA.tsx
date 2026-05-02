@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { trackBookNow } from "@/hooks/use-tracking";
 import klarnaLogo from "@/assets/klarna-logo.png";
 import clearpayLogo from "@/assets/clearpay-logo.png";
 
@@ -27,6 +28,7 @@ const FinalCTA = () => (
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
           <Link
             to="/bookings#book"
+            onClick={() => trackBookNow("home_final")}
             className="group inline-flex items-center gap-3 px-10 py-4 bg-gold text-white font-body text-[11px] tracking-[0.2em] uppercase hover:bg-gold-dark transition-colors duration-300"
           >
             Book Consultation

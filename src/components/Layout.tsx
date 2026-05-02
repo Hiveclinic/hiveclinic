@@ -10,6 +10,8 @@ import TreatmentChatbot from "./TreatmentChatbot";
 
 import instagramLogo from "@/assets/instagram-logo.png";
 import tiktokLogo from "@/assets/tiktok-logo.png";
+import klarnaLogo from "@/assets/klarna-logo.png";
+import clearpayLogo from "@/assets/clearpay-logo.png";
 import { supabase } from "@/integrations/supabase/client";
 
 const navLinks = [{
@@ -18,9 +20,6 @@ const navLinks = [{
 }, {
   to: "/treatments",
   label: "Treatments"
-}, {
-  to: "/pricing",
-  label: "Pricing"
 }, {
   to: "/content-models",
   label: "Content Models"
@@ -257,7 +256,7 @@ const Layout = ({
                 { name: "Chemical Peels", to: "/treatments/chemical-peels-manchester" },
                 { name: "Fat Dissolve", to: "/treatments/fat-dissolving-manchester" },
                 { name: "All Treatments", to: "/treatments" },
-                { name: "Full Price List", to: "/pricing" },
+                { name: "Book Now", to: "/bookings" },
               ].map(s => (
                 <Link key={s.to} to={s.to} className="block font-body text-sm text-background/60 hover:text-background mb-2">{s.name}</Link>
               ))}
@@ -287,9 +286,13 @@ const Layout = ({
             </div>
           </div>
           <div className="border-t border-background/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="font-body text-xs text-background/40">
-              © 2026 Hive Clinic. All rights reserved.
-            </p>
+            <div className="flex items-center gap-3">
+              <p className="font-body text-xs text-background/40">© 2026 Hive Clinic.</p>
+              <span className="text-background/20">·</span>
+              <span className="font-body text-[10px] tracking-[0.2em] uppercase text-background/40">Pay in 3</span>
+              <img src={klarnaLogo} alt="Klarna" className="h-3.5 opacity-70" />
+              <img src={clearpayLogo} alt="Clearpay" className="h-3.5 opacity-70" />
+            </div>
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
               <p className="font-body text-xs text-background/40">
                 Manchester City Centre, Deansgate

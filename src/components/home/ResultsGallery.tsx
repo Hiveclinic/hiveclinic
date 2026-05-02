@@ -4,10 +4,18 @@ import { Link } from "react-router-dom";
 
 interface ResultsGalleryProps { images: string[]; }
 
-// Editorial grid - no rotated polaroids, no captions cluttering the image.
+const GALLERY_ALTS = [
+  "Natural lip filler result by Hive Clinic Manchester",
+  "Profhilo skin booster glow result, Hive Clinic Deansgate",
+  "Anti-wrinkle treatment refreshed forehead, Hive Clinic Manchester",
+  "Facial balancing dermal filler before and after, Hive Clinic",
+  "Glass-skin hydrafacial result at Hive Clinic Manchester",
+  "Cheek and jawline contouring with dermal filler, Hive Clinic",
+];
+
 const ResultsGallery = ({ images }: ResultsGalleryProps) => {
   return (
-    <section className="section-y bg-bone" aria-label="Results gallery">
+    <section className="section-y bg-bone" aria-label="Client results gallery">
       <div className="container-edit">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -41,9 +49,10 @@ const ResultsGallery = ({ images }: ResultsGalleryProps) => {
             >
               <img
                 src={img}
-                alt={`Hive Clinic result ${i + 1}`}
+                alt={GALLERY_ALTS[i] ?? `Aesthetic treatment result ${i + 1} at Hive Clinic Manchester`}
                 className="w-full aspect-[4/5] object-cover hover:scale-[1.04] transition-transform duration-[1200ms]"
                 loading="lazy"
+                decoding="async"
               />
             </motion.div>
           ))}

@@ -244,7 +244,7 @@ export default function BookingSystem() {
       {/* Category nav - taps deep-link the iframe AND scroll to it */}
       {!loading && (
         <section className="sticky top-[89px] z-30 bg-background/92 backdrop-blur-md border-b border-border">
-          <div className="max-w-6xl mx-auto px-4 py-2.5 overflow-x-auto">
+          <div className="max-w-6xl mx-auto px-4 py-2.5 overflow-x-auto scrollbar-hide">
             <div className="flex gap-1 min-w-max items-center">
               <span className="eyebrow text-muted-foreground pr-2">Jump to</span>
               {grouped.map(([cat]) => (

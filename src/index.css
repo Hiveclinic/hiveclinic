@@ -136,9 +136,9 @@
 
 @layer utilities {
   .font-display       { font-family: 'Tenor Sans', serif; letter-spacing: 0.01em; }
-  .font-serif-accent  { font-family: 'Marcellus', serif; letter-spacing: 0.015em; }
-  .font-script        { font-family: 'Marcellus', serif; font-style: italic; letter-spacing: 0.01em; }
-  .display-italic     { font-family: 'Marcellus', serif; font-style: italic; }
+  .font-serif-accent  { font-family: 'Italiana', 'Marcellus', serif; letter-spacing: 0.01em; }
+  .font-script        { font-family: 'Italiana', 'Marcellus', serif; font-style: italic; letter-spacing: 0.005em; }
+  .display-italic     { font-family: 'Italiana', 'Marcellus', serif; font-style: italic; letter-spacing: 0; }
   .font-body          { font-family: 'Manrope', sans-serif; }
 
   .text-champagne   { color: hsl(var(--champagne)); }

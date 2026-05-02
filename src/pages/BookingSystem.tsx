@@ -269,106 +269,138 @@ export default function BookingSystem() {
           {loading ? (
             <p className="text-center font-body text-muted-foreground animate-pulse">Loading menu…</p>
           ) : (
-            <div className="space-y-14 md:space-y-20">
+            <div className="space-y-3 md:space-y-4">
               {grouped.map(([cat, items], catIndex) => {
                 const lowest = Math.min(
                   ...items
                     .map((i) => (i.on_offer && i.offer_price ? Number(i.offer_price) : Number(i.price)))
                     .filter((n) => n > 0),
                 );
+                const isOpen = openCats[cat] ?? catIndex === 0;
                 return (
                   <motion.div
                     key={cat}
                     id={`cat-${slug(cat)}`}
-                    initial={{ opacity: 0, y: 16 }}
+                    initial={{ opacity: 0, y: 12 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.5 }}
-                    className="scroll-mt-32"
+                    transition={{ duration: 0.4 }}
+                    className="scroll-mt-32 border border-border bg-card/40"
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-end mb-5 md:mb-8 pb-3 md:pb-5 border-b border-border">
-                      <div className="md:col-span-1 hidden md:block">
-                        <p className="font-display text-5xl text-champagne/40 italic">
+                    <button
+                      type="button"
+                      onClick={() => setOpenCats((s) => ({ ...s, [cat]: !isOpen }))}
+                      aria-expanded={isOpen}
+                      className="w-full grid grid-cols-12 gap-3 md:gap-6 items-center px-4 md:px-6 py-4 md:py-5 text-left hover:bg-bone-deep/40 transition-colors"
+                    >
+                      <div className="hidden md:block md:col-span-1">
+                        <p className="font-display text-3xl text-champagne/40 italic">
                           {String(catIndex + 1).padStart(2, "0")}
                         </p>
                       </div>
-                      <div className="md:col-span-7">
-                        <p className="eyebrow text-champagne mb-2">Category</p>
-                        <h2 className="font-display text-2xl md:text-4xl leading-tight">{cat}</h2>
+                      <div className="col-span-7 md:col-span-7">
+                        <p className="eyebrow text-champagne mb-1">Category</p>
+                        <h2 className="font-display text-xl md:text-2xl leading-tight">{cat}</h2>
                       </div>
-                      <div className="md:col-span-2 md:text-right">
-                        <p className="eyebrow text-muted-foreground mb-1">From</p>
-                        <p className="font-display text-2xl md:text-3xl">
+                      <div className="col-span-3 md:col-span-2 text-right">
+                        <p className="eyebrow text-muted-foreground mb-0.5">From</p>
+                        <p className="font-display text-lg md:text-2xl">
                           {Number.isFinite(lowest) ? fmt(lowest) : "Free"}
                         </p>
                       </div>
-                      <div className="md:col-span-2 md:text-right">
-                        <button
-                          type="button"
-                          onClick={() => handleCategoryBook(cat)}
-                          className="inline-flex items-center gap-1.5 font-body text-[10px] tracking-[0.25em] uppercase text-foreground hover:text-champagne border-b border-champagne/40 hover:border-champagne pb-0.5 transition-colors"
-                        >
-                          Open in calendar <ArrowRight size={11} />
-                        </button>
+                      <div className="col-span-2 md:col-span-2 flex justify-end">
+                        <ChevronDown
+                          size={18}
+                          strokeWidth={1.5}
+                          className={`text-champagne transition-transform ${isOpen ? "rotate-180" : ""}`}
+                        />
                       </div>
-                    </div>
+                    </button>
 
-                    <ul>
-                      {items.map((it) => {
-                        const showOffer = it.on_offer && it.offer_price;
-                        return (
-                          <li
-                            key={it.id}
-                            className="group grid grid-cols-12 gap-3 md:gap-4 items-baseline py-4 border-b border-border last:border-b-0"
-                          >
-                            <div className="col-span-12 sm:col-span-7">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <h3 className="font-display text-lg md:text-xl leading-tight">{it.name}</h3>
-                                {it.offer_label && (
-                                  <span className="inline-flex font-body text-[9px] tracking-widest uppercase text-champagne border border-champagne/40 px-2 py-0.5">
-                                    {it.offer_label}
-                                  </span>
-                                )}
-                              </div>
-                              {it.duration_mins > 0 && (
-                                <p className="font-body text-[11px] text-muted-foreground tracking-wider mt-1">
-                                  {it.duration_mins} min
-                                </p>
-                              )}
-                            </div>
-
-                            <div
-                              className="hidden sm:block col-span-2 border-b border-dotted border-border/80 mb-3"
-                              aria-hidden
-                            />
-
-                            <div className="col-span-7 sm:col-span-2 sm:text-right">
-                              {showOffer ? (
-                                <div>
-                                  <span className="font-body text-xs text-muted-foreground line-through mr-2">
-                                    £{Number(it.price).toFixed(0)}
-                                  </span>
-                                  <span className="font-display text-xl md:text-2xl text-champagne">
-                                    {fmt(Number(it.offer_price))}
-                                  </span>
-                                </div>
-                              ) : (
-                                <span className="font-display text-xl md:text-2xl">{fmt(Number(it.price))}</span>
-                              )}
-                            </div>
-                            <div className="col-span-5 sm:col-span-1 sm:text-right">
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          key="content"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-4 md:px-6 pb-4 md:pb-6 border-t border-border">
+                            <div className="flex justify-end pt-3 pb-1">
                               <button
                                 type="button"
-                                onClick={() => handleBook(cat, it)}
-                                className="inline-flex items-center gap-1 font-body text-[10px] tracking-[0.25em] uppercase text-foreground/80 hover:text-champagne transition-colors"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleCategoryBook(cat);
+                                }}
+                                className="inline-flex items-center gap-1.5 font-body text-[10px] tracking-[0.25em] uppercase text-foreground hover:text-champagne border-b border-champagne/40 hover:border-champagne pb-0.5 transition-colors"
                               >
-                                Book <ArrowRight size={10} />
+                                Open in calendar <ArrowRight size={11} />
                               </button>
                             </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
+
+                            <ul>
+                              {items.map((it) => {
+                                const showOffer = it.on_offer && it.offer_price;
+                                return (
+                                  <li
+                                    key={it.id}
+                                    className="group grid grid-cols-12 gap-3 md:gap-4 items-baseline py-3.5 border-b border-border last:border-b-0"
+                                  >
+                                    <div className="col-span-12 sm:col-span-7">
+                                      <div className="flex items-center gap-2 flex-wrap">
+                                        <h3 className="font-display text-base md:text-lg leading-tight">{it.name}</h3>
+                                        {it.offer_label && (
+                                          <span className="inline-flex font-body text-[9px] tracking-widest uppercase text-champagne border border-champagne/40 px-2 py-0.5">
+                                            {it.offer_label}
+                                          </span>
+                                        )}
+                                      </div>
+                                      {it.duration_mins > 0 && (
+                                        <p className="font-body text-[11px] text-muted-foreground tracking-wider mt-0.5">
+                                          {it.duration_mins} min
+                                        </p>
+                                      )}
+                                    </div>
+
+                                    <div
+                                      className="hidden sm:block col-span-2 border-b border-dotted border-border/80 mb-3"
+                                      aria-hidden
+                                    />
+
+                                    <div className="col-span-7 sm:col-span-2 sm:text-right">
+                                      {showOffer ? (
+                                        <div>
+                                          <span className="font-body text-xs text-muted-foreground line-through mr-2">
+                                            £{Number(it.price).toFixed(0)}
+                                          </span>
+                                          <span className="font-display text-lg md:text-xl text-champagne">
+                                            {fmt(Number(it.offer_price))}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <span className="font-display text-lg md:text-xl">{fmt(Number(it.price))}</span>
+                                      )}
+                                    </div>
+                                    <div className="col-span-5 sm:col-span-1 sm:text-right">
+                                      <button
+                                        type="button"
+                                        onClick={() => handleBook(cat, it)}
+                                        className="inline-flex items-center gap-1 font-body text-[10px] tracking-[0.25em] uppercase text-foreground/80 hover:text-champagne transition-colors"
+                                      >
+                                        Book <ArrowRight size={10} />
+                                      </button>
+                                    </div>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
                 );
               })}

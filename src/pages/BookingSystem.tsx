@@ -1,11 +1,11 @@
 import { useEffect, useState, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Sparkles, Clock, ShieldCheck, ChevronDown } from "lucide-react";
+import { ArrowRight, Sparkles, Clock, ShieldCheck, ChevronDown, Maximize2, ExternalLink } from "lucide-react";
 import Layout from "@/components/Layout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import { supabase } from "@/integrations/supabase/client";
 import { trackBookNow } from "@/hooks/use-tracking";
-import { useBookNow, ACUITY_BOOKING_URL } from "@/hooks/use-book-now";
+import { useBookNow, ACUITY_BOOKING_URL, buildAcuityBookingUrl } from "@/hooks/use-book-now";
 import klarnaLogo from "@/assets/klarna-logo.png";
 import clearpayLogo from "@/assets/clearpay-logo.png";
 
@@ -40,27 +40,35 @@ const fmt = (n: number) => (n === 0 ? "Free" : `£${Number(n).toFixed(0)}`);
 
 const faqs = [
   {
-    q: "Do I need a consultation first?",
-    a: "Yes — for all injectable treatments a consultation with a qualified prescriber is required. This ensures your safety and allows us to build a tailored treatment plan.",
+    q: "Do I need a consultation before treatment?",
+    a: "Yes — every injectable treatment includes a face-to-face consultation with a qualified prescriber, either before the appointment or as the first part of it. We'll review your medical history, discuss your goals and confirm the treatment is right for you.",
   },
   {
-    q: "Can I pay in instalments?",
-    a: "Yes. We offer Klarna and Clearpay on most treatments at checkout. Choose your slot, then select your preferred payment method.",
+    q: "Can I pay with Klarna or Clearpay?",
+    a: "Yes. Both are available at checkout on the booking confirmation step. You'll be able to split your treatment into 3 interest-free payments. Klarna and Clearpay handle their own credit checks; approval isn't guaranteed.",
   },
   {
-    q: "What if I need to reschedule?",
-    a: "We ask for at least 48 hours notice. Late cancellations or no-shows may forfeit the booking deposit (20% of treatment cost).",
+    q: "How much is the booking deposit?",
+    a: "A 20% non-refundable deposit secures your appointment, deducted from your final balance on the day. The rest can be paid by card, cash, bank transfer or Klarna / Clearpay.",
   },
   {
-    q: "How early should I arrive?",
-    a: "Please arrive at your exact appointment time — not earlier. Our space is small and we treat one client at a time so we can give you our full attention.",
+    q: "What's your cancellation policy?",
+    a: "We need at least 48 hours notice to reschedule or cancel. Inside 48 hours the deposit is forfeited; no-shows are charged for the full appointment. The earlier you let us know, the easier it is for someone on the waiting list.",
+  },
+  {
+    q: "When should I arrive?",
+    a: "Please arrive at your exact appointment time, not earlier. The studio is intimate and we treat one client at a time so you get our full attention.",
+  },
+  {
+    q: "Where are you based?",
+    a: "Hive Clinic, 25 Saint John Street, Manchester M3 4DT — two minutes from Deansgate. Paid street parking and several NCP car parks are within a five-minute walk.",
   },
 ];
 
 export default function BookingSystem() {
   usePageMeta(
-    "Book a Treatment | Hive Clinic Manchester",
-    "Book your aesthetic treatment at Hive Clinic Manchester. Tap any service to open the live calendar — same names, same prices, no surprises. Klarna & Clearpay available.",
+    "Book Aesthetic Treatments Manchester | Hive Clinic",
+    "Book lip filler, anti-wrinkle, skin boosters and more at Hive Clinic Manchester. Live calendar, transparent prices, Klarna and Clearpay accepted. 25 Saint John Street, M3 4DT.",
     {
       jsonLd: {
         "@context": "https://schema.org",
@@ -77,6 +85,7 @@ export default function BookingSystem() {
   const [loading, setLoading] = useState(true);
   const [embedUrl, setEmbedUrl] = useState<string>(ACUITY_BOOKING_URL);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [expanded, setExpanded] = useState(false);
   const embedRef = useRef<HTMLDivElement>(null);
   const book = useBookNow();
 
@@ -132,53 +141,57 @@ export default function BookingSystem() {
     book({ category: item.category, appointmentTypeId: item.acuity_appointment_type_id ?? undefined });
   };
 
+  const handleCategoryBook = (cat: string) => {
+    trackBookNow("bookings_category_nav", cat);
+    book(cat);
+  };
+
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative bg-ink text-bone pt-20 md:pt-28 pb-14 md:pb-20 overflow-hidden">
+      <section className="relative bg-ink text-bone pt-16 md:pt-24 pb-12 md:pb-16 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-champagne blur-[180px]" />
         </div>
-        <div className="relative max-w-5xl mx-auto px-5 md:px-8 text-center">
+        <div className="relative max-w-4xl mx-auto px-5 md:px-8 text-center">
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="eyebrow text-champagne mb-5"
+            className="eyebrow text-champagne mb-4"
           >
-            Live Booking — Tap & Go
+            Live Booking
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="font-display text-[clamp(2.2rem,7vw,5rem)] leading-[0.98] mb-5 text-bone"
+            className="font-display text-[clamp(2rem,6.5vw,4.5rem)] leading-[0.98] mb-4 text-bone"
           >
-            Book your treatment.
+            Book a treatment
             <br />
-            <span className="display-italic text-champagne">No fuss.</span>
+            <span className="display-italic text-champagne">in seconds.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.15 }}
-            className="font-body text-sm md:text-base text-bone/60 max-w-xl mx-auto leading-relaxed mb-7"
+            className="font-body text-[15px] md:text-base text-bone/65 max-w-lg mx-auto leading-[1.7] mb-6"
           >
-            Tap any service below to open the live calendar — straight to the right slot.
-            Same names, same prices, paid securely on the day or in 3 with Klarna / Clearpay.
+            Pick a treatment from the menu — the live calendar opens to that exact service. Pay a 20% deposit to confirm, the balance comes due on the day.
           </motion.p>
 
           {/* Klarna / Clearpay strip */}
-          <div className="flex items-center justify-center gap-5 mb-8">
-            <span className="eyebrow text-bone/50">Pay in 3</span>
-            <img src={klarnaLogo} alt="Klarna" className="h-5 md:h-6 opacity-90" />
-            <img src={clearpayLogo} alt="Clearpay" className="h-5 md:h-6 opacity-90" />
+          <div className="flex items-center justify-center gap-4 mb-7">
+            <span className="eyebrow text-bone/45">Pay in 3</span>
+            <img src={klarnaLogo} alt="Klarna" className="h-5 md:h-6" />
+            <img src={clearpayLogo} alt="Clearpay" className="h-5 md:h-6" />
           </div>
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             {[
               { icon: ShieldCheck, label: "Qualified prescriber" },
               { icon: Clock, label: "48hr cancellation" },
-              { icon: Sparkles, label: "Synced with calendar" },
+              { icon: Sparkles, label: "Manchester · M3 4DT" },
             ].map((b) => (
               <div key={b.label} className="flex items-center gap-2">
                 <b.icon size={12} strokeWidth={1.5} className="text-champagne" />
@@ -189,19 +202,21 @@ export default function BookingSystem() {
         </div>
       </section>
 
-      {/* Category nav */}
+      {/* Category nav — taps deep-link the iframe AND scroll to it */}
       {!loading && (
-        <section className="sticky top-[89px] z-30 bg-background/90 backdrop-blur-md border-b border-border">
+        <section className="sticky top-[89px] z-30 bg-background/92 backdrop-blur-md border-b border-border">
           <div className="max-w-6xl mx-auto px-4 py-2.5 overflow-x-auto">
-            <div className="flex gap-1 min-w-max">
+            <div className="flex gap-1 min-w-max items-center">
+              <span className="eyebrow text-muted-foreground pr-2">Jump to</span>
               {grouped.map(([cat]) => (
-                <a
+                <button
                   key={cat}
-                  href={`#${slug(cat)}`}
-                  className="px-3 py-1.5 font-body text-[10px] tracking-[0.25em] uppercase text-muted-foreground hover:text-foreground border border-transparent hover:border-champagne/30 transition-all whitespace-nowrap"
+                  type="button"
+                  onClick={() => handleCategoryBook(cat)}
+                  className="px-3 py-1.5 font-body text-[10px] tracking-[0.25em] uppercase text-muted-foreground hover:text-foreground border border-transparent hover:border-champagne/40 transition-all whitespace-nowrap"
                 >
                   {cat}
-                </a>
+                </button>
               ))}
             </div>
           </div>
@@ -209,12 +224,12 @@ export default function BookingSystem() {
       )}
 
       {/* Menu */}
-      <section className="py-12 md:py-20 bg-background">
+      <section className="py-10 md:py-16 bg-background">
         <div className="max-w-5xl mx-auto px-5 md:px-8">
           {loading ? (
-            <p className="text-center font-body text-muted-foreground animate-pulse">Loading the menu…</p>
+            <p className="text-center font-body text-muted-foreground animate-pulse">Loading menu…</p>
           ) : (
-            <div className="space-y-16 md:space-y-24">
+            <div className="space-y-14 md:space-y-20">
               {grouped.map(([cat, items], catIndex) => {
                 const lowest = Math.min(
                   ...items
@@ -224,26 +239,37 @@ export default function BookingSystem() {
                 return (
                   <motion.div
                     key={cat}
-                    id={slug(cat)}
+                    id={`cat-${slug(cat)}`}
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.5 }}
                     className="scroll-mt-32"
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-end mb-6 md:mb-10 pb-4 md:pb-6 border-b border-border">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-end mb-5 md:mb-8 pb-3 md:pb-5 border-b border-border">
                       <div className="md:col-span-1 hidden md:block">
                         <p className="font-display text-5xl text-champagne/40 italic">
                           {String(catIndex + 1).padStart(2, "0")}
                         </p>
                       </div>
-                      <div className="md:col-span-8">
+                      <div className="md:col-span-7">
                         <p className="eyebrow text-champagne mb-2">Category</p>
                         <h2 className="font-display text-2xl md:text-4xl leading-tight">{cat}</h2>
                       </div>
-                      <div className="md:col-span-3 md:text-right">
+                      <div className="md:col-span-2 md:text-right">
                         <p className="eyebrow text-muted-foreground mb-1">From</p>
-                        <p className="font-display text-2xl md:text-3xl">{Number.isFinite(lowest) ? fmt(lowest) : "Free"}</p>
+                        <p className="font-display text-2xl md:text-3xl">
+                          {Number.isFinite(lowest) ? fmt(lowest) : "Free"}
+                        </p>
+                      </div>
+                      <div className="md:col-span-2 md:text-right">
+                        <button
+                          type="button"
+                          onClick={() => handleCategoryBook(cat)}
+                          className="inline-flex items-center gap-1.5 font-body text-[10px] tracking-[0.25em] uppercase text-foreground hover:text-champagne border-b border-champagne/40 hover:border-champagne pb-0.5 transition-colors"
+                        >
+                          Open in calendar <ArrowRight size={11} />
+                        </button>
                       </div>
                     </div>
 
@@ -253,7 +279,7 @@ export default function BookingSystem() {
                         return (
                           <li
                             key={it.id}
-                            className="group grid grid-cols-12 gap-3 md:gap-4 items-baseline py-4 md:py-5 border-b border-border last:border-b-0"
+                            className="group grid grid-cols-12 gap-3 md:gap-4 items-baseline py-4 border-b border-border last:border-b-0"
                           >
                             <div className="col-span-12 sm:col-span-7">
                               <div className="flex items-center gap-2 flex-wrap">
@@ -313,46 +339,58 @@ export default function BookingSystem() {
 
       {/* Embedded Acuity scheduler */}
       <section id="book" className="bg-bone-deep/40 border-y border-border" ref={embedRef}>
-        <div className="max-w-5xl mx-auto px-5 md:px-8 py-12 md:py-16">
-          <div className="text-center mb-6">
-            <p className="eyebrow text-champagne mb-3">Live Calendar</p>
-            <h2 className="font-display text-2xl md:text-4xl leading-tight">Pick your moment.</h2>
-            <p className="font-body text-sm text-muted-foreground mt-3 max-w-md mx-auto">
-              The scheduler below stays right here — use the back arrows inside it to switch service,
-              or scroll up to pick a different one from the menu.
-            </p>
+        <div className={`mx-auto px-5 md:px-8 py-10 md:py-14 ${expanded ? "max-w-7xl" : "max-w-5xl"}`}>
+          <div className="flex items-end justify-between gap-4 mb-5">
+            <div>
+              <p className="eyebrow text-champagne mb-2">Live Calendar</p>
+              <h2 className="font-display text-2xl md:text-3xl leading-tight">Pick your time.</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setExpanded((v) => !v)}
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 border border-border hover:border-champagne text-foreground/70 hover:text-foreground font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
+                aria-label={expanded ? "Collapse calendar" : "Expand calendar"}
+              >
+                <Maximize2 size={12} strokeWidth={1.5} />
+                {expanded ? "Collapse" : "Expand"}
+              </button>
+              <a
+                href={embedUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 border border-border hover:border-champagne text-foreground/70 hover:text-foreground font-body text-[10px] tracking-[0.25em] uppercase transition-colors"
+              >
+                <ExternalLink size={12} strokeWidth={1.5} />
+                New tab
+              </a>
+            </div>
           </div>
-          <div className="bg-background border border-border shadow-lg overflow-hidden" style={{ minHeight: "780px" }}>
+          <div
+            className="bg-background border border-border shadow-lg overflow-hidden"
+            style={{ minHeight: expanded ? "920px" : "780px" }}
+          >
             <iframe
               key={embedUrl}
               src={embedUrl}
-              title="Hive Clinic booking"
+              title="Hive Clinic booking calendar"
               width="100%"
-              height="780"
+              height={expanded ? 920 : 780}
               frameBorder="0"
               className="w-full block"
             />
           </div>
-          <p className="font-body text-[11px] text-muted-foreground text-center mt-4">
-            Trouble with the embed?{" "}
-            <a
-              href={embedUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-champagne hover:underline"
-            >
-              Open the booking page in a new tab
-            </a>
-            .
+          <p className="font-body text-[11px] text-muted-foreground mt-3">
+            Tip: tap a treatment from the menu above to jump straight to its calendar.
           </p>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-16 md:py-24 bg-background">
+      <section className="py-14 md:py-20 bg-background">
         <div className="max-w-2xl mx-auto px-5 md:px-8">
           <p className="eyebrow text-champagne text-center mb-3">Before you book</p>
-          <h2 className="font-display text-3xl md:text-4xl text-center mb-10">Quick answers.</h2>
+          <h2 className="font-display text-3xl md:text-4xl text-center mb-8">Good to know.</h2>
           <div className="divide-y divide-border border-y border-border">
             {faqs.map((f, i) => (
               <button

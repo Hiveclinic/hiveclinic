@@ -86,7 +86,7 @@ const HeroSection = ({ heroImg }: HeroSectionProps) => {
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} size={11} className="fill-champagne text-champagne" strokeWidth={0} />
                 ))}
-                <span className="ml-2 font-body text-[11px] tracking-wider text-ink/65">5.0 Google / 100+ reviews</span>
+                <span className="ml-2 font-body text-[11px] tracking-wider text-ink/65">5.0 Google / Five-Star Reviews</span>
               </div>
               <span className="hidden sm:block w-px h-4 bg-ink/15" />
               <span className="font-body text-[11px] tracking-wider text-ink/55">Qualified Practitioners</span>

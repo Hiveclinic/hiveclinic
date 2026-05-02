@@ -20,7 +20,7 @@ const SocialProof = ({ reviews }: SocialProofProps) => (
                 <Star key={i} size={13} className="fill-champagne text-champagne" strokeWidth={0} />
               ))}
             </div>
-            <span className="eyebrow text-ink/55">5.0 on Google / 100+ reviews</span>
+            <span className="eyebrow text-ink/55">5.0 on Google / Five-Star Reviews</span>
           </div>
           <h2 className="font-display text-4xl md:text-6xl text-ink leading-[1.04] tracking-tight">
             They came back. <span className="display-italic text-aubergine">Twice.</span>

@@ -1,16 +1,23 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
+// Constant-time string comparison to mitigate timing attacks
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < a.length; i++) mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return mismatch === 0;
+}
+
 serve(async (req) => {
   const url = new URL(req.url);
-  const token = url.searchParams.get("token");
+  const token = url.searchParams.get("token") ?? "";
 
-  // Token auth - match against first 20 chars of anon key (used in admin UI)
-  const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
+  // Use a dedicated random secret stored in env (never derived from the public anon key).
+  const expectedToken = Deno.env.get("CALENDAR_FEED_PASSWORD") ?? "";
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-  const expectedToken = anonKey.substring(0, 20);
 
-  if (!token || token !== expectedToken) {
+  if (!expectedToken || expectedToken.length < 16 || !timingSafeEqual(token, expectedToken)) {
     return new Response("Unauthorized", { status: 401 });
   }
 
@@ -32,7 +39,7 @@ serve(async (req) => {
     const now = new Date();
     const stamp = now.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
 
-    let ical = [
+    const ical: string[] = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
       "PRODID:-//Hive Clinic//Booking Calendar//EN",
@@ -47,7 +54,6 @@ serve(async (req) => {
       const [hours, minutes] = b.booking_time.split(":");
       const startTime = `${dateStr}T${hours}${minutes}00`;
 
-      // Calculate end time
       const startDate = new Date(`${b.booking_date}T${b.booking_time}`);
       const endDate = new Date(startDate.getTime() + b.duration_mins * 60000);
       const endTime = endDate.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "").substring(0, 15);

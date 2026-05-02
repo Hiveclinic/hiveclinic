@@ -359,17 +359,82 @@ const BookingSystem = () => {
                   )}
                 </div>
 
-                <a
-                  href={buildAcuityUrl(details)}
+                <button
+                  onClick={() => {
+                    setScheduling(details);
+                    setDetails(null);
+                  }}
                   className="group flex items-center justify-center gap-2 w-full bg-foreground text-background py-4 font-body text-xs tracking-[0.25em] uppercase hover:bg-accent transition-colors"
                 >
-                  Book on Acuity
-                  <ExternalLink size={13} className="group-hover:translate-x-0.5 transition-transform" />
-                </a>
+                  Schedule Appointment
+                  <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                </button>
                 <p className="text-center font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground mt-4">
-                  Opens in a new tab · Secure scheduler
+                  Live availability · Secure scheduler
                 </p>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Embedded Acuity Scheduler */}
+      <AnimatePresence>
+        {scheduling && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setScheduling(null)}
+            className="fixed inset-0 z-[110] bg-foreground/80 backdrop-blur-sm flex items-stretch md:items-center justify-center md:p-6"
+          >
+            <motion.div
+              initial={{ y: 60, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 60, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative bg-cream w-full md:max-w-3xl md:mx-auto h-full md:h-[90vh] flex flex-col border-t md:border border-border shadow-2xl"
+            >
+              {/* Branded header */}
+              <div className="flex items-center justify-between px-5 md:px-7 py-4 border-b border-border bg-background/60 backdrop-blur-md">
+                <div className="min-w-0">
+                  <p className="font-body text-[9px] tracking-[0.3em] uppercase text-accent mb-1 truncate">{scheduling.category}</p>
+                  <h3 className="font-display text-lg md:text-xl leading-tight truncate">{scheduling.name}</h3>
+                </div>
+                <div className="flex items-center gap-2 ml-4">
+                  <a
+                    href={buildAcuityUrl(scheduling)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open scheduler in new tab"
+                    className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <ExternalLink size={16} />
+                  </a>
+                  <button
+                    onClick={() => setScheduling(null)}
+                    aria-label="Close scheduler"
+                    className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Embedded scheduler */}
+              <iframe
+                src={buildAcuityUrl(scheduling)}
+                title={`Book ${scheduling.name}`}
+                className="flex-1 w-full bg-cream"
+                frameBorder={0}
+                loading="lazy"
+                allow="payment"
+              />
+
+              <p className="px-5 py-3 text-center font-body text-[9px] tracking-[0.25em] uppercase text-muted-foreground border-t border-border bg-background/60">
+                Secure booking · Powered by Acuity
+              </p>
             </motion.div>
           </motion.div>
         )}

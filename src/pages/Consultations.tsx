@@ -35,7 +35,7 @@ const Consultations = () => {
           <div className="border border-border p-8 text-center">
             <MapPin size={24} strokeWidth={1.5} className="text-gold mx-auto mb-4" />
             <h3 className="font-display text-2xl mb-2">In-Person Consultation</h3>
-            <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">30 minutes · £25</p>
+            <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">Consultation · £20</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Full skin analysis, personalised treatment plan, and aftercare advice. Redeemable against any course or treatment booked.</p>
             <a
                 href="/bookings#book"
@@ -47,7 +47,7 @@ const Consultations = () => {
           <div className="border border-border p-8 text-center">
             <Stethoscope size={24} strokeWidth={1.5} className="text-gold mx-auto mb-4" />
             <h3 className="font-display text-2xl mb-2">Prescriber Consultation</h3>
-            <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">Anti-Wrinkle · £25</p>
+            <p className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-4">Anti-Wrinkle · Free</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-6">Required prior to anti-wrinkle injections. This is a separate medical service provided by our prescriber.</p>
             <a
                 href="/bookings#book"

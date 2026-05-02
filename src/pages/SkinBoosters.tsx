@@ -11,9 +11,9 @@ const treatments = [
   { name: "Under Eye Skin Booster", desc: "Injectable treatment for dark circles and fine lines under the eye area.", price: "£130" },
   { name: "Seventy Hyal Skin Booster", desc: "Deep hydration to improve glow, elasticity, and skin firmness.", price: "£140" },
   { name: "Polynucleotides", desc: "Bio-stimulating injections that regenerate skin cells and improve elasticity from within.", price: "£180" },
-  { name: "Profhilo", desc: "Advanced injectable for skin laxity and hydration. Course of 2 recommended.", price: "£280" },
-  { name: "Under Eye Booster Course (3 Sessions)", desc: "Course of 3 under-eye treatments for progressive improvement.", price: "£360" },
-  { name: "Seventy Hyal Course (3 Sessions)", desc: "Course of 3 hydration boosters for lasting radiance.", price: "£380" },
+  { name: "Profhilo (2 Sessions)", desc: "Advanced injectable for skin laxity and hydration. Course of 2 included.", price: "£280" },
+  { name: "Seventy Hyal Course (3 Sessions)", desc: "Course of 3 hydration boosters for lasting radiance.", price: "£360" },
+  { name: "Polynucleotides Course (3 Sessions)", desc: "Course of 3 polynucleotide sessions for visible regeneration.", price: "£480" },
 ];
 
 const faqs = [
@@ -21,7 +21,7 @@ const faqs = [
   { q: "What is the difference between skin remodelling and fillers?", a: "Skin remodelling treatments disperse across a wide area to stimulate collagen and elastin. Fillers add volume to specific areas. Many clients benefit from both." },
   { q: "How many sessions do I need?", a: "Most skin boosters require 2 sessions 4 weeks apart for optimal results. Our injectable remodelling treatment is typically 2 sessions, with maintenance every 6 months." },
   { q: "When will I see results?", a: "You may notice improved hydration immediately, but the full collagen-stimulating effects develop over 4-8 weeks as your skin regenerates from within." },
-  { q: "How much do skin boosters cost in Manchester?", a: "Skin boosters at Hive Clinic start from £130 for an Under Eye Booster. Seventy Hyal is £140, Polynucleotides £180, and Profhilo is £280 per session. Course packages are also available." },
+  { q: "How much do skin boosters cost in Manchester?", a: "Skin boosters at Hive Clinic start from £130 for an Under Eye Booster. Seventy Hyal is £140, Polynucleotides £180, and Profhilo is £280 for the recommended 2-session course. Course packages are also available." },
 ];
 
 const SkinBoosters = () => {

@@ -7,12 +7,9 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Microneedling with Hydrating Serum", desc: "Dr Pen microneedling with hyaluronic acid serum for improved texture and tone.", price: "£160" },
-  { name: "Microneedling with Skin Booster", desc: "Microneedling combined with mesotherapy or booster infusion for deeper rejuvenation.", price: "£200" },
-  { name: "Stretch Mark Microneedling", desc: "Stimulates collagen to improve stretch mark texture. 3-6 sessions recommended.", price: "£180" },
-  { name: "Microneedling Course (3 Sessions)", desc: "Course of 3 hydrating serum sessions for progressive results.", price: "£420" },
-  { name: "Microneedling + Booster Course (3 Sessions)", desc: "Course of 3 booster-infused sessions for maximum rejuvenation.", price: "£540" },
-  { name: "Stretch Mark Course (3 Sessions)", desc: "Course of 3 stretch mark treatments for visible improvement.", price: "£480" },
+  { name: "Microneedling", desc: "Dr Pen microneedling with hyaluronic acid serum to improve texture, tone, and pores.", price: "£160" },
+  { name: "Microneedling Course (3 Sessions)", desc: "Course of 3 sessions for progressive collagen-led results.", price: "£420" },
+  { name: "Microneedling Course (6 Sessions)", desc: "Extended course of 6 sessions for the deepest skin remodelling.", price: "£720" },
 ];
 
 const faqs = [

@@ -117,8 +117,8 @@ const AdminMarketingTab = () => {
               <CheckCircle size={14} className="text-green-600" />
             </div>
             <div>
-              <p className="font-body text-sm font-medium">Resend — Configured</p>
-              <p className="font-body text-[10px] text-muted-foreground">Delivery not yet tested — send a test campaign to verify</p>
+              <p className="font-body text-sm font-medium">Resend - Configured</p>
+              <p className="font-body text-[10px] text-muted-foreground">Delivery not yet tested - send a test campaign to verify</p>
             </div>
           </div>
           <span className="font-body text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-green-500/10 text-green-600">Configured</span>
@@ -154,7 +154,7 @@ const AdminMarketingTab = () => {
               <div key={c.id} className="bg-card border border-border rounded-xl p-4 flex items-center justify-between flex-wrap gap-2">
                 <div>
                   <p className="font-body text-sm font-medium">{c.name}</p>
-                  <p className="font-body text-[11px] text-muted-foreground">{c.campaign_type} — {format(new Date(c.created_at), "d MMM yyyy")}</p>
+                  <p className="font-body text-[11px] text-muted-foreground">{c.campaign_type} - {format(new Date(c.created_at), "d MMM yyyy")}</p>
                 </div>
                 <span className={`font-body text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${
                   c.status === "sent" ? "bg-green-500/10 text-green-600" : c.status === "scheduled" ? "bg-blue-500/10 text-blue-600" : "bg-secondary text-muted-foreground"

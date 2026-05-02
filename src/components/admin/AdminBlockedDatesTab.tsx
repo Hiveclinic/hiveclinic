@@ -70,7 +70,7 @@ const AdminBlockedDatesTab = () => {
                 <span className="font-body text-sm font-medium">
                   {new Date(d.blocked_date + "T00:00:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
                 </span>
-                {d.reason && <span className="font-body text-xs text-muted-foreground">— {d.reason}</span>}
+                {d.reason && <span className="font-body text-xs text-muted-foreground">- {d.reason}</span>}
               </div>
               <button onClick={() => removeDate(d.id)} className="px-2 py-1 border border-border text-muted-foreground hover:text-red-500 hover:border-red-500 transition-colors">
                 <Trash2 size={14} />

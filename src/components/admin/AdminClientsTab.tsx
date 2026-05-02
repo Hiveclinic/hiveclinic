@@ -518,7 +518,7 @@ const AdminClientsTab = () => {
                             <p className="font-body text-xs font-medium">{pkg.package_name}</p>
                             <p className="font-body text-[10px] text-muted-foreground">
                               {pkg.sessions_used}/{pkg.sessions_total} used
-                              {pkg.expiry_date && ` — Expires ${new Date(pkg.expiry_date + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}`}
+                              {pkg.expiry_date && ` - Expires ${new Date(pkg.expiry_date + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}`}
                             </p>
                           </div>
                           <div className="flex items-center gap-2">

@@ -40,15 +40,27 @@ export default {
           foreground: "hsl(var(--accent-foreground))",
         },
         gold: {
-          DEFAULT: "hsl(var(--gold))",
-          light: "hsl(var(--gold-light))",
-          dark: "hsl(var(--gold-dark))",
+          DEFAULT: "hsl(var(--champagne))",
+          light: "hsl(var(--champagne-light))",
+          dark: "hsl(var(--champagne-deep))",
+        },
+        champagne: {
+          DEFAULT: "hsl(var(--champagne))",
+          light: "hsl(var(--champagne-light))",
+          deep: "hsl(var(--champagne-deep))",
+        },
+        aubergine: {
+          DEFAULT: "hsl(var(--aubergine))",
+          deep: "hsl(var(--aubergine-deep))",
         },
         ink: {
           DEFAULT: "hsl(var(--ink))",
           soft: "hsl(var(--ink-soft))",
         },
-        bone: "hsl(var(--bone))",
+        bone: {
+          DEFAULT: "hsl(var(--bone))",
+          deep: "hsl(var(--bone-deep))",
+        },
         blush: {
           DEFAULT: "hsl(var(--blush))",
           deep: "hsl(var(--blush-deep))",
@@ -58,10 +70,9 @@ export default {
           deep: "hsl(var(--rose-deep))",
         },
         burgundy: {
-          DEFAULT: "hsl(var(--burgundy))",
-          deep: "hsl(var(--burgundy-deep))",
+          DEFAULT: "hsl(var(--aubergine))",
+          deep: "hsl(var(--aubergine-deep))",
         },
-        champagne: "hsl(var(--champagne))",
         chrome: {
           DEFAULT: "hsl(var(--chrome))",
           deep: "hsl(var(--chrome-deep))",

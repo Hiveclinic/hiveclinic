@@ -125,7 +125,7 @@ export default function AdminCatalogSyncTab() {
         </button>
       </div>
 
-      {/* Status header — always visible (in-sync or not) */}
+      {/* Status header - always visible (in-sync or not) */}
       {loading ? (
         <p className="font-body text-sm text-muted-foreground animate-pulse">Loading…</p>
       ) : !latest ? (

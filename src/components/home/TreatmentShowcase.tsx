@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { trackBookNow } from "@/hooks/use-tracking";
+import { useBookNow } from "@/hooks/use-book-now";
 import { LUXE } from "@/lib/stock-images";
 import catSkinTreatments from "@/assets/categories/cat-skin-treatments.jpg";
 import catFatDissolve from "@/assets/categories/cat-fat-dissolve.jpg";
@@ -19,16 +19,6 @@ const FALLBACK: Record<string, string> = {
   "Fat Dissolve": catFatDissolve,
 };
 
-const LINKS: Record<string, string> = {
-  "Anti Wrinkle (Botox)": "/treatments/anti-wrinkle-injections-manchester",
-  Lips: "/treatments/lip-fillers-manchester",
-  "Facial Balancing": "/treatments/facial-balancing-manchester",
-  "Skin Boosters": "/treatments/skin-boosters-manchester",
-  "Skin Treatments": "/treatments/microneedling-manchester",
-  "Chemical Peels": "/treatments/chemical-peels-manchester",
-  "Fat Dissolve": "/treatments/fat-dissolving-manchester",
-};
-
 const ORDER = [
   "Anti Wrinkle (Botox)",
   "Lips",
@@ -40,10 +30,11 @@ const ORDER = [
 ];
 
 type Row = { name: string; category: string; price: number; on_offer: boolean; offer_price: number | null; image_url: string | null };
-type Cat = { title: string; from: string; count: number; img: string; link: string };
+type Cat = { title: string; from: string; count: number; img: string };
 
 const TreatmentShowcase = () => {
   const [cats, setCats] = useState<Cat[]>([]);
+  const book = useBookNow();
 
   useEffect(() => {
     supabase
@@ -71,7 +62,6 @@ const TreatmentShowcase = () => {
             from: !Number.isFinite(lowest) || lowest === 0 ? "POA" : `£${lowest.toFixed(0)}`,
             count: list.length,
             img: firstImg || FALLBACK[c] || LUXE.lips,
-            link: LINKS[c] || `/treatments`,
           };
         });
         setCats(built);
@@ -79,43 +69,41 @@ const TreatmentShowcase = () => {
   }, []);
 
   return (
-    <section className="py-24 md:py-32 bg-ink text-bone bg-noise" aria-label="Treatment categories">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="section-y bg-ink text-bone bg-noise" aria-label="Treatment categories">
+      <div className="container-edit">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16"
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 md:mb-20"
         >
           <div>
-            <p className="eyebrow text-rose mb-4">The Menu</p>
-            <h2 className="font-display text-4xl md:text-6xl text-bone leading-[1.02]">
-              Pick your
-              <span className="font-script italic text-rose"> ritual.</span>
+            <p className="eyebrow text-champagne mb-5">The Menu</p>
+            <h2 className="font-display text-4xl md:text-6xl text-bone leading-[1.04] tracking-tight">
+              Pick your <span className="display-italic text-champagne">ritual.</span>
             </h2>
           </div>
-          <Link
-            to="/pricing"
-            className="self-start inline-flex items-center gap-2 font-body text-[11px] tracking-[0.28em] uppercase text-bone/60 hover:text-rose border-b border-rose/40 pb-1 transition-colors"
+          <button
+            onClick={() => { trackBookNow("home_showcase_book"); book(); }}
+            className="self-start inline-flex items-center gap-2 font-body text-[11px] tracking-[0.3em] uppercase text-bone/60 hover:text-champagne border-b border-champagne/40 pb-1 transition-colors"
           >
-            Full price list <ArrowUpRight size={13} />
-          </Link>
+            Open Booking <ArrowUpRight size={13} strokeWidth={1.5} />
+          </button>
         </motion.div>
 
         <div className="border-t border-bone/10">
           {cats.map((c, i) => (
             <motion.div
               key={c.title}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ delay: i * 0.04, duration: 0.5 }}
               className="border-b border-bone/10 group"
             >
-              <Link
-                to={c.link}
-                onClick={() => trackBookNow("home_showcase", c.title)}
-                className="grid grid-cols-12 gap-4 md:gap-8 items-center py-7 md:py-10 hover:bg-bone/[0.03] transition-colors"
+              <button
+                onClick={() => { trackBookNow("home_showcase", c.title); book(c.title); }}
+                className="w-full grid grid-cols-12 gap-4 md:gap-8 items-center py-7 md:py-10 hover:bg-bone/[0.03] transition-colors text-left"
               >
                 <div className="col-span-3 md:col-span-2">
                   <div className="aspect-[4/5] overflow-hidden bg-bone/5">
@@ -123,7 +111,7 @@ const TreatmentShowcase = () => {
                       src={c.img}
                       alt={`${c.title} treatments`}
                       loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1200ms]"
+                      className="w-full h-full object-cover group-hover:scale-[1.06] transition-transform duration-[1200ms]"
                     />
                   </div>
                 </div>
@@ -132,22 +120,22 @@ const TreatmentShowcase = () => {
                     <span className="numeral text-xl md:text-2xl">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <h3 className="font-display text-2xl md:text-5xl text-bone group-hover:text-rose transition-colors">
+                    <h3 className="font-display text-2xl md:text-5xl text-bone group-hover:text-champagne transition-colors">
                       {c.title}
                     </h3>
                   </div>
-                  <p className="font-body text-[11px] tracking-[0.28em] uppercase text-bone/40 mt-3 ml-0 md:ml-9">
-                    {c.count} {c.count === 1 ? "treatment" : "treatments"}
+                  <p className="font-body text-[11px] tracking-[0.3em] uppercase text-bone/40 mt-3 ml-0 md:ml-9">
+                    {c.count} {c.count === 1 ? "option" : "options"} / opens booking
                   </p>
                 </div>
                 <div className="col-span-3 md:col-span-3 text-right">
-                  <p className="font-body text-[10px] tracking-[0.28em] uppercase text-bone/40 mb-1">From</p>
+                  <p className="font-body text-[10px] tracking-[0.3em] uppercase text-bone/40 mb-1">From</p>
                   <div className="flex items-center justify-end gap-3">
                     <span className="font-display text-2xl md:text-4xl text-bone">{c.from}</span>
-                    <ArrowUpRight size={18} className="text-bone/30 group-hover:text-rose group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
+                    <ArrowUpRight size={18} className="text-bone/30 group-hover:text-champagne group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" strokeWidth={1.5} />
                   </div>
                 </div>
-              </Link>
+              </button>
             </motion.div>
           ))}
         </div>

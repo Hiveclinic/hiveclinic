@@ -22,7 +22,7 @@ const ConsentForm = () => {
   const [treatmentType, setTreatmentType] = useState("");
   const [treatments, setTreatments] = useState<{ id: string; name: string; category: string }[]>([]);
 
-  // Section 1 – Personal Details
+  // Section 1 - Personal Details
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -40,29 +40,29 @@ const ConsentForm = () => {
       });
   }, []);
 
-  // Section 2 – Medical Information
+  // Section 2 - Medical Information
   const [medicalConditions, setMedicalConditions] = useState("");
   const [medications, setMedications] = useState("");
   const [allergies, setAllergies] = useState("");
   const [pregnant, setPregnant] = useState<"yes" | "no" | "">("");
   const [previousTreatment, setPreviousTreatment] = useState<"yes" | "no" | "">("");
 
-  // Section 4 – Risks & Liability (required checkboxes)
+  // Section 4 - Risks & Liability (required checkboxes)
   const [resultsVary, setResultsVary] = useState(false);
   const [risksUnderstood, setRisksUnderstood] = useState(false);
   const [disclosedAll, setDisclosedAll] = useState(false);
   const [treatmentRefused, setTreatmentRefused] = useState(false);
   const [consentTreatment, setConsentTreatment] = useState(false);
 
-  // Section 5 – GDPR
+  // Section 5 - GDPR
   const [gdprConsent, setGdprConsent] = useState(false);
 
-  // Section 6 – Marketing (optional)
+  // Section 6 - Marketing (optional)
   const [consentPhotos, setConsentPhotos] = useState(false);
   const [consentMarketing, setConsentMarketing] = useState(false);
   const [consentWithdraw, setConsentWithdraw] = useState(false);
 
-  // Section 7 – Signature
+  // Section 7 - Signature
   const [signatureName, setSignatureName] = useState("");
 
   const sectionStyle = "border border-border p-6 md:p-8 bg-card";
@@ -228,7 +228,7 @@ const ConsentForm = () => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
               >
-                {/* STEP 1 – Personal Details */}
+                {/* STEP 1 - Personal Details */}
                 {step === 1 && (
                   <div className={sectionStyle}>
                     <h3 className={headingStyle}>Personal Details</h3>
@@ -278,7 +278,7 @@ const ConsentForm = () => {
                   </div>
                 )}
 
-                {/* STEP 2 – Medical Information */}
+                {/* STEP 2 - Medical Information */}
                 {step === 2 && (
                   <div className={sectionStyle}>
                     <h3 className={headingStyle}>Medical Information</h3>
@@ -326,7 +326,7 @@ const ConsentForm = () => {
                   </div>
                 )}
 
-                {/* STEP 3 – Treatment Understanding */}
+                {/* STEP 3 - Treatment Understanding */}
                 {step === 3 && (
                   <div className={sectionStyle}>
                     <h3 className={headingStyle}>Treatment Understanding</h3>
@@ -339,7 +339,7 @@ const ConsentForm = () => {
                   </div>
                 )}
 
-                {/* STEP 4 – Risks & Liability */}
+                {/* STEP 4 - Risks & Liability */}
                 {step === 4 && (
                   <div className={sectionStyle}>
                     <h3 className={headingStyle}>Risks & Liability Consent</h3>
@@ -361,7 +361,7 @@ const ConsentForm = () => {
                   </div>
                 )}
 
-                {/* STEP 5 – GDPR */}
+                {/* STEP 5 - GDPR */}
                 {step === 5 && (
                   <div className={sectionStyle}>
                     <h3 className={headingStyle}>Data Protection (GDPR)</h3>
@@ -373,7 +373,7 @@ const ConsentForm = () => {
                   </div>
                 )}
 
-                {/* STEP 6 – Marketing (Optional) */}
+                {/* STEP 6 - Marketing (Optional) */}
                 {step === 6 && (
                   <div className={sectionStyle}>
                     <h3 className={headingStyle}>Marketing & Media Consent</h3>
@@ -395,7 +395,7 @@ const ConsentForm = () => {
                   </div>
                 )}
 
-                {/* STEP 7 – Signature */}
+                {/* STEP 7 - Signature */}
                 {step === 7 && (
                   <div className={sectionStyle}>
                     <h3 className={headingStyle}>Digital Signature</h3>

@@ -193,7 +193,7 @@ const AdminCalendarView = () => {
 
   const handleMarkPaid = async (method?: string) => {
     if (!editBooking) return;
-    const noteAddition = method ? `\n[Paid via ${method}${paymentRef ? ` — Ref: ${paymentRef}` : ""}]` : "";
+    const noteAddition = method ? `\n[Paid via ${method}${paymentRef ? ` - Ref: ${paymentRef}` : ""}]` : "";
     const currentNotes = editForm?.notes || editBooking.notes || "";
     const { error } = await supabase.from("bookings").update({ payment_status: "fully_paid", notes: noteAddition ? `${currentNotes}${noteAddition}` : currentNotes }).eq("id", editBooking.id);
     if (error) { toast.error("Failed to update"); return; }
@@ -349,7 +349,7 @@ const AdminCalendarView = () => {
                     <span className="font-body text-xs">{b.booking_time.slice(0, 5)}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="font-body text-xs opacity-70">{(b.treatments as any)?.name} — {b.duration_mins}m</span>
+                    <span className="font-body text-xs opacity-70">{(b.treatments as any)?.name} - {b.duration_mins}m</span>
                     <span className="font-body text-xs font-medium">£{Number(b.total_price).toFixed(0)}</span>
                   </div>
                 </div>
@@ -551,8 +551,8 @@ const AdminCalendarView = () => {
                 {paymentPlan ? (
                   <div className="space-y-2">
                     <div className="font-body text-xs space-y-1">
-                      <p>Total: £{Number(paymentPlan.total_amount).toFixed(2)} — {paymentPlan.total_instalments} instalments of £{Number(paymentPlan.instalment_amount).toFixed(2)}</p>
-                      <p>Paid: {paymentPlan.paid_instalments}/{paymentPlan.total_instalments} — Status: <span className={paymentPlan.status === "completed" ? "text-green-600" : "text-accent"}>{paymentPlan.status}</span></p>
+                      <p>Total: £{Number(paymentPlan.total_amount).toFixed(2)} - {paymentPlan.total_instalments} instalments of £{Number(paymentPlan.instalment_amount).toFixed(2)}</p>
+                      <p>Paid: {paymentPlan.paid_instalments}/{paymentPlan.total_instalments} - Status: <span className={paymentPlan.status === "completed" ? "text-green-600" : "text-accent"}>{paymentPlan.status}</span></p>
                       {paymentPlan.next_payment_date && <p>Next payment: {paymentPlan.next_payment_date}</p>}
                     </div>
                     {paymentPlan.status === "active" && (
@@ -610,7 +610,7 @@ const AdminCalendarView = () => {
               <div className="border-t border-border pt-4 flex items-center justify-between flex-wrap gap-2">
                 <div className="font-body text-xs text-muted-foreground">
                   <p>Treatment: {(editBooking.treatments as any)?.name}</p>
-                  <p>Total: £{Number(editForm.total_price).toFixed(2)} — <span className={editBooking.payment_status === "fully_paid" ? "text-green-600" : "text-accent"}>{editBooking.payment_status}</span></p>
+                  <p>Total: £{Number(editForm.total_price).toFixed(2)} - <span className={editBooking.payment_status === "fully_paid" ? "text-green-600" : "text-accent"}>{editBooking.payment_status}</span></p>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => { setEditBooking(null); setEditForm(null); }} className="px-4 py-2 border border-border font-body text-xs uppercase tracking-wider rounded-lg hover:border-foreground transition-colors">Cancel</button>

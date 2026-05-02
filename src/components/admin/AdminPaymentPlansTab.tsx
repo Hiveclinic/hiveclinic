@@ -141,7 +141,7 @@ const AdminPaymentPlansTab = () => {
               <label className="font-body text-xs block mb-1">Booking</label>
               <select value={newBookingId} onChange={e => { setNewBookingId(e.target.value); const b = bookings.find(b => b.id === e.target.value); if (b) setNewTotal(Number(b.total_price)); }} className="w-full border border-border bg-transparent px-3 py-2 font-body text-sm focus:border-gold focus:outline-none">
                 <option value="">Select booking...</option>
-                {bookings.map(b => <option key={b.id} value={b.id}>{b.customer_name} — £{Number(b.total_price).toFixed(0)}</option>)}
+                {bookings.map(b => <option key={b.id} value={b.id}>{b.customer_name} - £{Number(b.total_price).toFixed(0)}</option>)}
               </select>
             </div>
             <div>

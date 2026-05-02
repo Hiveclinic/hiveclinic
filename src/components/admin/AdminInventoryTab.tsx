@@ -183,7 +183,7 @@ const AdminInventoryTab = () => {
                 </div>
                 <div>
                   <p className="font-body text-sm font-medium">{item.name}</p>
-                  <p className="font-body text-[11px] text-muted-foreground">{item.category}{item.supplier ? ` — ${item.supplier}` : ""}</p>
+                  <p className="font-body text-[11px] text-muted-foreground">{item.category}{item.supplier ? ` - ${item.supplier}` : ""}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">

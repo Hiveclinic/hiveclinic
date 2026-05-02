@@ -81,7 +81,7 @@ const CATEGORY_TAGLINES: Record<string, string> = {
   Offers: "Limited windows. Exceptional value.",
 };
 
-// Display order — luxury-first, offers first to drive conversion
+// Display order - luxury-first, offers first to drive conversion
 const CATEGORY_ORDER = [
   "Offers",
   "Anti Wrinkle (Botox)",
@@ -182,7 +182,7 @@ const Treatments = () => {
 
   return (
     <Layout>
-      {/* Dark editorial hero — mirrors the Acuity scheduler vibe */}
+      {/* Dark editorial hero - mirrors the Acuity scheduler vibe */}
       <section className="relative bg-foreground text-background pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.04] pointer-events-none">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gold blur-[180px]" />
@@ -211,7 +211,7 @@ const Treatments = () => {
             className="font-body text-base text-background/55 mt-8 max-w-xl leading-relaxed"
           >
             Select a category to explore. Every treatment mirrors what you'll
-            see at booking — same names, same prices, same expert care.
+            see at booking - same names, same prices, same expert care.
           </motion.p>
         </div>
       </section>

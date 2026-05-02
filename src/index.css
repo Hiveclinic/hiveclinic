@@ -254,3 +254,8 @@
     .container-edit { padding-left: 2rem; padding-right: 2rem; }
   }
 }
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+}

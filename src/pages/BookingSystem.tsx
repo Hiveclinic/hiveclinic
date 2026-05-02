@@ -45,11 +45,11 @@ const faqs = [
   },
   {
     q: "Is there a separate Anti-Wrinkle Consultation?",
-    a: "Yes — an Anti-Wrinkle Consultation can be booked on its own, free of charge. UK regulations require a face-to-face prescriber assessment before any toxin treatment, so even returning clients are reassessed at every appointment.",
+    a: "Yes - an Anti-Wrinkle Consultation can be booked on its own, free of charge. UK regulations require a face-to-face prescriber assessment before any toxin treatment, so even returning clients are reassessed at every appointment.",
   },
   {
     q: "Who carries out my treatment?",
-    a: "All injectable and prescription-only treatments are performed by Bianca, a qualified aesthetic practitioner. Prescription medicines (such as anti-wrinkle toxin) are prescribed under a face-to-face consultation in line with GPhC and JCCP guidance — we never prescribe remotely.",
+    a: "All injectable and prescription-only treatments are performed by Bianca, a qualified aesthetic practitioner. Prescription medicines (such as anti-wrinkle toxin) are prescribed under a face-to-face consultation in line with GPhC and JCCP guidance - we never prescribe remotely.",
   },
   {
     q: "Can I pay with Klarna or Clearpay?",
@@ -61,19 +61,19 @@ const faqs = [
   },
   {
     q: "Can I reschedule if something comes up?",
-    a: "Of course — we just ask for at least 48 hours notice so we can offer the slot to someone on the waiting list. You can reschedule once free of charge inside that window via your confirmation email or WhatsApp.",
+    a: "Of course - we just ask for at least 48 hours notice so we can offer the slot to someone on the waiting list. You can reschedule once free of charge inside that window via your confirmation email or WhatsApp.",
   },
   {
     q: "What happens if I reschedule late or miss my appointment?",
-    a: "Inside 48 hours the deposit is forfeited and a fresh deposit is required to rebook. No-shows are charged for the full appointment cost, as the time is held exclusively for you. Genuine emergencies are reviewed case by case — please let us know as early as you can.",
+    a: "Inside 48 hours the deposit is forfeited and a fresh deposit is required to rebook. No-shows are charged for the full appointment cost, as the time is held exclusively for you. Genuine emergencies are reviewed case by case - please let us know as early as you can.",
   },
   {
-    q: "I'm unwell or have a cold sore — can I still come in?",
-    a: "Please don't. Active illness, fever, cold sores, recent dental work or compromised skin can affect treatment safety and results. Message us as soon as possible — we'll move your appointment without losing your deposit when you let us know in good time.",
+    q: "I'm unwell or have a cold sore - can I still come in?",
+    a: "Please don't. Active illness, fever, cold sores, recent dental work or compromised skin can affect treatment safety and results. Message us as soon as possible - we'll move your appointment without losing your deposit when you let us know in good time.",
   },
   {
     q: "Can I have treatment if I'm pregnant or breastfeeding?",
-    a: "Injectable treatments (anti-wrinkle, dermal filler, skin boosters, fat dissolve) are not offered during pregnancy or while breastfeeding. Several of our facials and peels are also unsuitable — please flag this when booking and we'll guide you to safe alternatives.",
+    a: "Injectable treatments (anti-wrinkle, dermal filler, skin boosters, fat dissolve) are not offered during pregnancy or while breastfeeding. Several of our facials and peels are also unsuitable - please flag this when booking and we'll guide you to safe alternatives.",
   },
   {
     q: "When should I arrive?",
@@ -81,7 +81,7 @@ const faqs = [
   },
   {
     q: "Where are you based?",
-    a: "Hive Clinic, 25 Saint John Street, Manchester M3 4DT — two minutes from Deansgate. Paid street parking and several NCP car parks are within a five-minute walk.",
+    a: "Hive Clinic, 25 Saint John Street, Manchester M3 4DT - two minutes from Deansgate. Paid street parking and several NCP car parks are within a five-minute walk.",
   },
 ];
 
@@ -105,6 +105,7 @@ export default function BookingSystem() {
   const [loading, setLoading] = useState(true);
   const [embedUrl, setEmbedUrl] = useState<string>(ACUITY_BOOKING_URL);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openCats, setOpenCats] = useState<Record<string, boolean>>({});
   const [expanded, setExpanded] = useState(false);
   const [iframeLoading, setIframeLoading] = useState(true);
   const [iframeNonce, setIframeNonce] = useState(0);
@@ -216,7 +217,7 @@ export default function BookingSystem() {
             transition={{ delay: 0.15 }}
             className="font-body text-[15px] md:text-base text-bone/65 max-w-lg mx-auto leading-[1.7] mb-6"
           >
-            Pick a treatment from the menu — the live calendar opens to that exact service. Pay a 20% deposit to confirm, the balance comes due on the day.
+            Pick a treatment from the menu - the live calendar opens to that exact service. Pay a 20% deposit to confirm, the balance comes due on the day.
           </motion.p>
 
           {/* Klarna / Clearpay strip */}
@@ -241,10 +242,10 @@ export default function BookingSystem() {
         </div>
       </section>
 
-      {/* Category nav — taps deep-link the iframe AND scroll to it */}
+      {/* Category nav - taps deep-link the iframe AND scroll to it */}
       {!loading && (
         <section className="sticky top-[89px] z-30 bg-background/92 backdrop-blur-md border-b border-border">
-          <div className="max-w-6xl mx-auto px-4 py-2.5 overflow-x-auto">
+          <div className="max-w-6xl mx-auto px-4 py-2.5 overflow-x-auto scrollbar-hide">
             <div className="flex gap-1 min-w-max items-center">
               <span className="eyebrow text-muted-foreground pr-2">Jump to</span>
               {grouped.map(([cat]) => (
@@ -268,106 +269,138 @@ export default function BookingSystem() {
           {loading ? (
             <p className="text-center font-body text-muted-foreground animate-pulse">Loading menu…</p>
           ) : (
-            <div className="space-y-14 md:space-y-20">
+            <div className="space-y-3 md:space-y-4">
               {grouped.map(([cat, items], catIndex) => {
                 const lowest = Math.min(
                   ...items
                     .map((i) => (i.on_offer && i.offer_price ? Number(i.offer_price) : Number(i.price)))
                     .filter((n) => n > 0),
                 );
+                const isOpen = openCats[cat] ?? catIndex === 0;
                 return (
                   <motion.div
                     key={cat}
                     id={`cat-${slug(cat)}`}
-                    initial={{ opacity: 0, y: 16 }}
+                    initial={{ opacity: 0, y: 12 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.5 }}
-                    className="scroll-mt-32"
+                    transition={{ duration: 0.4 }}
+                    className="scroll-mt-32 border border-border bg-card/40"
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-end mb-5 md:mb-8 pb-3 md:pb-5 border-b border-border">
-                      <div className="md:col-span-1 hidden md:block">
-                        <p className="font-display text-5xl text-champagne/40 italic">
+                    <button
+                      type="button"
+                      onClick={() => setOpenCats((s) => ({ ...s, [cat]: !isOpen }))}
+                      aria-expanded={isOpen}
+                      className="w-full grid grid-cols-12 gap-3 md:gap-6 items-center px-4 md:px-6 py-4 md:py-5 text-left hover:bg-bone-deep/40 transition-colors"
+                    >
+                      <div className="hidden md:block md:col-span-1">
+                        <p className="font-display text-3xl text-champagne/40 italic">
                           {String(catIndex + 1).padStart(2, "0")}
                         </p>
                       </div>
-                      <div className="md:col-span-7">
-                        <p className="eyebrow text-champagne mb-2">Category</p>
-                        <h2 className="font-display text-2xl md:text-4xl leading-tight">{cat}</h2>
+                      <div className="col-span-7 md:col-span-7">
+                        <p className="eyebrow text-champagne mb-1">Category</p>
+                        <h2 className="font-display text-xl md:text-2xl leading-tight">{cat}</h2>
                       </div>
-                      <div className="md:col-span-2 md:text-right">
-                        <p className="eyebrow text-muted-foreground mb-1">From</p>
-                        <p className="font-display text-2xl md:text-3xl">
+                      <div className="col-span-3 md:col-span-2 text-right">
+                        <p className="eyebrow text-muted-foreground mb-0.5">From</p>
+                        <p className="font-display text-lg md:text-2xl">
                           {Number.isFinite(lowest) ? fmt(lowest) : "Free"}
                         </p>
                       </div>
-                      <div className="md:col-span-2 md:text-right">
-                        <button
-                          type="button"
-                          onClick={() => handleCategoryBook(cat)}
-                          className="inline-flex items-center gap-1.5 font-body text-[10px] tracking-[0.25em] uppercase text-foreground hover:text-champagne border-b border-champagne/40 hover:border-champagne pb-0.5 transition-colors"
-                        >
-                          Open in calendar <ArrowRight size={11} />
-                        </button>
+                      <div className="col-span-2 md:col-span-2 flex justify-end">
+                        <ChevronDown
+                          size={18}
+                          strokeWidth={1.5}
+                          className={`text-champagne transition-transform ${isOpen ? "rotate-180" : ""}`}
+                        />
                       </div>
-                    </div>
+                    </button>
 
-                    <ul>
-                      {items.map((it) => {
-                        const showOffer = it.on_offer && it.offer_price;
-                        return (
-                          <li
-                            key={it.id}
-                            className="group grid grid-cols-12 gap-3 md:gap-4 items-baseline py-4 border-b border-border last:border-b-0"
-                          >
-                            <div className="col-span-12 sm:col-span-7">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <h3 className="font-display text-lg md:text-xl leading-tight">{it.name}</h3>
-                                {it.offer_label && (
-                                  <span className="inline-flex font-body text-[9px] tracking-widest uppercase text-champagne border border-champagne/40 px-2 py-0.5">
-                                    {it.offer_label}
-                                  </span>
-                                )}
-                              </div>
-                              {it.duration_mins > 0 && (
-                                <p className="font-body text-[11px] text-muted-foreground tracking-wider mt-1">
-                                  {it.duration_mins} min
-                                </p>
-                              )}
-                            </div>
-
-                            <div
-                              className="hidden sm:block col-span-2 border-b border-dotted border-border/80 mb-3"
-                              aria-hidden
-                            />
-
-                            <div className="col-span-7 sm:col-span-2 sm:text-right">
-                              {showOffer ? (
-                                <div>
-                                  <span className="font-body text-xs text-muted-foreground line-through mr-2">
-                                    £{Number(it.price).toFixed(0)}
-                                  </span>
-                                  <span className="font-display text-xl md:text-2xl text-champagne">
-                                    {fmt(Number(it.offer_price))}
-                                  </span>
-                                </div>
-                              ) : (
-                                <span className="font-display text-xl md:text-2xl">{fmt(Number(it.price))}</span>
-                              )}
-                            </div>
-                            <div className="col-span-5 sm:col-span-1 sm:text-right">
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          key="content"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-4 md:px-6 pb-4 md:pb-6 border-t border-border">
+                            <div className="flex justify-end pt-3 pb-1">
                               <button
                                 type="button"
-                                onClick={() => handleBook(cat, it)}
-                                className="inline-flex items-center gap-1 font-body text-[10px] tracking-[0.25em] uppercase text-foreground/80 hover:text-champagne transition-colors"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleCategoryBook(cat);
+                                }}
+                                className="inline-flex items-center gap-1.5 font-body text-[10px] tracking-[0.25em] uppercase text-foreground hover:text-champagne border-b border-champagne/40 hover:border-champagne pb-0.5 transition-colors"
                               >
-                                Book <ArrowRight size={10} />
+                                Open in calendar <ArrowRight size={11} />
                               </button>
                             </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
+
+                            <ul>
+                              {items.map((it) => {
+                                const showOffer = it.on_offer && it.offer_price;
+                                return (
+                                  <li
+                                    key={it.id}
+                                    className="group grid grid-cols-12 gap-3 md:gap-4 items-baseline py-3.5 border-b border-border last:border-b-0"
+                                  >
+                                    <div className="col-span-12 sm:col-span-7">
+                                      <div className="flex items-center gap-2 flex-wrap">
+                                        <h3 className="font-display text-base md:text-lg leading-tight">{it.name}</h3>
+                                        {it.offer_label && (
+                                          <span className="inline-flex font-body text-[9px] tracking-widest uppercase text-champagne border border-champagne/40 px-2 py-0.5">
+                                            {it.offer_label}
+                                          </span>
+                                        )}
+                                      </div>
+                                      {it.duration_mins > 0 && (
+                                        <p className="font-body text-[11px] text-muted-foreground tracking-wider mt-0.5">
+                                          {it.duration_mins} min
+                                        </p>
+                                      )}
+                                    </div>
+
+                                    <div
+                                      className="hidden sm:block col-span-2 border-b border-dotted border-border/80 mb-3"
+                                      aria-hidden
+                                    />
+
+                                    <div className="col-span-7 sm:col-span-2 sm:text-right">
+                                      {showOffer ? (
+                                        <div>
+                                          <span className="font-body text-xs text-muted-foreground line-through mr-2">
+                                            £{Number(it.price).toFixed(0)}
+                                          </span>
+                                          <span className="font-display text-lg md:text-xl text-champagne">
+                                            {fmt(Number(it.offer_price))}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <span className="font-display text-lg md:text-xl">{fmt(Number(it.price))}</span>
+                                      )}
+                                    </div>
+                                    <div className="col-span-5 sm:col-span-1 sm:text-right">
+                                      <button
+                                        type="button"
+                                        onClick={() => handleBook(cat, it)}
+                                        className="inline-flex items-center gap-1 font-body text-[10px] tracking-[0.25em] uppercase text-foreground/80 hover:text-champagne transition-colors"
+                                      >
+                                        Book <ArrowRight size={10} />
+                                      </button>
+                                    </div>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
                 );
               })}
@@ -376,7 +409,7 @@ export default function BookingSystem() {
         </div>
       </section>
 
-      {/* Calendar CTA — opens compact popup */}
+      {/* Calendar CTA - opens compact popup */}
       <section id="book" className="bg-bone-deep/40 border-y border-border" ref={embedRef}>
         <div className="max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14 text-center">
           <p className="eyebrow text-champagne mb-2">Live Calendar</p>
@@ -408,7 +441,7 @@ export default function BookingSystem() {
         </div>
       </section>
 
-      {/* Booking modal — compact, scrollable iframe */}
+      {/* Booking modal - compact, scrollable iframe */}
       {modalOpen && (
         <div
           className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-ink/70 backdrop-blur-sm"

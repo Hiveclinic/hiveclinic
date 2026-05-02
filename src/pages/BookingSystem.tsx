@@ -126,6 +126,11 @@ export default function BookingSystem() {
     return () => window.removeEventListener("hive:book", handler);
   }, []);
 
+  // Reset iframe loading state on URL change or manual retry
+  useEffect(() => {
+    setIframeLoading(true);
+  }, [embedUrl, iframeNonce]);
+
   const grouped = useMemo(() => {
     const map = new Map<string, Row[]>();
     for (const r of rows) {

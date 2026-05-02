@@ -226,15 +226,15 @@ export default function BookingSystem() {
             <img src={clearpayLogo} alt="Clearpay" className="h-5 md:h-6" />
           </div>
 
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-x-6 gap-y-2.5">
             {[
               { icon: ShieldCheck, label: "Qualified prescriber" },
               { icon: Clock, label: "48hr cancellation" },
               { icon: Sparkles, label: "Manchester · M3 4DT" },
             ].map((b) => (
               <div key={b.label} className="flex items-center gap-2">
-                <b.icon size={12} strokeWidth={1.5} className="text-champagne" />
-                <span className="font-body text-[10px] tracking-[0.3em] uppercase text-bone/55">{b.label}</span>
+                <b.icon size={11} strokeWidth={1.5} className="text-champagne" />
+                <span className="font-body text-[9.5px] sm:text-[10px] tracking-[0.22em] sm:tracking-[0.3em] uppercase text-bone/55 whitespace-nowrap">{b.label}</span>
               </div>
             ))}
           </div>

@@ -296,6 +296,7 @@ const Admin = () => {
             {tab === "bookings" && <AdminBookingsTab />}
             {tab === "calendar" && <AdminCalendarView />}
             {tab === "treatments" && <AdminTreatmentsTab />}
+            {tab === "catalog-sync" && <AdminCatalogSyncTab />}
             {tab === "packages" && <AdminPaymentPlansTab />}
             {tab === "payments" && <AdminPaymentPlansTab />}
             {tab === "clients" && <AdminClientsTab />}

@@ -91,9 +91,9 @@ const AdminSettingsTab = () => {
   ];
 
   const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-  const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  const feedToken = anonKey?.substring(0, 20) || "";
-  const calendarFeedUrl = `https://${projectId}.supabase.co/functions/v1/calendar-feed?token=${feedToken}`;
+  // The token is the dedicated CALENDAR_FEED_PASSWORD secret stored server-side.
+  // Admins must append it manually to keep it out of the client bundle.
+  const calendarFeedUrl = `https://${projectId}.supabase.co/functions/v1/calendar-feed?token=YOUR_CALENDAR_FEED_PASSWORD`;
 
   const copyFeedUrl = () => {
     navigator.clipboard.writeText(calendarFeedUrl);

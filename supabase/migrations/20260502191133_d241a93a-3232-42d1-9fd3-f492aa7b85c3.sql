@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Service role inserts sync log" ON public.catalog_sync_log;

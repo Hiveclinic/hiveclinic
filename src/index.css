@@ -217,8 +217,7 @@
 
   /* Decorative serif numerals */
   .numeral {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
+    font-family: 'Tenor Sans', serif;
     font-feature-settings: 'lnum';
     color: hsl(var(--gold));
   }

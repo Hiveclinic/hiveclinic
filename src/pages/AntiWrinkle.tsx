@@ -8,15 +8,14 @@ import { useSiteImage } from "@/hooks/use-site-image";
 import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
-  { name: "Anti-Wrinkle 1 Area", desc: "Smooth forehead lines, frown lines, or crow's feet for a naturally refreshed look.", from: "£140" },
-  { name: "Anti-Wrinkle 2 Areas", desc: "Target two areas for a naturally refreshed look. Includes prescriber consultation.", from: "£180" },
-  { name: "Anti-Wrinkle 3 Areas", desc: "Full upper-face treatment covering forehead, frown, and eyes. Free top-up included.", from: "£220" },
+  { name: "Anti-Wrinkle 1 Area", desc: "Smooth forehead lines, frown lines, or crow's feet for a naturally refreshed look.", from: "£150" },
+  { name: "Anti-Wrinkle 2 Areas", desc: "Target two areas for a naturally refreshed look. Includes prescriber consultation.", from: "£200" },
+  { name: "Anti-Wrinkle 3 Areas", desc: "Full upper-face treatment covering forehead, frown, and eyes. Free top-up included.", from: "£240" },
   { name: "Masseter Jaw Slimming", desc: "Slim and contour the jawline for a more defined, feminine shape.", from: "£230" },
+  { name: "Nefertiti Lift", desc: "Lift and define the lower face and neckline with strategic placement.", from: "£260" },
   { name: "Brow Lift", desc: "Subtly elevate the brow for a more open, youthful eye area.", from: "£170" },
   { name: "Lip Flip", desc: "Enhance the upper lip shape without filler for a natural pout.", from: "£140" },
   { name: "Gummy Smile", desc: "Reduce gum visibility when smiling for a more balanced look.", from: "£140" },
-  { name: "Bunny Lines", desc: "Smooth lines on the sides of the nose that appear when scrunching.", from: "£140" },
-  { name: "Excessive Sweating (Underarms)", desc: "Significantly reduce underarm sweating for 4-6 months.", from: "£350" },
 ];
 
 const faqs = [
@@ -51,7 +50,7 @@ const AntiWrinkle = () => {
               Anti-Wrinkle Consultation Manchester
             </h1>
             <p className="font-body text-lg text-white/80 mb-6">
-              Wrinkle relaxing treatments from £140. Soften lines and restore a naturally youthful appearance with a qualified prescriber at Hive Clinic, Manchester City Centre.
+              Wrinkle relaxing treatments from £150. Soften lines and restore a naturally youthful appearance with a qualified prescriber at Hive Clinic, Manchester City Centre.
             </p>
             <div className="flex flex-wrap gap-4 mb-8">
               <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Qualified Prescriber</span></div>

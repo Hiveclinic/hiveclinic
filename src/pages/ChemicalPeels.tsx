@@ -8,10 +8,9 @@ import { STOCK } from "@/lib/stock-images";
 
 const treatments = [
   { name: "BioRePeel Face", desc: "Medical-grade TCA peel to improve acne, texture, and pigmentation with minimal downtime.", price: "£95" },
-  { name: "BioRePeel Body", desc: "Targets back, chest, or shoulders for acne and pigmentation.", price: "£110" },
-  { name: "BioRePeel Face Course (3 Sessions)", desc: "Course of 3 face peels for progressive results. Save £15.", price: "£270" },
+  { name: "BioRePeel Body", desc: "Targets back, chest, or shoulders for acne and pigmentation.", price: "£120" },
+  { name: "BioRePeel Face Course (3 Sessions)", desc: "Course of 3 face peels for progressive results.", price: "£270" },
   { name: "BioRePeel Body Course (3 Sessions)", desc: "Course of 3 body peels for deeper improvement.", price: "£300" },
-  { name: "Glass Skin Treatment", desc: "Combines exfoliation with hydrating actives for a luminous, dewy finish.", price: "£140" },
 ];
 
 const faqs = [

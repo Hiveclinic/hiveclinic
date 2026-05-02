@@ -20,7 +20,7 @@ const signatures = [
     eyebrow: "Skin Hero",
     title: "Profhilo",
     subtitle: "Glass-like glow in 4 weeks.",
-    price: "from £230",
+    price: "from £280",
     image: LUXE.profhilo,
     category: "Skin Boosters",
     src: "home_signature_profhilo",

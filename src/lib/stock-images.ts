@@ -63,7 +63,7 @@ export const STOCK = {
   about_hero: gallery1,
   about_secondary: gallery2,
 
-  // Lip Fillers — uses dermal filler category image
+  // Lip Fillers - uses dermal filler category image
   lipfillers_hero: catDermalFiller,
   lipfillers_secondary: gallery4,
   lipfillers_testimonial: gallery5,

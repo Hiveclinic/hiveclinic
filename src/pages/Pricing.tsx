@@ -168,7 +168,7 @@ export default function Pricing() {
                     className="scroll-mt-32"
                   >
                     {/* Category header — editorial */}
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-10 pb-6 border-b border-sand">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-10 pb-6 border-b border-chrome/40">
                       <div className="md:col-span-1 hidden md:block">
                         <p className="font-display text-5xl text-gold/40 italic">
                           {String(catIndex + 1).padStart(2, "0")}
@@ -263,7 +263,7 @@ export default function Pricing() {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-24 bg-cream-warm border-t border-sand">
+      <section className="py-24 bg-blush/30 border-t border-chrome/40">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <p className="font-body text-[10px] tracking-[0.4em] uppercase text-gold mb-4">
             Not sure where to start?

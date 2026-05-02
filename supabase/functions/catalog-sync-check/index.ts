@@ -24,6 +24,7 @@ const CATEGORY_MAP: Record<string, string> = {
   "✦ OFFERS": "Offers",
   "✦ SKIN BOOSTERS": "Skin Boosters",
   "✦ SKIN TREATMENTS": "Skin Treatments",
+  "Hive Tox Day Limited Appointments - THURSDAY 7TH MAY": "Offers",
 };
 
 const cleanName = (s: string) =>

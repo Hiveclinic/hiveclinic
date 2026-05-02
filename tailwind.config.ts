@@ -44,6 +44,11 @@ export default {
           light: "hsl(var(--gold-light))",
           dark: "hsl(var(--gold-dark))",
         },
+        cream: {
+          DEFAULT: "hsl(var(--cream))",
+          warm: "hsl(var(--cream-warm))",
+        },
+        champagne: "hsl(var(--champagne))",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

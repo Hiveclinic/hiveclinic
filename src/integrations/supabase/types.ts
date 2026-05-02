@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      acuity_cache: {
+        Row: {
+          data: Json
+          fetched_at: string
+          id: string
+        }
+        Insert: {
+          data?: Json
+          fetched_at?: string
+          id: string
+        }
+        Update: {
+          data?: Json
+          fetched_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
       admin_client_notes: {
         Row: {
           created_at: string

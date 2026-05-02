@@ -29,3 +29,9 @@ project_id = "kyjzjgdcfisuxogledux"
     verify_jwt = false
   [functions.send-email]
     verify_jwt = false
+  [functions.acuity-catalog]
+    verify_jwt = false
+  [functions.acuity-availability]
+    verify_jwt = false
+  [functions.acuity-create-appointment]
+    verify_jwt = false

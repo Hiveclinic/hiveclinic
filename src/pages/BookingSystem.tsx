@@ -77,6 +77,7 @@ const BookingSystem = () => {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [search, setSearch] = useState("");
   const [details, setDetails] = useState<Treatment | null>(null);
+  const [scheduling, setScheduling] = useState<Treatment | null>(null);
 
   const { data: treatments = [], isLoading } = useQuery({
     queryKey: ["bookings-treatments-v2"],

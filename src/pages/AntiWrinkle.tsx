@@ -28,8 +28,31 @@ const faqs = [
 
 const AntiWrinkle = () => {
   usePageMeta(
-    "Anti-Wrinkle Consultation Manchester City Centre | Hive Clinic",
-    "Book a wrinkle relaxing treatment consultation at Hive Clinic, Manchester City Centre. Soften forehead lines, frown lines and crow's feet with a qualified prescriber. Consultation required."
+    "Anti-Wrinkle Consultation Manchester | Hive Clinic",
+    "Wrinkle relaxing treatment consultation in Manchester City Centre. Soften forehead, frown lines and crow's feet with a qualified prescriber.",
+    {
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Anti-Wrinkle Consultation Manchester",
+        serviceType: "Wrinkle relaxing treatment consultation",
+        description: "Wrinkle relaxing treatment consultation by a qualified prescriber at Hive Clinic, Manchester City Centre. Softens forehead lines, frown lines and crow's feet.",
+        provider: {
+          "@type": "MedicalBusiness",
+          name: "Hive Clinic",
+          url: "https://hiveclinicuk.com/",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "25 Saint John Street",
+            addressLocality: "Manchester",
+            postalCode: "M3 4DT",
+            addressCountry: "GB",
+          },
+        },
+        areaServed: { "@type": "City", name: "Manchester" },
+        offers: { "@type": "Offer", priceCurrency: "GBP", price: "150" },
+      },
+    }
   );
   const heroImg = useSiteImage("antiwrinkle_hero", STOCK.antiwrinkle_hero);
   const secondaryImg = useSiteImage("antiwrinkle_secondary", STOCK.antiwrinkle_secondary);

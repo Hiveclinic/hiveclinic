@@ -6,6 +6,7 @@ const DEFAULT_OG = `${SITE_URL}/og-default.jpg`;
 type Meta = {
   canonicalPath?: string;
   ogImage?: string;
+  ogType?: string;
   jsonLd?: Record<string, any> | Array<Record<string, any>>;
 };
 
@@ -43,7 +44,7 @@ export function usePageMeta(title: string, description: string, opts: Meta = {})
     upsertMeta('meta[property="og:description"]', "property", "og:description", description);
     upsertMeta('meta[property="og:url"]', "property", "og:url", canonicalUrl);
     upsertMeta('meta[property="og:image"]', "property", "og:image", og);
-    upsertMeta('meta[property="og:type"]', "property", "og:type", "website");
+    upsertMeta('meta[property="og:type"]', "property", "og:type", opts.ogType ?? "website");
     upsertMeta('meta[name="twitter:card"]', "name", "twitter:card", "summary_large_image");
     upsertMeta('meta[name="twitter:title"]', "name", "twitter:title", title);
     upsertMeta('meta[name="twitter:description"]', "name", "twitter:description", description);

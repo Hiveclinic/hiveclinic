@@ -1,0 +1,30 @@
+# Hive Clinic
+
+> Aesthetics and skin clinic in Manchester City Centre offering lip fillers, anti-wrinkle consultations, dermal filler, HydraFacial, chemical peels, skin boosters and more. Located at 25 Saint John Street, Deansgate.
+
+## Pages
+
+- [Home](/): Overview of treatments, offers and clinic information.
+- [Treatments](/treatments): Full directory of treatments and pricing.
+- [Lip Fillers Manchester](/treatments/lip-fillers-manchester): Natural-looking lip filler from £100.
+- [Anti-Wrinkle Consultation Manchester](/treatments/anti-wrinkle-injections-manchester): Wrinkle relaxing treatment consultation by a qualified prescriber.
+- [Dermal Filler Manchester](/treatments/dermal-filler-manchester): Cheek, jawline, chin and tear trough filler.
+- [HydraFacial Manchester](/treatments/hydrafacial-manchester): Deep-cleansing hydrating facial with no downtime.
+- [Chemical Peels Manchester](/treatments/chemical-peels-manchester): Level 1 and Level 2 peels for texture, tone and pigmentation.
+- [Skin Boosters Manchester](/treatments/skin-boosters-manchester): Profhilo and Seventy Hyal injectable hydrators.
+- [Fat Dissolving Manchester](/treatments/fat-dissolving-manchester): Targeted fat dissolve injections.
+- [Microneedling Manchester](/treatments/microneedling-manchester): Collagen induction therapy for skin renewal.
+- [Facial Balancing Manchester](/treatments/facial-balancing-manchester): Full-face filler treatment plans.
+- [Pricing](/pricing): Up-to-date treatment pricing.
+- [About](/about): Practitioner and clinic story.
+- [Results](/results): Before and after gallery.
+- [Blog](/blog): The Hive Edit - aesthetic guides and tips.
+- [Bookings](/bookings): Book an appointment online.
+- [Contact](/contact): Contact details and enquiry form.
+- [Aftercare](/aftercare): Aftercare instructions for every treatment.
+- [Content Models](/content-models): Apply to be a content model at reduced rates.
+
+## Optional
+
+- [Terms](/terms): Booking and clinic terms.
+- [Privacy](/privacy): Privacy policy and GDPR information.

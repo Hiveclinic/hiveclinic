@@ -27,7 +27,7 @@ const staticReviews = [
 const Index = () => {
   usePageMeta(
     "Hive Clinic | Aesthetic Clinic Manchester City Centre",
-    "Advanced aesthetic treatments in Manchester City Centre. Lip fillers, dermal filler, anti-wrinkle, skin boosters, HydraFacial and more. Book your consultation today."
+    "Advanced aesthetic treatments in Manchester City Centre. Lip fillers, dermal filler, anti-wrinkle, HydraFacial and more. Book your consultation."
   );
 
   const [reviews, setReviews] = useState(staticReviews);

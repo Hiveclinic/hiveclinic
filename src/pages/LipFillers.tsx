@@ -18,7 +18,30 @@ const faqs = [
 const LipFillers = () => {
   usePageMeta(
     "Lip Filler Manchester City Centre | Hive Clinic",
-    "Natural-looking lip filler from £100 at Hive Clinic, Manchester City Centre. Expert lip enhancement by a qualified prescriber in Deansgate. Book your free consultation."
+    "Natural-looking lip filler from £100 in Manchester City Centre. Expert lip enhancement by a qualified prescriber in Deansgate. Book a consultation.",
+    {
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Lip Filler Manchester",
+        serviceType: "Lip enhancement (dermal filler)",
+        description: "Natural-looking lip filler treatment by a qualified prescriber at Hive Clinic, Manchester City Centre.",
+        provider: {
+          "@type": "MedicalBusiness",
+          name: "Hive Clinic",
+          url: "https://hiveclinicuk.com/",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "25 Saint John Street",
+            addressLocality: "Manchester",
+            postalCode: "M3 4DT",
+            addressCountry: "GB",
+          },
+        },
+        areaServed: { "@type": "City", name: "Manchester" },
+        offers: { "@type": "Offer", priceCurrency: "GBP", price: "100" },
+      },
+    }
   );
   const heroImg = useSiteImage("lipfillers_hero", STOCK.lipfillers_hero);
   const secondaryImg = useSiteImage("lipfillers_secondary", STOCK.lipfillers_secondary);

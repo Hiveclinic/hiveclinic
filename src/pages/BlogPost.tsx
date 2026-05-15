@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { usePageMeta } from "@/hooks/use-page-meta";
 
 const posts: Record<string, { title: string; date: string; content: string[] }> = {
   "what-to-expect-first-filler": {

@@ -78,6 +78,29 @@ const BlogPost = () => {
   const { slug } = useParams();
   const post = posts[slug || ""];
 
+  const safeTitle = post?.title ?? "Post Not Found";
+  const excerpt = post ? (post.content[0] ?? "").slice(0, 155) : "This blog post could not be found.";
+
+  usePageMeta(
+    `${safeTitle} | The Hive Edit`.slice(0, 60),
+    excerpt,
+    {
+      ogType: "article",
+      canonicalPath: `/blog/${slug ?? ""}`,
+      jsonLd: post
+        ? {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: post.title,
+            datePublished: post.date,
+            author: { "@type": "Organization", name: "Hive Clinic" },
+            publisher: { "@type": "Organization", name: "Hive Clinic", url: "https://hiveclinicuk.com/" },
+            mainEntityOfPage: `https://hiveclinicuk.com/blog/${slug ?? ""}`,
+          }
+        : undefined,
+    }
+  );
+
   if (!post) {
     return (
       <Layout>

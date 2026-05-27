@@ -39,6 +39,7 @@ import Aftercare from "./pages/Aftercare";
 import CustomerPortal from "./pages/CustomerPortal";
 import Privacy from "./pages/Privacy";
 import MuseLanding from "./pages/MuseLanding";
+import HnyClub from "./pages/HnyClub";
 
 import ConsentForm from "./pages/ConsentForm";
 import NotFound from "./pages/NotFound";
@@ -90,6 +91,7 @@ const AnimatedRoutes = () => {
           <Route path="/my-appointments" element={<PageTransition><CustomerPortal /></PageTransition>} />
           <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />
           <Route path="/content-models" element={<PageTransition><MuseLanding /></PageTransition>} />
+          <Route path="/liquid-bbl-manchester" element={<PageTransition><HnyClub /></PageTransition>} />
           
           <Route path="/consent-form" element={<PageTransition><ConsentForm /></PageTransition>} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />

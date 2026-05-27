@@ -244,6 +244,9 @@ const Layout = ({
               <Link to="/results" className="block font-body text-sm text-background/60 hover:text-background mb-2">
                 Results
               </Link>
+              <Link to="/liquid-bbl-manchester" className="block font-body text-sm text-background/60 hover:text-background mb-2">
+                HNY CLUB
+              </Link>
             </div>
             <div>
               <h4 className="font-display text-lg mb-4">Treatments</h4>

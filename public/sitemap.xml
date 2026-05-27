@@ -32,6 +32,7 @@
   <url><loc>https://hiveclinicuk.com/contact</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://hiveclinicuk.com/aftercare</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://hiveclinicuk.com/content-models</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://hiveclinicuk.com/liquid-bbl-manchester</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
   <url><loc>https://hiveclinicuk.com/terms</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
   <url><loc>https://hiveclinicuk.com/privacy</loc><priority>0.3</priority><changefreq>yearly</changefreq></url>
 </urlset>

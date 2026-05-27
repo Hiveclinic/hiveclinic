@@ -259,3 +259,19 @@
   .scrollbar-hide::-webkit-scrollbar { display: none; }
   .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 }
+
+/* ============================================ */
+/* HNY CLUB by Hive Clinic — scoped sub-brand   */
+/* ============================================ */
+.hny-club {
+  --hny-blush: #F7EBE5;
+  --hny-cream: #FBF6F1;
+  --hny-cream-card: #FFFBF6;
+  --hny-champagne: #E8D5C0;
+  --hny-soft-brown: #7A5C4B;
+  --hny-ink: #3D2A1F;
+  --hny-rose-gold: #C9A78B;
+  --hny-rose-gold-deep: #B08968;
+}
+.hny-club .font-display { font-family: 'Cormorant Garamond', serif; font-weight: 400; }
+.hny-club .font-body { font-family: 'Manrope', sans-serif; }

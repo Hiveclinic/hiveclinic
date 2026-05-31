@@ -137,7 +137,7 @@ const HnyClub = () => {
             </ul>
             <div className="flex flex-wrap items-center gap-3">
               <BookLink className="inline-flex items-center px-7 py-3.5 rounded-full text-white font-body text-[11px] tracking-[0.25em] uppercase shadow-sm hover:opacity-90 transition" >
-                <span style={{ background: "transparent" }}>Book Consultation</span>
+                Book Consultation
               </BookLink>
               <a href="#pricing" className="px-7 py-3.5 rounded-full font-body text-[11px] tracking-[0.25em] uppercase border transition hover:opacity-70" style={{ borderColor: "var(--hny-rose-gold)", color: "var(--hny-mocha)" }}>
                 View Pricing
@@ -178,7 +178,7 @@ const HnyClub = () => {
               <p className="font-body text-sm mt-2 max-w-md" style={{ color: "#C9B7A6" }}>Advanced BBL filler to enhance your curves, add volume and create a naturally sculpted look.</p>
             </div>
             <BookLink className="px-7 py-3.5 rounded-full text-white font-body text-[11px] tracking-[0.25em] uppercase hover:opacity-90 transition" >
-              <span style={{ background: "transparent" }}>Book Consultation</span>
+              Book Consultation
             </BookLink>
           </motion.div>
 
@@ -340,7 +340,7 @@ const HnyClub = () => {
             Start your HNY CLUB journey with a personalised consultation at Hive Clinic, Deansgate.
           </p>
           <BookLink className="inline-block px-9 py-4 rounded-full text-white font-body text-[12px] tracking-[0.3em] uppercase shadow-md hover:opacity-90 transition" >
-            <span style={{ background: "linear-gradient(135deg, var(--hny-rose-gold), var(--hny-rose-gold-deep))", padding: 0 }}>Book Consultation</span>
+            Book Consultation
           </BookLink>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-body text-xs" style={{ color: "#C9B7A6" }}>
             <span className="inline-flex items-center gap-2"><MapPin size={12} /> 25 Saint John Street, Deansgate, Manchester</span>

@@ -48,12 +48,14 @@ const faqs = [
   { q: "What does the consultation include?", a: "Suitability screening, ultrasound-led planning, tailored ml recommendation, full pricing breakdown, and pre/aftercare guidance. The £100 fee is redeemable against treatment booked within 14 days." },
 ];
 
-const BookLink = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+const GRADIENT = "linear-gradient(135deg, var(--hny-rose-gold), var(--hny-rose-gold-deep))";
+const BookLink = ({ children, className, variant = "primary" }: { children: React.ReactNode; className?: string; variant?: "primary" | "ghost" }) => {
   const external = /^https?:/i.test(BOOK_URL);
+  const style = variant === "primary" ? { background: GRADIENT } : undefined;
   return external ? (
-    <a href={BOOK_URL} target="_blank" rel="noopener noreferrer" className={className}>{children}</a>
+    <a href={BOOK_URL} target="_blank" rel="noopener noreferrer" className={className} style={style}>{children}</a>
   ) : (
-    <Link to={BOOK_URL} className={className}>{children}</Link>
+    <Link to={BOOK_URL} className={className} style={style}>{children}</Link>
   );
 };
 

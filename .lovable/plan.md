@@ -1,63 +1,69 @@
-## HNY CLUB by Hive Clinic — Liquid BBL landing page
+## HNY CLUB landing page — redesign & restructure
 
-A premium, editorial sub-brand page rendered inside the existing Hive Clinic site, but with its own slim top nav and softer visual identity. The rest of the website is untouched.
+A focused rebuild of `/liquid-bbl-manchester`. Keeps the dedicated HNY layout, swaps the visual language to match the rose-gold logo and reference poster, restructures so pricing + Book Consultation surface immediately, and adds the uploaded video and before/after results.
 
-### Route & files
+### Assets to wire in
+- `user-uploads://B4179565-8DE4-4866-82D6-A3A3B3623F1A.PNG` → `src/assets/hny/logo.png` (rose-gold HNYCLUB wordmark, used in nav + hero)
+- `user-uploads://371ddc75ed6b4cc38466a458d8dab885.MOV` → `public/hny/hero.mp4` (converted to web-friendly mp4 via ffmpeg, muted autoplay loop)
+- `user-uploads://6C8E750C-...JPG` and `20E7FE6A-...JPG` → `src/assets/hny/result-1.jpg`, `result-2.jpg` (before/after results section)
 
-- New route: `/liquid-bbl-manchester` (registered in `src/App.tsx`)
-- New page: `src/pages/HnyClub.tsx`
-- New layout (HNY CLUB only): `src/components/HnyLayout.tsx` — slim nav (Home / Treatments / Skin / Injectables / HNY CLUB / Book Consultation), Hive Clinic footer reused, HNY CLUB link injected into Quick Links
-- Logo slot: `src/assets/hny-club-logo.png` placeholder (commented "replace with uploaded logo"); the hero falls back to a typeset wordmark — "HNY CLUB" in Cormorant serif with "by Hive Clinic" underneath — until you upload one
-- Sitemap entry added in `public/sitemap.xml`; "HNY CLUB" added to footer Quick Links sitewide
+### Visual direction (less pink, still in Hive Clinic family)
+- Replace blush-dominant palette with warm nude + deep mocha + rose-gold accent only:
+  - `--hny-cream: #F6F1EA` (page bg)
+  - `--hny-nude: #E8DCCB` (section bands)
+  - `--hny-mocha: #2A1F1A` (primary text / dark sections like the reference poster)
+  - `--hny-rose-gold: #C58B6F` (accent, used sparingly on numbers, dividers, CTA)
+  - Pink reduced to a single soft tint used only behind pricing numbers
+- Typography change: drop Cormorant Garamond. Use **Tenor Sans** (refined geometric serif-sans, matches the logo's thin uppercase letterforms) for display, **Inter** for body. Loaded via Google Fonts in `index.html`, scoped under `.hny-club`.
+- Logo replaces typeset wordmark in both nav and hero (mix-blend on light bg, full-color on dark bg).
 
-### Visual system (scoped to this page)
+### New page structure (pricing + CTA no longer at bottom)
 
-Tokens added under a `.hny-club` scope in `src/index.css` so nothing leaks to other pages:
+```text
+1. NAV (slim, logo + Book Consultation pill)
+2. HERO — split: left = headline + 3 trust points + dual CTA (Book Consultation / View Pricing↓)
+              right = autoplay muted looping video (the uploaded .MOV)
+   Sticky "Book Consultation" appears on mobile from here down.
+3. PRICING STRIP (immediately under hero, above the fold on desktop)
+   - BBL Filler ml tiers (100/250/300/500/800ml — £499 / £999 / £1,199 / £1,999 / £2,999)
+   - Klarna · Clearpay · PayItMonthly chips
+   - Inline "Book Consultation" CTA
+4. TREATMENT MENU (4 cards: Liquid BBL · Hip Dip Filler · Signature Sculpt · Bespoke 1L Plan)
+   - Each card: name, 1-line desc, "from £X", Book button
+5. RESULTS — before/after pair using the two uploaded JPGs, with consent caption
+6. HOW IT WORKS — 3 steps (Consultation → Plan → Sculpt), ultrasound-led note
+7. WHY HNY CLUB — 5 fine-line icon points
+8. FAQ — 6 questions (downtime, pain, longevity, suitability, payment plans, consultation fee)
+9. FINAL CTA band — Book Consultation + phone + Deansgate address
+10. FOOTER (existing HNY footer, trimmed)
+```
 
-- Blush `#F7EBE5`, cream `#FBF6F1`, champagne `#E8D5C0`, soft brown `#7A5C4B`, rose-gold `#C9A78B → #B08968` gradient
-- Headings: Cormorant Garamond (already loaded); body: Satoshi (already loaded)
-- Buttons: rose-gold gradient with subtle inner highlight, generous letter-spacing, no harsh black
-- Cards: cream with 1px champagne hairline, soft shadow
-- Spacing: generous, editorial; smaller hero than typical Hive pages
+### Book Consultation button
+All Book CTAs route through a single `BOOK_URL` constant in `HnyClub.tsx`. Default: `/bookings` (current Hive flow). When the user shares the external link, swap the one constant. Opens in new tab when external (`target="_blank" rel="noopener"`).
 
-### Page sections
+### SEO (one-pager, indexable)
+- Title: `Liquid BBL Manchester | HNY CLUB by Hive Clinic` (unchanged)
+- Meta description unchanged
+- H1: "Liquid BBL & Non-Surgical Body Contouring, Manchester"
+- Section H2s aligned with target keywords (liquid bbl manchester, hip dip filler manchester, non-surgical body contouring deansgate)
+- JSON-LD: `MedicalBusiness` + `Service` + `FAQPage` (new, from FAQ section) + `BreadcrumbList` + `VideoObject` for the hero video
+- Single H1, semantic sections, alt text on logo/results, `loading="lazy"` on below-fold images, `preload="metadata"` on video, canonical already in place
 
-1. **Hero** — small refined wordmark, headline, subtext, 3 inline trust points, two CTAs (Book Consultation £100 / View Introductory Prices anchor), Klarna + Clearpay payment chip, single tasteful editorial image
-2. **Trust bar** — slim row with 5 line-icon items
-3. **Treatments** — 4 cream cards (Liquid BBL, Hip Dip Filler, Signature Sculpt, Bespoke 1L Sculpt Plan) with images and "Learn more"
-4. **Pricing + Payment plans** — two-column: left pricing table (Standard vs Introductory, 8 rows + disclaimer), right large Klarna & Clearpay cards with copy
-5. **Consultation & Treatment Planning** — text + bullets + £100 redeemable note + CTA, paired with a luxury consultation-room image
-6. **Why HNY CLUB** — 5 icon cards using approved wording only (no banned phrases)
-7. **Pre-care / Aftercare** — two side-by-side cards + PDF note
-8. **Final CTA** — heading, text, big Book Consultation £100 button, Klarna/Clearpay line
-9. **Footer** — existing Hive Clinic footer with HNY CLUB link added
+### Video handling
+- Convert .MOV → mp4 (h264, faststart) + webm via ffmpeg into `public/hny/`
+- `<video autoplay muted loop playsinline poster="">` with poster frame extracted from frame 1
+- Reduced motion: respects `prefers-reduced-motion` (pauses, shows poster)
 
-All CTAs link to `/bookings`. A persistent floating "Book Consultation" button on mobile keeps booking visible.
-
-### Imagery
-
-Generated now via `imagegen` (premium where it matters): hero (editorial soft-nude body contouring), 4 treatment thumbnails, 1 consultation/ultrasound scene, 1 ambient pricing-section image. All loaded through `useSiteImage` so the admin Media Library can swap each one to a real clinic photo later without code changes — image keys: `hny_hero`, `hny_card_liquid_bbl`, `hny_card_hip_dip`, `hny_card_signature_sculpt`, `hny_card_bespoke_1l`, `hny_consultation`, `hny_pricing_ambient`.
-
-### SEO (per-route via existing `usePageMeta` hook)
-
-- Title: `Liquid BBL Manchester | HNY CLUB by Hive Clinic`
-- Description: `Ultrasound-led Liquid BBL, hip dip filler and non-surgical body contouring at Hive Clinic, Deansgate Manchester. Consultation required. Payment plans available.`
-- Canonical: `https://hiveclinicuk.com/liquid-bbl-manchester`
-- Keywords/H tags target: Liquid BBL Manchester, non-surgical BBL Manchester, hip dip filler Manchester, body/buttock filler Manchester, ultrasound-led body contouring Manchester, Deansgate aesthetics clinic
-- JSON-LD: MedicalBusiness + Service + BreadcrumbList + Offer (introductory pricing)
-- Sitemap entry added
-
-### Compliance / copy guardrails
-
-Banned phrases excluded: "medical-led", "doctor-led", "guaranteed results", "surgery alternative", "safe guaranteed". Approved language used throughout: ultrasound-led, consultation-led, suitability assessed, tailored, structured, safety-focused, realistic results. Consultation suitability disclaimer present.
-
-### Responsive
-
-- Mobile: single column, pricing table converted to stacked rows with clear Standard/Introductory labels, sticky Book Consultation bar at bottom
-- Desktop: two-column pricing + payment, generous max-w-6xl spacing
+### Files
+- **Edit** `src/pages/HnyClub.tsx` — full restructure per outline above
+- **Edit** `src/components/HnyLayout.tsx` — replace typeset wordmark with logo image, update palette vars
+- **Edit** `src/index.css` — replace `.hny-club` token block (new palette, Tenor Sans + Inter)
+- **Edit** `index.html` — add Tenor Sans + Inter Google Fonts link
+- **Create** `src/assets/hny/logo.png`, `result-1.jpg`, `result-2.jpg`
+- **Create** `public/hny/hero.mp4`, `hero.webm`, `hero-poster.jpg`
+- **Delete** the 6 unused generated texture images in `src/assets/hny/` (hero.jpg, card-*.jpg, consultation.jpg) — no longer referenced
 
 ### Out of scope
-
-- Site-wide nav changes (HNY CLUB nav is page-scoped per your answer)
-- Uploading the final HNY CLUB logo (typeset fallback ships now; drop the PNG into `src/assets/hny-club-logo.png` and it auto-appears)
-- Real clinic photography (generated editorial images ship now; swap via Admin → Media Library)
+- Site-wide nav/footer (HNY page only)
+- Real BOOK_URL (placeholder `/bookings` until you share the link — one-line swap)
+- Admin Media Library swap hooks (page now ships with final assets, no fallback layer needed)

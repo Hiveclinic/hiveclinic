@@ -6,6 +6,7 @@ import instagramLogo from "@/assets/instagram-logo.png";
 import tiktokLogo from "@/assets/tiktok-logo.png";
 import klarnaLogo from "@/assets/klarna-logo.png";
 import clearpayLogo from "@/assets/clearpay-logo.png";
+import payItMonthlyLogo from "@/assets/hny/payitmonthly-logo.png";
 import hnyLogo from "@/assets/hny/logo.png";
 
 // Central CTA destinations — swap these one-liners when external links are ready.
@@ -149,11 +150,12 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
           <div>
             <h4 className="font-display text-base mb-3 tracking-wide" style={{ color: "var(--hny-mocha)" }}>Pay your way</h4>
             <p className="font-body text-xs mb-3" style={{ color: "var(--hny-soft-brown)" }}>
-              Klarna, Clearpay and Pay Monthly plans available, subject to provider approval.
+              Klarna, Clearpay and PayItMonthly plans available, subject to provider approval.
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <img src={klarnaLogo} alt="Klarna" className="h-5 opacity-80" />
               <img src={clearpayLogo} alt="Clearpay" className="h-5 opacity-80" />
+              <img src={payItMonthlyLogo} alt="PayItMonthly" className="h-5 opacity-80" />
             </div>
           </div>
         </div>

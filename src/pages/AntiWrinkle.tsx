@@ -146,7 +146,7 @@ const AntiWrinkle = () => {
 
               <h3 className="font-display text-2xl mb-4">Downtime & Recovery</h3>
               <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                There is no downtime. You may experience minor redness at injection sites which settles within an hour. Avoid touching the area for 4 hours and refrain from vigorous exercise for 24 hours.
+                Downtime is minimal. You may experience minor redness at injection sites which settles within an hour. Avoid touching the area for 4 hours and refrain from vigorous exercise for 24 hours.
               </p>
             </div>
           </div>

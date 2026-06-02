@@ -8,7 +8,7 @@ import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "What does LED light therapy do?", a: "LED therapy uses different wavelengths of light to target specific skin concerns. Red light stimulates collagen, blue light targets acne-causing bacteria, green reduces pigmentation, and yellow soothes inflammation." },
-  { q: "Is LED light therapy safe?", a: "Yes, LED is non-invasive and suitable for all skin types. There is no UV light involved and no downtime whatsoever." },
+  { q: "Is LED light therapy safe?", a: "Yes, LED is non-invasive and suitable for all skin types. There is no UV light involved and minimal downtime." },
   { q: "How many sessions do I need?", a: "For best results, we recommend a course of 6 sessions. However, you will notice improvements even after a single session." },
   { q: "Can I combine LED with other treatments?", a: "Absolutely. LED is an excellent add-on to facials, peels, and microneedling treatments to accelerate healing and enhance results." },
 ];
@@ -54,7 +54,7 @@ const LEDTherapy = () => {
               <h2 className="font-display text-4xl md:text-5xl mb-6">Science-Backed Skin Healing</h2>
               <p className="font-body text-muted-foreground leading-relaxed mb-8">Our medical-grade LED panels deliver precise wavelengths of light to stimulate cellular repair, boost collagen production, and calm inflammation. Each session is tailored to your skin's needs.</p>
               <div className="space-y-4 mb-8">
-                {["Red light - collagen stimulation", "Blue light - acne & bacteria", "Green light - pigmentation", "Yellow light - inflammation & redness", "No downtime or discomfort"].map(b => (
+                {["Red light - collagen stimulation", "Blue light - acne & bacteria", "Green light - pigmentation", "Yellow light - inflammation & redness", "Minimal downtime, gentle on skin"].map(b => (
                   <div key={b} className="flex items-center gap-3"><CheckCircle size={14} strokeWidth={1.5} className="text-gold flex-shrink-0" /><span className="font-body text-sm">{b}</span></div>
                 ))}
               </div>

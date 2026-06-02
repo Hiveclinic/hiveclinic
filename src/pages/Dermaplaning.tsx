@@ -8,7 +8,7 @@ import { STOCK } from "@/lib/stock-images";
 
 const faqs = [
   { q: "What is dermaplaning?", a: "Dermaplaning is a gentle exfoliation treatment that uses a sterile surgical blade to remove dead skin cells and vellus hair (peach fuzz) from the face, leaving skin instantly smoother and brighter." },
-  { q: "Does dermaplaning hurt?", a: "Not at all. The treatment is painless and feels like a gentle brushing sensation across the skin. Most clients find it very relaxing." },
+  { q: "Does dermaplaning hurt?", a: "Not at all. The treatment is very comfortable and feels like a gentle brushing sensation across the skin. Most clients find it very relaxing." },
   { q: "Will the hair grow back thicker?", a: "No - this is a common myth. Vellus hair grows back at the same rate and texture. It will not become coarser or darker." },
   { q: "How often should I have dermaplaning?", a: "Every 3-4 weeks is ideal, in line with your skin's natural renewal cycle. It's also an excellent pre-event treatment." },
   { q: "Can I combine dermaplaning with other treatments?", a: "Absolutely. Dermaplaning pairs beautifully with chemical peels and hydration facials for enhanced product penetration and results." },
@@ -88,7 +88,7 @@ const Dermaplaning = () => {
             <div>
               <h3 className="font-display text-2xl mb-4">Downtime & Recovery</h3>
               <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                There is no downtime. Your skin may appear slightly pink immediately after, which settles within an hour. Apply SPF and avoid harsh active products for 24 hours.
+                Downtime is minimal. Your skin may appear slightly pink immediately after, which settles within an hour. Apply SPF and avoid harsh active products for 24 hours.
               </p>
             </div>
           </div>

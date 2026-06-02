@@ -149,7 +149,7 @@ const HydraFacial = () => {
     <section className="py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
         <h2 className="font-display text-4xl md:text-5xl mb-4">Ready for Your Best Skin?</h2>
-        <p className="font-body text-muted-foreground mb-8">Book your HydraFacial today - no downtime, just results.</p>
+        <p className="font-body text-muted-foreground mb-8">Book your HydraFacial today - minimal downtime, just results.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
                 href="/bookings#book"

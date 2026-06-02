@@ -22,12 +22,16 @@ const waLink = (ml: string) =>
   `https://wa.me/447795008114?text=${encodeURIComponent(`hey babe, i'd love a virtual chat about Liquid BBL Manchester (${ml}) xx`)}`;
 
 const pricing = [
-  { ml: "100ml", price: "£499", monthly: "from £41/mo", note: "soft enhancement" },
-  { ml: "250ml", price: "£999", monthly: "from £83/mo", note: "hip dip filler" },
-  { ml: "300ml", price: "£1,199", monthly: "from £99/mo", note: "lift & projection", featured: true },
-  { ml: "500ml", price: "£1,999", monthly: "from £166/mo", note: "sculpted curve", featured: true },
-  { ml: "800ml", price: "£2,999", monthly: "from £249/mo", note: "statement silhouette" },
-  { ml: "1L bespoke", price: "£3,499", monthly: "from £291/mo", note: "fully bespoke contour" },
+  { ml: "100ml", price: "£499" },
+  { ml: "150ml", price: "£649" },
+  { ml: "200ml", price: "£799" },
+  { ml: "250ml", price: "£999" },
+  { ml: "300ml", price: "£1,199", featured: true },
+  { ml: "350ml", price: "£1,449" },
+  { ml: "400ml", price: "£1,699" },
+  { ml: "500ml", price: "£1,999", featured: true },
+  { ml: "600ml", price: "£2,399" },
+  { ml: "800ml", price: "£2,999" },
 ];
 
 const expectSteps = [

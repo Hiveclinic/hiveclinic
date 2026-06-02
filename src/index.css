@@ -265,18 +265,20 @@
 /* HNY CLUB by Hive Clinic — scoped sub-brand   */
 /* ============================================ */
 .hny-club {
-  /* Pulled directly from the HNY CLUB logo: blush pink wall + rose-gold metal letters */
-  --hny-cream: #F7DDD3;
-  --hny-cream-card: #FBE8E0;
-  --hny-nude: #F1CDBF;
+  /* Logo-derived blush pink wall + rose-gold metal, with extra girly pink accent */
+  --hny-cream: #FBE4DA;
+  --hny-cream-card: #FDEEE6;
+  --hny-nude: #F4CFC1;
   --hny-champagne: #E6B7A3;
   --hny-mocha: #4A2A20;
   --hny-mocha-soft: #6E3F30;
   --hny-soft-brown: #8A5A48;
   --hny-ink: #4A2A20;
-  --hny-rose-gold: #C99B85;
-  --hny-rose-gold-deep: #A77560;
-  --hny-blush: #F4D2C5;
+  --hny-rose-gold: #D08A75;
+  --hny-rose-gold-deep: #B5675A;
+  --hny-pink: #E48BA0;        /* girly accent */
+  --hny-pink-deep: #C76A82;
+  --hny-blush: #F8D8CC;
 }
 .hny-club .font-display { font-family: 'Cormorant Garamond', 'Tenor Sans', serif; font-weight: 400; letter-spacing: 0.005em; }
 .hny-club .font-body { font-family: 'Inter', 'Manrope', sans-serif; }
@@ -289,10 +291,11 @@
   display: inline-flex; align-items: center; gap: 0.5rem;
   padding: 0.65rem 1.4rem; border-radius: 999px;
   font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: lowercase;
-  background: var(--hny-rose-gold); color: #fff; border: 1px solid transparent;
-  transition: background .25s ease, color .25s ease, transform .25s ease;
+  background: linear-gradient(135deg, var(--hny-rose-gold) 0%, var(--hny-pink-deep) 100%);
+  color: #fff; border: 1px solid transparent;
+  transition: background .25s ease, color .25s ease, transform .25s ease, filter .25s ease;
 }
-.hny-club .btn-dainty:hover { background: var(--hny-rose-gold-deep); }
+.hny-club .btn-dainty:hover { filter: brightness(0.95); }
 .hny-club .btn-ghost {
   display: inline-flex; align-items: center; gap: 0.5rem;
   padding: 0.65rem 1.4rem; border-radius: 999px;
@@ -300,6 +303,38 @@
   background: transparent; color: var(--hny-mocha); border: 1px solid var(--hny-rose-gold);
   transition: background .25s ease;
 }
-.hny-club .btn-ghost:hover { background: rgba(201,155,133,0.12); }
+.hny-club .btn-ghost:hover { background: rgba(228,139,160,0.14); }
+
+/* Soft image edge fade — blends image edges into the page background */
+.hny-club .img-fade {
+  -webkit-mask-image: radial-gradient(ellipse 95% 95% at center, #000 60%, transparent 100%);
+          mask-image: radial-gradient(ellipse 95% 95% at center, #000 60%, transparent 100%);
+}
+.hny-club .img-fade-v {
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+}
+.hny-club .img-fade-h {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+}
+
+/* Pricelist card pop */
+.hny-club .price-card {
+  background: linear-gradient(165deg, #FDEEE6 0%, #F8D8CC 100%);
+  border: 1px solid rgba(181,103,90,0.18);
+  border-radius: 1.25rem;
+  box-shadow: 0 18px 40px -28px rgba(181,103,90,0.45), inset 0 1px 0 rgba(255,255,255,0.6);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.hny-club .price-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 28px 50px -28px rgba(199,106,130,0.55), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+.hny-club .price-card-featured {
+  background: linear-gradient(165deg, #FDEEE6 0%, #F4B6C5 100%);
+  border-color: rgba(199,106,130,0.4);
+}
+
 @keyframes hny-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .hny-club .marquee-track { display: inline-flex; gap: 3rem; animation: hny-marquee 48s linear infinite; white-space: nowrap; }

@@ -87,7 +87,7 @@ const faqs = [
   { q: "can it be reversed?", a: "Yes. Because it is hyaluronic acid based body filler, results can be dissolved with hyaluronidase if needed. That is a real safety win over surgical BBL." },
   { q: "who isn't suitable?", a: "You need to be 21+, in good general health, not pregnant or breastfeeding. We don't treat anyone with active infection in the area, certain autoimmune conditions, bleeding disorders or recent permanent filler in the same area. Full suitability is confirmed at your consultation." },
   { q: "when can I work out again?", a: "Light walking from day one. Skip the gym, spin, hot yoga and swimming for 7 days. Most babes are back to full training from day 8 to 10." },
-  { q: "can I fly after?", a: "Short flights from day 3 are usually fine for most clients. Skip long-haul for 7 days to reduce swelling and prolonged sitting." },
+  { q: "can I fly after?", a: "We ask all clients to avoid flights for 2 weeks post-treatment to reduce the risk of DVT and prolonged swelling, especially long-haul. If travel is unavoidable, please discuss at your consultation." },
   { q: "can I pay monthly?", a: "Absolutely. Klarna, Clearpay and PayItMonthly are all available, spread over up to 12 months with 0% options. Subject to provider approval." },
   { q: "how does the £100 deposit work?", a: "£100 secures your slot and is fully redeemable against your treatment. It covers your in-clinic consultation, ultrasound assessment and tailored body contouring plan." },
 ];

@@ -61,7 +61,7 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-2.5 font-body text-[11px] tracking-[0.24em] uppercase rounded-full text-white transition-opacity hover:opacity-90"
-              style={{ background: "var(--hny-pink-deep)" }}
+              style={{ background: "var(--hny-ink)" }}
             >
               Book Virtual Chat
             </a>
@@ -104,7 +104,7 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
                   rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
                   className="mt-2 px-6 py-3 rounded-full text-white text-center font-body text-[11px] tracking-[0.22em] uppercase"
-                  style={{ background: "var(--hny-pink-deep)" }}
+                  style={{ background: "var(--hny-ink)" }}
                 >
                   Book Virtual Chat
                 </a>
@@ -185,7 +185,7 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 py-3.5 text-center rounded-full text-white font-body text-[12px] tracking-[0.22em] uppercase"
-          style={{ background: "var(--hny-pink-deep)" }}
+          style={{ background: "var(--hny-ink)" }}
         >
           WhatsApp
         </a>

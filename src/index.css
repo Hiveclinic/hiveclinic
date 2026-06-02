@@ -265,28 +265,28 @@
 /* HNY CLUB by Hive Clinic — scoped sub-brand   */
 /* ============================================ */
 .hny-club {
-  /* Black + white + 5-shade pink ladder. No browns, no rose-gold metal. */
+  /* Pale pink palette — soft, dainty, almost-white walls with deeper pink accents */
   --hny-ink: #0B0B0B;
   --hny-snow: #FFFFFF;
-  --hny-petal: #FFE0E9;          /* palest — page wall */
-  --hny-blush-soft: #FFC2D4;     /* chips / trust band */
-  --hny-rose: #FF9EBB;           /* hairlines / dividers / hover */
-  --hny-rose-deep: #FF7AA2;      /* featured rows / links */
-  --hny-cranberry: #E05780;      /* deepest accent / CTA hover */
+  --hny-petal: #FFF5F8;          /* palest — page wall */
+  --hny-blush-soft: #FFE3EC;     /* chips / featured rows / trust band */
+  --hny-rose: #FFD1DC;           /* hairlines / dividers */
+  --hny-rose-deep: #F4B8C6;      /* accent text / links / hover */
+  --hny-cranberry: #F4B8C6;      /* CTA hover (deepest pink in palette) */
 
   /* Back-compat aliases */
-  --hny-cream: #FFE0E9;
+  --hny-cream: #FFF5F8;
   --hny-cream-card: #FFFFFF;
-  --hny-nude: #FFC2D4;
-  --hny-blush: #FFD3DF;
-  --hny-champagne: #FF9EBB;
+  --hny-nude: #FFE3EC;
+  --hny-blush: #FFE3EC;
+  --hny-champagne: #FFD1DC;
   --hny-mocha: #0B0B0B;
   --hny-mocha-soft: #1a1a1a;
   --hny-soft-brown: #4A4A4A;
-  --hny-rose-gold: #FF9EBB;
-  --hny-rose-gold-deep: #FF7AA2;
-  --hny-pink: #FF9EBB;
-  --hny-pink-deep: #FF7AA2;
+  --hny-rose-gold: #FFD1DC;
+  --hny-rose-gold-deep: #F4B8C6;
+  --hny-pink: #FFD1DC;
+  --hny-pink-deep: #F4B8C6;
 }
 
 /* Editorial display: Cormorant Garamond — dainty and feminine */

@@ -41,7 +41,7 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
             <img
               src={hnyLogo}
               alt="HNY CLUB by Hive Clinic - Liquid BBL Manchester"
-              className="h-24 md:h-36 w-auto"
+              className="h-14 md:h-24 w-auto"
             />
           </Link>
 

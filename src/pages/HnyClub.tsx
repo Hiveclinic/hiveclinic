@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import HnyLayout, { INSTAGRAM_URL, WHATSAPP_URL, DEPOSIT_URL, CONSULT_URL } from "@/components/HnyLayout";
+import HnyLayout, { INSTAGRAM_URL, WHATSAPP_URL } from "@/components/HnyLayout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import heroBaddie from "@/assets/hny/hero-baddie.jpg";
 import suite from "@/assets/hny/suite.jpg";

@@ -349,7 +349,7 @@
   display: grid; grid-template-columns: 1fr auto;
   align-items: center; gap: 1rem;
   padding: 0.95rem 1.25rem;
-  border-bottom: 1px solid rgba(255,158,187,0.32);
+  border-bottom: 1px solid rgba(244,184,198,0.42);
   font-family: 'Inter', sans-serif;
   color: var(--hny-ink);
   transition: background .2s ease;
@@ -358,8 +358,8 @@
   .hny-club .price-row { padding: 1.15rem 1.75rem; }
 }
 .hny-club .price-row:last-child { border-bottom: none; }
-.hny-club .price-row:hover { background: var(--hny-petal); }
-.hny-club .price-row-featured { background: var(--hny-petal); }
+.hny-club .price-row:hover { background: var(--hny-blush-soft); }
+.hny-club .price-row-featured { background: var(--hny-blush-soft); }
 .hny-club .price-row .ml { font-size: 14px; letter-spacing: 0.04em; }
 .hny-club .price-row .amt {
   font-family: 'Cormorant Garamond', serif;

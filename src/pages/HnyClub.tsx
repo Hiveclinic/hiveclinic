@@ -362,7 +362,7 @@ const HnyClub = () => {
             <Eyebrow>can i, can i not?</Eyebrow>
             <h2 className="display-lg" style={{ color: "var(--hny-mocha)" }}>do's & don'ts after your BBL.</h2>
             <p className="font-body text-[14px] md:text-base mt-3 max-w-xl mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              you stay fully awake, just comfortably numbed - so daily life carries on. here's exactly what is fine and what to skip.
+              you stay fully awake, just comfortably numbed, so daily life carries on. here's exactly what is fine and what to skip.
             </p>
           </motion.div>
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">

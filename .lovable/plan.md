@@ -1,69 +1,90 @@
-## HNY CLUB landing page — redesign & restructure
+## HNY CLUB — Liquid BBL Manchester (one-page rebuild)
 
-A focused rebuild of `/liquid-bbl-manchester`. Keeps the dedicated HNY layout, swaps the visual language to match the rose-gold logo and reference poster, restructures so pricing + Book Consultation surface immediately, and adds the uploaded video and before/after results.
+A focused rebuild of `/liquid-bbl-manchester` only. Hive Clinic main site is untouched. Goal: a luxury, ultrasound-led, ads-ready landing page with a clear path to **Book a Virtual Chat (Instagram/WhatsApp)** or **Secure your slot (£100 deposit)**.
 
-### Assets to wire in
-- `user-uploads://B4179565-8DE4-4866-82D6-A3A3B3623F1A.PNG` → `src/assets/hny/logo.png` (rose-gold HNYCLUB wordmark, used in nav + hero)
-- `user-uploads://371ddc75ed6b4cc38466a458d8dab885.MOV` → `public/hny/hero.mp4` (converted to web-friendly mp4 via ffmpeg, muted autoplay loop)
-- `user-uploads://6C8E750C-...JPG` and `20E7FE6A-...JPG` → `src/assets/hny/result-1.jpg`, `result-2.jpg` (before/after results section)
+### Inspiration blend
+- **Serenity / London Beauty / Aesthetic Ace / CLNQ** — sticky pricing rail, big hero, trust strip, before/after, FAQ, sticky bottom CTA on mobile.
+- **Acuity / Shopify polish** — clean rounded cards, generous spacing, soft shadows, micro-pill chips for payment plans, large clickable price tiles (not a wall of text).
 
-### Visual direction (less pink, still in Hive Clinic family)
-- Replace blush-dominant palette with warm nude + deep mocha + rose-gold accent only:
-  - `--hny-cream: #F6F1EA` (page bg)
-  - `--hny-nude: #E8DCCB` (section bands)
-  - `--hny-mocha: #2A1F1A` (primary text / dark sections like the reference poster)
-  - `--hny-rose-gold: #C58B6F` (accent, used sparingly on numbers, dividers, CTA)
-  - Pink reduced to a single soft tint used only behind pricing numbers
-- Typography change: drop Cormorant Garamond. Use **Tenor Sans** (refined geometric serif-sans, matches the logo's thin uppercase letterforms) for display, **Inter** for body. Loaded via Google Fonts in `index.html`, scoped under `.hny-club`.
-- Logo replaces typeset wordmark in both nav and hero (mix-blend on light bg, full-color on dark bg).
+### Brand & visual direction
+- Drop the pink-heavy palette. Pull the **rose-gold from the HNY logo** as the single accent over a warm nude/cream base + deep mocha ink. Logo rendered large and **transparent** (mix-blend on light, full-colour on dark hero band).
+- Typography stays Tenor Sans (display) + Inter (body), already loaded.
+- No em dashes anywhere in copy. Standard hyphens only.
+- Replace stock placeholder hero with a **generated AI hero woman** (luxe editorial portrait, soft warm lighting, side profile / back silhouette suggesting body contouring without explicit clinical imagery) — passes content filters and on-brand.
 
-### New page structure (pricing + CTA no longer at bottom)
+### Page structure (single page, anchor-linked nav)
 
 ```text
-1. NAV (slim, logo + Book Consultation pill)
-2. HERO — split: left = headline + 3 trust points + dual CTA (Book Consultation / View Pricing↓)
-              right = autoplay muted looping video (the uploaded .MOV)
-   Sticky "Book Consultation" appears on mobile from here down.
-3. PRICING STRIP (immediately under hero, above the fold on desktop)
-   - BBL Filler ml tiers (100/250/300/500/800ml — £499 / £999 / £1,199 / £1,999 / £2,999)
-   - Klarna · Clearpay · PayItMonthly chips
-   - Inline "Book Consultation" CTA
-4. TREATMENT MENU (4 cards: Liquid BBL · Hip Dip Filler · Signature Sculpt · Bespoke 1L Plan)
-   - Each card: name, 1-line desc, "from £X", Book button
-5. RESULTS — before/after pair using the two uploaded JPGs, with consent caption
-6. HOW IT WORKS — 3 steps (Consultation → Plan → Sculpt), ultrasound-led note
-7. WHY HNY CLUB — 5 fine-line icon points
-8. FAQ — 6 questions (downtime, pain, longevity, suitability, payment plans, consultation fee)
-9. FINAL CTA band — Book Consultation + phone + Deansgate address
-10. FOOTER (existing HNY footer, trimmed)
+1. SLIM NAV  — big transparent HNY logo left, anchors: Pricing · Plans · Results · FAQ, "Book Virtual Chat" pill right
+2. HERO (above the fold)
+   - Left: H1 "Liquid BBL & Non-Surgical Body Contouring, Manchester"
+           sub: ultrasound-led · medically qualified · Deansgate
+           3 trust pills (Ultrasound-Guided · 0% Payment Plans · 500+ Treatments)
+           Dual CTA: [Book Virtual Chat on Instagram] [WhatsApp Us]
+           Tertiary text link: "Secure your slot from £100 deposit"
+   - Right: AI hero woman image, rose-gold gradient wash, logo overlay top-right
+   - Sticky mobile CTA bar appears from here down
+3. PAYMENT PLANS STRIP (full-width band, rose-gold tint)
+   - "Spread the cost. Treat yourself today."
+   - Klarna · Clearpay · PayItMonthly chips, large logos
+   - "From £41/month on a 12-month plan" headline figure
+   - Inline [See Pricing ↓] [Book Virtual Chat]
+4. PRICING (the hero of the page — large, scannable, clickable)
+   - Section title "Transparent Pricing"
+   - 5 price tiles in 2 rows (desktop) / horizontal snap-scroll (mobile):
+     100ml £499 · 250ml £999 · 300ml £1,199 · 500ml £1,999 · 800ml £2,999 · 1L £3,499 (Bespoke)
+   - Each tile: ml badge · price · "from £X/month with Klarna" · Book button (links to virtual chat)
+   - Below: "£100 deposit secures your slot, redeemable against treatment"
+5. WHY HNY CLUB — 4 fine-line icons:
+   Ultrasound-Guided · Medically Qualified · Discreet Deansgate Suite · Aftercare Included
+6. HOW IT WORKS — 3 steps (Virtual Chat → Plan & Deposit → In-Clinic Sculpt)
+7. RESULTS — before/after pair (existing uploaded JPGs) with consent caption + carousel-ready layout
+8. WHAT'S INCLUDED — bullet list of inclusions, ultrasound emphasis
+9. FAQ — 8 questions (downtime, pain, longevity, suitability, payment plans, deposit policy, virtual chat, safety)
+10. FINAL CTA BAND (dark mocha)
+    - "Ready to be sculpted?"
+    - [DM on Instagram] [WhatsApp Chat] [Secure £100 Deposit]
+    - Address · phone · opening hours
+11. FOOTER (trimmed HNY footer)
 ```
 
-### Book Consultation button
-All Book CTAs route through a single `BOOK_URL` constant in `HnyClub.tsx`. Default: `/bookings` (current Hive flow). When the user shares the external link, swap the one constant. Opens in new tab when external (`target="_blank" rel="noopener"`).
+### CTAs & conversion plumbing
+- **Three destinations**, all centralised as constants in `HnyClub.tsx`:
+  - `INSTAGRAM_URL` → `https://instagram.com/hiveclinicuk` (DM CTA)
+  - `WHATSAPP_URL` → `https://wa.me/447795008114?text=Hi%20HNY%20CLUB%2C%20I%27d%20like%20to%20book%20a%20virtual%20chat%20about%20Liquid%20BBL`
+  - `DEPOSIT_URL` → `/bookings` (swap when external Setmore/Stripe link supplied)
+- Language: **"Virtual Chat"** everywhere, never "consultation" in CTAs. Body copy may still reference clinic consultation flow where compliance requires.
+- Hide the existing WhatsApp floating button on this route to avoid CTA clash (the in-page CTAs replace it).
 
-### SEO (one-pager, indexable)
-- Title: `Liquid BBL Manchester | HNY CLUB by Hive Clinic` (unchanged)
-- Meta description unchanged
+### Ads readiness (Google + Meta)
+- Single H1, semantic sections, descriptive alt text, lazy images below the fold.
+- All CTAs as real `<a>`/`<Link>` (no JS-only buttons) so Google Ads + Meta Pixel can track.
+- Fire existing tracking hooks (`use-tracking.ts`) on CTA clicks: `Lead` event on virtual chat clicks, `InitiateCheckout` on deposit click.
+- Meta CAPI: reuse current Pixel integration; no new events needed beyond mapping the 3 CTAs.
+- Mobile-first: 16px+ body, 44px+ tap targets, sticky bottom CTA, price tiles reflow to snap-scroll.
+
+### SEO
+- Title/description unchanged (already optimised).
 - H1: "Liquid BBL & Non-Surgical Body Contouring, Manchester"
-- Section H2s aligned with target keywords (liquid bbl manchester, hip dip filler manchester, non-surgical body contouring deansgate)
-- JSON-LD: `MedicalBusiness` + `Service` + `FAQPage` (new, from FAQ section) + `BreadcrumbList` + `VideoObject` for the hero video
-- Single H1, semantic sections, alt text on logo/results, `loading="lazy"` on below-fold images, `preload="metadata"` on video, canonical already in place
+- JSON-LD: `MedicalBusiness` + `Service` + `FAQPage` + `BreadcrumbList` + `Offer` (per price tier) + `VideoObject` if hero video retained.
+- Anchor links in nav double as internal jump links for dwell-time + crawl signals.
+- Keep canonical, sitemap entry already in place.
 
-### Video handling
-- Convert .MOV → mp4 (h264, faststart) + webm via ffmpeg into `public/hny/`
-- `<video autoplay muted loop playsinline poster="">` with poster frame extracted from frame 1
-- Reduced motion: respects `prefers-reduced-motion` (pauses, shows poster)
+### Hero media decision
+Replace the current video with the AI woman still as primary hero (faster LCP, ads-friendly). Keep the existing `hero.mp4` as an optional muted loop in a smaller "atmosphere" slot inside the Results or Why section — or drop entirely if it slows mobile. **Default: drop the video from the hero, keep the still.** One-line revert if you want it back.
 
 ### Files
-- **Edit** `src/pages/HnyClub.tsx` — full restructure per outline above
-- **Edit** `src/components/HnyLayout.tsx` — replace typeset wordmark with logo image, update palette vars
-- **Edit** `src/index.css` — replace `.hny-club` token block (new palette, Tenor Sans + Inter)
-- **Edit** `index.html` — add Tenor Sans + Inter Google Fonts link
-- **Create** `src/assets/hny/logo.png`, `result-1.jpg`, `result-2.jpg`
-- **Create** `public/hny/hero.mp4`, `hero.webm`, `hero-poster.jpg`
-- **Delete** the 6 unused generated texture images in `src/assets/hny/` (hero.jpg, card-*.jpg, consultation.jpg) — no longer referenced
+- **Edit** `src/pages/HnyClub.tsx` — full restructure per outline
+- **Edit** `src/components/HnyLayout.tsx` — bigger transparent logo, anchor nav (Pricing/Plans/Results/FAQ), Virtual Chat pill instead of Book Consultation, hide global WhatsApp button on this route (or guard in `App.tsx`)
+- **Edit** `src/index.css` — minor token tweak: stronger rose-gold accent, payment-plan band tint
+- **Create** `src/assets/hny/hero-woman.jpg` (generated, premium tier for legibility-safe editorial portrait)
+- **Keep** existing logo, result-1/2, hero.mp4 (mp4 demoted or removed from render)
 
 ### Out of scope
-- Site-wide nav/footer (HNY page only)
-- Real BOOK_URL (placeholder `/bookings` until you share the link — one-line swap)
-- Admin Media Library swap hooks (page now ships with final assets, no fallback layer needed)
+- Site-wide nav/footer
+- Real Stripe deposit checkout (uses `/bookings` placeholder until you share the link)
+- New backend / database changes
+- Touching any other Hive Clinic route
+
+### Open question before build
+Only one: **WhatsApp number** — confirm `+44 7795 008114` (the number used by the global WhatsApp button) is the correct line for HNY virtual chats, or share a different one.

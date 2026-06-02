@@ -1,108 +1,70 @@
-## HNY CLUB — Editorial Information Rebuild (Gucci / Juicy Couture energy)
+## What's wrong now
 
-Recast `/liquid-bbl-manchester` as a fashion-house style editorial one-pager. Oversized type, magazine grid, lookbook imagery, chaptered sections that read like a brand book. Every piece of info a client needs (prepare, what to expect, aftercare, FAQs) lives on the page. CTAs to WhatsApp / Instagram / £100 deposit are the conversion engine. Built to rank locally on Google for BBL filler, body contouring, body filler, non-surgical BBL, hip dip filler in Manchester.
+- **Wrong font direction.** The HNY CLUB logo is a tall geometric **sans-serif** in rose-gold (Tenor Sans / Jost / Outfit family), not a serif. Italiana on the prices reads "AI display font", especially on numerals (£499, 100ml).
+- **Pink is too pale.** The current `#FBE4DA` is washed out vs. the deeper rose-mauve wall in the brand photo.
+- **Pricing cards feel generic.** Solid blocks, a tacky pink pill, and Italiana numerals don't read "luxury beauty counter".
 
-### Visual direction — match the HNY logo
-- Pull the logo's exact colour story as the source of truth: warm rose-gold / blush / champagne on cream, deep mocha ink, hot baddie-pink accent. No new palette; everything keys off the logo.
-- Masthead nav with oversized transparent logo, ultra-thin uppercase anchor links, hairline rule
-- Hero as full-bleed editorial cover: oversized Tenor Sans H1 left ("THE LIQUID BBL"), tiny kicker ("HNY CLUB / VOL. 01 / MANCHESTER"), lookbook image right
-- Type scale pushed magazine-large (clamp 48-140px display), tracked-out uppercase eyebrows, Inter body in long-form columns
-- Chapter dividers: "CHAPTER 01 — PREPARE" with numerical rules, like a printed lookbook
-- Sexy-luxury girl energy: blush gradients, soft grain, generous negative space, gold hairlines
-- Imagery only, no decorative icons. **Use the user-uploaded images** (existing `hero-baddie.jpg`, `result-1/2.jpg`, `lifestyle-1/2.jpg`, `logo.png`, `payitmonthly-logo.png`) — crop/resize via CSS `object-fit` and aspect-ratio frames to fit each editorial slot. No new AI imagery.
-- Subtle scroll-reveal fades via framer-motion (already installed)
-- **No em dashes anywhere.** Standard hyphens only, copy will be re-audited.
+## The new concept (one direction, executed cleanly)
 
-### Page architecture (single page, anchor-linked)
+**"Boutique counter"** — a quiet, rose-gold boutique aesthetic. Geometric all-caps sans throughout (mirrors the logo metal), deepened pink walls, rose-gold hairline frames on the cards, no pills, no gradients.
 
-```text
-1.  MASTHEAD NAV       Logo + anchors (Treatment, Pricing, Prepare, Aftercare, FAQ, Book)
-2.  EDITORIAL HERO     Oversized H1, kicker, dual CTA, lookbook image
-3.  MARQUEE STRIP      Scrolling tagline (BBL Filler, Non-Surgical BBL, Hip Dip Filler, Body Contouring, Manchester, 0% Plans)
-4.  CHAPTER 01 - THE TREATMENT
-    What a Liquid BBL is, who it's for, how it differs from surgical BBL, results timeline
-5.  CHAPTER 02 - THE PRICELIST
-    Large clickable price tiles 100ml to 1L, Klarna and PayItMonthly inline figures, £100 deposit note
-6.  CHAPTER 03 - PAYMENT PLANS
-    Klarna, Clearpay, PayItMonthly side-by-side, example monthly breakdowns, eligibility note
-7.  CHAPTER 04 - WHAT TO EXPECT
-    In-clinic journey step by step: arrival, assessment, ultrasound mapping, treatment, recovery, leaving
-8.  CHAPTER 05 - PREPARE
-    Two-week, 48-hour, day-of checklists (hydration, avoid blood thinners, no alcohol, eat beforehand, comfy clothing)
-9.  CHAPTER 06 - AFTERCARE
-    First 24h, first week, first month, do's and don'ts, when results settle, when to contact us
-10. CHAPTER 07 - RESULTS
-    Editorial before/after pair using existing uploaded JPGs, consent caption
-11. CHAPTER 08 - THE EXPERIENCE
-    Lifestyle imagery + copy on the Deansgate suite, discretion, the HNY CLUB feeling
-12. CHAPTER 09 - FAQ
-    12 questions: downtime, pain, longevity, suitability, contraindications, plans, deposit, virtual chat, reversibility, complications, flying, exercise
-13. EDITORIAL CTA BAND Dark mocha, oversized type, three CTAs (Instagram, WhatsApp, £100 Deposit), address/phone/hours
-14. FOOTER             Existing HNY footer (unchanged)
+### 1. Type system (scoped to `.hny-club` only — rest of site untouched)
+
+- **Display:** `Tenor Sans` — clean tall geometric sans, all caps, wide tracking (0.18-0.32em). Used for H1/H2, tier volumes, prices.
+- **Body:** `Inter` 300/400 — already in use, stays.
+- **Small accent / "from £X/mo":** `Inter` italic at 10-11px, mocha at 70%.
+- **Drop completely:** Italiana, Cormorant Garamond (from this sub-brand only).
+
+H1 example: `HEY BABE, READY TO JOIN THE HNY CLUB?` in Tenor Sans all-caps, wide tracking — directly echoes the logo lockup.
+
+### 2. Palette deepen (CSS variables only)
+
+```
+--hny-cream:      #EFC9BE   (was #FBE4DA — deeper warm pink wall)
+--hny-cream-card: #F6D9CF   (card surface)
+--hny-nude:       #E8B8AA   (alt section)
+--hny-rose-gold:      #C28F78
+--hny-rose-gold-deep: #A06B55   (logo metal exact)
+--hny-mocha:      #3C1F16   (deeper cocoa ink)
 ```
 
-### Content (no em dashes, compliant phrasing)
-- Prepare checklist (2-week / 48h / day-of)
-- Aftercare checklist (24h / 1 week / 1 month) with "contact us" trigger list
-- What to expect walkthrough (6-8 steps, editorial tone)
-- Expanded FAQ (add: contraindications, who isn't suitable, can it be reversed, complications, can I fly, when can I exercise, when can I sit normally)
-- Marquee tagline loop
-- Chapter intros (1-2 paragraphs each), keyword-rich but readable
+Hex pulled from the suite-wall photo; rose-gold matches the logo letter colour.
 
-### SEO (rank on Google for Manchester BBL / body contouring terms)
-**Target keyword cluster** woven naturally into H1/H2/H3, intros, FAQ answers, alt text, JSON-LD:
-- liquid bbl manchester · non-surgical bbl manchester · bbl filler manchester · body filler manchester · body contouring manchester · hip dip filler manchester · sculptra bbl alternative · non surgical butt lift manchester · buttock filler manchester · 0% finance bbl
+### 3. Pricing card redesign
 
-**On-page**
-- Single H1: "Liquid BBL Manchester — Non-Surgical Body Contouring & Hip Dip Filler at HNY CLUB" (hyphen, not em dash)
-- Each chapter H2 carries a secondary keyword
-- Long-form copy ~1,800-2,200 words total (Google rewards depth on commercial pages)
-- Descriptive alt text on every uploaded image with location + treatment keywords
-- Internal anchor nav doubles as crawl/dwell signal
-- Lazy-load below-fold imagery for LCP
+```text
+┌─────────────────────────┐
+│         · 100ML ·       │   ← Tenor Sans, tracked, mocha
+│                         │
+│         £499            │   ← Tenor Sans 300, large, rose-gold
+│                         │
+│   ────  hairline  ────  │
+│                         │
+│    soft enhancement     │   ← Inter, mocha 70%
+│      from £41/mo        │   ← Inter italic, rose-gold
+└─────────────────────────┘
+```
 
-**Structured data (extend existing JSON-LD)**
-- `MedicalBusiness` with `areaServed: Manchester`, geo, opening hours, image
-- `Service` with `serviceType: Non-Surgical BBL`, `provider`, `areaServed`
-- `Offer` per price tier (100ml £499 through 1L £3,499)
-- `FAQPage` with all 12 Q&As
-- `HowTo` for "What to Expect" steps
-- `BreadcrumbList`
-- `LocalBusiness` aggregate rating (only if real reviews available; otherwise omit to stay compliant)
+- **Frame:** 1px solid rose-gold hairline (no shadows, no gradients).
+- **Featured tiers (300ml, 500ml):** 1px solid rose-gold-deep border + a tiny top-centre tab that reads `· MOST LOVED ·` in tracked Tenor Sans (no pink pill, no rounded background).
+- **Layout:** 2-col mobile / 3-col desktop, equal-height, very slight hover lift (translateY -2px) + border colour deepens. No card-to-card gradients.
+- **No emojis, no `♡`** — replaced with mid-dot separators `·`.
 
-**Off-page hooks (note for follow-up, not built this pass)**
-- Ensure `/liquid-bbl-manchester` is in `public/sitemap.xml` with high priority
-- Canonical to itself
+### 4. Buttons / pills (carry the new vocabulary)
 
-### CTAs (plumbing unchanged)
-- `INSTAGRAM_URL`, `WHATSAPP_URL`, `DEPOSIT_URL` constants already in `HnyLayout.tsx`
-- "Virtual Chat" wording on initial CTAs; "Secure your slot - £100 deposit" on deposit CTA
-- Every price tile clickable → WhatsApp pre-filled with chosen ml tier
-- Sticky mobile CTA bar stays
+- Already squared, solid pink. I'll keep them squared but switch the active colour from `--hny-pink-deep` to `--hny-rose-gold-deep` (logo metal) so CTAs match the boutique aesthetic, with the same mocha-invert on hover.
 
-### Mobile
-- Hero stacks, lookbook image first
-- Chapter numbering as inline eyebrow on mobile, left-margin rail on desktop
-- Price tiles → horizontal snap-scroll
-- Prepare / Aftercare checklists → accordions to control length
-- 44px+ tap targets, sticky bottom CTA unchanged
+### 5. Apply once, ripple through the page
 
-### Files to edit
-- `src/pages/HnyClub.tsx` — full restructure to chapter model, expanded copy, expanded JSON-LD
-- `src/components/HnyLayout.tsx` — nav anchors updated to new chapter IDs, masthead spacing tweaks
-- `src/index.css` — add editorial tokens (chapter rule, marquee keyframes, oversize display clamps); palette unchanged, pulled from logo
-- `public/sitemap.xml` — verify `/liquid-bbl-manchester` entry priority
+Because everything is scoped variables + a few utility classes (`.display-xl`, `.display-lg`, `.btn-dainty`, `.price-card`), the new direction propagates through every section on `/liquid-bbl-manchester` automatically — hero, marquee, treatment, what-to-expect, do's & don'ts, FAQ, final letter. No copy changes.
 
-### Reuse only
-- All imagery: existing uploaded files in `src/assets/hny/` — cropped/resized via CSS, no regeneration
-- Logo: existing transparent PNG
-- Fonts: Tenor Sans + Inter (already loaded)
+## Files touched
 
-### Out of scope
-- Hive Clinic main site
-- Real Stripe deposit checkout (stays `/bookings` until link supplied)
-- New imagery generation
-- Backend or schema changes
+- `src/index.css` — palette variables, `.font-display`, `.display-xl`, `.display-lg`, `.btn-dainty`, `.price-card` rules inside the `.hny-club` scope.
+- `src/pages/HnyClub.tsx` — replace the pink `LOVED` pill with the tracked top-centre tab; tighten the card markup (volume + price + hairline + descriptor + monthly); remove the heart accent in tier eyebrows.
 
-### One question before build
-Confirm the price tiers stay as currently shown (100ml £499 · 250ml £999 · 300ml £1,199 · 500ml £1,999 · 800ml £2,999 · 1L £3,499), or send updated figures so I bake the correct prices into the tiles and `Offer` schema in one pass.
+That's it. No new fonts to import beyond Tenor Sans (already loaded globally). No layout shifts elsewhere on the site.
+
+## After approval
+
+Switch to build mode and I'll apply the change in one pass, then screenshot the pricing grid at 390px to verify it reads as a boutique counter, not a SaaS pricing table.

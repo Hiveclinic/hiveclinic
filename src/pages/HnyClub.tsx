@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import HnyLayout, { INSTAGRAM_URL, WHATSAPP_URL, DEPOSIT_URL, CONSULT_URL } from "@/components/HnyLayout";
+import HnyLayout, { INSTAGRAM_URL, WHATSAPP_URL } from "@/components/HnyLayout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import heroBaddie from "@/assets/hny/hero-baddie.jpg";
 import suite from "@/assets/hny/suite.jpg";
@@ -108,8 +108,8 @@ const DualCTA = ({ primary = "join the honey club" }: { primary?: string }) => (
     <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-dainty">
       {primary} xx
     </a>
-    <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">
-      book consultation
+    <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">
+      DM on instagram
     </a>
   </div>
 );
@@ -307,12 +307,11 @@ const HnyClub = () => {
 
           <motion.div {...fade} className="mt-9 text-center">
             <p className="font-body text-[10.5px] tracking-[0.36em] uppercase mb-4" style={{ color: "var(--hny-ink)" }}>
-              DM to enquire or book your consultation
+              DM us to enquire or chat with our team
             </p>
             <div className="flex flex-wrap justify-center gap-2.5">
-              <a href={DEPOSIT_URL} className="btn-dainty">Secure £100 deposit</a>
-              <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Book consultation</a>
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Chat first xx</a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-dainty">WhatsApp us xx</a>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">DM on instagram</a>
             </div>
             <p className="font-body text-[11px] italic mt-5 max-w-md mx-auto leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
               Hyaluronic acid body filler treatment by qualified aesthetic practitioners. Suitability confirmed at in-person consultation. Subject to provider approval. 21+ only. Results vary and cannot be guaranteed.
@@ -582,10 +581,8 @@ const HnyClub = () => {
               no pressure. no commitment. just an honest chat with us to see if Liquid BBL Manchester is right for you.
             </p>
             <div className="flex flex-wrap gap-2.5 justify-center">
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-dainty">whatsapp us</a>
-              <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">book consultation</a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-dainty">whatsapp us xx</a>
               <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">DM on instagram</a>
-              <a href={DEPOSIT_URL} className="btn-ghost" style={{ borderColor: "var(--hny-mocha)", color: "var(--hny-mocha)" }}>£100 deposit</a>
             </div>
             <p className="font-script text-xl md:text-2xl mt-8" style={{ color: "var(--hny-pink-deep)" }}>
               xoxo, hny club

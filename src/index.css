@@ -271,8 +271,8 @@
   --hny-petal: #FFF5F8;          /* palest — page wall */
   --hny-blush-soft: #FFE3EC;     /* chips / featured rows / trust band */
   --hny-rose: #FFD1DC;           /* hairlines / dividers */
-  --hny-rose-deep: #F4B8C6;      /* accent text / links / hover */
-  --hny-cranberry: #F4B8C6;      /* CTA hover (deepest pink in palette) */
+  --hny-rose-deep: #C44F75;      /* accent text / links / hover — readable on pale pink */
+  --hny-cranberry: #A93A60;      /* CTA hover (deepest pink in palette) */
 
   /* Back-compat aliases */
   --hny-cream: #FFF5F8;
@@ -284,9 +284,9 @@
   --hny-mocha-soft: #1a1a1a;
   --hny-soft-brown: #4A4A4A;
   --hny-rose-gold: #FFD1DC;
-  --hny-rose-gold-deep: #F4B8C6;
+  --hny-rose-gold-deep: #C44F75;
   --hny-pink: #FFD1DC;
-  --hny-pink-deep: #F4B8C6;
+  --hny-pink-deep: #C44F75;
 }
 
 /* Editorial display: Cormorant Garamond — dainty and feminine */

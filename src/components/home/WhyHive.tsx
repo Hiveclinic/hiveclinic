@@ -4,7 +4,7 @@ const pillars = [
   { number: "01", title: "Consult", text: "We listen first. Your goals, your face, your lifestyle. Honest advice, no upsell." },
   { number: "02", title: "Tailor", text: "Bespoke plan using premium CE-marked products and the right technique for you." },
   { number: "03", title: "Treat", text: "Calm, comfortable studio. Numbing cream, gentle technique, beautiful surroundings." },
-  { number: "04", title: "Glow", text: "Aftercare that actually works. WhatsApp support and follow-up guaranteed." },
+  { number: "04", title: "Glow", text: "Aftercare that actually works. WhatsApp support and follow-up included." },
 ];
 
 const WhyHive = () => (

@@ -113,7 +113,7 @@ const recommendations: Record<string, Recommendation> = {
     category: "Anti-Wrinkle Treatments",
     tagline: "Turn back the clock without anyone knowing",
     description: "Our precision anti-wrinkle injections smooth lines and restore a naturally refreshed look. From subtle brow lifts to full facial rejuvenation - results you'll love.",
-    benefits: ["Results visible in 3-7 days", "No downtime needed", "Lasts 3-4 months", "Prices from just £120"],
+    benefits: ["Results visible in 3-7 days", "Minimal downtime", "Lasts 3-4 months", "Prices from just £120"],
     testimonial: { text: "I look 10 years younger but completely natural. Bianca is amazing!", name: "Sarah T." },
     link: "/treatments/anti-wrinkle-manchester",
   },
@@ -144,7 +144,7 @@ const recommendations: Record<string, Recommendation> = {
   "I have stubborn fat around my chin, stomach or thighs": {
     category: "Fat Dissolving Injections",
     tagline: "Contour without surgery",
-    description: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, and more. Permanent results with no downtime - the body contouring solution you've been looking for.",
+    description: "Non-surgical fat reduction for chin, jawline, abdomen, flanks, and more. Long-lasting results with minimal downtime - the body contouring solution you've been looking for.",
     benefits: ["Permanent fat cell reduction", "No surgery required", "Multiple areas treatable", "Prices from just £120"],
     testimonial: { text: "My double chin is gone. I can't believe the difference. So glad I found Hive.", name: "Priya K." },
     link: "/treatments/fat-dissolving-manchester",

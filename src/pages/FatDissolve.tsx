@@ -47,7 +47,7 @@ const FatDissolve = () => {
           </p>
           <div className="flex flex-wrap gap-4 mb-8">
             <div className="flex items-center gap-2"><Shield size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Non-Surgical</span></div>
-            <div className="flex items-center gap-2"><Award size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Permanent Results</span></div>
+            <div className="flex items-center gap-2"><Award size={14} className="text-gold" /><span className="font-body text-sm text-white/70">Long-lasting Results</span></div>
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
             <a
@@ -112,7 +112,7 @@ const FatDissolve = () => {
           {[
             { name: "Megan T.", text: "I'd tried everything to shift my double chin. After 2 sessions the difference is unbelievable. So worth it." },
             { name: "Leah R.", text: "The fat dissolving on my flanks has made such a difference to my confidence. Bianca explained everything so clearly." },
-            { name: "Danielle K.", text: "Non-surgical and permanent results - what more could you want? Hive is the best clinic in Manchester." },
+            { name: "Danielle K.", text: "Non-surgical and long-lasting results - what more could you want? Hive is the best clinic in Manchester." },
           ].map((r) => (
             <div key={r.name} className="p-8 border border-border bg-background">
               <div className="flex gap-1 mb-4">{Array.from({ length: 5 }).map((_, i) => <Star key={i} size={14} className="fill-gold text-gold" />)}</div>

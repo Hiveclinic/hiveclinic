@@ -10,9 +10,10 @@ import payItMonthlyLogo from "@/assets/hny/payitmonthly-logo.png";
 import hnyLogo from "@/assets/hny/logo.png";
 
 // Central CTA destinations — swap these one-liners when external links are ready.
-export const INSTAGRAM_URL = "https://instagram.com/hiveclinicuk";
+export const INSTAGRAM_URL = "https://www.instagram.com/thehnyclub/";
 export const WHATSAPP_URL =
   "https://wa.me/447795008114?text=Hi%20HNY%20CLUB%2C%20I%27d%20like%20to%20book%20a%20virtual%20chat%20about%20Liquid%20BBL";
+export const CONSULT_URL = "https://Hiveclinicuk.as.me/?calendarID=14132488"; // Acuity consultation booking
 export const DEPOSIT_URL = "/bookings"; // £100 deposit checkout — swap to Stripe link when ready
 
 const navAnchors = [
@@ -40,7 +41,7 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
             <img
               src={hnyLogo}
               alt="HNY CLUB by Hive Clinic - Liquid BBL Manchester"
-              className="h-24 md:h-36 w-auto"
+              className="h-14 md:h-24 w-auto"
             />
           </Link>
 
@@ -113,7 +114,7 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
         </AnimatePresence>
       </header>
 
-      <main className="flex-1 pt-[88px] md:pt-[120px]">{children}</main>
+      <main className="flex-1 pt-[72px] md:pt-[120px]">{children}</main>
 
       <footer className="border-t" style={{ borderColor: "var(--hny-champagne)", background: "var(--hny-nude)" }}>
         <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">

@@ -82,7 +82,7 @@ const aftercareGuides = [
       "Avoid very hot showers or steam for 24 hours",
       "Do not pick or scratch the skin",
     ],
-    healing: "There is no downtime with HydraFacial. Your skin may appear slightly flushed for 1-2 hours post-treatment. The glow is immediate and continues to improve over 5-7 days.",
+    healing: "Downtime is minimal with HydraFacial. Your skin may appear slightly flushed for 1-2 hours post-treatment. The glow is immediate and continues to improve over 5-7 days.",
   },
   {
     title: "Chemical Peel Aftercare",

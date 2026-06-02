@@ -265,17 +265,17 @@
 /* HNY CLUB by Hive Clinic — scoped sub-brand   */
 /* ============================================ */
 .hny-club {
-  --hny-cream: #F6F1EA;
-  --hny-cream-card: #FBF7F1;
-  --hny-nude: #E8DCCB;
-  --hny-champagne: #D9C6B0;
-  --hny-mocha: #2A1F1A;
-  --hny-mocha-soft: #4A3A30;
-  --hny-soft-brown: #6E5848;
-  --hny-ink: #2A1F1A;
-  --hny-rose-gold: #C58B6F;
-  --hny-rose-gold-deep: #A36F54;
-  --hny-blush: #F0E2D6;
+  --hny-cream: #FFF5F8;
+  --hny-cream-card: #FFFAFB;
+  --hny-nude: #FFE0EC;
+  --hny-champagne: #F8C8D8;
+  --hny-mocha: #1A0E14;
+  --hny-mocha-soft: #3A1F2A;
+  --hny-soft-brown: #6B3A52;
+  --hny-ink: #1A0E14;
+  --hny-rose-gold: #FF4D8D;
+  --hny-rose-gold-deep: #C2185B;
+  --hny-blush: #FFD6E5;
 }
 .hny-club .font-display { font-family: 'Tenor Sans', 'Cormorant Garamond', serif; font-weight: 400; letter-spacing: 0.01em; }
 .hny-club .font-body { font-family: 'Inter', 'Manrope', sans-serif; }

@@ -138,7 +138,7 @@ const HnyClub = () => {
           telephone: "+447795008114",
           priceRange: "££",
           areaServed: "Manchester",
-          address: { "@type": "PostalAddress", streetAddress: "25 Saint John Street", addressLocality: "Manchester", postalCode: "M3 4DT", addressCountry: "GB" },
+          address: { "@type": "PostalAddress", streetAddress: "22 St John Street", addressLocality: "Manchester", postalCode: "M3 4EB", addressCountry: "GB" },
         },
         {
           "@context": "https://schema.org",
@@ -593,7 +593,7 @@ const HnyClub = () => {
               xoxo, hny club
             </p>
             <div className="mt-6 font-body text-[11px] flex flex-wrap justify-center gap-x-5 gap-y-1.5" style={{ color: "var(--hny-soft-brown)" }}>
-              <span>25 Saint John Street, Deansgate, Manchester M3 4DT</span>
+              <span>22 St John Street, Deansgate, Manchester M3 4EB</span>
               <a href="tel:+447795008114" className="hover:opacity-70">+44 7795 008114</a>
             </div>
             <p className="font-body text-[10px] italic mt-4 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>

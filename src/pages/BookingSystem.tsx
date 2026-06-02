@@ -81,14 +81,14 @@ const faqs = [
   },
   {
     q: "Where are you based?",
-    a: "Hive Clinic, 25 Saint John Street, Manchester M3 4DT - two minutes from Deansgate. Paid street parking and several NCP car parks are within a five-minute walk.",
+    a: "Hive Clinic, 22 St John Street, Manchester M3 4EB - two minutes from Deansgate. Paid street parking and several NCP car parks are within a five-minute walk.",
   },
 ];
 
 export default function BookingSystem() {
   usePageMeta(
     "Book Aesthetic Treatments Manchester | Hive Clinic",
-    "Book lip filler, anti-wrinkle, skin boosters and more at Hive Clinic Manchester. Live calendar, transparent prices, Klarna and Clearpay accepted. 25 Saint John Street, M3 4DT.",
+    "Book lip filler, anti-wrinkle, skin boosters and more at Hive Clinic Manchester. Live calendar, transparent prices, Klarna and Clearpay accepted. 22 St John Street, M3 4EB.",
     {
       jsonLd: {
         "@context": "https://schema.org",
@@ -236,7 +236,7 @@ export default function BookingSystem() {
             {[
               { icon: ShieldCheck, label: "Qualified prescriber" },
               { icon: Clock, label: "48hr cancellation" },
-              { icon: Sparkles, label: "Manchester · M3 4DT" },
+              { icon: Sparkles, label: "Manchester · M3 4EB" },
             ].map((b) => (
               <div key={b.label} className="flex items-center gap-2">
                 <b.icon size={11} strokeWidth={1.5} className="text-champagne" />

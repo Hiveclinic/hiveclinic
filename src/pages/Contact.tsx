@@ -15,7 +15,7 @@ const contactSchema = z.object({
 });
 
 const Contact = () => {
-  usePageMeta("Contact Hive Clinic | Aesthetic Clinic Manchester City Centre", "Get in touch with Hive Clinic, Manchester City Centre. Book a consultation, ask a question or find our location at 25 Saint John Street.");
+  usePageMeta("Contact Hive Clinic | Aesthetic Clinic Manchester City Centre", "Get in touch with Hive Clinic, Manchester City Centre. Book a consultation, ask a question or find our location at 22 St John Street.");
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -111,7 +111,7 @@ const Contact = () => {
             <div className="space-y-8">
               <div className="space-y-6">
                 {[
-                  { icon: MapPin, text: "25 Saint John Street, Manchester, M3 4DT" },
+                  { icon: MapPin, text: "22 St John Street, Manchester, M3 4EB" },
                   { icon: Clock, text: "Mon: 10-4 | Tue: 10-5 | Thu: 12-8 | Fri: 10-6 | Sat: 10-5 | Wed/Sun: Closed" },
                   { icon: Phone, text: "+44 7795 008 114" },
                   { icon: Mail, text: "hello@hiveclinicuk.com" },
@@ -132,7 +132,7 @@ const Contact = () => {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Hive Clinic - 25 Saint John Street, Manchester M3 4DT"
+                  title="Hive Clinic - 22 St John Street, Manchester M3 4EB"
                 />
               </div>
             </div>

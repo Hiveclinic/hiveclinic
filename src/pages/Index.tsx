@@ -61,9 +61,9 @@ const Index = () => {
     "url": "https://hiveclinic.lovable.app",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "25 Saint John Street",
+      "streetAddress": "22 St John Street",
       "addressLocality": "Manchester",
-      "postalCode": "M3 4DT",
+      "postalCode": "M3 4EB",
       "addressCountry": "GB"
     },
     "aggregateRating": {

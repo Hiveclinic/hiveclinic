@@ -42,7 +42,7 @@ const FinalCTA = () => (
 
         <div className="border-t border-bone/[0.08] pt-6">
           <p className="font-body text-[11px] text-bone/40 tracking-[0.22em] uppercase">
-            25 Saint John Street / Manchester M3 4DT / Klarna / Clearpay
+            22 St John Street / Manchester M3 4EB / Klarna / Clearpay
           </p>
         </div>
       </motion.div>

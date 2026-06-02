@@ -114,7 +114,7 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
         </AnimatePresence>
       </header>
 
-      <main className="flex-1 pt-[88px] md:pt-[120px]">{children}</main>
+      <main className="flex-1 pt-[72px] md:pt-[120px]">{children}</main>
 
       <footer className="border-t" style={{ borderColor: "var(--hny-champagne)", background: "var(--hny-nude)" }}>
         <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">

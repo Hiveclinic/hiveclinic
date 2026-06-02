@@ -182,13 +182,13 @@ const HnyClub = () => {
 
             <DualCTA primary="virtual chat on whatsapp" />
 
-            <p className="font-body mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-1.5" style={{ color: "var(--hny-soft-brown)" }}>
+            <div className="font-body mt-4 flex flex-wrap items-center gap-x-4 gap-y-2" style={{ color: "var(--hny-soft-brown)" }}>
               <span className="font-script italic" style={{ fontSize: "16px", color: "var(--hny-ink)" }}>from £499</span>
-              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>Klarna</span>
-              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>Clearpay</span>
-              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>PayItMonthly</span>
+              <img src={klarnaLogo} alt="Klarna" className="h-5 w-auto opacity-85" />
+              <img src={clearpayLogo} alt="Clearpay" className="h-5 w-auto opacity-85" />
+              <img src={payItMonthlyLogo} alt="PayItMonthly" className="h-5 w-auto opacity-85" />
               <span className="text-[10px] tracking-[0.18em] uppercase">0% available</span>
-            </p>
+            </div>
           </motion.div>
 
           <motion.div {...fade} transition={{ duration: 0.8 }} className="relative">

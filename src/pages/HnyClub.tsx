@@ -274,36 +274,28 @@ const HnyClub = () => {
                 <span className="amt">{p.price}</span>
               </a>
             ))}
-            <div className="price-row-footnote">1L bespoke sculpt plan — consultation only</div>
+            <div className="price-row-footnote">1L bespoke sculpt plan, consultation only</div>
           </motion.div>
 
           <motion.div {...fade} className="mt-3 text-center">
-            <p className="font-body text-[10.5px] tracking-[0.32em] uppercase" style={{ color: "var(--hny-rose-deep)" }}>
+            <p className="font-body text-[10.5px] tracking-[0.32em] uppercase" style={{ color: "var(--hny-ink)" }}>
               Liquid BBL &nbsp;&nbsp; Hip Dip Filler &nbsp;&nbsp; Body Contouring
             </p>
           </motion.div>
 
-          {/* Elegant inline finance bar — whitespace separated */}
+          {/* Elegant inline finance bar — logos, whitespace separated */}
           <motion.div {...fade} className="finance-bar mt-8">
             <span className="fb-price">From £41/month</span>
             <span className="fb-apr">0% APR options</span>
             <span className="fb-providers">
-              <span className="fb-prov">Klarna</span>
-              <span className="fb-prov">Clearpay</span>
-              <span className="fb-prov">PayItMonthly</span>
+              <img src={klarnaLogo} alt="Klarna" className="fb-prov-logo" />
+              <img src={clearpayLogo} alt="Clearpay" className="fb-prov-logo" />
+              <img src={payItMonthlyLogo} alt="PayItMonthly" className="fb-prov-logo" />
             </span>
           </motion.div>
 
-          <motion.div {...fade} className="trust-band mt-6 grid grid-cols-2 divide-x" style={{ borderColor: "var(--hny-rose)" }}>
+          <motion.div {...fade} className="trust-band mt-6">
             <div className="px-5 py-5 md:py-6 text-center">
-              <p className="font-body text-[10.5px] tracking-[0.26em] uppercase font-medium" style={{ color: "var(--hny-ink)" }}>
-                Payment plans available
-              </p>
-              <p className="font-body text-[11px] mt-1" style={{ color: "var(--hny-ink)", opacity: 0.7 }}>
-                Spread up to 12 months
-              </p>
-            </div>
-            <div className="px-5 py-5 md:py-6 text-center" style={{ borderColor: "var(--hny-rose)" }}>
               <p className="font-body text-[10.5px] tracking-[0.26em] uppercase font-medium" style={{ color: "var(--hny-ink)" }}>
                 2-week review &amp; support
               </p>

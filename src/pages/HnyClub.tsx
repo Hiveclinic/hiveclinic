@@ -182,8 +182,12 @@ const HnyClub = () => {
 
             <DualCTA primary="virtual chat on whatsapp" />
 
-            <p className="font-body text-[11px] mt-4 tracking-wide" style={{ color: "var(--hny-soft-brown)" }}>
-              from £499 · klarna · clearpay · payitmonthly · 0% available
+            <p className="font-body mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-1.5" style={{ color: "var(--hny-soft-brown)" }}>
+              <span className="font-script italic" style={{ fontSize: "16px", color: "var(--hny-ink)" }}>from £499</span>
+              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>Klarna</span>
+              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>Clearpay</span>
+              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>PayItMonthly</span>
+              <span className="text-[10px] tracking-[0.18em] uppercase">0% available</span>
             </p>
           </motion.div>
 

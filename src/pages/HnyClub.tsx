@@ -581,10 +581,8 @@ const HnyClub = () => {
               no pressure. no commitment. just an honest chat with us to see if Liquid BBL Manchester is right for you.
             </p>
             <div className="flex flex-wrap gap-2.5 justify-center">
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-dainty">whatsapp us</a>
-              <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">book consultation</a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-dainty">whatsapp us xx</a>
               <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">DM on instagram</a>
-              <a href={DEPOSIT_URL} className="btn-ghost" style={{ borderColor: "var(--hny-mocha)", color: "var(--hny-mocha)" }}>£100 deposit</a>
             </div>
             <p className="font-script text-xl md:text-2xl mt-8" style={{ color: "var(--hny-pink-deep)" }}>
               xoxo, hny club

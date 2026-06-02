@@ -385,14 +385,14 @@
 
 /* ===== Elegant inline finance bar — no middots, whitespace only ===== */
 .hny-club .finance-bar {
-  display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline;
-  gap: 14px 20px;
-  padding: 14px 16px;
-  border-top: 1px solid rgba(255,158,187,0.45);
-  border-bottom: 1px solid rgba(255,158,187,0.45);
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+  gap: 14px 22px;
+  padding: 16px 16px;
+  border-top: 1px solid rgba(244,184,198,0.55);
+  border-bottom: 1px solid rgba(244,184,198,0.55);
 }
 @media (min-width: 768px) {
-  .hny-club .finance-bar { gap: 14px 32px; padding: 18px 20px; flex-wrap: nowrap; }
+  .hny-club .finance-bar { gap: 16px 34px; padding: 20px 22px; flex-wrap: nowrap; }
 }
 .hny-club .finance-bar .fb-price {
   font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500;
@@ -403,15 +403,17 @@
   text-transform: uppercase; font-weight: 400; color: var(--hny-ink);
 }
 .hny-club .finance-bar .fb-providers {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 14px 20px;
+  display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center;
+  gap: 16px 22px;
 }
 @media (min-width: 768px) {
-  .hny-club .finance-bar .fb-providers { gap: 32px; }
+  .hny-club .finance-bar .fb-providers { gap: 28px; }
 }
-.hny-club .finance-bar .fb-prov {
-  font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.22em;
-  text-transform: uppercase; font-weight: 500; color: var(--hny-rose-deep);
+.hny-club .finance-bar .fb-prov-logo {
+  height: 18px; width: auto; display: inline-block; opacity: 0.85;
+}
+@media (min-width: 768px) {
+  .hny-club .finance-bar .fb-prov-logo { height: 20px; }
 }
 
 @keyframes hny-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }

@@ -277,5 +277,12 @@
   --hny-rose-gold-deep: #C2185B;
   --hny-blush: #FFD6E5;
 }
-.hny-club .font-display { font-family: 'Tenor Sans', 'Cormorant Garamond', serif; font-weight: 400; letter-spacing: 0.01em; }
+.hny-club .font-display { font-family: 'Tenor Sans', 'Cormorant Garamond', serif; font-weight: 400; letter-spacing: 0.005em; }
 .hny-club .font-body { font-family: 'Inter', 'Manrope', sans-serif; }
+.hny-club .display-xl { font-family: 'Tenor Sans', serif; font-size: clamp(2.6rem, 9vw, 7.5rem); line-height: 0.96; letter-spacing: -0.01em; }
+.hny-club .display-lg { font-family: 'Tenor Sans', serif; font-size: clamp(2rem, 5.4vw, 4rem); line-height: 1.02; letter-spacing: -0.005em; }
+.hny-club .kicker { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.42em; text-transform: uppercase; font-weight: 500; }
+.hny-club .rule-gold { height: 1px; background: linear-gradient(90deg, transparent, var(--hny-rose-gold-deep), transparent); }
+.hny-club .chapter-num { font-family: 'Tenor Sans', serif; font-size: 11px; letter-spacing: 0.42em; text-transform: uppercase; color: var(--hny-rose-gold-deep); }
+@keyframes hny-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.hny-club .marquee-track { display: inline-flex; gap: 3rem; animation: hny-marquee 38s linear infinite; white-space: nowrap; }

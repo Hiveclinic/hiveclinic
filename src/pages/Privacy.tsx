@@ -16,7 +16,7 @@ const Privacy = () => {
 
             <div>
               <h2 className="font-display text-3xl mb-4">1. Data Controller</h2>
-              <p>Hive Clinic, 25 Saint John Street, Manchester, M3 4DT ("we", "us", "our") is the data controller responsible for your personal data. You can contact our Data Protection contact at hello@hiveclinicuk.com or +44 7795 008 114.</p>
+              <p>Hive Clinic, 22 St John Street, Manchester, M3 4EB ("we", "us", "our") is the data controller responsible for your personal data. You can contact our Data Protection contact at hello@hiveclinicuk.com or +44 7795 008 114.</p>
             </div>
 
             <div>
@@ -128,7 +128,7 @@ const Privacy = () => {
               <p>For any privacy-related queries or to exercise your rights:</p>
               <div className="mt-4 space-y-2">
                 <p className="font-semibold">Hive Clinic</p>
-                <p>25 Saint John Street, Manchester, M3 4DT</p>
+                <p>22 St John Street, Manchester, M3 4EB</p>
                 <p>Email: hello@hiveclinicuk.com</p>
                 <p>Phone: +44 7795 008 114</p>
               </div>

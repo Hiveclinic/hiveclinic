@@ -16,7 +16,7 @@ const Terms = () => {
 
             <div>
               <h2 className="font-display text-3xl mb-4">1. Introduction</h2>
-              <p>These Terms and Conditions govern the provision of all aesthetic treatments, consultations, and related services by Hive Clinic ("we", "us", "our"), located at 25 Saint John Street, Manchester, M3 4DT. By booking an appointment or receiving treatment, you ("the client") agree to be bound by these terms in full. Please read them carefully before proceeding.</p>
+              <p>These Terms and Conditions govern the provision of all aesthetic treatments, consultations, and related services by Hive Clinic ("we", "us", "our"), located at 22 St John Street, Manchester, M3 4EB. By booking an appointment or receiving treatment, you ("the client") agree to be bound by these terms in full. Please read them carefully before proceeding.</p>
             </div>
 
             <div>
@@ -193,7 +193,7 @@ const Terms = () => {
               <p>For any questions regarding these terms, or to raise a concern, please contact us:</p>
               <div className="mt-4 space-y-2">
                 <p className="font-semibold">Hive Clinic</p>
-                <p>25 Saint John Street, Manchester, M3 4DT</p>
+                <p>22 St John Street, Manchester, M3 4EB</p>
                 <p>Phone: +44 7795 008 114</p>
                 <p>Email: hello@hiveclinicuk.com</p>
                 <p>WhatsApp: +44 7795 008 114</p>

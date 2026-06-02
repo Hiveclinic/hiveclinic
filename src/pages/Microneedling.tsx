@@ -160,7 +160,7 @@ const Microneedling = () => {
             Message Us on WhatsApp
           </a>
         </div>
-        <p className="font-body text-xs text-muted-foreground mt-6">25 Saint John Street, Manchester M3 4DT</p>
+        <p className="font-body text-xs text-muted-foreground mt-6">22 St John Street, Manchester M3 4EB</p>
       </div>
     </section>
   </Layout>

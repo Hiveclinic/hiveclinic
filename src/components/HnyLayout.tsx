@@ -137,8 +137,8 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
           <div>
             <h4 className="font-display text-base mb-3 tracking-wide" style={{ color: "var(--hny-mocha)" }}>Visit</h4>
-            <p className="font-body text-sm" style={{ color: "var(--hny-soft-brown)" }}>25 Saint John Street</p>
-            <p className="font-body text-sm" style={{ color: "var(--hny-soft-brown)" }}>Deansgate, Manchester M3 4DT</p>
+            <p className="font-body text-sm" style={{ color: "var(--hny-soft-brown)" }}>22 St John Street</p>
+            <p className="font-body text-sm" style={{ color: "var(--hny-soft-brown)" }}>Deansgate, Manchester M3 4EB</p>
             <a href="tel:+447795008114" className="font-body text-sm block mt-1 hover:opacity-70" style={{ color: "var(--hny-soft-brown)" }}>+44 7795 008114</a>
             <div className="mt-4 flex gap-3">
               <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Instagram">

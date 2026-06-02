@@ -43,9 +43,9 @@ const AntiWrinkle = () => {
           url: "https://hiveclinicuk.com/",
           address: {
             "@type": "PostalAddress",
-            streetAddress: "25 Saint John Street",
+            streetAddress: "22 St John Street",
             addressLocality: "Manchester",
-            postalCode: "M3 4DT",
+            postalCode: "M3 4EB",
             addressCountry: "GB",
           },
         },
@@ -236,7 +236,7 @@ const AntiWrinkle = () => {
               Message Us on WhatsApp
             </a>
           </div>
-          <p className="font-body text-xs text-muted-foreground mt-6">25 Saint John Street, Manchester M3 4DT</p>
+          <p className="font-body text-xs text-muted-foreground mt-6">22 St John Street, Manchester M3 4EB</p>
         </div>
       </section>
 

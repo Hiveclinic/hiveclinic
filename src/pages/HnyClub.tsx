@@ -7,9 +7,6 @@ import suite from "@/assets/hny/suite.jpg";
 import lifestyle1 from "@/assets/hny/lifestyle-1.jpg";
 import result1 from "@/assets/hny/result-1.jpg";
 import result2 from "@/assets/hny/result-2.jpg";
-import klarnaLogo from "@/assets/klarna-logo.png";
-import clearpayLogo from "@/assets/clearpay-logo.png";
-import payItMonthlyLogo from "@/assets/hny/payitmonthly-logo.png";
 
 const fade = {
   initial: { opacity: 0, y: 14 },
@@ -52,7 +49,7 @@ const prepareList = [
 const aftercareList = [
   { when: "first 24 hours", items: ["avoid sitting directly on the area where possible - lean to one side or use a cushion", "sleep on your front or side tonight", "no alcohol, gym or hot baths", "mild swelling, warmth or bruising is normal"] },
   { when: "first week", items: ["light walks are encouraged from day one", "no gym, spin, sauna, steam or swimming for 7 days", "front or side sleeping where possible", "hydrate, hydrate, hydrate"] },
-  { when: "first month", items: ["ease back into training from day 8", "no deep tissue massage to the area for 4 weeks", "final shape typically refines across 2 to 4 weeks", "your complimentary 2 week review is already booked"] },
+  { when: "first month", items: ["ease back into training from day 8", "no deep tissue massage to the area for 4 weeks", "avoid flights for 2 weeks post-treatment (DVT and swelling risk)", "final shape typically refines across 2 to 4 weeks", "your complimentary 2 week review is already booked"] },
 ];
 
 // Legal-safe do / don't (awake, numbed, normal activities)
@@ -70,7 +67,7 @@ const doDont = {
     "no gym, spin, hot yoga, swimming or sauna for 7 days",
     "no alcohol or blood thinners for 24 hours either side",
     "no deep tissue massage to the area for 4 weeks",
-    "no flying long-haul or prolonged sitting for 7 days",
+    "no flights for 2 weeks post-treatment - DVT and swelling risk, especially long-haul",
     "no fake tan, hot baths or sunbeds for 7 days",
   ],
 };
@@ -87,7 +84,7 @@ const faqs = [
   { q: "can it be reversed?", a: "Yes. Because it is hyaluronic acid based body filler, results can be dissolved with hyaluronidase if needed. That is a real safety win over surgical BBL." },
   { q: "who isn't suitable?", a: "You need to be 21+, in good general health, not pregnant or breastfeeding. We don't treat anyone with active infection in the area, certain autoimmune conditions, bleeding disorders or recent permanent filler in the same area. Full suitability is confirmed at your consultation." },
   { q: "when can I work out again?", a: "Light walking from day one. Skip the gym, spin, hot yoga and swimming for 7 days. Most babes are back to full training from day 8 to 10." },
-  { q: "can I fly after?", a: "Short flights from day 3 are usually fine for most clients. Skip long-haul for 7 days to reduce swelling and prolonged sitting." },
+  { q: "can I fly after?", a: "We ask all clients to avoid flights for 2 weeks post-treatment to reduce the risk of DVT and prolonged swelling, especially long-haul. If travel is unavoidable, please discuss at your consultation." },
   { q: "can I pay monthly?", a: "Absolutely. Klarna, Clearpay and PayItMonthly are all available, spread over up to 12 months with 0% options. Subject to provider approval." },
   { q: "how does the £100 deposit work?", a: "£100 secures your slot and is fully redeemable against your treatment. It covers your in-clinic consultation, ultrasound assessment and tailored body contouring plan." },
 ];
@@ -138,7 +135,7 @@ const HnyClub = () => {
           telephone: "+447795008114",
           priceRange: "££",
           areaServed: "Manchester",
-          address: { "@type": "PostalAddress", streetAddress: "25 Saint John Street", addressLocality: "Manchester", postalCode: "M3 4DT", addressCountry: "GB" },
+          address: { "@type": "PostalAddress", streetAddress: "22 St John Street", addressLocality: "Manchester", postalCode: "M3 4EB", addressCountry: "GB" },
         },
         {
           "@context": "https://schema.org",
@@ -182,8 +179,12 @@ const HnyClub = () => {
 
             <DualCTA primary="virtual chat on whatsapp" />
 
-            <p className="font-body text-[11px] mt-4 tracking-wide" style={{ color: "var(--hny-soft-brown)" }}>
-              from £499 · klarna · clearpay · payitmonthly · 0% available
+            <p className="font-body mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-1.5" style={{ color: "var(--hny-soft-brown)" }}>
+              <span className="font-script italic" style={{ fontSize: "16px", color: "var(--hny-ink)" }}>from £499</span>
+              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>Klarna</span>
+              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>Clearpay</span>
+              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>PayItMonthly</span>
+              <span className="text-[10px] tracking-[0.18em] uppercase">0% available</span>
             </p>
           </motion.div>
 
@@ -279,17 +280,28 @@ const HnyClub = () => {
 
           <motion.div {...fade} className="mt-3 text-center">
             <p className="font-body text-[10.5px] tracking-[0.32em] uppercase" style={{ color: "var(--hny-rose-deep)" }}>
-              · Liquid BBL · Hip Dip Filler · Body Contouring ·
+              Liquid BBL &nbsp;&nbsp; Hip Dip Filler &nbsp;&nbsp; Body Contouring
             </p>
           </motion.div>
 
-          <motion.div {...fade} className="trust-band mt-8 grid grid-cols-2 divide-x" style={{ borderColor: "var(--hny-rose)" }}>
+          {/* Elegant inline finance bar — whitespace separated */}
+          <motion.div {...fade} className="finance-bar mt-8">
+            <span className="fb-price">From £41/month</span>
+            <span className="fb-apr">0% APR options</span>
+            <span className="fb-providers">
+              <span className="fb-prov">Klarna</span>
+              <span className="fb-prov">Clearpay</span>
+              <span className="fb-prov">PayItMonthly</span>
+            </span>
+          </motion.div>
+
+          <motion.div {...fade} className="trust-band mt-6 grid grid-cols-2 divide-x" style={{ borderColor: "var(--hny-rose)" }}>
             <div className="px-5 py-5 md:py-6 text-center">
               <p className="font-body text-[10.5px] tracking-[0.26em] uppercase font-medium" style={{ color: "var(--hny-ink)" }}>
                 Payment plans available
               </p>
               <p className="font-body text-[11px] mt-1" style={{ color: "var(--hny-ink)", opacity: 0.7 }}>
-                Klarna · Clearpay · PayItMonthly
+                Spread up to 12 months
               </p>
             </div>
             <div className="px-5 py-5 md:py-6 text-center" style={{ borderColor: "var(--hny-rose)" }}>
@@ -311,13 +323,8 @@ const HnyClub = () => {
               <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Book consultation</a>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Chat first xx</a>
             </div>
-            <div className="mt-7 flex items-center justify-center gap-6 flex-wrap opacity-80">
-              <img src={klarnaLogo} alt="Klarna payment plans for Liquid BBL Manchester" className="h-5 md:h-6" loading="lazy" />
-              <img src={clearpayLogo} alt="Clearpay payment plans for BBL filler Manchester" className="h-4 md:h-5" loading="lazy" />
-              <img src={payItMonthlyLogo} alt="PayItMonthly finance for body contouring Manchester" className="h-5 md:h-6" loading="lazy" />
-            </div>
-            <p className="font-body text-[11px] italic mt-4 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              Spread up to 12 months, 0% options available, subject to provider approval. 21+ only. Results vary and cannot be guaranteed.
+            <p className="font-body text-[11px] italic mt-5 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
+              Subject to provider approval. 21+ only. Results vary and cannot be guaranteed.
             </p>
           </motion.div>
         </div>
@@ -593,7 +600,7 @@ const HnyClub = () => {
               xoxo, hny club
             </p>
             <div className="mt-6 font-body text-[11px] flex flex-wrap justify-center gap-x-5 gap-y-1.5" style={{ color: "var(--hny-soft-brown)" }}>
-              <span>25 Saint John Street, Deansgate, Manchester M3 4DT</span>
+              <span>22 St John Street, Deansgate, Manchester M3 4EB</span>
               <a href="tel:+447795008114" className="hover:opacity-70">+44 7795 008114</a>
             </div>
             <p className="font-body text-[10px] italic mt-4 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>

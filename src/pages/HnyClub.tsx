@@ -70,7 +70,7 @@ const doDont = {
     "no gym, spin, hot yoga, swimming or sauna for 7 days",
     "no alcohol or blood thinners for 24 hours either side",
     "no deep tissue massage to the area for 4 weeks",
-    "no flights for 2 weeks post-treatment - DVT and swelling risk, especially long-haul",
+    "no flights for 2 weeks post-treatment (DVT and swelling risk, especially long-haul)",
     "no fake tan, hot baths or sunbeds for 7 days",
   ],
 };

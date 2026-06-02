@@ -283,17 +283,28 @@ const HnyClub = () => {
 
           <motion.div {...fade} className="mt-3 text-center">
             <p className="font-body text-[10.5px] tracking-[0.32em] uppercase" style={{ color: "var(--hny-rose-deep)" }}>
-              · Liquid BBL · Hip Dip Filler · Body Contouring ·
+              Liquid BBL &nbsp;&nbsp; Hip Dip Filler &nbsp;&nbsp; Body Contouring
             </p>
           </motion.div>
 
-          <motion.div {...fade} className="trust-band mt-8 grid grid-cols-2 divide-x" style={{ borderColor: "var(--hny-rose)" }}>
+          {/* Elegant inline finance bar — whitespace separated */}
+          <motion.div {...fade} className="finance-bar mt-8">
+            <span className="fb-price">From £41/month</span>
+            <span className="fb-apr">0% APR options</span>
+            <span className="fb-providers">
+              <span className="fb-prov">Klarna</span>
+              <span className="fb-prov">Clearpay</span>
+              <span className="fb-prov">PayItMonthly</span>
+            </span>
+          </motion.div>
+
+          <motion.div {...fade} className="trust-band mt-6 grid grid-cols-2 divide-x" style={{ borderColor: "var(--hny-rose)" }}>
             <div className="px-5 py-5 md:py-6 text-center">
               <p className="font-body text-[10.5px] tracking-[0.26em] uppercase font-medium" style={{ color: "var(--hny-ink)" }}>
                 Payment plans available
               </p>
               <p className="font-body text-[11px] mt-1" style={{ color: "var(--hny-ink)", opacity: 0.7 }}>
-                Klarna · Clearpay · PayItMonthly
+                Spread up to 12 months
               </p>
             </div>
             <div className="px-5 py-5 md:py-6 text-center" style={{ borderColor: "var(--hny-rose)" }}>
@@ -315,13 +326,8 @@ const HnyClub = () => {
               <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Book consultation</a>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Chat first xx</a>
             </div>
-            <div className="mt-7 flex items-center justify-center gap-6 flex-wrap opacity-80">
-              <img src={klarnaLogo} alt="Klarna payment plans for Liquid BBL Manchester" className="h-5 md:h-6" loading="lazy" />
-              <img src={clearpayLogo} alt="Clearpay payment plans for BBL filler Manchester" className="h-4 md:h-5" loading="lazy" />
-              <img src={payItMonthlyLogo} alt="PayItMonthly finance for body contouring Manchester" className="h-5 md:h-6" loading="lazy" />
-            </div>
-            <p className="font-body text-[11px] italic mt-4 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              Spread up to 12 months, 0% options available, subject to provider approval. 21+ only. Results vary and cannot be guaranteed.
+            <p className="font-body text-[11px] italic mt-5 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
+              Subject to provider approval. 21+ only. Results vary and cannot be guaranteed.
             </p>
           </motion.div>
         </div>

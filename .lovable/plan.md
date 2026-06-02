@@ -1,90 +1,108 @@
-## HNY CLUB — Liquid BBL Manchester (one-page rebuild)
+## HNY CLUB — Editorial Information Rebuild (Gucci / Juicy Couture energy)
 
-A focused rebuild of `/liquid-bbl-manchester` only. Hive Clinic main site is untouched. Goal: a luxury, ultrasound-led, ads-ready landing page with a clear path to **Book a Virtual Chat (Instagram/WhatsApp)** or **Secure your slot (£100 deposit)**.
+Recast `/liquid-bbl-manchester` as a fashion-house style editorial one-pager. Oversized type, magazine grid, lookbook imagery, chaptered sections that read like a brand book. Every piece of info a client needs (prepare, what to expect, aftercare, FAQs) lives on the page. CTAs to WhatsApp / Instagram / £100 deposit are the conversion engine. Built to rank locally on Google for BBL filler, body contouring, body filler, non-surgical BBL, hip dip filler in Manchester.
 
-### Inspiration blend
-- **Serenity / London Beauty / Aesthetic Ace / CLNQ** — sticky pricing rail, big hero, trust strip, before/after, FAQ, sticky bottom CTA on mobile.
-- **Acuity / Shopify polish** — clean rounded cards, generous spacing, soft shadows, micro-pill chips for payment plans, large clickable price tiles (not a wall of text).
+### Visual direction — match the HNY logo
+- Pull the logo's exact colour story as the source of truth: warm rose-gold / blush / champagne on cream, deep mocha ink, hot baddie-pink accent. No new palette; everything keys off the logo.
+- Masthead nav with oversized transparent logo, ultra-thin uppercase anchor links, hairline rule
+- Hero as full-bleed editorial cover: oversized Tenor Sans H1 left ("THE LIQUID BBL"), tiny kicker ("HNY CLUB / VOL. 01 / MANCHESTER"), lookbook image right
+- Type scale pushed magazine-large (clamp 48-140px display), tracked-out uppercase eyebrows, Inter body in long-form columns
+- Chapter dividers: "CHAPTER 01 — PREPARE" with numerical rules, like a printed lookbook
+- Sexy-luxury girl energy: blush gradients, soft grain, generous negative space, gold hairlines
+- Imagery only, no decorative icons. **Use the user-uploaded images** (existing `hero-baddie.jpg`, `result-1/2.jpg`, `lifestyle-1/2.jpg`, `logo.png`, `payitmonthly-logo.png`) — crop/resize via CSS `object-fit` and aspect-ratio frames to fit each editorial slot. No new AI imagery.
+- Subtle scroll-reveal fades via framer-motion (already installed)
+- **No em dashes anywhere.** Standard hyphens only, copy will be re-audited.
 
-### Brand & visual direction
-- Drop the pink-heavy palette. Pull the **rose-gold from the HNY logo** as the single accent over a warm nude/cream base + deep mocha ink. Logo rendered large and **transparent** (mix-blend on light, full-colour on dark hero band).
-- Typography stays Tenor Sans (display) + Inter (body), already loaded.
-- No em dashes anywhere in copy. Standard hyphens only.
-- Replace stock placeholder hero with a **generated AI hero woman** (luxe editorial portrait, soft warm lighting, side profile / back silhouette suggesting body contouring without explicit clinical imagery) — passes content filters and on-brand.
-
-### Page structure (single page, anchor-linked nav)
+### Page architecture (single page, anchor-linked)
 
 ```text
-1. SLIM NAV  — big transparent HNY logo left, anchors: Pricing · Plans · Results · FAQ, "Book Virtual Chat" pill right
-2. HERO (above the fold)
-   - Left: H1 "Liquid BBL & Non-Surgical Body Contouring, Manchester"
-           sub: ultrasound-led · medically qualified · Deansgate
-           3 trust pills (Ultrasound-Guided · 0% Payment Plans · 500+ Treatments)
-           Dual CTA: [Book Virtual Chat on Instagram] [WhatsApp Us]
-           Tertiary text link: "Secure your slot from £100 deposit"
-   - Right: AI hero woman image, rose-gold gradient wash, logo overlay top-right
-   - Sticky mobile CTA bar appears from here down
-3. PAYMENT PLANS STRIP (full-width band, rose-gold tint)
-   - "Spread the cost. Treat yourself today."
-   - Klarna · Clearpay · PayItMonthly chips, large logos
-   - "From £41/month on a 12-month plan" headline figure
-   - Inline [See Pricing ↓] [Book Virtual Chat]
-4. PRICING (the hero of the page — large, scannable, clickable)
-   - Section title "Transparent Pricing"
-   - 5 price tiles in 2 rows (desktop) / horizontal snap-scroll (mobile):
-     100ml £499 · 250ml £999 · 300ml £1,199 · 500ml £1,999 · 800ml £2,999 · 1L £3,499 (Bespoke)
-   - Each tile: ml badge · price · "from £X/month with Klarna" · Book button (links to virtual chat)
-   - Below: "£100 deposit secures your slot, redeemable against treatment"
-5. WHY HNY CLUB — 4 fine-line icons:
-   Ultrasound-Guided · Medically Qualified · Discreet Deansgate Suite · Aftercare Included
-6. HOW IT WORKS — 3 steps (Virtual Chat → Plan & Deposit → In-Clinic Sculpt)
-7. RESULTS — before/after pair (existing uploaded JPGs) with consent caption + carousel-ready layout
-8. WHAT'S INCLUDED — bullet list of inclusions, ultrasound emphasis
-9. FAQ — 8 questions (downtime, pain, longevity, suitability, payment plans, deposit policy, virtual chat, safety)
-10. FINAL CTA BAND (dark mocha)
-    - "Ready to be sculpted?"
-    - [DM on Instagram] [WhatsApp Chat] [Secure £100 Deposit]
-    - Address · phone · opening hours
-11. FOOTER (trimmed HNY footer)
+1.  MASTHEAD NAV       Logo + anchors (Treatment, Pricing, Prepare, Aftercare, FAQ, Book)
+2.  EDITORIAL HERO     Oversized H1, kicker, dual CTA, lookbook image
+3.  MARQUEE STRIP      Scrolling tagline (BBL Filler, Non-Surgical BBL, Hip Dip Filler, Body Contouring, Manchester, 0% Plans)
+4.  CHAPTER 01 - THE TREATMENT
+    What a Liquid BBL is, who it's for, how it differs from surgical BBL, results timeline
+5.  CHAPTER 02 - THE PRICELIST
+    Large clickable price tiles 100ml to 1L, Klarna and PayItMonthly inline figures, £100 deposit note
+6.  CHAPTER 03 - PAYMENT PLANS
+    Klarna, Clearpay, PayItMonthly side-by-side, example monthly breakdowns, eligibility note
+7.  CHAPTER 04 - WHAT TO EXPECT
+    In-clinic journey step by step: arrival, assessment, ultrasound mapping, treatment, recovery, leaving
+8.  CHAPTER 05 - PREPARE
+    Two-week, 48-hour, day-of checklists (hydration, avoid blood thinners, no alcohol, eat beforehand, comfy clothing)
+9.  CHAPTER 06 - AFTERCARE
+    First 24h, first week, first month, do's and don'ts, when results settle, when to contact us
+10. CHAPTER 07 - RESULTS
+    Editorial before/after pair using existing uploaded JPGs, consent caption
+11. CHAPTER 08 - THE EXPERIENCE
+    Lifestyle imagery + copy on the Deansgate suite, discretion, the HNY CLUB feeling
+12. CHAPTER 09 - FAQ
+    12 questions: downtime, pain, longevity, suitability, contraindications, plans, deposit, virtual chat, reversibility, complications, flying, exercise
+13. EDITORIAL CTA BAND Dark mocha, oversized type, three CTAs (Instagram, WhatsApp, £100 Deposit), address/phone/hours
+14. FOOTER             Existing HNY footer (unchanged)
 ```
 
-### CTAs & conversion plumbing
-- **Three destinations**, all centralised as constants in `HnyClub.tsx`:
-  - `INSTAGRAM_URL` → `https://instagram.com/hiveclinicuk` (DM CTA)
-  - `WHATSAPP_URL` → `https://wa.me/447795008114?text=Hi%20HNY%20CLUB%2C%20I%27d%20like%20to%20book%20a%20virtual%20chat%20about%20Liquid%20BBL`
-  - `DEPOSIT_URL` → `/bookings` (swap when external Setmore/Stripe link supplied)
-- Language: **"Virtual Chat"** everywhere, never "consultation" in CTAs. Body copy may still reference clinic consultation flow where compliance requires.
-- Hide the existing WhatsApp floating button on this route to avoid CTA clash (the in-page CTAs replace it).
+### Content (no em dashes, compliant phrasing)
+- Prepare checklist (2-week / 48h / day-of)
+- Aftercare checklist (24h / 1 week / 1 month) with "contact us" trigger list
+- What to expect walkthrough (6-8 steps, editorial tone)
+- Expanded FAQ (add: contraindications, who isn't suitable, can it be reversed, complications, can I fly, when can I exercise, when can I sit normally)
+- Marquee tagline loop
+- Chapter intros (1-2 paragraphs each), keyword-rich but readable
 
-### Ads readiness (Google + Meta)
-- Single H1, semantic sections, descriptive alt text, lazy images below the fold.
-- All CTAs as real `<a>`/`<Link>` (no JS-only buttons) so Google Ads + Meta Pixel can track.
-- Fire existing tracking hooks (`use-tracking.ts`) on CTA clicks: `Lead` event on virtual chat clicks, `InitiateCheckout` on deposit click.
-- Meta CAPI: reuse current Pixel integration; no new events needed beyond mapping the 3 CTAs.
-- Mobile-first: 16px+ body, 44px+ tap targets, sticky bottom CTA, price tiles reflow to snap-scroll.
+### SEO (rank on Google for Manchester BBL / body contouring terms)
+**Target keyword cluster** woven naturally into H1/H2/H3, intros, FAQ answers, alt text, JSON-LD:
+- liquid bbl manchester · non-surgical bbl manchester · bbl filler manchester · body filler manchester · body contouring manchester · hip dip filler manchester · sculptra bbl alternative · non surgical butt lift manchester · buttock filler manchester · 0% finance bbl
 
-### SEO
-- Title/description unchanged (already optimised).
-- H1: "Liquid BBL & Non-Surgical Body Contouring, Manchester"
-- JSON-LD: `MedicalBusiness` + `Service` + `FAQPage` + `BreadcrumbList` + `Offer` (per price tier) + `VideoObject` if hero video retained.
-- Anchor links in nav double as internal jump links for dwell-time + crawl signals.
-- Keep canonical, sitemap entry already in place.
+**On-page**
+- Single H1: "Liquid BBL Manchester — Non-Surgical Body Contouring & Hip Dip Filler at HNY CLUB" (hyphen, not em dash)
+- Each chapter H2 carries a secondary keyword
+- Long-form copy ~1,800-2,200 words total (Google rewards depth on commercial pages)
+- Descriptive alt text on every uploaded image with location + treatment keywords
+- Internal anchor nav doubles as crawl/dwell signal
+- Lazy-load below-fold imagery for LCP
 
-### Hero media decision
-Replace the current video with the AI woman still as primary hero (faster LCP, ads-friendly). Keep the existing `hero.mp4` as an optional muted loop in a smaller "atmosphere" slot inside the Results or Why section — or drop entirely if it slows mobile. **Default: drop the video from the hero, keep the still.** One-line revert if you want it back.
+**Structured data (extend existing JSON-LD)**
+- `MedicalBusiness` with `areaServed: Manchester`, geo, opening hours, image
+- `Service` with `serviceType: Non-Surgical BBL`, `provider`, `areaServed`
+- `Offer` per price tier (100ml £499 through 1L £3,499)
+- `FAQPage` with all 12 Q&As
+- `HowTo` for "What to Expect" steps
+- `BreadcrumbList`
+- `LocalBusiness` aggregate rating (only if real reviews available; otherwise omit to stay compliant)
 
-### Files
-- **Edit** `src/pages/HnyClub.tsx` — full restructure per outline
-- **Edit** `src/components/HnyLayout.tsx` — bigger transparent logo, anchor nav (Pricing/Plans/Results/FAQ), Virtual Chat pill instead of Book Consultation, hide global WhatsApp button on this route (or guard in `App.tsx`)
-- **Edit** `src/index.css` — minor token tweak: stronger rose-gold accent, payment-plan band tint
-- **Create** `src/assets/hny/hero-woman.jpg` (generated, premium tier for legibility-safe editorial portrait)
-- **Keep** existing logo, result-1/2, hero.mp4 (mp4 demoted or removed from render)
+**Off-page hooks (note for follow-up, not built this pass)**
+- Ensure `/liquid-bbl-manchester` is in `public/sitemap.xml` with high priority
+- Canonical to itself
+
+### CTAs (plumbing unchanged)
+- `INSTAGRAM_URL`, `WHATSAPP_URL`, `DEPOSIT_URL` constants already in `HnyLayout.tsx`
+- "Virtual Chat" wording on initial CTAs; "Secure your slot - £100 deposit" on deposit CTA
+- Every price tile clickable → WhatsApp pre-filled with chosen ml tier
+- Sticky mobile CTA bar stays
+
+### Mobile
+- Hero stacks, lookbook image first
+- Chapter numbering as inline eyebrow on mobile, left-margin rail on desktop
+- Price tiles → horizontal snap-scroll
+- Prepare / Aftercare checklists → accordions to control length
+- 44px+ tap targets, sticky bottom CTA unchanged
+
+### Files to edit
+- `src/pages/HnyClub.tsx` — full restructure to chapter model, expanded copy, expanded JSON-LD
+- `src/components/HnyLayout.tsx` — nav anchors updated to new chapter IDs, masthead spacing tweaks
+- `src/index.css` — add editorial tokens (chapter rule, marquee keyframes, oversize display clamps); palette unchanged, pulled from logo
+- `public/sitemap.xml` — verify `/liquid-bbl-manchester` entry priority
+
+### Reuse only
+- All imagery: existing uploaded files in `src/assets/hny/` — cropped/resized via CSS, no regeneration
+- Logo: existing transparent PNG
+- Fonts: Tenor Sans + Inter (already loaded)
 
 ### Out of scope
-- Site-wide nav/footer
-- Real Stripe deposit checkout (uses `/bookings` placeholder until you share the link)
-- New backend / database changes
-- Touching any other Hive Clinic route
+- Hive Clinic main site
+- Real Stripe deposit checkout (stays `/bookings` until link supplied)
+- New imagery generation
+- Backend or schema changes
 
-### Open question before build
-Only one: **WhatsApp number** — confirm `+44 7795 008114` (the number used by the global WhatsApp button) is the correct line for HNY virtual chats, or share a different one.
+### One question before build
+Confirm the price tiers stay as currently shown (100ml £499 · 250ml £999 · 300ml £1,199 · 500ml £1,999 · 800ml £2,999 · 1L £3,499), or send updated figures so I bake the correct prices into the tiles and `Offer` schema in one pass.

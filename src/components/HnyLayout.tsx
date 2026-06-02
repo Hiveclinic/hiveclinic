@@ -16,9 +16,10 @@ export const WHATSAPP_URL =
 export const DEPOSIT_URL = "/bookings"; // £100 deposit checkout — swap to Stripe link when ready
 
 const navAnchors = [
+  { href: "#treatment", label: "Treatment" },
   { href: "#pricing", label: "Pricing" },
-  { href: "#plans", label: "Payment Plans" },
-  { href: "#results", label: "Results" },
+  { href: "#prepare", label: "Prepare" },
+  { href: "#aftercare", label: "Aftercare" },
   { href: "#faq", label: "FAQ" },
 ];
 
@@ -38,8 +39,8 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
           <Link to="/liquid-bbl-manchester" aria-label="HNY CLUB by Hive Clinic" className="flex items-center">
             <img
               src={hnyLogo}
-              alt="HNY CLUB by Hive Clinic"
-              className="h-20 md:h-28 w-auto"
+              alt="HNY CLUB by Hive Clinic - Liquid BBL Manchester"
+              className="h-24 md:h-36 w-auto"
             />
           </Link>
 

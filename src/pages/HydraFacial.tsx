@@ -12,7 +12,7 @@ const treatments = [
 ];
 
 const faqs = [
-  { q: "What is a HydraFacial?", a: "A HydraFacial is a multi-step facial treatment that combines cleansing, exfoliation, extraction, and hydration using patented technology. It delivers instant, visible results with no downtime." },
+  { q: "What is a HydraFacial?", a: "A HydraFacial is a multi-step facial treatment that combines cleansing, exfoliation, extraction, and hydration using patented technology. It delivers instant, visible results with minimal downtime." },
   { q: "Is a HydraFacial suitable for all skin types?", a: "Yes. HydraFacials are gentle enough for sensitive skin yet effective enough for oily, acne-prone, or mature skin. Your practitioner will customise the treatment to your specific needs." },
   { q: "How often should I get a HydraFacial?", a: "For optimal results, we recommend a HydraFacial every 4-6 weeks. Many clients book monthly as part of their ongoing skincare routine." },
   { q: "Is there any downtime?", a: "None at all. You can return to your normal routine immediately. Most clients apply makeup and go straight back to work or socialising." },

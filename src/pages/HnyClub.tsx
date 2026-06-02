@@ -44,7 +44,7 @@ const expectSteps = [
 ];
 
 const prepareList = [
-  { when: "two weeks before", items: ["skip blood thinners (ibuprofen, fish oil, vitamin E) - check with your GP first", "pause retinol on the lower back & bum", "no new injectables or laser to the area", "drink water like it's your job, prioritise protein"] },
+  { when: "two weeks before", items: ["skip blood thinners (ibuprofen, fish oil, vitamin E), check with your GP first", "pause retinol on the lower back & bum", "no new injectables or laser to the area", "drink water like it's your job, prioritise protein"] },
   { when: "48 hours before", items: ["no alcohol, babe", "skip the gym, sauna, sunbeds", "no fake tan on the area", "eat a proper meal before your appointment"] },
   { when: "day of", items: ["clean skin, no body lotion or oil on the area", "wear something comfy with soft underwear", "bring a snack and water for after", "allow up to 90 minutes total"] },
 ];

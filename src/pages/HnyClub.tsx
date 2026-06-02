@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import HnyLayout, { INSTAGRAM_URL, WHATSAPP_URL, DEPOSIT_URL } from "@/components/HnyLayout";
+import HnyLayout, { INSTAGRAM_URL, WHATSAPP_URL, DEPOSIT_URL, CONSULT_URL } from "@/components/HnyLayout";
 import { usePageMeta } from "@/hooks/use-page-meta";
 import heroBaddie from "@/assets/hny/hero-baddie.jpg";
 import suite from "@/assets/hny/suite.jpg";
@@ -24,8 +24,8 @@ const waLink = (ml: string) =>
 const pricing = [
   { ml: "100ml", price: "£499", monthly: "from £41/mo", note: "soft enhancement" },
   { ml: "250ml", price: "£999", monthly: "from £83/mo", note: "hip dip filler" },
-  { ml: "300ml", price: "£1,199", monthly: "from £99/mo", note: "lift & projection" },
-  { ml: "500ml", price: "£1,999", monthly: "from £166/mo", note: "sculpted curve" },
+  { ml: "300ml", price: "£1,199", monthly: "from £99/mo", note: "lift & projection", featured: true },
+  { ml: "500ml", price: "£1,999", monthly: "from £166/mo", note: "sculpted curve", featured: true },
   { ml: "800ml", price: "£2,999", monthly: "from £249/mo", note: "statement silhouette" },
   { ml: "1L bespoke", price: "£3,499", monthly: "from £291/mo", note: "fully bespoke contour" },
 ];
@@ -34,7 +34,7 @@ const expectSteps = [
   { t: "you arrive", d: "tea, soft lighting, your favourite playlist on in our private Deansgate suite. we take our time with you." },
   { t: "we talk", d: "honest chat about your shape, your goals, and what's realistic for body contouring in Manchester. no upselling, ever." },
   { t: "ultrasound mapping", d: "we map vessels and tissue planes under live ultrasound before a single drop of BBL filler is placed. the safer way." },
-  { t: "numbing", d: "topical numbing and lidocaine inside the body filler. most babes say it feels like pressure, not pain." },
+  { t: "numbing", d: "topical numbing and lidocaine inside the body filler. you stay fully awake, just comfortably numbed." },
   { t: "sculpting", d: "hyaluronic acid filler placed in considered layers to lift, project and balance hip dips. 45 to 75 minutes." },
   { t: "the reveal", d: "we look at your shape together standing and seated. consented photos, written aftercare, a hug, and you're out." },
 ];
@@ -46,22 +46,44 @@ const prepareList = [
 ];
 
 const aftercareList = [
-  { when: "first 24 hours", items: ["no sitting directly on the area - lean to one side or use a cushion", "sleep on your front or side tonight", "no alcohol, gym or hot baths", "mild swelling, warmth or bruising is totally normal"] },
+  { when: "first 24 hours", items: ["avoid sitting directly on the area where possible - lean to one side or use a cushion", "sleep on your front or side tonight", "no alcohol, gym or hot baths", "mild swelling, warmth or bruising is normal"] },
   { when: "first week", items: ["light walks are encouraged from day one", "no gym, spin, sauna, steam or swimming for 7 days", "front or side sleeping where possible", "hydrate, hydrate, hydrate"] },
-  { when: "first month", items: ["ease back into training from day 8", "no deep tissue massage to the area for 4 weeks", "final shape refines across 2 to 4 weeks", "your free 2 week review is already booked"] },
+  { when: "first month", items: ["ease back into training from day 8", "no deep tissue massage to the area for 4 weeks", "final shape typically refines across 2 to 4 weeks", "your complimentary 2 week review is already booked"] },
 ];
 
+// Legal-safe do / don't (awake, numbed, normal activities)
+const doDont = {
+  can: [
+    "drive yourself home straight after (you stay fully awake, no sedation)",
+    "go back to work the next day for most desk-based roles",
+    "walk, do gentle stretching and light daily life from day one",
+    "shower normally after 24 hours, pat the area dry",
+    "wear loose, comfy underwear and your usual clothes",
+    "take paracetamol if you have any tenderness",
+  ],
+  cant: [
+    "no sitting flat on the area for the first 24-48 hours",
+    "no gym, spin, hot yoga, swimming or sauna for 7 days",
+    "no alcohol or blood thinners for 24 hours either side",
+    "no deep tissue massage to the area for 4 weeks",
+    "no flying long-haul or prolonged sitting for 7 days",
+    "no fake tan, hot baths or sunbeds for 7 days",
+  ],
+};
+
 const faqs = [
-  { q: "what is a Liquid BBL?", a: "A Liquid BBL is a non-surgical Brazilian Butt Lift using advanced hyaluronic acid BBL filler to add volume, lift the bum and soften hip dips. No surgery, no general anaesthetic, no theatre. Walk in, walk out. It's one of the most requested body contouring treatments in Manchester." },
-  { q: "how is this different from a surgical BBL?", a: "Surgical BBL means general anaesthetic, fat transfer and weeks of strict downtime. Liquid BBL Manchester with HNY Club is filler-based, ultrasound-led, same-day, scar-free and fully reversible if you ever wanted it dissolved." },
-  { q: "is it safe?", a: "Every Liquid BBL at HNY Club is performed under live ultrasound by qualified aesthetic practitioners. Ultrasound lets us see vessels and tissue planes in real time, which is the gold standard for body filler and BBL filler placement." },
-  { q: "does it hurt?", a: "Topical numbing first, plus lidocaine inside the filler. Most babes describe pressure, not pain." },
-  { q: "is there downtime?", a: "Most clients are back to light daily life the next day. Skip the gym, sauna and sitting on the area for 48 hours. Light swelling or bruising can be normal for a few days." },
-  { q: "how long does it last?", a: "Typically 12 to 18 months, depending on volume, lifestyle and metabolism. Top-ups can be booked once your shape softens." },
-  { q: "can it be reversed?", a: "Yes. Because it's hyaluronic acid based body filler, results can be dissolved with hyaluronidase if you ever wanted to. That's a real safety win over surgical BBL." },
-  { q: "who isn't suitable?", a: "You need to be 21+, in good general health, not pregnant or breastfeeding. We don't treat anyone with active infection in the area, certain autoimmune conditions, bleeding disorders or recent permanent filler in the same area." },
+  { q: "what is a Liquid BBL?", a: "A Liquid BBL is a non-surgical Brazilian Butt Lift using advanced hyaluronic acid BBL filler to add volume, lift the bum and soften hip dips. No surgery, no general anaesthetic, no theatre. Walk in, walk out. It is one of the most requested body contouring treatments in Manchester." },
+  { q: "how is this different from a surgical BBL?", a: "Surgical BBL involves general anaesthetic, fat transfer and weeks of strict downtime. Liquid BBL Manchester with HNY Club is filler-based, ultrasound-led, same-day, minimally invasive with only tiny entry points and minimal scarring, and fully reversible if you ever wanted it dissolved." },
+  { q: "will i be awake?", a: "Yes, fully awake. There is no sedation and no general anaesthetic. You will be comfortably numbed with topical numbing and lidocaine inside the filler, so you can chat with us the whole time." },
+  { q: "is it safe?", a: "Every Liquid BBL at HNY Club is performed under live ultrasound by qualified aesthetic practitioners. Ultrasound lets us see vessels and tissue planes in real time, which is considered best practice for body filler and BBL filler placement. As with any aesthetic treatment, risks will be discussed in full at your in-person consultation." },
+  { q: "does it hurt?", a: "Topical numbing is applied first, plus lidocaine is mixed into the filler. Most babes describe it as pressure rather than pain, though comfort varies person to person." },
+  { q: "is there downtime?", a: "Downtime is minimal compared to surgical BBL. Most clients return to light daily life the next day. We ask you to avoid the gym, sauna and sitting flat on the area for 48 hours. Light swelling or bruising can last a few days." },
+  { q: "can i drive home after?", a: "Yes. You are fully awake and not sedated, so you can drive yourself home straight after your appointment. We still recommend a comfy cushion for the car seat." },
+  { q: "how long do results last?", a: "Typically 12 to 18 months, depending on volume placed, lifestyle, metabolism and aftercare. Individual results vary. Top-ups can be booked once your shape softens." },
+  { q: "can it be reversed?", a: "Yes. Because it is hyaluronic acid based body filler, results can be dissolved with hyaluronidase if needed. That is a real safety win over surgical BBL." },
+  { q: "who isn't suitable?", a: "You need to be 21+, in good general health, not pregnant or breastfeeding. We don't treat anyone with active infection in the area, certain autoimmune conditions, bleeding disorders or recent permanent filler in the same area. Full suitability is confirmed at your consultation." },
   { q: "when can I work out again?", a: "Light walking from day one. Skip the gym, spin, hot yoga and swimming for 7 days. Most babes are back to full training from day 8 to 10." },
-  { q: "can I fly after?", a: "Short flights from day 3 are usually fine. Skip long-haul for 7 days to reduce swelling and prolonged sitting." },
+  { q: "can I fly after?", a: "Short flights from day 3 are usually fine for most clients. Skip long-haul for 7 days to reduce swelling and prolonged sitting." },
   { q: "can I pay monthly?", a: "Absolutely. Klarna, Clearpay and PayItMonthly are all available, spread over up to 12 months with 0% options. Subject to provider approval." },
   { q: "how does the £100 deposit work?", a: "£100 secures your slot and is fully redeemable against your treatment. It covers your in-clinic consultation, ultrasound assessment and tailored body contouring plan." },
 ];
@@ -82,14 +104,14 @@ const DualCTA = ({ primary = "join the honey club" }: { primary?: string }) => (
     <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-dainty">
       {primary} xx
     </a>
-    <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="font-script text-base md:text-lg underline underline-offset-4 decoration-1 hover:opacity-70" style={{ color: "var(--hny-rose-gold-deep)" }}>
-      or DM us
+    <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">
+      book consultation
     </a>
   </div>
 );
 
 const Eyebrow = ({ children }: { children: React.ReactNode }) => (
-  <p className="font-script text-lg md:text-xl mb-2.5" style={{ color: "var(--hny-rose-gold-deep)" }}>
+  <p className="font-script text-lg md:text-xl mb-2.5" style={{ color: "var(--hny-pink-deep)" }}>
     {children}
   </p>
 );
@@ -142,13 +164,13 @@ const HnyClub = () => {
     <HnyLayout>
       {/* ============== HERO LETTER ============== */}
       <section className="relative overflow-hidden" style={{ background: "var(--hny-cream)" }}>
-        <div className="max-w-[1180px] mx-auto px-5 md:px-10 pt-3 pb-10 md:pt-8 md:pb-16 grid lg:grid-cols-[1.05fr_1fr] gap-8 lg:gap-14 items-center">
+        <div className="max-w-[1180px] mx-auto px-5 md:px-10 pt-6 pb-10 md:pt-10 md:pb-16 grid lg:grid-cols-[1.05fr_1fr] gap-8 lg:gap-14 items-center">
           <motion.div {...fade}>
-            <p className="font-script text-xl md:text-2xl mb-2" style={{ color: "var(--hny-rose-gold-deep)" }}>
+            <p className="font-script text-xl md:text-2xl mb-2" style={{ color: "var(--hny-pink-deep)" }}>
               hey babe,
             </p>
             <h1 className="display-xl" style={{ color: "var(--hny-mocha)" }}>
-              ready to join the <em className="font-script" style={{ color: "var(--hny-rose-gold-deep)" }}>honey club</em>?
+              ready to join the <em className="font-script" style={{ color: "var(--hny-pink-deep)" }}>honey club</em>?
             </h1>
             <p className="font-body text-[15px] md:text-lg leading-[1.65] mt-4 mb-6 max-w-xl" style={{ color: "var(--hny-soft-brown)" }}>
               luxury <strong>Liquid BBL Manchester</strong>, hip dip filler and body contouring at HNY Club, Deansgate. ultrasound-led BBL filler, walk-in walk-out, tailored to your shape. the soft alternative to surgical BBL.
@@ -162,7 +184,7 @@ const HnyClub = () => {
           </motion.div>
 
           <motion.div {...fade} transition={{ duration: 0.8 }} className="relative">
-            <div className="aspect-[4/5] md:aspect-[3/4] rounded-[34%/8%] overflow-hidden" style={{ boxShadow: "0 40px 80px -36px rgba(167,117,96,0.45)" }}>
+            <div className="aspect-[4/5] md:aspect-[3/4] overflow-hidden img-fade">
               <img
                 src={heroBaddie}
                 alt="Liquid BBL Manchester - luxury non-surgical Brazilian Butt Lift and BBL filler at HNY Club Deansgate"
@@ -172,7 +194,7 @@ const HnyClub = () => {
                 fetchPriority="high"
               />
             </div>
-            <p className="font-script absolute -bottom-2 left-1/2 -translate-x-1/2 text-base md:text-lg whitespace-nowrap px-4 py-1.5 rounded-full" style={{ background: "var(--hny-cream-card)", color: "var(--hny-rose-gold-deep)" }}>
+            <p className="font-script absolute -bottom-2 left-1/2 -translate-x-1/2 text-base md:text-lg whitespace-nowrap px-4 py-1.5 rounded-full" style={{ background: "var(--hny-cream-card)", color: "var(--hny-pink-deep)" }}>
               xoxo, hny club
             </p>
           </motion.div>
@@ -185,7 +207,7 @@ const HnyClub = () => {
           {[...marqueeWords, ...marqueeWords, ...marqueeWords].map((w, i) => (
             <span key={i} className="flex items-center gap-8">
               {w}
-              <span className="font-script text-xl" style={{ color: "var(--hny-rose-gold-deep)" }}>♡</span>
+              <span className="font-script text-xl" style={{ color: "var(--hny-pink-deep)" }}>♡</span>
             </span>
           ))}
         </div>
@@ -205,9 +227,9 @@ const HnyClub = () => {
               Think of it as a non-surgical Brazilian Butt Lift. We use advanced hyaluronic acid <strong>BBL filler</strong> to add volume, lift and projection to your bum and soften hip dips, so your silhouette reads as one continuous, feminine curve from waist to thigh.
             </p>
             <p>
-              Every <strong>body contouring Manchester</strong> appointment at HNY Club is done under live ultrasound so we can see exactly where we're placing product. No general anaesthetic, no scars, no theatre. You're in and out the same day and back to light daily life the next.
+              Every <strong>body contouring Manchester</strong> appointment at HNY Club is done under live ultrasound so we can see exactly where we're placing product. No general anaesthetic, only tiny entry points with minimal scarring, no theatre. You're in and out the same day and back to light daily life the next.
             </p>
-            <p className="font-script text-xl md:text-2xl text-center pt-1" style={{ color: "var(--hny-rose-gold-deep)" }}>
+            <p className="font-script text-xl md:text-2xl text-center pt-1" style={{ color: "var(--hny-pink-deep)" }}>
               snatched, sculpted, unapologetically you.
             </p>
           </motion.div>
@@ -218,52 +240,50 @@ const HnyClub = () => {
         </div>
       </section>
 
-      {/* ============== PRICING ============== */}
+      {/* ============== PRICING — popping cards ============== */}
       <section id="pricing" className="py-14 md:py-24" style={{ background: "var(--hny-nude)" }}>
-        <div className="max-w-[1000px] mx-auto px-5 md:px-10">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-10">
           <motion.div {...fade} className="text-center mb-10">
             <Eyebrow>the pricelist</Eyebrow>
             <h2 className="display-lg" style={{ color: "var(--hny-mocha)" }}>your curve, your call.</h2>
             <p className="font-body text-[14px] md:text-base mt-3 max-w-xl mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              transparent BBL filler pricing by volume. every package includes consultation, ultrasound-led treatment and your free 2 week review.
+              transparent BBL filler pricing by volume. every package includes consultation, ultrasound-led treatment and your complimentary 2 week review.
             </p>
           </motion.div>
 
-          <ul>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
             {pricing.map((p, i) => (
-              <motion.li
+              <motion.a
                 key={p.ml}
+                href={waLink(p.ml)}
+                target="_blank"
+                rel="noopener noreferrer"
                 {...fade}
-                transition={{ duration: 0.4, delay: i * 0.03 }}
-                style={{ borderTop: i === 0 ? "1px solid rgba(167,117,96,0.22)" : undefined, borderBottom: "1px solid rgba(167,117,96,0.22)" }}
+                transition={{ duration: 0.45, delay: i * 0.04 }}
+                className={`price-card ${p.featured ? "price-card-featured" : ""} relative p-5 md:p-7 flex flex-col items-center text-center group`}
               >
-                <a
-                  href={waLink(p.ml)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_2fr_auto] gap-x-4 sm:gap-x-8 items-baseline py-5 md:py-6 sm:hover:px-3 transition-all duration-300"
-                >
-                  <span className="font-display italic text-xl sm:text-2xl md:text-3xl" style={{ color: "var(--hny-mocha)" }}>{p.ml}</span>
-                  <span className="hidden sm:block font-body text-sm md:text-base" style={{ color: "var(--hny-soft-brown)" }}>
-                    {p.note} · {p.monthly}
+                {p.featured && (
+                  <span className="absolute top-2.5 right-2.5 font-body text-[9px] tracking-[0.22em] uppercase px-2 py-1 rounded-full" style={{ background: "var(--hny-pink-deep)", color: "#fff" }}>
+                    loved
                   </span>
-                  <span className="font-display text-xl sm:text-2xl md:text-3xl text-right sm:group-hover:translate-x-1 transition-transform" style={{ color: "var(--hny-rose-gold-deep)" }}>
-                    {p.price}
-                  </span>
-                  <span className="sm:hidden col-span-2 font-body text-[12px] -mt-1 pb-1" style={{ color: "var(--hny-soft-brown)" }}>
-                    {p.note} · {p.monthly}
-                  </span>
-                </a>
-              </motion.li>
+                )}
+                <span className="font-display italic text-xl md:text-2xl mb-1" style={{ color: "var(--hny-mocha)" }}>{p.ml}</span>
+                <span className="font-display text-3xl md:text-5xl my-1 transition-transform group-hover:scale-105" style={{ color: "var(--hny-pink-deep)" }}>
+                  {p.price}
+                </span>
+                <span className="font-body text-[11px] md:text-xs mt-1" style={{ color: "var(--hny-soft-brown)" }}>{p.note}</span>
+                <span className="font-script text-sm md:text-base mt-2" style={{ color: "var(--hny-rose-gold-deep)" }}>{p.monthly}</span>
+              </motion.a>
             ))}
-          </ul>
+          </div>
 
           <motion.div {...fade} className="mt-10 text-center">
-            <p className="font-script text-lg md:text-xl mb-4 max-w-md mx-auto" style={{ color: "var(--hny-rose-gold-deep)" }}>
+            <p className="font-script text-lg md:text-xl mb-4 max-w-md mx-auto" style={{ color: "var(--hny-pink-deep)" }}>
               £100 deposit secures your slot. fully redeemable against your treatment.
             </p>
             <div className="flex flex-wrap justify-center gap-2.5">
               <a href={DEPOSIT_URL} className="btn-dainty">secure £100 deposit</a>
+              <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">book consultation</a>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">chat first xx</a>
             </div>
             <div className="mt-8 flex items-center justify-center gap-6 flex-wrap opacity-90">
@@ -272,7 +292,7 @@ const HnyClub = () => {
               <img src={payItMonthlyLogo} alt="PayItMonthly finance for body contouring Manchester" className="h-5 md:h-6" loading="lazy" />
             </div>
             <p className="font-body text-[11px] italic mt-4 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              spread up to 12 months, 0% options available, subject to provider approval. 21+ only.
+              spread up to 12 months, 0% options available, subject to provider approval. 21+ only. results vary and cannot be guaranteed.
             </p>
           </motion.div>
         </div>
@@ -282,7 +302,7 @@ const HnyClub = () => {
       <section id="expect" className="py-14 md:py-24" style={{ background: "var(--hny-cream)" }}>
         <div className="max-w-[1000px] mx-auto px-5 md:px-10 grid lg:grid-cols-[1fr_1.2fr] gap-10 lg:gap-14 items-start">
           <motion.div {...fade} className="lg:sticky lg:top-32">
-            <div className="aspect-[4/5] rounded-[34%/6%] overflow-hidden">
+            <div className="aspect-[4/5] overflow-hidden img-fade">
               <img src={lifestyle1} alt="Non-surgical BBL Manchester - what to expect at HNY Club body contouring suite" className="w-full h-full object-cover" loading="lazy" />
             </div>
           </motion.div>
@@ -295,7 +315,7 @@ const HnyClub = () => {
             <ol className="space-y-6">
               {expectSteps.map((s, i) => (
                 <li key={s.t} className="grid grid-cols-[auto_1fr] gap-4">
-                  <span className="font-display italic text-2xl md:text-3xl leading-none pt-0.5" style={{ color: "var(--hny-rose-gold-deep)" }}>
+                  <span className="font-display italic text-2xl md:text-3xl leading-none pt-0.5" style={{ color: "var(--hny-pink-deep)" }}>
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div>
@@ -312,24 +332,64 @@ const HnyClub = () => {
         </div>
       </section>
 
+      {/* ============== DO'S & DON'TS ============== */}
+      <section id="do-dont" className="py-14 md:py-24" style={{ background: "var(--hny-blush)" }}>
+        <div className="max-w-[1000px] mx-auto px-5 md:px-10">
+          <motion.div {...fade} className="text-center mb-10">
+            <Eyebrow>can i, can i not?</Eyebrow>
+            <h2 className="display-lg" style={{ color: "var(--hny-mocha)" }}>do's & don'ts after your BBL.</h2>
+            <p className="font-body text-[14px] md:text-base mt-3 max-w-xl mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
+              you stay fully awake, just comfortably numbed - so daily life carries on. here's exactly what is fine and what to skip.
+            </p>
+          </motion.div>
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+            <motion.div {...fade} className="rounded-3xl p-7 md:p-9" style={{ background: "var(--hny-cream-card)", border: "1px solid rgba(199,106,130,0.18)" }}>
+              <h3 className="font-script text-2xl md:text-3xl mb-4" style={{ color: "var(--hny-pink-deep)" }}>you can, babe</h3>
+              <ul className="space-y-3 font-body text-[14px] md:text-base leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
+                {doDont.can.map((it) => (
+                  <li key={it} className="flex gap-2.5">
+                    <span className="font-script text-xl flex-shrink-0 leading-none pt-1" style={{ color: "var(--hny-pink-deep)" }}>♡</span>
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+            <motion.div {...fade} className="rounded-3xl p-7 md:p-9" style={{ background: "var(--hny-cream-card)", border: "1px solid rgba(181,103,90,0.18)" }}>
+              <h3 className="font-script text-2xl md:text-3xl mb-4" style={{ color: "var(--hny-rose-gold-deep)" }}>save for later</h3>
+              <ul className="space-y-3 font-body text-[14px] md:text-base leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
+                {doDont.cant.map((it) => (
+                  <li key={it} className="flex gap-2.5">
+                    <span className="font-display italic text-lg flex-shrink-0 leading-none pt-1" style={{ color: "var(--hny-rose-gold-deep)" }}>×</span>
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+          <p className="font-body text-[11px] italic text-center mt-6 max-w-xl mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
+            general guidance only. your practitioner will tailor aftercare to your individual treatment plan at your consultation.
+          </p>
+        </div>
+      </section>
+
       {/* ============== PREPARE ============== */}
-      <section id="prepare" className="py-14 md:py-24" style={{ background: "var(--hny-blush)" }}>
+      <section id="prepare" className="py-14 md:py-24" style={{ background: "var(--hny-cream)" }}>
         <div className="max-w-[1000px] mx-auto px-5 md:px-10">
           <motion.div {...fade} className="text-center mb-10">
             <Eyebrow>before your appointment</Eyebrow>
             <h2 className="display-lg" style={{ color: "var(--hny-mocha)" }}>how to prepare, babe.</h2>
             <p className="font-body text-[14px] md:text-base mt-3 max-w-xl mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              small choices in the days before your BBL filler make a real difference to swelling, bruising and how quickly your shape settles.
+              small choices in the days before your BBL filler can make a real difference to swelling, bruising and how quickly your shape settles.
             </p>
           </motion.div>
           <div className="grid md:grid-cols-3 gap-8 md:gap-10">
             {prepareList.map((g) => (
               <motion.div key={g.when} {...fade}>
-                <h3 className="font-script text-xl md:text-2xl mb-3" style={{ color: "var(--hny-rose-gold-deep)" }}>{g.when}</h3>
+                <h3 className="font-script text-xl md:text-2xl mb-3" style={{ color: "var(--hny-pink-deep)" }}>{g.when}</h3>
                 <ul className="space-y-2.5 font-body text-[14px] md:text-base leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
                   {g.items.map((it) => (
                     <li key={it} className="flex gap-2.5">
-                      <span className="font-script text-lg flex-shrink-0 leading-none pt-1" style={{ color: "var(--hny-rose-gold-deep)" }}>♡</span>
+                      <span className="font-script text-lg flex-shrink-0 leading-none pt-1" style={{ color: "var(--hny-pink-deep)" }}>♡</span>
                       <span>{it}</span>
                     </li>
                   ))}
@@ -341,7 +401,7 @@ const HnyClub = () => {
       </section>
 
       {/* ============== AFTERCARE ============== */}
-      <section id="aftercare" className="py-14 md:py-24" style={{ background: "var(--hny-cream)" }}>
+      <section id="aftercare" className="py-14 md:py-24" style={{ background: "var(--hny-blush)" }}>
         <div className="max-w-[1000px] mx-auto px-5 md:px-10">
           <motion.div {...fade} className="text-center mb-10">
             <Eyebrow>post care</Eyebrow>
@@ -353,11 +413,11 @@ const HnyClub = () => {
           <div className="grid md:grid-cols-3 gap-8 md:gap-10">
             {aftercareList.map((g) => (
               <motion.div key={g.when} {...fade}>
-                <h3 className="font-script text-xl md:text-2xl mb-3" style={{ color: "var(--hny-rose-gold-deep)" }}>{g.when}</h3>
+                <h3 className="font-script text-xl md:text-2xl mb-3" style={{ color: "var(--hny-pink-deep)" }}>{g.when}</h3>
                 <ul className="space-y-2.5 font-body text-[14px] md:text-base leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
                   {g.items.map((it) => (
                     <li key={it} className="flex gap-2.5">
-                      <span className="font-script text-lg flex-shrink-0 leading-none pt-1" style={{ color: "var(--hny-rose-gold-deep)" }}>♡</span>
+                      <span className="font-script text-lg flex-shrink-0 leading-none pt-1" style={{ color: "var(--hny-pink-deep)" }}>♡</span>
                       <span>{it}</span>
                     </li>
                   ))}
@@ -365,20 +425,20 @@ const HnyClub = () => {
               </motion.div>
             ))}
           </div>
-          <motion.p {...fade} className="font-script text-lg md:text-xl text-center mt-10 max-w-md mx-auto" style={{ color: "var(--hny-rose-gold-deep)" }}>
+          <motion.p {...fade} className="font-script text-lg md:text-xl text-center mt-10 max-w-md mx-auto" style={{ color: "var(--hny-pink-deep)" }}>
             anything feels off? message your practitioner on whatsapp anytime. we're always here.
           </motion.p>
         </div>
       </section>
 
       {/* ============== RESULTS ============== */}
-      <section id="results" className="py-14 md:py-24" style={{ background: "var(--hny-nude)" }}>
+      <section id="results" className="py-14 md:py-24" style={{ background: "var(--hny-cream)" }}>
         <div className="max-w-[1000px] mx-auto px-5 md:px-10">
           <motion.div {...fade} className="text-center mb-10">
             <Eyebrow>real results</Eyebrow>
             <h2 className="display-lg" style={{ color: "var(--hny-mocha)" }}>your before & after.</h2>
             <p className="font-body text-[14px] md:text-base mt-3 max-w-xl mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              real client results from Liquid BBL Manchester, shared with consent. individual outcomes vary based on anatomy, volume placed and aftercare.
+              real client results from Liquid BBL Manchester, shared with consent. individual outcomes vary based on anatomy, volume placed and aftercare. results cannot be guaranteed.
             </p>
           </motion.div>
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">
@@ -387,7 +447,7 @@ const HnyClub = () => {
               { src: result2, cap: "Non-surgical BBL Manchester, 500ml. projection & sculpted curve." },
             ].map((r, i) => (
               <motion.figure key={i} {...fade} transition={{ duration: 0.7, delay: i * 0.1 }}>
-                <div className="aspect-[4/5] overflow-hidden rounded-[30%/5%]">
+                <div className="aspect-[4/5] overflow-hidden img-fade">
                   <img
                     src={r.src}
                     alt={`Liquid BBL Manchester before and after ${i + 1} - HNY Club BBL filler & body contouring`}
@@ -395,7 +455,7 @@ const HnyClub = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <figcaption className="font-script text-base md:text-lg mt-3 text-center" style={{ color: "var(--hny-rose-gold-deep)" }}>
+                <figcaption className="font-script text-base md:text-lg mt-3 text-center" style={{ color: "var(--hny-pink-deep)" }}>
                   {r.cap}
                 </figcaption>
               </motion.figure>
@@ -407,11 +467,11 @@ const HnyClub = () => {
         </div>
       </section>
 
-      {/* ============== EXPERIENCE (real suite photo) ============== */}
+      {/* ============== EXPERIENCE ============== */}
       <section className="relative overflow-hidden" style={{ background: "var(--hny-cream)" }}>
         <div className="grid lg:grid-cols-2 items-stretch">
-          <div className="aspect-[4/5] lg:aspect-auto">
-            <img src={suite} alt="HNY Club Manchester - private Deansgate suite for Liquid BBL and body contouring" className="w-full h-full object-cover" loading="lazy" />
+          <div className="aspect-[4/5] lg:aspect-auto overflow-hidden">
+            <img src={suite} alt="HNY Club Manchester - private Deansgate suite for Liquid BBL and body contouring" className="w-full h-full object-cover img-fade-h" loading="lazy" />
           </div>
           <div className="px-6 md:px-12 py-12 md:py-20 flex items-center" style={{ background: "var(--hny-cream)" }}>
             <div className="max-w-md">
@@ -431,42 +491,57 @@ const HnyClub = () => {
         </div>
       </section>
 
-      {/* ============== FAQ ============== */}
+      {/* ============== FAQ — tighter 2-col layout ============== */}
       <section id="faq" className="py-14 md:py-24" style={{ background: "var(--hny-cream)" }}>
-        <div className="max-w-2xl mx-auto px-5 md:px-8">
+        <div className="max-w-[1100px] mx-auto px-5 md:px-10">
           <motion.div {...fade} className="text-center mb-10">
             <Eyebrow>your questions, answered</Eyebrow>
             <h2 className="display-lg" style={{ color: "var(--hny-mocha)" }}>ask me anything, babe.</h2>
           </motion.div>
-          <div>
+          <div className="grid md:grid-cols-2 gap-x-8 md:gap-x-12 gap-y-0">
             {faqs.map((f, i) => {
               const open = openFaq === i;
               return (
                 <motion.div
                   key={f.q}
                   {...fade}
-                  transition={{ duration: 0.35, delay: i * 0.02 }}
+                  transition={{ duration: 0.35, delay: i * 0.015 }}
                   className="border-b"
-                  style={{ borderColor: "rgba(167,117,96,0.22)" }}
+                  style={{ borderColor: "rgba(199,106,130,0.22)" }}
                 >
                   <button
                     onClick={() => setOpenFaq(open ? null : i)}
-                    className="w-full flex items-center justify-between gap-4 py-4 md:py-5 text-left"
+                    className="w-full flex items-center justify-between gap-3 py-4 md:py-4 text-left"
                     aria-expanded={open}
                   >
-                    <span className="font-display italic text-base md:text-xl pr-2" style={{ color: "var(--hny-mocha)" }}>{f.q}</span>
-                    <span className="font-display text-xl flex-shrink-0" style={{ color: "var(--hny-rose-gold-deep)" }}>{open ? "−" : "+"}</span>
+                    <span className="font-display italic text-[15px] md:text-lg pr-2" style={{ color: "var(--hny-mocha)" }}>{f.q}</span>
+                    <span
+                      className="flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full text-sm transition-transform"
+                      style={{
+                        background: open ? "var(--hny-pink-deep)" : "transparent",
+                        color: open ? "#fff" : "var(--hny-pink-deep)",
+                        border: `1px solid var(--hny-pink-deep)`,
+                        transform: open ? "rotate(45deg)" : "rotate(0deg)",
+                      }}
+                    >
+                      +
+                    </span>
                   </button>
-                  {open && (
-                    <div className="pb-5 pr-6 font-body text-[14px] md:text-base leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
-                      {f.a}
-                    </div>
-                  )}
+                  <div
+                    className="overflow-hidden transition-all duration-300 ease-out font-body text-[13px] md:text-[14px] leading-relaxed"
+                    style={{
+                      maxHeight: open ? "400px" : "0px",
+                      opacity: open ? 1 : 0,
+                      color: "var(--hny-soft-brown)",
+                    }}
+                  >
+                    <div className="pb-4 pr-8">{f.a}</div>
+                  </div>
                 </motion.div>
               );
             })}
           </div>
-          <motion.p {...fade} className="font-script text-lg md:text-xl text-center mt-10" style={{ color: "var(--hny-rose-gold-deep)" }}>
+          <motion.p {...fade} className="font-script text-lg md:text-xl text-center mt-10" style={{ color: "var(--hny-pink-deep)" }}>
             still wondering? slide into our DMs. no question is too small. xx
           </motion.p>
         </div>
@@ -476,25 +551,29 @@ const HnyClub = () => {
       <section className="py-16 md:py-24" style={{ background: "var(--hny-nude)" }}>
         <div className="max-w-xl mx-auto px-6 text-center">
           <motion.div {...fade}>
-            <p className="font-script text-xl mb-2" style={{ color: "var(--hny-rose-gold-deep)" }}>p.s.</p>
+            <p className="font-script text-xl mb-2" style={{ color: "var(--hny-pink-deep)" }}>p.s.</p>
             <h2 className="display-lg mb-5" style={{ color: "var(--hny-mocha)" }}>
-              ready to join the <em className="font-script" style={{ color: "var(--hny-rose-gold-deep)" }}>honey club</em>?
+              ready to join the <em className="font-script" style={{ color: "var(--hny-pink-deep)" }}>honey club</em>?
             </h2>
             <p className="font-body text-[15px] md:text-base mb-7 leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
               no pressure. no commitment. just an honest chat with us to see if Liquid BBL Manchester is right for you.
             </p>
             <div className="flex flex-wrap gap-2.5 justify-center">
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-dainty">whatsapp us</a>
+              <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">book consultation</a>
               <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">DM on instagram</a>
               <a href={DEPOSIT_URL} className="btn-ghost" style={{ borderColor: "var(--hny-mocha)", color: "var(--hny-mocha)" }}>£100 deposit</a>
             </div>
-            <p className="font-script text-xl md:text-2xl mt-8" style={{ color: "var(--hny-rose-gold-deep)" }}>
+            <p className="font-script text-xl md:text-2xl mt-8" style={{ color: "var(--hny-pink-deep)" }}>
               xoxo, hny club
             </p>
             <div className="mt-6 font-body text-[11px] flex flex-wrap justify-center gap-x-5 gap-y-1.5" style={{ color: "var(--hny-soft-brown)" }}>
               <span>25 Saint John Street, Deansgate, Manchester M3 4DT</span>
               <a href="tel:+447795008114" className="hover:opacity-70">+44 7795 008114</a>
             </div>
+            <p className="font-body text-[10px] italic mt-4 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
+              Aesthetic treatments carry risks which will be discussed in full at your consultation. Results vary and cannot be guaranteed. Suitability is confirmed in person by a qualified practitioner. 21+ only.
+            </p>
           </motion.div>
         </div>
       </section>

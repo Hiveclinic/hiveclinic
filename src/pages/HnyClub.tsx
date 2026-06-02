@@ -22,12 +22,16 @@ const waLink = (ml: string) =>
   `https://wa.me/447795008114?text=${encodeURIComponent(`hey babe, i'd love a virtual chat about Liquid BBL Manchester (${ml}) xx`)}`;
 
 const pricing = [
-  { ml: "100ml", price: "£499", monthly: "from £41/mo", note: "soft enhancement" },
-  { ml: "250ml", price: "£999", monthly: "from £83/mo", note: "hip dip filler" },
-  { ml: "300ml", price: "£1,199", monthly: "from £99/mo", note: "lift & projection", featured: true },
-  { ml: "500ml", price: "£1,999", monthly: "from £166/mo", note: "sculpted curve", featured: true },
-  { ml: "800ml", price: "£2,999", monthly: "from £249/mo", note: "statement silhouette" },
-  { ml: "1L bespoke", price: "£3,499", monthly: "from £291/mo", note: "fully bespoke contour" },
+  { ml: "100ml", price: "£499" },
+  { ml: "150ml", price: "£649" },
+  { ml: "200ml", price: "£799" },
+  { ml: "250ml", price: "£999" },
+  { ml: "300ml", price: "£1,199", featured: true },
+  { ml: "350ml", price: "£1,449" },
+  { ml: "400ml", price: "£1,699" },
+  { ml: "500ml", price: "£1,999", featured: true },
+  { ml: "600ml", price: "£2,399" },
+  { ml: "800ml", price: "£2,999" },
 ];
 
 const expectSteps = [
@@ -240,60 +244,80 @@ const HnyClub = () => {
         </div>
       </section>
 
-      {/* ============== PRICING — popping cards ============== */}
-      <section id="pricing" className="py-14 md:py-24" style={{ background: "var(--hny-nude)" }}>
-        <div className="max-w-[1100px] mx-auto px-5 md:px-10">
-          <motion.div {...fade} className="text-center mb-10">
-            <Eyebrow>the pricelist</Eyebrow>
-            <h2 className="display-lg" style={{ color: "var(--hny-mocha)" }}>your curve, your call.</h2>
-            <p className="font-body text-[14px] md:text-base mt-3 max-w-xl mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              transparent BBL filler pricing by volume. every package includes consultation, ultrasound-led treatment and your complimentary 2 week review.
+      {/* ============== PRICING — editorial flyer ============== */}
+      <section id="pricing" className="py-14 md:py-24" style={{ background: "var(--hny-petal)" }}>
+        <div className="max-w-[760px] mx-auto px-5 md:px-10">
+          <motion.div {...fade} className="mb-7">
+            <p className="font-body text-[10.5px] tracking-[0.36em] uppercase mb-3" style={{ color: "var(--hny-ink)" }}>
+              Introductory
             </p>
+            <h2 className="display-xl" style={{ color: "var(--hny-ink)" }}>Pricing</h2>
+            <p className="font-body text-[14px] md:text-[15px] mt-3 leading-relaxed" style={{ color: "var(--hny-ink)" }}>
+              Ultrasound-led Liquid BBL &amp; Hip Dip Filler — every package includes consultation, treatment and your complimentary 2-week review.
+            </p>
+            <div className="flex flex-wrap gap-2 mt-5">
+              <span className="hny-chip">◉ Deansgate, Manchester</span>
+              <span className="hny-chip">◉ Consultation Required</span>
+            </div>
           </motion.div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
-            {pricing.map((p, i) => (
-              <motion.a
+          <motion.div {...fade} className="price-ledger">
+            {pricing.map((p) => (
+              <a
                 key={p.ml}
                 href={waLink(p.ml)}
                 target="_blank"
                 rel="noopener noreferrer"
-                {...fade}
-                transition={{ duration: 0.45, delay: i * 0.04 }}
-                className={`price-card ${p.featured ? "price-card-featured" : ""} relative px-5 py-7 md:px-7 md:py-9 flex flex-col items-center text-center group`}
+                className={`price-row ${p.featured ? "price-row-featured" : ""}`}
               >
-                {p.featured && (
-                  <span className="price-tab">· most loved ·</span>
-                )}
-                <span className="font-display text-[11px] md:text-xs mb-4" style={{ color: "var(--hny-mocha)", letterSpacing: "0.32em" }}>
-                  · {p.ml} ·
-                </span>
-                <span className="font-display text-4xl md:text-5xl mb-4 transition-transform group-hover:scale-[1.03]" style={{ color: "var(--hny-rose-gold-deep)", letterSpacing: "0.04em", fontWeight: 400 }}>
-                  {p.price}
-                </span>
-                <span className="price-hairline mb-4" />
-                <span className="font-body text-[11px] md:text-xs mb-1.5" style={{ color: "var(--hny-soft-brown)", letterSpacing: "0.06em" }}>{p.note}</span>
-                <span className="font-body italic text-[11px] md:text-xs" style={{ color: "var(--hny-rose-gold-deep)" }}>{p.monthly}</span>
-              </motion.a>
+                <span className="ml">{p.ml}</span>
+                <span className="amt">{p.price}</span>
+              </a>
             ))}
-          </div>
+            <div className="price-row-footnote">1L bespoke sculpt plan — consultation only</div>
+          </motion.div>
 
-          <motion.div {...fade} className="mt-10 text-center">
-            <p className="font-script text-lg md:text-xl mb-4 max-w-md mx-auto" style={{ color: "var(--hny-pink-deep)" }}>
-              £100 deposit secures your slot. fully redeemable against your treatment.
+          <motion.div {...fade} className="mt-3 text-center">
+            <p className="font-body text-[10.5px] tracking-[0.32em] uppercase" style={{ color: "var(--hny-rose-deep)" }}>
+              · Liquid BBL · Hip Dip Filler · Body Contouring ·
+            </p>
+          </motion.div>
+
+          <motion.div {...fade} className="trust-band mt-8 grid grid-cols-2 divide-x" style={{ borderColor: "var(--hny-rose)" }}>
+            <div className="px-5 py-5 md:py-6 text-center">
+              <p className="font-body text-[10.5px] tracking-[0.26em] uppercase font-medium" style={{ color: "var(--hny-ink)" }}>
+                Payment plans available
+              </p>
+              <p className="font-body text-[11px] mt-1" style={{ color: "var(--hny-ink)", opacity: 0.7 }}>
+                Klarna · Clearpay · PayItMonthly
+              </p>
+            </div>
+            <div className="px-5 py-5 md:py-6 text-center" style={{ borderColor: "var(--hny-rose)" }}>
+              <p className="font-body text-[10.5px] tracking-[0.26em] uppercase font-medium" style={{ color: "var(--hny-ink)" }}>
+                2-week review &amp; support
+              </p>
+              <p className="font-body text-[11px] mt-1" style={{ color: "var(--hny-ink)", opacity: 0.7 }}>
+                Included with every treatment
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div {...fade} className="mt-9 text-center">
+            <p className="font-body text-[10.5px] tracking-[0.36em] uppercase mb-4" style={{ color: "var(--hny-ink)" }}>
+              DM to enquire or book your consultation
             </p>
             <div className="flex flex-wrap justify-center gap-2.5">
-              <a href={DEPOSIT_URL} className="btn-dainty">secure £100 deposit</a>
-              <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">book consultation</a>
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">chat first xx</a>
+              <a href={DEPOSIT_URL} className="btn-dainty">Secure £100 deposit</a>
+              <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Book consultation</a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Chat first xx</a>
             </div>
-            <div className="mt-8 flex items-center justify-center gap-6 flex-wrap opacity-90">
+            <div className="mt-7 flex items-center justify-center gap-6 flex-wrap opacity-80">
               <img src={klarnaLogo} alt="Klarna payment plans for Liquid BBL Manchester" className="h-5 md:h-6" loading="lazy" />
               <img src={clearpayLogo} alt="Clearpay payment plans for BBL filler Manchester" className="h-4 md:h-5" loading="lazy" />
               <img src={payItMonthlyLogo} alt="PayItMonthly finance for body contouring Manchester" className="h-5 md:h-6" loading="lazy" />
             </div>
             <p className="font-body text-[11px] italic mt-4 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              spread up to 12 months, 0% options available, subject to provider approval. 21+ only. results vary and cannot be guaranteed.
+              Spread up to 12 months, 0% options available, subject to provider approval. 21+ only. Results vary and cannot be guaranteed.
             </p>
           </motion.div>
         </div>

@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -265,48 +266,55 @@
 /* HNY CLUB by Hive Clinic — scoped sub-brand   */
 /* ============================================ */
 .hny-club {
-  /* Deepened to match the rose-mauve suite wall in the brand photo */
-  --hny-cream: #EFC9BE;          /* main wall — deeper warm pink */
-  --hny-cream-card: #F6D9CF;     /* card surface */
-  --hny-nude: #E8B8AA;           /* alt section */
-  --hny-champagne: #D8A38F;
-  --hny-mocha: #3C1F16;          /* deep cocoa ink */
-  --hny-mocha-soft: #5C3528;
-  --hny-soft-brown: #7A4A3A;
-  --hny-ink: #3C1F16;
-  --hny-rose-gold: #C28F78;
-  --hny-rose-gold-deep: #A06B55; /* logo metal */
-  --hny-pink: #E48BA0;
-  --hny-pink-deep: #C76A82;
-  --hny-blush: #F2C9BD;
+  /* Black + white + three pinks. No browns, no rose-gold metal. */
+  --hny-ink: #0B0B0B;            /* black — through-line with hiveclinicuk.com */
+  --hny-snow: #FFFFFF;
+  --hny-petal: #FBE7E0;          /* palest baby pink — page wall */
+  --hny-blush-soft: #F4CFC4;     /* mid pink — chips, alt sections */
+  --hny-rose: #E8A597;           /* deep rose — dividers, hover, accent */
+  --hny-rose-deep: #D88A78;      /* deepest rose — featured rows, hover ink */
+
+  /* Back-compat: existing token names remapped to the new palette */
+  --hny-cream: #FBE7E0;          /* page wall */
+  --hny-cream-card: #FFFFFF;     /* card surfaces */
+  --hny-nude: #F4CFC4;           /* pricing / trust band */
+  --hny-blush: #F9DDD3;           /* gentle alt section */
+  --hny-champagne: #E8A597;      /* dividers / borders */
+  --hny-mocha: #0B0B0B;          /* ink */
+  --hny-mocha-soft: #1a1a1a;
+  --hny-soft-brown: #4A4A4A;     /* body text — soft grey-black */
+  --hny-rose-gold: #E8A597;
+  --hny-rose-gold-deep: #D88A78;
+  --hny-pink: #E8A597;
+  --hny-pink-deep: #D88A78;
 }
-/* Logo-vibe: tall geometric all-caps sans (Tenor Sans) — matches the rose-gold logo lockup */
-.hny-club .font-display { font-family: 'Tenor Sans', 'Jost', sans-serif; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; }
+/* Editorial display: DM Serif Display — the flyer serif */
+.hny-club .font-display { font-family: 'DM Serif Display', 'Cormorant Garamond', serif; font-weight: 400; letter-spacing: 0; text-transform: none; }
 .hny-club .font-body { font-family: 'Inter', 'Manrope', sans-serif; }
-.hny-club .font-script { font-family: 'Inter', sans-serif; font-style: italic; font-weight: 300; letter-spacing: 0.02em; }
-.hny-club .display-xl { font-family: 'Tenor Sans', sans-serif; font-weight: 400; font-size: clamp(2.1rem, 7vw, 5rem); line-height: 1.05; letter-spacing: 0.14em; text-transform: uppercase; }
-.hny-club .display-lg { font-family: 'Tenor Sans', sans-serif; font-weight: 400; font-size: clamp(1.5rem, 4vw, 2.6rem); line-height: 1.12; letter-spacing: 0.16em; text-transform: uppercase; }
+.hny-club .font-script { font-family: 'DM Serif Display', serif; font-style: italic; font-weight: 400; letter-spacing: 0; }
+.hny-club .display-xl { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(2.6rem, 9vw, 6rem); line-height: 0.96; letter-spacing: -0.005em; text-transform: uppercase; }
+.hny-club .display-lg { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(1.9rem, 5vw, 3.4rem); line-height: 1.04; letter-spacing: -0.005em; text-transform: uppercase; }
 .hny-club .kicker { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.36em; text-transform: uppercase; font-weight: 500; }
 
-/* Boutique CTA — squared, rose-gold (logo metal), tracked uppercase */
+/* CTAs — solid black on pink (bridges with main site CTAs), rose ghost variant */
 .hny-club .btn-dainty {
   display: inline-flex; align-items: center; gap: 0.55rem;
-  padding: 0.85rem 1.7rem; border-radius: 2px;
-  font-family: 'Tenor Sans', sans-serif; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 400;
-  background: var(--hny-rose-gold-deep); color: #fff;
-  border: 1px solid var(--hny-rose-gold-deep);
+  padding: 0.9rem 1.7rem; border-radius: 2px;
+  font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; font-weight: 500;
+  background: var(--hny-ink); color: var(--hny-snow);
+  border: 1px solid var(--hny-ink);
   transition: background .25s ease, color .25s ease, border-color .25s ease;
 }
-.hny-club .btn-dainty:hover { background: var(--hny-mocha); border-color: var(--hny-mocha); }
+.hny-club .btn-dainty:hover { background: var(--hny-rose-deep); border-color: var(--hny-rose-deep); color: #fff; }
 .hny-club .btn-ghost {
   display: inline-flex; align-items: center; gap: 0.55rem;
-  padding: 0.85rem 1.7rem; border-radius: 2px;
-  font-family: 'Tenor Sans', sans-serif; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 400;
-  background: transparent; color: var(--hny-mocha);
-  border: 1px solid var(--hny-mocha);
+  padding: 0.9rem 1.7rem; border-radius: 2px;
+  font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; font-weight: 500;
+  background: transparent; color: var(--hny-ink);
+  border: 1px solid var(--hny-ink);
   transition: background .25s ease, color .25s ease;
 }
-.hny-club .btn-ghost:hover { background: var(--hny-mocha); color: var(--hny-cream); }
+.hny-club .btn-ghost:hover { background: var(--hny-ink); color: var(--hny-snow); }
 
 /* Soft image edge fade */
 .hny-club .img-fade {
@@ -322,31 +330,59 @@
           mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
 }
 
-/* Boutique price card — rose-gold hairline frame, no shadow, no gradient */
-.hny-club .price-card {
-  background: var(--hny-cream-card);
-  border: 1px solid rgba(160,107,85,0.32);
-  border-radius: 2px;
-  transition: border-color .3s ease, transform .3s ease, background .3s ease;
+/* ===== Editorial flyer — pricing ledger ===== */
+.hny-club .hny-chip {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.55rem 1rem; border-radius: 999px;
+  background: var(--hny-blush-soft); color: var(--hny-ink);
+  font-family: 'Inter', sans-serif; font-size: 10.5px; letter-spacing: 0.22em;
+  text-transform: uppercase; font-weight: 500;
 }
-.hny-club .price-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--hny-rose-gold-deep);
-  background: #fff;
+.hny-club .price-ledger {
+  background: var(--hny-snow);
+  border: 1px solid var(--hny-rose);
+  border-radius: 4px;
+  overflow: hidden;
 }
-.hny-club .price-card-featured {
-  background: #fff;
-  border: 1px solid var(--hny-rose-gold-deep);
-  box-shadow: inset 0 0 0 1px rgba(160,107,85,0.18);
+.hny-club .price-row {
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: center; gap: 1rem;
+  padding: 0.95rem 1.25rem;
+  border-bottom: 1px solid rgba(232,165,151,0.28);
+  font-family: 'Inter', sans-serif;
+  color: var(--hny-ink);
+  transition: background .2s ease;
 }
-.hny-club .price-tab {
-  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-  background: var(--hny-cream); padding: 0 0.7rem;
-  font-family: 'Tenor Sans', sans-serif; font-size: 9.5px; letter-spacing: 0.34em; text-transform: uppercase;
-  color: var(--hny-rose-gold-deep); white-space: nowrap;
+@media (min-width: 768px) {
+  .hny-club .price-row { padding: 1.15rem 1.75rem; }
 }
-.hny-club .price-card-featured .price-tab { background: var(--hny-cream); }
-.hny-club .price-hairline { width: 36px; height: 1px; background: var(--hny-rose-gold); opacity: 0.7; }
+.hny-club .price-row:last-child { border-bottom: none; }
+.hny-club .price-row:hover { background: var(--hny-petal); }
+.hny-club .price-row-featured { background: var(--hny-petal); }
+.hny-club .price-row .ml { font-size: 14px; letter-spacing: 0.04em; }
+.hny-club .price-row .amt {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px; letter-spacing: 0.005em;
+}
+@media (min-width: 768px) {
+  .hny-club .price-row .ml { font-size: 15px; }
+  .hny-club .price-row .amt { font-size: 22px; }
+}
+.hny-club .price-row-footnote {
+  padding: 0.9rem 1.25rem;
+  text-align: center;
+  font-family: 'DM Serif Display', serif; font-style: italic;
+  color: var(--hny-rose-deep);
+  font-size: 13px;
+  background: var(--hny-petal);
+}
+.hny-club .trust-band {
+  background: var(--hny-blush-soft);
+  border-top: 1px solid var(--hny-rose);
+  border-bottom: 1px solid var(--hny-rose);
+}
+
+
 
 
 @keyframes hny-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }

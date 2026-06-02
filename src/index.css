@@ -373,9 +373,9 @@
   padding: 0.9rem 1.25rem;
   text-align: center;
   font-family: 'Cormorant Garamond', serif; font-style: italic;
-  color: var(--hny-rose-deep);
+  color: var(--hny-ink);
   font-size: 15px;
-  background: var(--hny-petal);
+  background: var(--hny-blush-soft);
 }
 .hny-club .trust-band {
   background: var(--hny-blush-soft);

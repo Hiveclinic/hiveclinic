@@ -265,28 +265,28 @@
 /* HNY CLUB by Hive Clinic — scoped sub-brand   */
 /* ============================================ */
 .hny-club {
-  /* Black + white + 5-shade pink ladder. No browns, no rose-gold metal. */
+  /* Pale pink palette — soft, dainty, almost-white walls with deeper pink accents */
   --hny-ink: #0B0B0B;
   --hny-snow: #FFFFFF;
-  --hny-petal: #FFE0E9;          /* palest — page wall */
-  --hny-blush-soft: #FFC2D4;     /* chips / trust band */
-  --hny-rose: #FF9EBB;           /* hairlines / dividers / hover */
-  --hny-rose-deep: #FF7AA2;      /* featured rows / links */
-  --hny-cranberry: #E05780;      /* deepest accent / CTA hover */
+  --hny-petal: #FFF5F8;          /* palest — page wall */
+  --hny-blush-soft: #FFE3EC;     /* chips / featured rows / trust band */
+  --hny-rose: #FFD1DC;           /* hairlines / dividers */
+  --hny-rose-deep: #F4B8C6;      /* accent text / links / hover */
+  --hny-cranberry: #F4B8C6;      /* CTA hover (deepest pink in palette) */
 
   /* Back-compat aliases */
-  --hny-cream: #FFE0E9;
+  --hny-cream: #FFF5F8;
   --hny-cream-card: #FFFFFF;
-  --hny-nude: #FFC2D4;
-  --hny-blush: #FFD3DF;
-  --hny-champagne: #FF9EBB;
+  --hny-nude: #FFE3EC;
+  --hny-blush: #FFE3EC;
+  --hny-champagne: #FFD1DC;
   --hny-mocha: #0B0B0B;
   --hny-mocha-soft: #1a1a1a;
   --hny-soft-brown: #4A4A4A;
-  --hny-rose-gold: #FF9EBB;
-  --hny-rose-gold-deep: #FF7AA2;
-  --hny-pink: #FF9EBB;
-  --hny-pink-deep: #FF7AA2;
+  --hny-rose-gold: #FFD1DC;
+  --hny-rose-gold-deep: #F4B8C6;
+  --hny-pink: #FFD1DC;
+  --hny-pink-deep: #F4B8C6;
 }
 
 /* Editorial display: Cormorant Garamond — dainty and feminine */
@@ -349,7 +349,7 @@
   display: grid; grid-template-columns: 1fr auto;
   align-items: center; gap: 1rem;
   padding: 0.95rem 1.25rem;
-  border-bottom: 1px solid rgba(255,158,187,0.32);
+  border-bottom: 1px solid rgba(244,184,198,0.42);
   font-family: 'Inter', sans-serif;
   color: var(--hny-ink);
   transition: background .2s ease;
@@ -358,8 +358,8 @@
   .hny-club .price-row { padding: 1.15rem 1.75rem; }
 }
 .hny-club .price-row:last-child { border-bottom: none; }
-.hny-club .price-row:hover { background: var(--hny-petal); }
-.hny-club .price-row-featured { background: var(--hny-petal); }
+.hny-club .price-row:hover { background: var(--hny-blush-soft); }
+.hny-club .price-row-featured { background: var(--hny-blush-soft); }
 .hny-club .price-row .ml { font-size: 14px; letter-spacing: 0.04em; }
 .hny-club .price-row .amt {
   font-family: 'Cormorant Garamond', serif;
@@ -373,9 +373,9 @@
   padding: 0.9rem 1.25rem;
   text-align: center;
   font-family: 'Cormorant Garamond', serif; font-style: italic;
-  color: var(--hny-rose-deep);
+  color: var(--hny-ink);
   font-size: 15px;
-  background: var(--hny-petal);
+  background: var(--hny-blush-soft);
 }
 .hny-club .trust-band {
   background: var(--hny-blush-soft);
@@ -385,14 +385,14 @@
 
 /* ===== Elegant inline finance bar — no middots, whitespace only ===== */
 .hny-club .finance-bar {
-  display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline;
-  gap: 14px 20px;
-  padding: 14px 16px;
-  border-top: 1px solid rgba(255,158,187,0.45);
-  border-bottom: 1px solid rgba(255,158,187,0.45);
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+  gap: 14px 22px;
+  padding: 16px 16px;
+  border-top: 1px solid rgba(244,184,198,0.55);
+  border-bottom: 1px solid rgba(244,184,198,0.55);
 }
 @media (min-width: 768px) {
-  .hny-club .finance-bar { gap: 14px 32px; padding: 18px 20px; flex-wrap: nowrap; }
+  .hny-club .finance-bar { gap: 16px 34px; padding: 20px 22px; flex-wrap: nowrap; }
 }
 .hny-club .finance-bar .fb-price {
   font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500;
@@ -403,15 +403,17 @@
   text-transform: uppercase; font-weight: 400; color: var(--hny-ink);
 }
 .hny-club .finance-bar .fb-providers {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 14px 20px;
+  display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center;
+  gap: 16px 22px;
 }
 @media (min-width: 768px) {
-  .hny-club .finance-bar .fb-providers { gap: 32px; }
+  .hny-club .finance-bar .fb-providers { gap: 28px; }
 }
-.hny-club .finance-bar .fb-prov {
-  font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.22em;
-  text-transform: uppercase; font-weight: 500; color: var(--hny-rose-deep);
+.hny-club .finance-bar .fb-prov-logo {
+  height: 18px; width: auto; display: inline-block; opacity: 0.85;
+}
+@media (min-width: 768px) {
+  .hny-club .finance-bar .fb-prov-logo { height: 20px; }
 }
 
 @keyframes hny-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }

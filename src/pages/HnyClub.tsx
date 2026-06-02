@@ -7,6 +7,9 @@ import suite from "@/assets/hny/suite.jpg";
 import lifestyle1 from "@/assets/hny/lifestyle-1.jpg";
 import result1 from "@/assets/hny/result-1.jpg";
 import result2 from "@/assets/hny/result-2.jpg";
+import klarnaLogo from "@/assets/klarna-logo.png";
+import clearpayLogo from "@/assets/clearpay-logo.png";
+import payItMonthlyLogo from "@/assets/hny/payitmonthly-logo.png";
 
 const fade = {
   initial: { opacity: 0, y: 14 },
@@ -41,13 +44,13 @@ const expectSteps = [
 ];
 
 const prepareList = [
-  { when: "two weeks before", items: ["skip blood thinners (ibuprofen, fish oil, vitamin E) - check with your GP first", "pause retinol on the lower back & bum", "no new injectables or laser to the area", "drink water like it's your job, prioritise protein"] },
+  { when: "two weeks before", items: ["skip blood thinners (ibuprofen, fish oil, vitamin E), check with your GP first", "pause retinol on the lower back & bum", "no new injectables or laser to the area", "drink water like it's your job, prioritise protein"] },
   { when: "48 hours before", items: ["no alcohol, babe", "skip the gym, sauna, sunbeds", "no fake tan on the area", "eat a proper meal before your appointment"] },
   { when: "day of", items: ["clean skin, no body lotion or oil on the area", "wear something comfy with soft underwear", "bring a snack and water for after", "allow up to 90 minutes total"] },
 ];
 
 const aftercareList = [
-  { when: "first 24 hours", items: ["avoid sitting directly on the area where possible - lean to one side or use a cushion", "sleep on your front or side tonight", "no alcohol, gym or hot baths", "mild swelling, warmth or bruising is normal"] },
+  { when: "first 24 hours", items: ["avoid sitting directly on the area where possible, lean to one side or use a cushion", "sleep on your front or side tonight", "no alcohol, gym or hot baths", "mild swelling, warmth or bruising is normal"] },
   { when: "first week", items: ["light walks are encouraged from day one", "no gym, spin, sauna, steam or swimming for 7 days", "front or side sleeping where possible", "hydrate, hydrate, hydrate"] },
   { when: "first month", items: ["ease back into training from day 8", "no deep tissue massage to the area for 4 weeks", "avoid flights for 2 weeks post-treatment (DVT and swelling risk)", "final shape typically refines across 2 to 4 weeks", "your complimentary 2 week review is already booked"] },
 ];
@@ -67,7 +70,7 @@ const doDont = {
     "no gym, spin, hot yoga, swimming or sauna for 7 days",
     "no alcohol or blood thinners for 24 hours either side",
     "no deep tissue massage to the area for 4 weeks",
-    "no flights for 2 weeks post-treatment - DVT and swelling risk, especially long-haul",
+    "no flights for 2 weeks post-treatment (DVT and swelling risk, especially long-haul)",
     "no fake tan, hot baths or sunbeds for 7 days",
   ],
 };
@@ -179,13 +182,13 @@ const HnyClub = () => {
 
             <DualCTA primary="virtual chat on whatsapp" />
 
-            <p className="font-body mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-1.5" style={{ color: "var(--hny-soft-brown)" }}>
+            <div className="font-body mt-4 flex flex-wrap items-center gap-x-4 gap-y-2" style={{ color: "var(--hny-soft-brown)" }}>
               <span className="font-script italic" style={{ fontSize: "16px", color: "var(--hny-ink)" }}>from £499</span>
-              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>Klarna</span>
-              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>Clearpay</span>
-              <span className="text-[10px] tracking-[0.22em] uppercase font-medium" style={{ color: "var(--hny-rose-deep)" }}>PayItMonthly</span>
+              <img src={klarnaLogo} alt="Klarna" className="h-5 w-auto opacity-85" />
+              <img src={clearpayLogo} alt="Clearpay" className="h-5 w-auto opacity-85" />
+              <img src={payItMonthlyLogo} alt="PayItMonthly" className="h-5 w-auto opacity-85" />
               <span className="text-[10px] tracking-[0.18em] uppercase">0% available</span>
-            </p>
+            </div>
           </motion.div>
 
           <motion.div {...fade} transition={{ duration: 0.8 }} className="relative">
@@ -254,12 +257,8 @@ const HnyClub = () => {
             </p>
             <h2 className="display-xl" style={{ color: "var(--hny-ink)" }}>Pricing</h2>
             <p className="font-body text-[14px] md:text-[15px] mt-3 leading-relaxed" style={{ color: "var(--hny-ink)" }}>
-              Ultrasound-led Liquid BBL &amp; Hip Dip Filler — every package includes consultation, treatment and your complimentary 2-week review.
+              Ultrasound-led Liquid BBL and Hip Dip Filler. Every package includes consultation, treatment and your complimentary 2-week review.
             </p>
-            <div className="flex flex-wrap gap-2 mt-5">
-              <span className="hny-chip">◉ Deansgate, Manchester</span>
-              <span className="hny-chip">◉ Consultation Required</span>
-            </div>
           </motion.div>
 
           <motion.div {...fade} className="price-ledger">
@@ -275,36 +274,28 @@ const HnyClub = () => {
                 <span className="amt">{p.price}</span>
               </a>
             ))}
-            <div className="price-row-footnote">1L bespoke sculpt plan — consultation only</div>
+            <div className="price-row-footnote">1L bespoke sculpt plan, consultation only</div>
           </motion.div>
 
           <motion.div {...fade} className="mt-3 text-center">
-            <p className="font-body text-[10.5px] tracking-[0.32em] uppercase" style={{ color: "var(--hny-rose-deep)" }}>
+            <p className="font-body text-[10.5px] tracking-[0.32em] uppercase" style={{ color: "var(--hny-ink)" }}>
               Liquid BBL &nbsp;&nbsp; Hip Dip Filler &nbsp;&nbsp; Body Contouring
             </p>
           </motion.div>
 
-          {/* Elegant inline finance bar — whitespace separated */}
+          {/* Elegant inline finance bar — logos, whitespace separated */}
           <motion.div {...fade} className="finance-bar mt-8">
             <span className="fb-price">From £41/month</span>
             <span className="fb-apr">0% APR options</span>
             <span className="fb-providers">
-              <span className="fb-prov">Klarna</span>
-              <span className="fb-prov">Clearpay</span>
-              <span className="fb-prov">PayItMonthly</span>
+              <img src={klarnaLogo} alt="Klarna" className="fb-prov-logo" />
+              <img src={clearpayLogo} alt="Clearpay" className="fb-prov-logo" />
+              <img src={payItMonthlyLogo} alt="PayItMonthly" className="fb-prov-logo" />
             </span>
           </motion.div>
 
-          <motion.div {...fade} className="trust-band mt-6 grid grid-cols-2 divide-x" style={{ borderColor: "var(--hny-rose)" }}>
+          <motion.div {...fade} className="trust-band mt-6">
             <div className="px-5 py-5 md:py-6 text-center">
-              <p className="font-body text-[10.5px] tracking-[0.26em] uppercase font-medium" style={{ color: "var(--hny-ink)" }}>
-                Payment plans available
-              </p>
-              <p className="font-body text-[11px] mt-1" style={{ color: "var(--hny-ink)", opacity: 0.7 }}>
-                Spread up to 12 months
-              </p>
-            </div>
-            <div className="px-5 py-5 md:py-6 text-center" style={{ borderColor: "var(--hny-rose)" }}>
               <p className="font-body text-[10.5px] tracking-[0.26em] uppercase font-medium" style={{ color: "var(--hny-ink)" }}>
                 2-week review &amp; support
               </p>
@@ -371,7 +362,7 @@ const HnyClub = () => {
             <Eyebrow>can i, can i not?</Eyebrow>
             <h2 className="display-lg" style={{ color: "var(--hny-mocha)" }}>do's & don'ts after your BBL.</h2>
             <p className="font-body text-[14px] md:text-base mt-3 max-w-xl mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              you stay fully awake, just comfortably numbed - so daily life carries on. here's exactly what is fine and what to skip.
+              you stay fully awake, just comfortably numbed, so daily life carries on. here's exactly what is fine and what to skip.
             </p>
           </motion.div>
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">

@@ -33,13 +33,12 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
         className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b"
         style={{ background: "rgba(246, 241, 234, 0.92)", borderColor: "var(--hny-champagne)" }}
       >
-        <nav className="max-w-7xl mx-auto px-5 md:px-8 py-3 flex items-center justify-between">
+        <nav className="max-w-7xl mx-auto px-5 md:px-8 py-2 flex items-center justify-between">
           <Link to="/liquid-bbl-manchester" aria-label="HNY CLUB by Hive Clinic" className="flex items-center">
             <img
               src={hnyLogo}
               alt="HNY CLUB by Hive Clinic"
-              className="h-12 md:h-16 w-auto"
-              style={{ mixBlendMode: "multiply" }}
+              className="h-20 md:h-28 w-auto"
             />
           </Link>
 

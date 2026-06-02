@@ -1,109 +1,53 @@
-## Direction
+# HNY Club — Font Revert, Palette Fix, Address Fix, Aftercare, Finance Bar
 
-Rebuild the HNY CLUB page on a clean **black + white + three-pink** system that transitions out of the main hiveclinicuk.com home (black ink stays the through-line, beige/gold/mocha are gone). Then replace the 4-card pricing block with the **full editorial flyer** layout from your reference image — all 10 tiers plus the 1L bespoke note, big serif headline, rose-pink chips, hairline ledger, trust band.
+## 1. Font — revert to Cormorant Garamond
+In `src/index.css`:
+- `.font-display`, `.display-xl`, `.display-lg`, `.font-script` → `'Cormorant Garamond', serif` (italic for script/accents)
+- Remove `text-transform: uppercase` from display rules
+- Keep `Inter` for body, chips, buttons, small-caps labels
+- Drop the `@import` for DM Serif Display
 
-## The new palette (scoped to `.hny-club` only)
+## 2. Palette — 5-shade pink ladder (scoped to `.hny-club`)
+Replace pink tokens in `src/index.css`:
+- `--hny-petal: #FFE0E9` (page wall, palest)
+- `--hny-blush-soft: #FFC2D4` (chips, trust band)
+- `--hny-rose: #FF9EBB` (hairlines, dividers, hover)
+- `--hny-rose-deep: #FF7AA2` (featured row tint, links)
+- `--hny-cranberry: #E05780` (deepest accent, CTA hover)
+- `--hny-ink: #0B0B0B`, `--hny-snow: #FFFFFF`
 
-No browns. No copper rose-gold. Just black, white, and three pinks that ladder cleanly.
+Back-compat aliases (`--hny-cream`, `--hny-mocha`, `--hny-soft-brown`, `--hny-rose-gold`, `--hny-pink`, etc.) remap to this ladder so nothing breaks. CTAs stay solid black on pink; hover flips to `--hny-cranberry`.
 
-| Token | Hex | Use |
-|---|---|---|
-| `--hny-ink` | `#0B0B0B` | Headlines, prices, body ink — bridges with main site black |
-| `--hny-snow` | `#FFFFFF` | Price ledger card, contrast surfaces |
-| `--hny-petal` | `#FBE7E0` | Page wall — palest baby pink |
-| `--hny-blush` | `#F4CFC4` | Chips, alt sections, trust band |
-| `--hny-rose` | `#E8A597` | Dividers, hover, hairlines, accent |
+## 3. Address fix
+`25 Saint John Street, M3 4DT` → `22 St John Street, M3 4EB`
+- `src/components/HnyLayout.tsx` footer
+- Any JSON-LD `LocalBusiness` block on this page
+- Grep other treatment pages for the old address and update wherever it appears
 
-Buttons become **solid black on pink** (matches main site CTAs), with a `--hny-rose` ghost variant for secondaries. CTA hover = black → rose. No more rose-gold metal anywhere.
+## 4. Aftercare copy
+On HNY Club aftercare list:
+- Add to "can't" list: **No flights for 2 weeks post-treatment** (DVT/swelling risk, especially long-haul)
+- Replace existing "no flying long-haul or prolonged sitting for 7 days" with the 2-week version
+- Add to "first month" section: `avoid flights for 2 weeks post-treatment`
+- Tighten any residual "no downtime" language
 
-## Type system
+## 5. Finance strip — elegant inline bar (no middots)
+Replace the current finance strip under the pricing ledger with a single hairline-bordered bar, items separated by **generous whitespace only** (no `·`, no pipes):
 
-- **Display:** `DM Serif Display` (Google Font) — heavier editorial serif, the one in your flyer. Replaces Tenor Sans for headlines. Used for `INTRODUCTORY PRICING`, section H2s, prices.
-- **Eyebrow / chips / labels:** `Inter` 500 small-caps, tracked `0.28em`.
-- **Body:** `Inter` 300/400.
+> *From £41/month*   0% APR options   Klarna   Clearpay   PayItMonthly
 
-Italiana is fully removed. Tenor Sans stays only on the logo lockup (existing asset).
-
-## The pricing section — editorial flyer build
-
-```text
-┌─────────────────────────────────────────┐
-│                                         │   ← petal wall (#FBE7E0)
-│   [HNY CLUB logo]                       │
-│   INTRODUCTORY                          │
-│   PRICING                               │   ← DM Serif Display, ink, ~88px
-│   Ultrasound-led Liquid BBL & Hip Dip   │
-│                                         │
-│   [⌖ DEANSGATE, MANCHESTER]             │   ← blush chip, ink text, small-caps
-│   [⌖ CONSULTATION REQUIRED]             │
-│                                         │
-│   ┌─────────────────────────────────┐   │
-│   │  100ml                  £499    │   │   ← snow card, ink ink
-│   │  ─────── hairline rose ──────── │   │
-│   │  150ml                  £649    │   │
-│   │  200ml                  £799    │   │
-│   │  250ml                  £999    │   │
-│   │  300ml                  £1,199  │   │   ← bold row (most loved)
-│   │  350ml                  £1,449  │   │
-│   │  400ml                  £1,699  │   │
-│   │  500ml                  £1,999  │   │   ← bold row (most loved)
-│   │  600ml                  £2,399  │   │
-│   │  800ml                  £2,999  │   │
-│   │  ─────────────────────────────  │   │
-│   │  1L bespoke sculpt — consult    │   │   ← italic footnote
-│   └─────────────────────────────────┘   │
-│                                         │
-│   · LIQUID BBL · HIP DIP FILLER ·       │   ← marquee, rose
-│     BODY CONTOURING ·                   │
-│                                         │
-│  ╔═════════════════════════════════════╗│
-│  ║  ⎙  PAYMENT PLANS  │  ⌖  2-WEEK     ║│   ← blush trust band
-│  ║     AVAILABLE       │   REVIEW &     ║│
-│  ║                     │   SUPPORT      ║│
-│  ╚═════════════════════════════════════╝│
-│                                         │
-│   DM TO ENQUIRE OR BOOK YOUR CONSULT    │   ← eyebrow
-│   [SECURE £100 DEPOSIT] [BOOK CONSULT]  │   ← black pills
-│   [CHAT FIRST XX]                       │
-└─────────────────────────────────────────┘
-```
-
-Mobile (390px): everything stacks. Price ledger goes edge-to-edge (12px gutter), ml left / £ right, 13px Inter for ml + 15px DM Serif for price, rows ~44px tall. Total ledger fits without scrolling on one screen.
-
-Featured rows (300ml, 500ml): subtle blush row-background `#FBE7E0` + slightly bolder ink, no pill, no badge.
-
-## Site-wide palette ripple
-
-Because the new tokens are CSS variables, the rest of the HNY page (hero, marquee, what-to-expect, do's & don'ts, FAQ, final letter) automatically swings to the new black/white/pink system — same components, no copy or layout changes outside the pricing block.
-
-## Pricing data update
-
-```ts
-const pricing = [
-  { ml: "100ml", price: "£499" },
-  { ml: "150ml", price: "£649" },
-  { ml: "200ml", price: "£799" },
-  { ml: "250ml", price: "£999" },
-  { ml: "300ml", price: "£1,199", featured: true },
-  { ml: "350ml", price: "£1,449" },
-  { ml: "400ml", price: "£1,699" },
-  { ml: "500ml", price: "£1,999", featured: true },
-  { ml: "600ml", price: "£2,399" },
-  { ml: "800ml", price: "£2,999" },
-];
-// + 1L bespoke footnote (consultation only, no public price)
-```
-
-Each row stays a WhatsApp deep-link (`waLink(p.ml)`) so the booking funnel is unchanged.
+- Top + bottom hairline: 1px `--hny-rose` at 40% opacity
+- Vertical padding: 18px desktop / 14px mobile
+- `From £41/month` → Cormorant Garamond italic, 17px, `--hny-ink`
+- `0% APR options` → Inter 400, 12px, small-caps, tracked `0.18em`, `--hny-ink`
+- `Klarna   Clearpay   PayItMonthly` → Inter 500, 12px, small-caps, tracked `0.22em`, `--hny-rose-deep`
+- Item spacing: ~32px gap desktop, ~20px gap mobile (flex with gap, wraps cleanly)
+- Mobile (390px): wraps to 2 lines — price + APR on line 1, providers on line 2
 
 ## Files touched
+- `src/index.css` — fonts, palette, finance bar classes
+- `src/pages/HnyClub.tsx` — finance bar markup, aftercare copy
+- `src/components/HnyLayout.tsx` — address
+- Any other file containing the old address string
 
-- **`src/index.css`** — replace `.hny-club` CSS variables (3 pinks + ink + snow); swap `font-display` / `display-xl` / `display-lg` to DM Serif Display; rewrite `btn-dainty` / `btn-ghost` to black-on-pink; remove `price-card` / `price-card-featured` / `price-tab` (replaced by ledger styles); add `.price-ledger`, `.price-row`, `.price-row-featured`, `.hny-chip`, `.trust-band`. Add `@import` for DM Serif Display.
-- **`src/pages/HnyClub.tsx`** — replace the pricing grid (currently lines ~255-300) with the editorial flyer block: headline + chips + 10-row ledger + 1L footnote + marquee strip + trust band + CTA row. Update `pricing` array to 10 tiers.
-- **`src/components/HnyLayout.tsx`** — swap header CTA colour from `--hny-pink-deep` to `--hny-ink` (black-on-pink, matches main site).
-
-## After build
-
-Screenshot at 390px to verify: (a) headline doesn't wrap awkwardly, (b) the full 10-row ledger fits one screen, (c) chips and trust band sit on the right pink tones, (d) page transitions feel continuous with hiveclinicuk.com when navigating in.
-
-Ready to switch to build mode and ship.
+No layout moves, no new sections, no changes to anything you liked.

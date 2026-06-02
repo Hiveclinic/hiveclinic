@@ -314,8 +314,8 @@ const HnyClub = () => {
               <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Book consultation</a>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Chat first xx</a>
             </div>
-            <p className="font-body text-[11px] italic mt-5 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              Subject to provider approval. 21+ only. Results vary and cannot be guaranteed.
+            <p className="font-body text-[11px] italic mt-5 max-w-md mx-auto leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
+              Hyaluronic acid body filler treatment by qualified aesthetic practitioners. Suitability confirmed at in-person consultation. Subject to provider approval. 21+ only. Results vary and cannot be guaranteed.
             </p>
           </motion.div>
         </div>

@@ -52,7 +52,7 @@ const prepareList = [
 const aftercareList = [
   { when: "first 24 hours", items: ["avoid sitting directly on the area where possible - lean to one side or use a cushion", "sleep on your front or side tonight", "no alcohol, gym or hot baths", "mild swelling, warmth or bruising is normal"] },
   { when: "first week", items: ["light walks are encouraged from day one", "no gym, spin, sauna, steam or swimming for 7 days", "front or side sleeping where possible", "hydrate, hydrate, hydrate"] },
-  { when: "first month", items: ["ease back into training from day 8", "no deep tissue massage to the area for 4 weeks", "final shape typically refines across 2 to 4 weeks", "your complimentary 2 week review is already booked"] },
+  { when: "first month", items: ["ease back into training from day 8", "no deep tissue massage to the area for 4 weeks", "avoid flights for 2 weeks post-treatment (DVT and swelling risk)", "final shape typically refines across 2 to 4 weeks", "your complimentary 2 week review is already booked"] },
 ];
 
 // Legal-safe do / don't (awake, numbed, normal activities)
@@ -70,7 +70,7 @@ const doDont = {
     "no gym, spin, hot yoga, swimming or sauna for 7 days",
     "no alcohol or blood thinners for 24 hours either side",
     "no deep tissue massage to the area for 4 weeks",
-    "no flying long-haul or prolonged sitting for 7 days",
+    "no flights for 2 weeks post-treatment - DVT and swelling risk, especially long-haul",
     "no fake tan, hot baths or sunbeds for 7 days",
   ],
 };

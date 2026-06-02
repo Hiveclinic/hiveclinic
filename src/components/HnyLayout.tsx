@@ -33,13 +33,12 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
         className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b"
         style={{ background: "rgba(246, 241, 234, 0.92)", borderColor: "var(--hny-champagne)" }}
       >
-        <nav className="max-w-7xl mx-auto px-5 md:px-8 py-3 flex items-center justify-between">
+        <nav className="max-w-7xl mx-auto px-5 md:px-8 py-2 flex items-center justify-between">
           <Link to="/liquid-bbl-manchester" aria-label="HNY CLUB by Hive Clinic" className="flex items-center">
             <img
               src={hnyLogo}
               alt="HNY CLUB by Hive Clinic"
-              className="h-12 md:h-16 w-auto"
-              style={{ mixBlendMode: "multiply" }}
+              className="h-20 md:h-28 w-auto"
             />
           </Link>
 
@@ -112,12 +111,12 @@ const HnyLayout = ({ children }: { children: React.ReactNode }) => {
         </AnimatePresence>
       </header>
 
-      <main className="flex-1 pt-[72px] md:pt-[88px]">{children}</main>
+      <main className="flex-1 pt-[88px] md:pt-[120px]">{children}</main>
 
       <footer className="border-t" style={{ borderColor: "var(--hny-champagne)", background: "var(--hny-nude)" }}>
         <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
           <div>
-            <img src={hnyLogo} alt="HNY CLUB by Hive Clinic" className="h-14 w-auto mb-4" style={{ mixBlendMode: "multiply" }} />
+            <img src={hnyLogo} alt="HNY CLUB by Hive Clinic" className="h-20 w-auto mb-4" />
             <p className="font-body text-sm leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
               Ultrasound-led non-surgical body contouring at Hive Clinic, Deansgate, Manchester.
             </p>

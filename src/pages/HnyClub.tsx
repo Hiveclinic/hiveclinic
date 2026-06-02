@@ -7,9 +7,6 @@ import suite from "@/assets/hny/suite.jpg";
 import lifestyle1 from "@/assets/hny/lifestyle-1.jpg";
 import result1 from "@/assets/hny/result-1.jpg";
 import result2 from "@/assets/hny/result-2.jpg";
-import klarnaLogo from "@/assets/klarna-logo.png";
-import clearpayLogo from "@/assets/clearpay-logo.png";
-import payItMonthlyLogo from "@/assets/hny/payitmonthly-logo.png";
 
 const fade = {
   initial: { opacity: 0, y: 14 },

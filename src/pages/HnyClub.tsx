@@ -260,19 +260,20 @@ const HnyClub = () => {
                 rel="noopener noreferrer"
                 {...fade}
                 transition={{ duration: 0.45, delay: i * 0.04 }}
-                className={`price-card ${p.featured ? "price-card-featured" : ""} relative p-5 md:p-7 flex flex-col items-center text-center group`}
+                className={`price-card ${p.featured ? "price-card-featured" : ""} relative px-5 py-7 md:px-7 md:py-9 flex flex-col items-center text-center group`}
               >
                 {p.featured && (
-                  <span className="absolute top-2.5 right-2.5 font-body text-[9px] tracking-[0.22em] uppercase px-2 py-1 rounded-full" style={{ background: "var(--hny-pink-deep)", color: "#fff" }}>
-                    loved
-                  </span>
+                  <span className="price-tab">· most loved ·</span>
                 )}
-                <span className="font-display italic text-xl md:text-2xl mb-1" style={{ color: "var(--hny-mocha)" }}>{p.ml}</span>
-                <span className="font-display text-3xl md:text-5xl my-1 transition-transform group-hover:scale-105" style={{ color: "var(--hny-pink-deep)" }}>
+                <span className="font-display text-[11px] md:text-xs mb-4" style={{ color: "var(--hny-mocha)", letterSpacing: "0.32em" }}>
+                  · {p.ml} ·
+                </span>
+                <span className="font-display text-4xl md:text-5xl mb-4 transition-transform group-hover:scale-[1.03]" style={{ color: "var(--hny-rose-gold-deep)", letterSpacing: "0.04em", fontWeight: 400 }}>
                   {p.price}
                 </span>
-                <span className="font-body text-[11px] md:text-xs mt-1" style={{ color: "var(--hny-soft-brown)" }}>{p.note}</span>
-                <span className="font-script text-sm md:text-base mt-2" style={{ color: "var(--hny-rose-gold-deep)" }}>{p.monthly}</span>
+                <span className="price-hairline mb-4" />
+                <span className="font-body text-[11px] md:text-xs mb-1.5" style={{ color: "var(--hny-soft-brown)", letterSpacing: "0.06em" }}>{p.note}</span>
+                <span className="font-body italic text-[11px] md:text-xs" style={{ color: "var(--hny-rose-gold-deep)" }}>{p.monthly}</span>
               </motion.a>
             ))}
           </div>

@@ -307,12 +307,11 @@ const HnyClub = () => {
 
           <motion.div {...fade} className="mt-9 text-center">
             <p className="font-body text-[10.5px] tracking-[0.36em] uppercase mb-4" style={{ color: "var(--hny-ink)" }}>
-              DM to enquire or book your consultation
+              DM us to enquire or chat with our team
             </p>
             <div className="flex flex-wrap justify-center gap-2.5">
-              <a href={DEPOSIT_URL} className="btn-dainty">Secure £100 deposit</a>
-              <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Book consultation</a>
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Chat first xx</a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-dainty">WhatsApp us xx</a>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">DM on instagram</a>
             </div>
             <p className="font-body text-[11px] italic mt-5 max-w-md mx-auto leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
               Hyaluronic acid body filler treatment by qualified aesthetic practitioners. Suitability confirmed at in-person consultation. Subject to provider approval. 21+ only. Results vary and cannot be guaranteed.

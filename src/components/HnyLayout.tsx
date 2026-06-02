@@ -10,9 +10,10 @@ import payItMonthlyLogo from "@/assets/hny/payitmonthly-logo.png";
 import hnyLogo from "@/assets/hny/logo.png";
 
 // Central CTA destinations — swap these one-liners when external links are ready.
-export const INSTAGRAM_URL = "https://instagram.com/hiveclinicuk";
+export const INSTAGRAM_URL = "https://www.instagram.com/thehnyclub/";
 export const WHATSAPP_URL =
   "https://wa.me/447795008114?text=Hi%20HNY%20CLUB%2C%20I%27d%20like%20to%20book%20a%20virtual%20chat%20about%20Liquid%20BBL";
+export const CONSULT_URL = "https://Hiveclinicuk.as.me/?calendarID=14132488"; // Acuity consultation booking
 export const DEPOSIT_URL = "/bookings"; // £100 deposit checkout — swap to Stripe link when ready
 
 const navAnchors = [

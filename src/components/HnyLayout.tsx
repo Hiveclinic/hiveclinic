@@ -4,9 +4,9 @@ import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import instagramLogo from "@/assets/instagram-logo.png";
 import tiktokLogo from "@/assets/tiktok-logo.png";
-import klarnaLogo from "@/assets/klarna-logo.png";
-import clearpayLogo from "@/assets/clearpay-logo.png";
-import payItMonthlyLogo from "@/assets/hny/payitmonthly-logo.png";
+import klarnaLogo from "@/assets/hny/klarna-mark.png";
+import clearpayLogo from "@/assets/hny/clearpay-mark.png";
+import payItMonthlyLogo from "@/assets/hny/payitmonthly-mark.png";
 import hnyLogo from "@/assets/hny/logo.png";
 
 // Central CTA destinations — swap these one-liners when external links are ready.

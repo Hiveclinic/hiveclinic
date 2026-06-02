@@ -7,9 +7,9 @@ import suite from "@/assets/hny/suite.jpg";
 import lifestyle1 from "@/assets/hny/lifestyle-1.jpg";
 import result1 from "@/assets/hny/result-1.jpg";
 import result2 from "@/assets/hny/result-2.jpg";
-import klarnaLogo from "@/assets/klarna-logo.png";
-import clearpayLogo from "@/assets/clearpay-logo.png";
-import payItMonthlyLogo from "@/assets/hny/payitmonthly-logo.png";
+import klarnaLogo from "@/assets/hny/klarna-mark.png";
+import clearpayLogo from "@/assets/hny/clearpay-mark.png";
+import payItMonthlyLogo from "@/assets/hny/payitmonthly-mark.png";
 
 const fade = {
   initial: { opacity: 0, y: 14 },
@@ -314,8 +314,8 @@ const HnyClub = () => {
               <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Book consultation</a>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">Chat first xx</a>
             </div>
-            <p className="font-body text-[11px] italic mt-5 max-w-md mx-auto" style={{ color: "var(--hny-soft-brown)" }}>
-              Subject to provider approval. 21+ only. Results vary and cannot be guaranteed.
+            <p className="font-body text-[11px] italic mt-5 max-w-md mx-auto leading-relaxed" style={{ color: "var(--hny-soft-brown)" }}>
+              Hyaluronic acid body filler treatment by qualified aesthetic practitioners. Suitability confirmed at in-person consultation. Subject to provider approval. 21+ only. Results vary and cannot be guaranteed.
             </p>
           </motion.div>
         </div>

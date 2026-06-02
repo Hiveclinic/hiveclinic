@@ -257,12 +257,8 @@ const HnyClub = () => {
             </p>
             <h2 className="display-xl" style={{ color: "var(--hny-ink)" }}>Pricing</h2>
             <p className="font-body text-[14px] md:text-[15px] mt-3 leading-relaxed" style={{ color: "var(--hny-ink)" }}>
-              Ultrasound-led Liquid BBL &amp; Hip Dip Filler — every package includes consultation, treatment and your complimentary 2-week review.
+              Ultrasound-led Liquid BBL and Hip Dip Filler. Every package includes consultation, treatment and your complimentary 2-week review.
             </p>
-            <div className="flex flex-wrap gap-2 mt-5">
-              <span className="hny-chip">◉ Deansgate, Manchester</span>
-              <span className="hny-chip">◉ Consultation Required</span>
-            </div>
           </motion.div>
 
           <motion.div {...fade} className="price-ledger">

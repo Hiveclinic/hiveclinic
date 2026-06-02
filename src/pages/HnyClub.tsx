@@ -169,8 +169,8 @@ const HnyClub = () => {
                 src={hnyLogo}
                 alt=""
                 aria-hidden="true"
-                className="absolute top-5 right-5 h-16 md:h-20 w-auto opacity-90"
-                style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.25))" }}
+                className="absolute top-6 left-6 right-6 mx-auto h-24 md:h-32 w-auto opacity-95"
+                style={{ filter: "drop-shadow(0 4px 14px rgba(0,0,0,0.35))" }}
               />
             </div>
           </motion.div>

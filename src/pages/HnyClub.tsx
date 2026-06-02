@@ -108,8 +108,8 @@ const DualCTA = ({ primary = "join the honey club" }: { primary?: string }) => (
     <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-dainty">
       {primary} xx
     </a>
-    <a href={CONSULT_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">
-      book consultation
+    <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">
+      DM on instagram
     </a>
   </div>
 );

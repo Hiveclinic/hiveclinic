@@ -280,30 +280,33 @@
   --hny-pink-deep: #C76A82;
   --hny-blush: #F8D8CC;
 }
-.hny-club .font-display { font-family: 'Cormorant Garamond', 'Tenor Sans', serif; font-weight: 400; letter-spacing: 0.005em; }
+/* Logo-vibe: tall, elegant serif (Italiana) used for the brand display type */
+.hny-club .font-display { font-family: 'Italiana', 'Cormorant Garamond', serif; font-weight: 400; letter-spacing: 0.01em; }
 .hny-club .font-body { font-family: 'Inter', 'Manrope', sans-serif; }
 .hny-club .font-script { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; }
-.hny-club .display-xl { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(2.4rem, 8vw, 6rem); line-height: 1; letter-spacing: -0.015em; }
-.hny-club .display-lg { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(1.75rem, 4.6vw, 3rem); line-height: 1.06; letter-spacing: -0.01em; }
+.hny-club .display-xl { font-family: 'Italiana', serif; font-weight: 400; font-size: clamp(2.6rem, 8.4vw, 6.2rem); line-height: 1; letter-spacing: 0.005em; }
+.hny-club .display-lg { font-family: 'Italiana', serif; font-weight: 400; font-size: clamp(1.9rem, 4.8vw, 3.2rem); line-height: 1.06; letter-spacing: 0.005em; }
 .hny-club .kicker { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 0.36em; text-transform: uppercase; font-weight: 500; }
-/* Dainty pill button - thin outline, light fill, no AI-style heavy shadow */
+
+/* Dainty pill - solid pink, tracked uppercase, clean and refined */
 .hny-club .btn-dainty {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  padding: 0.65rem 1.4rem; border-radius: 999px;
-  font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: lowercase;
-  background: linear-gradient(135deg, var(--hny-rose-gold) 0%, var(--hny-pink-deep) 100%);
-  color: #fff; border: 1px solid transparent;
-  transition: background .25s ease, color .25s ease, transform .25s ease, filter .25s ease;
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.8rem 1.6rem; border-radius: 2px;
+  font-family: 'Inter', sans-serif; font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase; font-weight: 500;
+  background: var(--hny-pink-deep); color: #fff;
+  border: 1px solid var(--hny-pink-deep);
+  transition: background .25s ease, color .25s ease, border-color .25s ease;
 }
-.hny-club .btn-dainty:hover { filter: brightness(0.95); }
+.hny-club .btn-dainty:hover { background: var(--hny-mocha); border-color: var(--hny-mocha); }
 .hny-club .btn-ghost {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  padding: 0.65rem 1.4rem; border-radius: 999px;
-  font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: lowercase;
-  background: transparent; color: var(--hny-mocha); border: 1px solid var(--hny-rose-gold);
-  transition: background .25s ease;
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.8rem 1.6rem; border-radius: 2px;
+  font-family: 'Inter', sans-serif; font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase; font-weight: 500;
+  background: transparent; color: var(--hny-mocha);
+  border: 1px solid var(--hny-mocha);
+  transition: background .25s ease, color .25s ease;
 }
-.hny-club .btn-ghost:hover { background: rgba(228,139,160,0.14); }
+.hny-club .btn-ghost:hover { background: var(--hny-mocha); color: var(--hny-cream); }
 
 /* Soft image edge fade — blends image edges into the page background */
 .hny-club .img-fade {
@@ -319,21 +322,21 @@
           mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
 }
 
-/* Pricelist card pop */
+/* Pricelist card - flat, no gradient, hairline border */
 .hny-club .price-card {
-  background: linear-gradient(165deg, #FDEEE6 0%, #F8D8CC 100%);
-  border: 1px solid rgba(181,103,90,0.18);
-  border-radius: 1.25rem;
-  box-shadow: 0 18px 40px -28px rgba(181,103,90,0.45), inset 0 1px 0 rgba(255,255,255,0.6);
-  transition: transform .3s ease, box-shadow .3s ease;
+  background: var(--hny-cream-card);
+  border: 1px solid rgba(181,103,90,0.22);
+  border-radius: 4px;
+  transition: border-color .3s ease, transform .3s ease, background .3s ease;
 }
 .hny-club .price-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 28px 50px -28px rgba(199,106,130,0.55), inset 0 1px 0 rgba(255,255,255,0.7);
+  transform: translateY(-2px);
+  border-color: var(--hny-pink-deep);
+  background: #fff;
 }
 .hny-club .price-card-featured {
-  background: linear-gradient(165deg, #FDEEE6 0%, #F4B6C5 100%);
-  border-color: rgba(199,106,130,0.4);
+  background: #fff;
+  border-color: var(--hny-pink-deep);
 }
 
 @keyframes hny-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
